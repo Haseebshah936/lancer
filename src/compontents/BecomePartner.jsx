@@ -30,6 +30,7 @@ const Container = styled.div`
   justify-content: space-around;
   margin-top: 5rem;
   background-color: #068a6fdc;
+  margin-bottom: 5rem;
 `;
 const TextContainer = styled.div`
   display: flex;
@@ -47,7 +48,11 @@ const Heading = styled.h1`
   @media (max-width: 768px) {
     text-align: start;
   }
+  @media (max-width: 600px) {
+    font-size: 2rem;
+  }
 `;
+
 const Tagline = styled.p`
   color: white;
   font-size: 1.5rem;
@@ -55,6 +60,10 @@ const Tagline = styled.p`
   margin-bottom: 2.5rem;
   line-height: 2rem;
   text-align: justify;
+  @media (max-width: 600px) {
+    margin-top: 1.5rem;
+    font-size: 1rem;
+  }
 `;
 
 const ButtonContainer = styled.div`
@@ -84,6 +93,9 @@ const BtnText = styled.div`
   margin-inline: 1.5rem;
   text-transform: capitalize;
   color: white;
+  @media (max-width: 600px) {
+    font-size: 1rem;
+  }
 `;
 
 const ImageContainer = styled.img`

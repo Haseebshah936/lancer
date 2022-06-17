@@ -83,12 +83,14 @@ const Wrapper = styled.div`
 const Container = styled.div`
   display: flex;
   justify-content: space-around;
-  max-height: 70vh;
+  @media (max-width: 750px) {
+    justify-content: flex-start;
+  }
 `;
 const TextContainer = styled.div`
   display: flex;
   flex-direction: column;
-  flex: 0.8;
+  flex: 1;
 `;
 
 const Heading = styled.h1`
@@ -97,12 +99,18 @@ const Heading = styled.h1`
   @media (max-width: 768px) {
     text-align: start;
   }
+  @media (max-width: 600px) {
+    font-size: 2.5rem;
+  }
 `;
 const Tagline = styled.p`
   font-size: 1rem;
   margin-top: 3rem;
   line-height: 2rem;
   text-align: justify;
+  @media (max-width: 600px) {
+    margin-top: 1.5rem;
+  }
 `;
 
 const CountContainer = styled.div`
@@ -132,7 +140,7 @@ const ImageContainer = styled.img`
   flex-direction: column;
   flex: 0.8;
   margin-left: 7%;
-  @media (max-width: 650px) {
+  @media (max-width: 750px) {
     display: none;
   }
   align-self: center;
