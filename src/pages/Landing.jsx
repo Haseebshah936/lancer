@@ -11,8 +11,8 @@ function Landing(props) {
     <>
       <Header />
       <Title />
-      <TopSellers />
       <Categories />
+      <TopSellers />
       <FeaturedSeller />
       <Newsletter />
       <Footer />
