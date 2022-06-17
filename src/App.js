@@ -8,6 +8,7 @@ import About from "./pages/About";
 import Discover from "./pages/Discover";
 import Signup from "./pages/Signup";
 import { CustomContextProvider } from "./Hooks/useCustomContext";
+import Ranking from "./pages/Ranking";
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
@@ -19,6 +20,7 @@ function App(props) {
           <Route path="/about" element={<About />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/ranking" element={<Ranking />} />
         </Routes>
       </Router>
     </CustomContextProvider>
