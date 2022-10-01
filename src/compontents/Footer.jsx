@@ -47,7 +47,7 @@ function Footer(props) {
         <Title>Useful Links</Title>
         <List>
           <ListItem>
-            <NavLink to="/">Home</NavLink>
+            <NavLink to="/home">Home</NavLink>
           </ListItem>
           <ListItem>
             <NavLink to="/about">About</NavLink>
