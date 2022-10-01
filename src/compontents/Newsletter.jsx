@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import styled from "styled-components";
+import { mobile } from "../responsive";
 
 function Newsletter(props) {
   return (
@@ -51,6 +52,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 7rem 15rem;
   border-radius: 5rem;
+  ${mobile({borderRadius: "0rem", width: "100%"})}
 `;
 
 const HeadingContainer = styled.div`

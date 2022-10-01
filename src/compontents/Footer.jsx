@@ -88,9 +88,7 @@ const Container = styled.div`
   display: flex;
   background-color: black;
   margin-top: 10rem;
-  @media (max-width: 480px) {
-    margin-top: 0rem;
-  }
+  ${mobile({ marginTop: "0rem", flexDirection: "column" })}
   color: white;
   width: 100%;
 `;

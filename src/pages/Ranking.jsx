@@ -6,12 +6,11 @@ import ProfileComponent from "../compontents/ProfileComponent";
 
 function Ranking(props) {
   const a = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
   ];
   return (
-    <>
+    <Wrapper>
       <Header />
-
       <Container>
         <Heading>Top Sellers This Month</Heading>
         <ProfileContainer>
@@ -23,11 +22,18 @@ function Ranking(props) {
         </ProfileContainer>
       </Container>
       <Footer />
-    </>
+    </Wrapper>
   );
 }
 
 export default Ranking;
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
 
 const Container = styled.div`
   display: flex;
@@ -35,6 +41,7 @@ const Container = styled.div`
   padding-inline: 7%;
   align-items: center;
   margin-top: 5rem;
+  margin-bottom: 3rem;
 `;
 
 const Heading = styled.h2`
@@ -42,6 +49,7 @@ const Heading = styled.h2`
   @media (max-width: 768px) {
     font-size: 2.5rem;
   }
+  margin-bottom: 3rem;
 `;
 const ProfileContainer = styled.div`
   display: flex;
@@ -49,7 +57,7 @@ const ProfileContainer = styled.div`
   align-self: center;
   align-items: center;
   @media (max-width: 2400px) {
-    justify-content: space-around;
+    /* justify-content: space-around; */
   }
   justify-content: flex-start;
   max-width: 120rem;

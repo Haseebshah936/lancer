@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import Header from "./compontents/Header";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route, Routes } from "react-router-dom";
 import Landing from "./pages/Landing";
 import HowitWork from "./pages/HowitWork";
 import About from "./pages/About";
@@ -15,12 +15,13 @@ function App(props) {
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
         <Routes>
-          <Route path="/" element={<Landing />} />
           <Route path="/howitwork" element={<HowitWork />} />
           <Route path="/about" element={<About />} />
           <Route path="/discover" element={<Discover />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/ranking" element={<Ranking />} />
+          <Route path="/home" element={<Landing />} />
+          <Route path="*" element={<Navigate to="/home" replace/>} />
         </Routes>
       </Router>
     </CustomContextProvider>

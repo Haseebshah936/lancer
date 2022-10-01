@@ -44,7 +44,7 @@ export default function ResponsiveDrawer({
             </CloseContainer>
             <ListItem>
               <SubContainer>
-                <NavLink to="/">Home</NavLink>
+                <NavLink to="/home">Home</NavLink>
                 <NavLink to="/about">About</NavLink>
                 <NavLink to="/discover">Discover</NavLink>
                 <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink>

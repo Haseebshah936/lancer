@@ -5,7 +5,7 @@ function ProfileComponent({ count = 1 }) {
     <Container>
       <Wrapper>
         <CountText>{count}</CountText>
-        <Image src={`https://picsum.photos/200/300?random=${count}`} />
+        <Image src={`https://api.lorem.space/image/face?w=200&h=200&hash=hc9era4i`} />
         <DetailsContainer>
           <NameText>Haseeb</NameText>
           <EarnedContainer>
