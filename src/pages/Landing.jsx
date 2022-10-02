@@ -1,10 +1,10 @@
-import Categories from "../compontents/Categories";
-import FeaturedSeller from "../compontents/FeaturedSeller";
-import Footer from "../compontents/Footer";
-import Header from "../compontents/Header";
-import Newsletter from "../compontents/Newsletter";
-import Title from "../compontents/Title";
-import TopSellers from "../compontents/TopSellers";
+import Categories from "../components/Categories";
+import FeaturedSeller from "../components/FeaturedSeller";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Newsletter from "../components/Newsletter";
+import Title from "../components/Title";
+import TopSellers from "../components/TopSellers";
 
 function Landing(props) {
   return (

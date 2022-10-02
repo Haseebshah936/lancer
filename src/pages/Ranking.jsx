@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Footer from "../compontents/Footer";
-import Header from "../compontents/Header";
-import ProfileComponent from "../compontents/ProfileComponent";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import ProfileComponent from "../components/ProfileComponent";
 
 function Ranking(props) {
   const a = [

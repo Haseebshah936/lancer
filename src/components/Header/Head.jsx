@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import colors from "../../utils/colors";
 
 function Head({ toggleDrawer, toggleLogin }) {
   const navigate = useNavigate();
@@ -132,7 +133,7 @@ const SubContainer = styled.div`
     color: #7d7d7d;
   }
   a.active {
-    border-bottom: 0.3rem solid #125d4a;
+    border-bottom: 0.3rem solid ${colors.textGreen};
     margin-top: 0.2rem;
   }
   @media (max-width: 786px) {

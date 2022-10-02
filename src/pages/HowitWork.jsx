@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import Footer from "../compontents/Footer";
-import Header from "../compontents/Header";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 function HowitWork(props) {
   return (

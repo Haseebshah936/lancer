@@ -12,6 +12,8 @@ const colors = {
     newsLetterInputBorderWhite: "rgba(255, 255, 255, 0.3)",
     newsLetterInputBackground: "rgba(255, 255, 255, 0.1)",
     becomePartnerGreen: "#068a6fdc",
-    becomePartnerButtonGreen: "#05ad8c"
+    becomePartnerButtonGreen: "#05ad8c",
+    darkBlue: "#242f6b",
+    gray: "gray",
 }
 export default colors;

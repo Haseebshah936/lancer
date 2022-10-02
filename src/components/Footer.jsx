@@ -63,8 +63,7 @@ function Footer(props) {
       <Right>
         <Title>Contact</Title>
         <ContactItem>
-          <Room style={{ marginRight: "1rem", fontSize: "2rem" }} />9 Fateh sher
-          road Bagh Gull Begum
+          <Room style={{ marginRight: "1rem", fontSize: "2rem" }} />25 COMSATS LAHORE
         </ContactItem>
         <ContactItem>
           <Phone style={{ marginRight: "1rem", fontSize: "2rem" }} />
@@ -72,7 +71,7 @@ function Footer(props) {
         </ContactItem>
         <ContactItem>
           <MailOutline style={{ marginRight: "1rem", fontSize: "2rem" }} />
-          haseebshah936@gmail.com
+          infolancer@gmail.com
         </ContactItem>
         <img
           src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655318185/lancer/hd-visa-mastercard-paypal-payment-methods-logos-png-21635415866zngy8aj06k-removebg-preview_acqk7w.png"
@@ -160,6 +159,7 @@ const Right = styled.div`
   flex: 1;
   img {
     width: 70%;
+    max-width: 25rem;
   }
 `;
 const ContactItem = styled.div`
