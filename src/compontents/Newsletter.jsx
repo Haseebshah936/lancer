@@ -52,7 +52,7 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 7rem 15rem;
   border-radius: 5rem;
-  ${mobile({borderRadius: "0rem", width: "100%"})}
+  ${mobile({borderRadius: "0rem", width: "100%", padding: "3rem 7rem"})}
 `;
 
 const HeadingContainer = styled.div`
@@ -61,6 +61,7 @@ const HeadingContainer = styled.div`
 `;
 const Heading = styled.h2`
   font-size: 3rem;
+  text-align: center;
   @media (max-width: 768px) {
     font-size: 2.5rem;
   }
@@ -87,9 +88,12 @@ const InputContainer = styled.div`
   justify-items: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.1);
-  padding: 0.4rem 0.3rem 0.4rem 2rem;
+  padding: 0.4rem 0.4rem 0.4rem 2rem;
   border-radius: 2rem;
   border: 0.5px solid rgba(255, 255, 255, 0.3);
+  ${mobile({
+    marginTop: "2rem",
+  })}
 `;
 
 const Input = styled.input`

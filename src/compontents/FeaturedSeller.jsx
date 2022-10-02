@@ -36,7 +36,7 @@ function FeaturedSeller(props) {
                 backgroundColor: "transparent",
                 borderColor: "#0000009e",
               },
-              marginLeft: "1.5rem",
+              marginRight: "1.5rem",
               fontSize: "1rem",
               padding: ".7rem 2rem",
               minWidth: "1rem",
@@ -133,6 +133,7 @@ const CategoryContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
   scroll-behavior: smooth;
 `;
 

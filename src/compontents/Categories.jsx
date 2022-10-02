@@ -146,6 +146,7 @@ const CategoryContainer = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
+  scrollbar-width: none;
   scroll-behavior: smooth;
 `;
 
