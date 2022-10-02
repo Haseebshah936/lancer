@@ -2,6 +2,7 @@ import { Language } from '@mui/icons-material';
 import { Avatar } from '@mui/material';
 import React from 'react';
 import styled from 'styled-components';
+import { miniTablet } from '../responsive';
 import colors from '../utils/colors';
 
 function DetailsCard({heading="25 COMSATS LAHORE", subheading="Official Address", Icon=null, backgroundColor={
@@ -10,13 +11,15 @@ function DetailsCard({heading="25 COMSATS LAHORE", subheading="Official Address"
 }}) {
     return (
         <Container>
-            <Heading>{heading}</Heading>
-            <Wrapper>
-                <Avatar sx={backgroundColor}>
-                    {Icon && Icon}
-                </Avatar>
-            <SubHeading>{subheading}</SubHeading>
-            </Wrapper>
+            <SubContainer>
+                <Heading>{heading}</Heading>
+                <Wrapper>
+                    <Avatar sx={backgroundColor}>
+                        {Icon && Icon}
+                    </Avatar>
+                <SubHeading>{subheading}</SubHeading>
+                </Wrapper>
+            </SubContainer>
         </Container>
     );
 }
@@ -36,7 +39,12 @@ const Container = styled.div`
     box-shadow: .5px 0.5px 8px 1px rgba(0,0,0,0.1);
     -webkit-box-shadow: .5px 0.5px 8px 1px rgba(0,0,0,0.1);
     margin: 1rem;
-    
+    ${miniTablet({ width: "32rem",margin: "1rem 0rem", height: "15rem" })}
+`
+const SubContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 `
 const Heading = styled.h3`
     font-size: 1.5rem;
@@ -45,7 +53,7 @@ const Heading = styled.h3`
 const Wrapper = styled.div`
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 1rem;
 `
 const SubHeading = styled.h4`

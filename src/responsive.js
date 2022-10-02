@@ -18,7 +18,7 @@ export const tablet = (props) => {
 
 export const miniTablet = (props) => {
   return css`
-    @media (max-width: 650px) {
+    @media (max-width: 700px) {
       ${props}
     }
   `

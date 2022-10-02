@@ -8,6 +8,7 @@ import {
 } from "@mui/icons-material";
 import React from "react";
 import styled from "styled-components";
+import CustomFilledButton from "../components/CustomFilledButton";
 import DetailsCard from "../components/DetailsCard";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
@@ -50,17 +51,17 @@ function ContactUs(props) {
         <Form>
           <Heading>Get In Touch</Heading>
           <NameContainer>
-            <Input placeholder="First Name" />
-            <Input placeholder="Last Name" />
+            <Input style={{width: "48%"}} placeholder="First Name" />
+            <Input style={{width: "48%"}} placeholder="Last Name" />
           </NameContainer>
           <Input placeholder="Email address" />
           <Input placeholder="Subject" />
           <Input placeholder="Your Message" />
+          <CustomFilledButton title={"Send Message"} style={{
+            alignSelf: "center",
+          }}/>
         </Form>
-        <iframe
-          width="560"
-          height="315"
-          frameborder="0"
+        <Iframe
           scrolling="no"
           marginheight="0"
           marginwidth="0"
@@ -83,16 +84,18 @@ const Container = styled.div`
 const DetailsCardContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-inline: 7%;
   ${miniTablet({ flexDirection: "column" })}
-  margin-top: 7rem;
-
+  margin-top: 5rem;
+  padding-inline: 7%;
 `;
 
 const SubContainer = styled.div`
   display: flex;
   align-self: center;
   margin-top: 7rem;
+  padding-inline: 7%;
+  margin-bottom: 7rem;
+  ${miniTablet({ flexDirection: "column", marginTop: "1rem" })}
 `;
 
 const Form = styled.form`
@@ -102,28 +105,52 @@ const Form = styled.form`
   border-radius: 2%;
   display: flex;
   flex-direction: column;
-  padding: 2rem;
+  padding: 5rem 4rem;
+  width: 38rem;
+  max-width: 38rem;
+  height: 48rem;
+  max-height: 48rem;
+  margin-right: 3rem;
+  ${miniTablet({ width: "32rem" ,marginBottom: "2rem", marginRight: "0rem" })}
 `;
 
 const Heading = styled.h3`
   color: ${colors.black};
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 600;
   align-self: center;
+  margin-bottom: 5rem;
 `;
 const Input = styled.input`
-  margin-top: 2rem;
+  margin-bottom: 2rem;
   border: 0rem;
-  border-bottom: 1px solid rgba(0,0,0, 0.1);
-  margin-right: 1rem;
+  border-bottom: .5px solid rgba(0,0,0, 0.1);
   font-weight: 300;
   font-size: 1.2rem;
   line-height: 3.5rem;
   ::placeholder {
     color: rgba(0,0,0, 0.7);
   }
+  :focus {
+    outline: none;
+  }
 `;
 
 const NameContainer = styled.div`
   display: flex;
+  box-sizing: border-box;
+  overflow: hidden;
+  justify-content: space-between;
 `;
+
+const Iframe = styled.iframe`
+  width: 38rem;
+  max-width: 38rem;
+  height: 48rem;
+  border: 0;
+  background-color: ${colors.white};
+  box-shadow: 0.5px 0.5px 8px 1px rgba(0, 0, 0, 0.1);
+  -webkit-box-shadow: 0.5px 0.5px 8px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 2%;
+  ${miniTablet({ width: "32rem" })}
+`
