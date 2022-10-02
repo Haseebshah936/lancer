@@ -6,6 +6,7 @@ import {
   PublicOutlined,
   SupportAgentOutlined,
 } from "@mui/icons-material";
+import { CircularProgress } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 import CustomFilledButton from "../components/CustomFilledButton";
@@ -23,6 +24,7 @@ function ContactUs(props) {
     subject: "",
     message: "",
   })
+  const [iframeLoaded, setIframeLoaded] = useState(false)
   const sx = {
     height: "2.5rem",
     width: "2.5rem",
@@ -72,8 +74,8 @@ function ContactUs(props) {
         <Form onSubmit={handleSubmit}>
           <Heading>Get In Touch</Heading>
           <NameContainer>
-            <Input style={{width: "48%"}} name="firstName" onChange={handleChange} value={formData.firstName} placeholder="First Name" />
-            <Input style={{width: "48%"}} name="lastName" onChange={handleChange} value={formData.lastName} placeholder="Last Name" />
+            <Input style={{width: "50%"}} name="firstName" onChange={handleChange} value={formData.firstName} placeholder="First Name" />
+            <Input style={{width: "50%"}} name="lastName" onChange={handleChange} value={formData.lastName} placeholder="Last Name" />
           </NameContainer>
           <Input type={"email"} value={formData.email} name="email" onChange={handleChange} placeholder="Email address" />
           <Input value={formData.subject} name="subject" onChange={handleChange} placeholder="Subject" />
@@ -82,12 +84,16 @@ function ContactUs(props) {
             alignSelf: "center",
           }}/>
         </Form>
-        <Iframe
+        <IframeContainer>
+        {!iframeLoaded && <CircularProgress style={{marginTop: "22rem"}} color={"success"}/>}
+          <Iframe
           scrolling="no"
           marginheight="0"
           marginwidth="0"
           src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=COMSTAS&amp;t=p&amp;z=11&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
-        />
+          onLoad={() => setIframeLoaded(true)}
+          />
+          </IframeContainer> 
       </SubContainer>
       <Footer />
     </Container>
@@ -129,8 +135,8 @@ const Form = styled.form`
   padding: 5rem 4rem;
   width: 38rem;
   max-width: 38rem;
-  height: 48rem;
-  max-height: 48rem;
+  height: 50rem;
+  max-height: 50rem;
   margin-right: 3rem;
   ${miniTablet({ width: "32rem" ,marginBottom: "2rem", marginRight: "0rem" })}
 `;
@@ -164,14 +170,25 @@ const NameContainer = styled.div`
   justify-content: space-between;
 `;
 
-const Iframe = styled.iframe`
-  width: 38rem;
-  max-width: 38rem;
-  height: 48rem;
-  border: 0;
+const IframeContainer = styled.div`
   background-color: ${colors.white};
   box-shadow: 0.5px 0.5px 8px 1px rgba(0, 0, 0, 0.1);
   -webkit-box-shadow: 0.5px 0.5px 8px 1px rgba(0, 0, 0, 0.1);
   border-radius: 2%;
+  overflow: hidden;
+  line-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 38rem;
+  max-width: 38rem;
   ${miniTablet({ width: "32rem" })}
+  height: 50rem;
+`
+
+const Iframe = styled.iframe`
+  width: 100%;
+  height: 100%;
+  border: 0;
 `
