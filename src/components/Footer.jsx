@@ -91,6 +91,7 @@ const Container = styled.div`
   ${mobile({ marginTop: "0rem", flexDirection: "column" })}
   color: white;
   width: 100%;
+  padding-inline: 7%;
 `;
 const Left = styled.div`
   flex: 1;
@@ -122,6 +123,7 @@ const SocialIcon = styled.a`
   }
 `;
 const Center = styled.div`
+  flex: .5;
   padding: 2rem;
   ${mobile({
     display: "none",

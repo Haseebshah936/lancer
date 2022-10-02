@@ -110,11 +110,12 @@ const Wrap = styled.div`
 
 const Form = styled.form`
   margin: 2rem;
-  padding: 1.5rem 2rem;
+  padding: 4rem 3rem;
   border-radius: 0.5rem;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.15);
   width: 38rem;
+  height: 48rem;
   display: flex;
   flex-direction: column;
 `;
@@ -124,14 +125,16 @@ const Input = styled.input`
   padding: 1.5rem 1rem;
   margin-block: 1rem !important;
   font-size: 1.4rem;
-  color: ${colors.inputBorderNotFocused};
   margin: 0.6rem 0;
   border: 0.2rem solid rgba(0, 0, 0, 0.26);
   text-transform: none;
   outline: none;
   border-radius: 2.5rem;
   :focus {
-    border: 0.2rem solid ${colors.inputBorderFocused};
+    border: 0.2rem solid ${colors.primaryGreen};
+  }
+  ::placeholder {
+    color: rgba(0,0,0, 0.7);
   }
 `;
 

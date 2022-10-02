@@ -234,7 +234,7 @@ const Input = styled.input`
   padding: 1.5rem 1.5rem;
   margin-block: 0.5rem !important;
   background-color: #f1f1f165;
-  font-size: 1rem;
+  font-size: 1.4rem;
   min-width: 28rem;
   margin: 0.6rem 0;
   border: 0.2rem solid rgba(0, 0, 0, 0.26);
@@ -242,7 +242,7 @@ const Input = styled.input`
   outline: none;
   border-radius: 2.5rem;
   :focus {
-    border: 0.2rem solid #0c0c0c9b;
+    border: 0.2rem solid ${colors.primaryGreen};
   }
 `;
 

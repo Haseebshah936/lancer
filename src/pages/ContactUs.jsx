@@ -6,7 +6,7 @@ import {
   PublicOutlined,
   SupportAgentOutlined,
 } from "@mui/icons-material";
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import CustomFilledButton from "../components/CustomFilledButton";
 import DetailsCard from "../components/DetailsCard";
@@ -16,10 +16,31 @@ import { miniTablet, mobile } from "../responsive";
 import colors from "../utils/colors";
 
 function ContactUs(props) {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    message: "",
+  })
   const sx = {
     height: "2.5rem",
     width: "2.5rem",
   };
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(formData);
+  }
+
+
   return (
     <Container>
       <Header />
@@ -48,15 +69,15 @@ function ContactUs(props) {
         />
       </DetailsCardContainer>
       <SubContainer>
-        <Form>
+        <Form onSubmit={handleSubmit}>
           <Heading>Get In Touch</Heading>
           <NameContainer>
-            <Input style={{width: "48%"}} placeholder="First Name" />
-            <Input style={{width: "48%"}} placeholder="Last Name" />
+            <Input style={{width: "48%"}} name="firstName" onChange={handleChange} value={formData.firstName} placeholder="First Name" />
+            <Input style={{width: "48%"}} name="lastName" onChange={handleChange} value={formData.lastName} placeholder="Last Name" />
           </NameContainer>
-          <Input placeholder="Email address" />
-          <Input placeholder="Subject" />
-          <Input placeholder="Your Message" />
+          <Input type={"email"} value={formData.email} name="email" onChange={handleChange} placeholder="Email address" />
+          <Input value={formData.subject} name="subject" onChange={handleChange} placeholder="Subject" />
+          <Input value={formData.message} name="message" onChange={handleChange} placeholder="Your Message" />
           <CustomFilledButton title={"Send Message"} style={{
             alignSelf: "center",
           }}/>

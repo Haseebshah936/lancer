@@ -34,6 +34,7 @@ function Header(props) {
       />
       <Modal
         open={open}
+        style={{backgroundColor: "rgba(0,0,0,0.5)"}}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
