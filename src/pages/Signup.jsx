@@ -1,11 +1,12 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
 import { Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useCustomContext } from "../Hooks/useCustomContext";
+import colors from "../utils/colors";
 
 function Signup(props) {
   const navigate = useNavigate();
@@ -13,6 +14,10 @@ function Signup(props) {
   const [password, setPassword] = useState("");
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
+
+  useEffect(() => {
+      setOpen(false)
+  }, [])
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -68,14 +73,14 @@ function Signup(props) {
           <Form onSubmit={handleSubmit}>
             <Heading>Sign Up to Lancer</Heading>
             <SocialContainer>
-              <SocialIcon c=" #55ACEE">
-                <Twitter htmlColor="#55ACEE" />
+              <SocialIcon c={colors.twitterBlue}>
+                <Twitter htmlColor={colors.twitterBlue} />
               </SocialIcon>
-              <SocialIcon c=" #3178F1">
-                <FacebookTwoTone htmlColor="#3178F1" />
+              <SocialIcon c={colors.facebookBlue}>
+                <FacebookTwoTone htmlColor={colors.facebookBlue} />
               </SocialIcon>
-              <SocialIcon c={" rgba(229,61,55,1)"}>
-                <Google htmlColor=" rgba(229,61,55,1) " />
+              <SocialIcon c={colors.googleRed}>
+                <Google htmlColor={colors.googleRed} />
               </SocialIcon>
             </SocialContainer>
             <Tagline>or do via email</Tagline>
@@ -293,7 +298,7 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, #00726c) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;

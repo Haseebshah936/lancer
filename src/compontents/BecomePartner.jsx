@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
+import colors from "../utils/colors";
 function BecomePartner(props) {
   return (
     <Container>
@@ -29,7 +30,7 @@ const Container = styled.div`
   margin-inline: 5%;
   justify-content: space-around;
   margin-top: 5rem;
-  background-color: #068a6fdc;
+  background-color: ${colors.becomePartnerGreen};
   margin-bottom: 5rem;
 `;
 const TextContainer = styled.div`
@@ -44,7 +45,7 @@ const Heading = styled.h1`
   font-size: 4rem;
   margin-top: 4rem;
   text-transform: capitalize;
-  color: white;
+  color: ${colors.white};
   @media (max-width: 768px) {
     text-align: start;
   }
@@ -54,7 +55,7 @@ const Heading = styled.h1`
 `;
 
 const Tagline = styled.p`
-  color: white;
+  color: ${colors.white};
   font-size: 1.5rem;
   margin-top: 2rem;
   margin-bottom: 2.5rem;
@@ -81,18 +82,18 @@ const Btn = styled(Button)`
   padding: 1rem 1rem;
   cursor: pointer;
   margin-top: 2.5rem;
-  color: black !important;
+  color: ${colors.black} !important;
   box-shadow: 3px 2px 16px 5px rgba(8, 8, 8, 0.18);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(8, 8, 8, 0.18);
   -moz-box-shadow: 3px 2px 16px 5px rgba(8, 8, 8, 0.18);
-  background-color: #05ad8c !important;
+  background-color: ${colors.becomePartnerButtonGreen} !important;
 `;
 
 const BtnText = styled.div`
   font-size: 1.5rem;
   margin-inline: 1.5rem;
   text-transform: capitalize;
-  color: white;
+  color: ${colors.white};
   @media (max-width: 600px) {
     font-size: 1rem;
   }

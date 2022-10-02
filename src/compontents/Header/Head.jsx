@@ -20,11 +20,12 @@ function Head({ toggleDrawer, toggleLogin }) {
           <Image src="logo.png" />
         </Link>
       </Menucontainer>
+      <Wrapper>
       <SubContainer>
         <NavLink to="/home">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/discover">Discover</NavLink>
-        <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink>
+        <NavLink to="/contactus">Contact&nbsp;Us</NavLink>
+        {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
       </SubContainer>
       <ButtonContainer>
         <Button
@@ -66,11 +67,13 @@ function Head({ toggleDrawer, toggleLogin }) {
             "&:hover": { backgroundColor: "rgba(0,0,0,0.8)" },
             textTransform: "capitalize",
           }}
-          onClick={() => navigate("signup")}
+          onClick={() => navigate("/signup")}
         >
           Sign&nbsp;Up
         </Button>
       </ButtonContainer>
+      </Wrapper>
+
     </Container>
   );
 }
@@ -106,13 +109,17 @@ const Image = styled.img`
   width: 6rem;
   height: 2.5rem;
 `;
+const Wrapper = styled.div`
+  display: flex;
+`
 const SubContainer = styled.div`
   flex: 0.5;
   display: flex;
   justify-content: center;
   text-decoration: none;
-  align-items: center;
+  align-items: flex-end !important;
   align-self: center;
+  margin-right: 1rem;
   color: black;
   a {
     text-decoration: none;

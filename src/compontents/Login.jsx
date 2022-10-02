@@ -14,6 +14,7 @@ import {
 
 import { Link, useNavigate } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
+import colors from "../utils/colors";
 
 function Login({ toggleClose }) {
   const [email, setEmail] = useState("");
@@ -70,14 +71,14 @@ function Login({ toggleClose }) {
             <BtnText>Login</BtnText>
           </Btn>
           <SocialContainer>
-            <SocialIcon c=" #55ACEE">
-              <Twitter htmlColor="#55ACEE" />
+            <SocialIcon c={colors.twitterBlue}>
+              <Twitter htmlColor={colors.twitterBlue} />
             </SocialIcon>
-            <SocialIcon c=" #3178F1">
-              <FacebookTwoTone htmlColor="#3178F1" />
+            <SocialIcon c={colors.facebookBlue}>
+              <FacebookTwoTone htmlColor={colors.facebookBlue} />
             </SocialIcon>
-            <SocialIcon c={" rgba(229,61,55,1)"}>
-              <Google htmlColor=" rgba(229,61,55,1) " />
+            <SocialIcon c={colors.googleRed}>
+              <Google htmlColor={colors.googleRed} />
             </SocialIcon>
           </SocialContainer>
           <Container>
@@ -123,13 +124,14 @@ const Input = styled.input`
   padding: 1.5rem 1rem;
   margin-block: 1rem !important;
   font-size: 1.4rem;
-  color: #045c4a;
+  color: ${colors.inputBorderNotFocused};
   margin: 0.6rem 0;
-  border: 0.2rem solid rgba(0, 0, 0, 0.3);
+  border: 0.2rem solid rgba(0, 0, 0, 0.26);
   text-transform: none;
   outline: none;
+  border-radius: 2.5rem;
   :focus {
-    border: 0.2rem solid #045c4a;
+    border: 0.2rem solid ${colors.inputBorderFocused};
   }
 `;
 
@@ -162,7 +164,7 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, #00726c) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;

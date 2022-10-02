@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
+import colors from "../utils/colors";
 function Title(props) {
   return (
     <Container>
@@ -94,7 +95,7 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, #00726c) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
@@ -132,7 +133,7 @@ const CountTextContainer = styled.div`
 `;
 const CountText = styled.h2`
   font-size: 2.5rem;
-  color: #045c4a;
+  color: ${colors.textGreen};
   margin-bottom: 0rem;
 `;
 const SubText = styled.p`

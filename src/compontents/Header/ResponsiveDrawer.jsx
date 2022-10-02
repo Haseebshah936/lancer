@@ -46,8 +46,8 @@ export default function ResponsiveDrawer({
               <SubContainer>
                 <NavLink to="/home">Home</NavLink>
                 <NavLink to="/about">About</NavLink>
-                <NavLink to="/discover">Discover</NavLink>
-                <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink>
+                <NavLink to="/contactus">Contact&nbsp;Us</NavLink>
+                {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
               </SubContainer>
             </ListItem>
           </List>

@@ -53,11 +53,11 @@ function Footer(props) {
             <NavLink to="/about">About</NavLink>
           </ListItem>
           <ListItem>
-            <NavLink to="/discover">Discover</NavLink>
+          <NavLink to="/contactus">Contact&nbsp;Us</NavLink>
           </ListItem>
-          <ListItem>
+          {/* <ListItem>
             <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink>
-          </ListItem>
+          </ListItem> */}
         </List>
       </Center>
       <Right>
@@ -87,6 +87,7 @@ export default Footer;
 const Container = styled.div`
   display: flex;
   background-color: black;
+  justify-content: space-evenly;
   margin-top: 10rem;
   ${mobile({ marginTop: "0rem", flexDirection: "column" })}
   color: white;
@@ -101,6 +102,7 @@ const Left = styled.div`
 const Logo = styled.h1``;
 const Desc = styled.p`
   margin: 2rem 0rem;
+  text-align: justify;
 `;
 const SocialContainer = styled.div`
   display: flex;
@@ -121,7 +123,6 @@ const SocialIcon = styled.a`
   }
 `;
 const Center = styled.div`
-  flex: 1;
   padding: 2rem;
   ${mobile({
     display: "none",

@@ -1,6 +1,7 @@
 import { Button } from "@mui/material";
 import styled from "styled-components";
 import { mobile } from "../responsive";
+import colors from "../utils/colors";
 
 function Newsletter(props) {
   return (
@@ -46,7 +47,7 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
-  background: linear-gradient(130deg, #172f33, #43856b) border-box;
+  background: linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -87,10 +88,10 @@ const InputContainer = styled.div`
   display: flex;
   justify-items: center;
   align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: ${colors.newsLetterInputBackground};
   padding: 0.4rem 0.4rem 0.4rem 2rem;
   border-radius: 2rem;
-  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  border: 0.5px solid ${colors.newsLetterInputBorder};
   ${mobile({
     marginTop: "2rem",
   })}

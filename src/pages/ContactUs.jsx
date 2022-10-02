@@ -3,17 +3,17 @@ import styled from "styled-components";
 import Footer from "../compontents/Footer";
 import Header from "../compontents/Header";
 
-function Discover(props) {
+function ContactUs(props) {
   return (
     <Container>
       <Header />
-      Discover
+      ContactUs
       <Footer />
     </Container>
   );
 }
 
-export default Discover;
+export default ContactUs;
 const Container = styled.div`
   display: flex;
   flex-direction: column;

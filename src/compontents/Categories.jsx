@@ -4,6 +4,7 @@ import Category from "./Category";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRef } from "react";
+import colors from "../utils/colors";
 
 function Categories(props) {
   const a = [1, 2, 3, 4, 5, 6];
@@ -41,8 +42,7 @@ function Categories(props) {
               fontSize: "1rem",
               padding: ".7rem 2rem",
               minWidth: "1rem",
-              background:
-                " linear-gradient(130deg, #172f33, #43856b) border-box",
+              background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
               marginTop: "5rem",
               textTransform: "capitalize",
             }}
@@ -84,7 +84,7 @@ function Categories(props) {
           fontSize: "1rem",
           padding: "1rem 2rem",
           minWidth: "1rem",
-          background: " linear-gradient(130deg, #172f33, #43856b) border-box",
+          background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
           marginTop: "4rem",
           textTransform: "capitalize",
         }}

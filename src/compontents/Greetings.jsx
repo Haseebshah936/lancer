@@ -2,6 +2,7 @@ import { Button, ClickAwayListener, Modal } from "@mui/material";
 import React, { useState } from "react";
 import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import colors from "../utils/colors";
 
 function Greetings(props) {
   const [open, setOpen] = useState(false);
@@ -128,7 +129,7 @@ const CountTextContainer = styled.div`
 `;
 const CountText = styled.h2`
   font-size: 3rem;
-  color: #045c4a;
+  color: ${colors.textGreen};
   margin-bottom: 0rem;
 `;
 const SubText = styled.p`
