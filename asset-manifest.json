@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/lancer/static/css/main.558968a6.css",
+    "main.js": "/lancer/static/js/main.f70568f7.js",
+    "static/js/496.c4a38b74.chunk.js": "/lancer/static/js/496.c4a38b74.chunk.js",
+    "index.html": "/lancer/index.html",
+    "main.558968a6.css.map": "/lancer/static/css/main.558968a6.css.map",
+    "main.f70568f7.js.map": "/lancer/static/js/main.f70568f7.js.map",
+    "496.c4a38b74.chunk.js.map": "/lancer/static/js/496.c4a38b74.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.558968a6.css",
+    "static/js/main.f70568f7.js"
+  ]
+}
