@@ -49,7 +49,7 @@ function ContactUs(props) {
       <DetailsCardContainer>
         <DetailsCard Icon={<PublicOutlined sx={sx} />} />
         <DetailsCard
-          heading="infolancer@gmail.com"
+          heading="infolancer7@gmail.com"
           subheading="Official Mail"
           Icon={<MailOutline sx={sx} />}
           backgroundColor={{
