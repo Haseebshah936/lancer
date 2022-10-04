@@ -71,7 +71,7 @@ function Footer(props) {
         </ContactItem>
         <ContactItem>
           <MailOutline style={{ marginRight: "1rem", fontSize: "2rem" }} />
-          infolancer7@gmail.com
+          infolancer@gmail.com
         </ContactItem>
         <img
           src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655318185/lancer/hd-visa-mastercard-paypal-payment-methods-logos-png-21635415866zngy8aj06k-removebg-preview_acqk7w.png"
