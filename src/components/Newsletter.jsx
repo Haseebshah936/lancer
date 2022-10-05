@@ -91,7 +91,7 @@ const InputContainer = styled.div`
   background-color: ${colors.newsLetterInputBackground};
   padding: 0.4rem 0.4rem 0.4rem 2rem;
   border-radius: 2rem;
-  border: 0.5px solid ${colors.newsLetterInputBorder};
+  border: 0.5px solid ${colors.newsLetterInputBorderWhite};
   ${mobile({
     marginTop: "2rem",
   })}
