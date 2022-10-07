@@ -7,6 +7,8 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useCustomContext } from "../Hooks/useCustomContext";
 import colors from "../utils/colors";
+import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 function Signup(props) {
   const navigate = useNavigate();
@@ -16,8 +18,15 @@ function Signup(props) {
   const { setOpen } = useCustomContext();
 
   useEffect(() => {
-      setOpen(false)
-  }, [])
+    setOpen(false);
+  }, []);
+
+  const responseSuccessGoogle = (response) => {
+    console.log(response);
+  };
+  const responseFaliureGoogle = (response) => {
+    console.log(response);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,6 +53,17 @@ function Signup(props) {
     //     });
     // }
   };
+
+  const login = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      const tokens = await axios.post('http://localhost:3003/api/auth/google', {  // http://localhost:3001/auth/google backend that will exchange the code
+        code,
+      });
+  
+      console.log(tokens);
+    },
+  });
   return (
     <Container>
       <Wrapper>
@@ -79,17 +99,17 @@ function Signup(props) {
               <SocialIcon c={colors.facebookBlue}>
                 <FacebookTwoTone htmlColor={colors.facebookBlue} />
               </SocialIcon>
-              <SocialIcon c={colors.googleRed}>
+              <SocialIcon onClick={() => login()} c={colors.googleRed}>
                 <Google htmlColor={colors.googleRed} />
               </SocialIcon>
             </SocialContainer>
             <Tagline>or do via email</Tagline>
+             
             <Input
               type="email"
               name="email"
               onChange={(text) => setEmail(text.target.value)}
               placeholder="Email"
-              autoFocus={true}
             />
             <Input
               type="password"
@@ -230,6 +250,12 @@ const Tagline = styled.p`
   opacity: 0.6;
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const Input = styled.input`
   padding: 1.5rem 1.5rem;
   margin-block: 0.5rem !important;
@@ -298,7 +324,8 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
+      border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
