@@ -5,7 +5,7 @@ import colors from "../utils/colors";
 function BecomePartner(props) {
   return (
     <Container>
-      <ImageContainer src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655445328/lancer/Capture-removebg-preview_cc7ga1.png" />
+      <ImageContainer src="./becomeAPartner.png" />
 
       <TextContainer>
         <Heading>Become An Investor.</Heading>

@@ -154,7 +154,7 @@ const ImageContainer = styled.div`
   @media (max-width: 1200px) {
     height: 40vh;
   }
-  background-image: url("1.svg");
+  background-image: url("./1.svg");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;

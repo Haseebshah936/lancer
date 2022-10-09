@@ -6,7 +6,7 @@ import styled from "styled-components";
 function Seller(props) {
   return (
     <NewCard>
-      <Image variant="top" src="1.svg" />
+      <Image variant="top" src="./1.svg" />
       <Body>
         <Title>Haseeb</Title>
         <Wrapper>
