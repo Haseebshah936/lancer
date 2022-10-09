@@ -2,6 +2,7 @@ import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
 import colors from "../utils/colors";
+import teamImg from "../assets/1.svg"
 function Title(props) {
   return (
     <Container>
@@ -154,7 +155,7 @@ const ImageContainer = styled.div`
   @media (max-width: 1200px) {
     height: 40vh;
   }
-  background-image: url("./1.svg");
+  background-image: url(${teamImg});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;

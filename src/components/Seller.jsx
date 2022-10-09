@@ -2,11 +2,12 @@ import { Avatar, Button } from "@mui/material";
 import React from "react";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
+import teamImg from "../assets/1.svg"
 
 function Seller(props) {
   return (
     <NewCard>
-      <Image variant="top" src="./1.svg" />
+      <Image variant="top" src={teamImg} />
       <Body>
         <Title>Haseeb</Title>
         <Wrapper>

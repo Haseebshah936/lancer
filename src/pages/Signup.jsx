@@ -12,6 +12,7 @@ import * as joi from "joi";
 import axios from "axios";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 import * as queryString from "query-string";
+import signup from "../assets/signup.png"
 
 const schema = joi.object({
   email: joi.string().required(),
@@ -397,7 +398,7 @@ const BtnText = styled.div`
 
 const Image = styled.div`
   flex: 1;
-  background: url("./signup.png");
+  background: url(${signup});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -2,11 +2,12 @@ import { Button } from "@mui/material";
 import React from "react";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
+import teamImg from "../assets/1.svg"
 
 function Category(props) {
   return (
     <NewCard>
-      <Image variant="top" src="./1.svg" />
+      <Image variant="top" src={teamImg} />
       <Body>
         <div>
           <Title>Mobile Development</Title>
