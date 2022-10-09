@@ -12,7 +12,7 @@ import * as joi from "joi";
 import axios from "axios";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
 import * as queryString from "query-string";
-import signup from "../assets/signup.png"
+import { signup } from "../assets";
 
 const schema = joi.object({
   email: joi.string().required(),

@@ -2,8 +2,7 @@ import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
 import colors from "../utils/colors";
-import becomePartner from "../assets/becomeAPartner.png"
-
+import { becomePartner } from "../assets";
 function BecomePartner(props) {
   return (
     <Container>
