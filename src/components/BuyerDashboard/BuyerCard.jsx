@@ -14,7 +14,16 @@ import styled from "styled-components";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
 const BuyerCard = () => {
   return (
-    <Card sx={{ maxWidth: "20rem" }}>
+    <Card
+      sx={{
+        maxWidth: "20rem",
+        minWidth: "20rem",
+        marginRight: "2rem",
+        boxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
+        WebkitBoxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
+        borderRadius: "5%",
+      }}
+    >
       <CardMedia
         component="img"
         image="1.svg"
@@ -51,16 +60,40 @@ const BuyerCard = () => {
           <GradeSharpIcon sx={{ color: "#FFBE5B" }} />
           <MiniWrapper>
             <p style={{ color: "#FFBE5B" }}>5.0</p>
-            <p>(33)</p>
+            <p style={{ marginLeft: "2px" }}>(33)</p>
           </MiniWrapper>
         </Wrapper>
       </CardContent>
-      <CardActions disableSpacing sx={{ paddingTop: "0px" }}>
+      <CardActions
+        disableSpacing
+        sx={{
+          paddingTop: "0px",
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <Tooltip title="Save To Favourites" placement="bottom">
           <IconButton aria-label="add to favorites">
             <FavoriteBorderOutlinedIcon sx={{ color: "#045c4a" }} />
           </IconButton>
         </Tooltip>
+        <MiniWrapper>
+          <p
+            style={{ color: "grey", fontFamily: "'Gemunu Libre', sans-serif" }}
+          >
+            STARTING AT
+          </p>
+          <p
+            style={{
+              marginLeft: "5px",
+              fontWeight: "500",
+              fontSize: "2rem",
+              color: "#045c4a",
+            }}
+          >
+            $50
+          </p>
+        </MiniWrapper>
       </CardActions>
     </Card>
   );
@@ -71,8 +104,6 @@ export default BuyerCard;
 const Wrapper = styled.div`
   display: flex;
   align-items: center;
-  /* background-color: red; */
-
   margin-top: 5px;
 `;
 

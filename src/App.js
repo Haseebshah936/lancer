@@ -13,9 +13,7 @@ import Signup from "./pages/Signup";
 import { CustomContextProvider } from "./Hooks/useCustomContext";
 import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
-import Slider from "./components/BuyerDashboard/Slider";
-import BuyerCard from "./components/BuyerDashboard/BuyerCard";
-import GigSlider from "./components/BuyerDashboard/GigSlider";
+import BuyerDashboard from "./pages/BuyerDashboard";
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
@@ -32,7 +30,7 @@ function App(props) {
         </Routes>
       </Router>
     </CustomContextProvider>
-    // <GigSlider></GigSlider>
+    // <BuyerDashboard></BuyerDashboard>
   );
 }
 
