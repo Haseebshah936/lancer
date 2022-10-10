@@ -7,100 +7,43 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useCustomContext } from "../Hooks/useCustomContext";
 import colors from "../utils/colors";
-import { useGoogleLogin } from "@react-oauth/google";
-import * as joi from "joi";
-import axios from "axios";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
-import * as queryString from "query-string";
-import { signup } from "../assets";
-
-const schema = joi.object({
-  email: joi.string().required(),
-  password: joi.string().min(8).required(),
-});
 
 function Signup(props) {
   const navigate = useNavigate();
-  const [user, setUser] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
 
   useEffect(() => {
-    setOpen(false);
-  }, []);
+      setOpen(false)
+  }, [])
 
-  const googleAuth = useGoogleLogin({
-    flow: "auth-code",
-    onSuccess: async ({ code }) => {
-      const tokens = await axios.post("http://localhost:3003/api/auth/google", {
-        // http://localhost:3001/auth/google backend that will exchange the code
-        code,
-      });
-
-      console.log(tokens);
-    },
-    redirect_uri: "http://localhost:3000/home",
-  });
-
-  // const facebookAuth = async () => {
-  const stringifiedParams = queryString.stringify({
-    client_id: "881136853269267",
-    redirect_uri: "https://localhost:3000",
-    scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
-    response_type: "code",
-    auth_type: "rerequest",
-    display: "popup",
-  });
-
-  const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
-  // }
-
-  const responseFacebook = async (res) => {
-    console.log(res)
-    const {accessToken,id} = res;
-    const response = await axios.post("http://localhost:3003/api/auth/facebook/", {
-      id,
-      accessToken
-    })
-    console.log("Response From facebook", response);
-  }
-
-  const handleChange = ({ target }) => {
-    const newData = {
-      ...user,
-    };
-    newData[target.name] = target.value;
-    setUser(newData);
-  };
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { error } = schema.validate(user, { abortEarly: false });
-    if (error) {
-      const { details } = error;
-      console.log(details);
-      details.map((e) => {
-        console.log(e.path[0], e.message);
-      });
-      return;
-    } else {
-      try {
-        const response = await axios.post(
-          "http://localhost:3003/api/auth/signup",
-          {
-            ...user,
-          }
-        );
-        console.log(response.data);
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    }
+    // if (!(email === "" || password === "")) {
+    //   const auth = getAuth(firebaseApp);
+    //   signInWithEmailAndPassword(auth, email, password)
+    //     .then((userCredential) => {
+    //       const user = userCredential.user;
+    //       if (!user.emailVerified) {
+    //         sendEmailVerification(auth.currentUser).then(() => {
+    //           alert(
+    //             "A verification link was sent to you Please verify your Email"
+    //           );
+    //         });
+    //         setLogin(false);
+    //       } else {
+    //         setLogin(user);
+    //         setLoaded(false);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       const errorCode = error.code;
+    //       alert(errorCode.substring(5, errorCode.length).replaceAll("-", " "));
+    //     });
+    // }
   };
-
   return (
     <Container>
       <Wrapper>
@@ -133,37 +76,20 @@ function Signup(props) {
               <SocialIcon c={colors.twitterBlue}>
                 <Twitter htmlColor={colors.twitterBlue} />
               </SocialIcon>
-              {/* <a href={facebookLoginUrl}> */}
-                <FacebookLogin 
-                appId="881136853269267"
-                autoLoad={false}
-                fields="name,email,picture"
-                callback={responseFacebook}
-                render={(renderProps) => <SocialIcon onClick={renderProps.onClick} c={colors.facebookBlue}>
+              <SocialIcon c={colors.facebookBlue}>
                 <FacebookTwoTone htmlColor={colors.facebookBlue} />
-              </SocialIcon>}
-                />
-                 {/* <SocialIcon c={colors.facebookBlue}>
-                <FacebookTwoTone htmlColor={colors.facebookBlue} />
-              </SocialIcon> */}
-              {/* </a> */}
-              <SocialIcon
-                onClick={async () => {
-                  googleAuth();
-                  // await axios.post("http://localhost:3003/api/auth/google")
-                }}
-                c={colors.googleRed}
-              >
+              </SocialIcon>
+              <SocialIcon c={colors.googleRed}>
                 <Google htmlColor={colors.googleRed} />
               </SocialIcon>
             </SocialContainer>
             <Tagline>or do via email</Tagline>
-
             <Input
               type="email"
               name="email"
-              onChange={(text) => handleChange(text)}
+              onChange={(text) => setEmail(text.target.value)}
               placeholder="Email"
+              autoFocus={true}
             />
             <Input
               type="password"
@@ -171,7 +97,7 @@ function Signup(props) {
               className="box"
               placeholder="Password"
               onChange={(e) => {
-                handleChange(e);
+                setPassword(e.target.value);
               }}
             />
             <ButtonContainer>
@@ -304,12 +230,6 @@ const Tagline = styled.p`
   opacity: 0.6;
 `;
 
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-`;
-
 const Input = styled.input`
   padding: 1.5rem 1.5rem;
   margin-block: 0.5rem !important;
@@ -378,8 +298,7 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
-      border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
@@ -398,7 +317,7 @@ const BtnText = styled.div`
 
 const Image = styled.div`
   flex: 1;
-  background: url(${signup});
+  background: url("https://res.cloudinary.com/dj46ttbl8/image/upload/v1655380143/lancer/66677de7-8d41-4091-92af-78f9c175d4ca_vdckxb.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

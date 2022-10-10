@@ -2,11 +2,10 @@ import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
 import colors from "../utils/colors";
-import { becomePartner } from "../assets";
 function BecomePartner(props) {
   return (
     <Container>
-      <ImageContainer src={becomePartner} />
+      <ImageContainer src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655445328/lancer/Capture-removebg-preview_cc7ga1.png" />
 
       <TextContainer>
         <Heading>Become An Investor.</Heading>

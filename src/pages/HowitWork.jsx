@@ -7,7 +7,7 @@ function HowitWork(props) {
   return (
     <Container>
       <Header />
-      How it Work Not being Used
+      How it Work
       <Footer />
     </Container>
   );
