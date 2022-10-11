@@ -16,18 +16,20 @@ import ContactUs from "./pages/ContactUs";
 import Slider from "./components/BuyerDashboard/Slider";
 import BuyerCard from "./components/BuyerDashboard/BuyerCard";
 import GigSlider from "./components/BuyerDashboard/GigSlider";
+import SellerGig from "./pages/SellerGig";
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
         <Routes>
-          <Route path="/howitwork" element={<HowitWork />} />
+          {/* <Route path="/howitwork" element={<HowitWork />} /> */}
           <Route path="/about" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/home" element={<Landing />} />
+          <Route path="/" element={<SellerGig />}/>
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>
