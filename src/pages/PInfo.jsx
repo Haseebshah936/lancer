@@ -9,25 +9,38 @@ import { URL } from "../Env";
 export default function PInfo() {
   const location = useLocation();
   const [pathName, setPathName] = useState(location.pathname);
+  const [bgMenuColor, setBgMenuColor] = useState([
+    { color: "white" },
+    { color: "#f2f2f2" },
+  ]);
 
-  console.log("pathname", `${URL}${location.pathname}`);
   useEffect(() => {
     setPathName(location.pathname);
-    if (location.pathname === "/pinfo") {
-      console.log("redirect");
-      // return <Navigate to="/personaldetailsandskills" />;
-    }
+    console.log("pathname", `${URL}${location.pathname}`);
   }, [location.pathname]);
   return (
-    <div>
+    <>
       <Header></Header>
 
-      <div className="d-flex to-row">
+      <div
+        className="container border d-flex to-row rounded"
+        style={{
+          boxShadow:
+            "rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px",
+        }}
+      >
         <MobileViewDiv>
-          <div className="container ms-5">
+          <div className="container ms-5" style={{ width: "170px" }}>
             <RRDLink
               to="/pinfo/personaldetailsandskills"
-              className="d-flex to-row"
+              className="d-flex to-row rounded mt-4"
+              style={{
+                backgroundColor:
+                  pathName === "/pinfo/personaldetailsandskills"
+                    ? bgMenuColor[0].color
+                    : bgMenuColor[1].color,
+                width: "164px",
+              }}
             >
               {pathName === "/pinfo/personaldetailsandskills" ? (
                 <ActivePageMarker></ActivePageMarker>
@@ -36,7 +49,14 @@ export default function PInfo() {
             </RRDLink>
             <RRDLink
               to="/pinfo/experienceandeducation"
-              className="d-flex to-row"
+              className="d-flex to-row rounded"
+              style={{
+                backgroundColor:
+                  pathName === "/pinfo/experienceandeducation"
+                    ? bgMenuColor[0].color
+                    : bgMenuColor[1].color,
+                width: "164px",
+              }}
             >
               {pathName === "/pinfo/experienceandeducation" ? (
                 <ActivePageMarker></ActivePageMarker>
@@ -45,7 +65,14 @@ export default function PInfo() {
             </RRDLink>
             <RRDLink
               to="/pinfo/pinfoprojectsandrewards"
-              className="d-flex to-row"
+              className="d-flex to-row rounded"
+              style={{
+                backgroundColor:
+                  pathName === "/pinfo/pinfoprojectsandrewards"
+                    ? bgMenuColor[0].color
+                    : bgMenuColor[1].color,
+                width: "164px",
+              }}
             >
               {pathName === "/pinfo/pinfoprojectsandrewards" ? (
                 <ActivePageMarker></ActivePageMarker>
@@ -58,7 +85,7 @@ export default function PInfo() {
           <Outlet></Outlet>
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
@@ -77,6 +104,7 @@ const MobileViewDiv = styled.div`
   @media only screen and (max-width: 600px) {
     display: none;
     magin: 0;
-  } ;
+  }
+  background-color: #f2f2f2;
 `;
 const OutLetDiv = styled.div``;

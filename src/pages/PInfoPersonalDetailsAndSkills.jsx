@@ -65,7 +65,7 @@ export default function PInfoPersonalDetailsAndSkills() {
   return (
     <MainDiv className="p-3 rounded">
       {/* Header Start */}
-      <div className="ps-2 pe-2 pb-3 border rounded">
+      <div className="ps-2 pe-2 pb-3 rounded">
         <div className="mt-2 border p-2 rounded">
           <HeaderDiv>
             <div className="ps-2 d-flex flex-row align-items-center">
