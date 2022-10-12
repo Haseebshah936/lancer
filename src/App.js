@@ -14,6 +14,7 @@ import { CustomContextProvider } from "./Hooks/useCustomContext";
 import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
 import BuyerDashboard from "./pages/BuyerDashboard";
+import SellerGig from "./pages/SellerGig";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ function App(props) {
     // <CustomContextProvider value={{ open, setOpen }}>
     //   <Router>
     //     <Routes>
+    //       <Route path="/" element={<SellerGig />} />
     //       <Route path="/howitwork" element={<HowitWork />} />
     //       <Route path="/about" element={<About />} />
     //       <Route path="/contactus" element={<ContactUs />} />
