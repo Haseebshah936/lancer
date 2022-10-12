@@ -27,6 +27,7 @@
     "react-image-gallery": "^1.2.11",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
+    "react-swipeable-views": "^0.14.0",
     "styled-components": "^5.3.6",
     "web-vitals": "^3.0.2"
   },
