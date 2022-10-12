@@ -12,6 +12,7 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import styled from "styled-components";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
+import { teamImg } from "../../assets";
 const BuyerCard = () => {
   return (
     <Card
@@ -26,7 +27,7 @@ const BuyerCard = () => {
     >
       <CardMedia
         component="img"
-        image="1.svg"
+        image={teamImg}
         alt="Gig Image"
         sizes="contain"
         border-radius="15px"

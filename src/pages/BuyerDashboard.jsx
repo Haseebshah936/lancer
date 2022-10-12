@@ -6,9 +6,9 @@ import TopSlider from "../components/BuyerDashboard/TopSlider";
 const BuyerDashboard = () => {
   return (
     <div>
-      <Header></Header>
-      <MPGigSlider></MPGigSlider>
-      {/* <TopSlider></TopSlider> */}
+      {/* <Header></Header>
+      <MPGigSlider></MPGigSlider> */}
+      <TopSlider></TopSlider>
     </div>
   );
 };

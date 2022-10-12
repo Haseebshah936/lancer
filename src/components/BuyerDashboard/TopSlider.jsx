@@ -1,8 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import CustomFilledButton from "../CustomFilledButton";
+import Carousel from "react-bootstrap/Carousel";
+// import "react-bootstrap/dist/react-bootstrap";
 
-// container;
+import { social } from "../../assets";
+
 const TopSlider = () => {
   return (
     <Container>
@@ -16,10 +19,23 @@ const TopSlider = () => {
           style={{ margin: "5px 0px 0px 0px" }}
         ></CustomFilledButton>
       </FirstSection>
-      <Line></Line>
       <SecondSection>
-        {" "}
-        <h4>asd</h4>
+        <Carousel style={{ height: "200px" }}>
+          <Carousel.Item>
+            <img className="d-block w-100" src={social} alt="First slide" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img className="d-block w-100" src={social} alt="Second slide" />
+          </Carousel.Item>
+          <Carousel.Item>
+            <img
+              className="d-block w-100"
+              // style={{ sizes: "contain" }}
+              src={social}
+              alt="Third slide"
+            />
+          </Carousel.Item>
+        </Carousel>
       </SecondSection>
     </Container>
   );
@@ -28,41 +44,41 @@ const TopSlider = () => {
 export default TopSlider;
 
 const Container = styled.div`
-  /* padding-inline: 7%; */
-  /* width: 100%; */
+  height: 200px;
   display: flex;
   justify-content: space-around;
   align-items: center;
-  min-height: 200px;
+  min-height: 20rem;
   margin-top: 1rem;
   margin-inline: 7%;
   position: relative;
   border-radius: 5px;
-  background-color: #605d5df1;
+  background-color: #ffffff;
   box-sizing: border-box;
   overflow: hidden;
-  box-shadow: 2%;
-`;
-
-const Line = styled.div`
-  width: 1000px;
-  transform: rotate(-45deg);
-  transform-origin: center center;
-  border-top: 1px solid white;
-  position: absolute;
-  box-sizing: border-box;
+  box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
+  -webkit-box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
+  -moz-box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
 `;
 
 const FirstSection = styled.div`
   display: flex;
+  height: 100%;
+  width: 45%;
   flex-direction: column;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
   text-align: center;
+  background-color: #ffffff;
 `;
 
 const SecondSection = styled.div`
+  width: 55%;
+  height: 100%;
+  flex-direction: column;
   display: flex;
   align-items: center;
-  justify-items: center;
+  justify-content: center;
+  /* background-color: green; */
+  clip-path: polygon(25% 0, 100% 0%, 100% 100%, 0% 100%);
 `;
