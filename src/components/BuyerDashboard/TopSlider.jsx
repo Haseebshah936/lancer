@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import CustomFilledButton from "../CustomFilledButton";
 import Carousel from "react-bootstrap/Carousel";
-// import "react-bootstrap/dist/react-bootstrap";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { social } from "../../assets";
 
