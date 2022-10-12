@@ -86,6 +86,7 @@ function GigPricePlanMini(props) {
               border: ".5px solid rgba(0,0,0,0.2)",
               marginLeft: "-1px",
               bgcolor: colors.lightGrey,
+              padding: ".8rem 1rem"
             },
             value === 0 && activeStyle,
           ]}
@@ -97,7 +98,7 @@ function GigPricePlanMini(props) {
             {
               border: ".5px solid rgba(0,0,0,0.2)",
               marginLeft: "-1px",
-              bgcolor: colors.lightGrey,
+              bgcolor: colors.lightGrey,padding: ".8rem 1rem"
             },
             value === 1 && activeStyle,
           ]}
@@ -110,7 +111,7 @@ function GigPricePlanMini(props) {
               border: ".5px solid rgba(0,0,0,0.2)",
               marginLeft: "-1px",
               marginRight: "-1px",
-              bgcolor: colors.lightGrey,
+              bgcolor: colors.lightGrey,padding: ".8rem 1rem"
             },
             value === 2 && activeStyle,
           ]}

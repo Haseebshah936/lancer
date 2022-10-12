@@ -9,6 +9,7 @@ import { IconButton } from "@mui/material";
 import { FavoriteBorder, StarRate, Visibility } from "@mui/icons-material";
 import colors from "../../utils/colors";
 import GigPricePlanMini from "./GigPricePlanMini";
+import Review from "../../components/Review";
 
 const images = [
   {
@@ -206,44 +207,103 @@ function SellerGig({
     <>
       <Header />
       <Container>
-        <SubContainer1>
-          <Heading>
-            Get your premium quality product logo designing and | rebranding
-            material in very low price
-          </Heading>
-          <ReviewContainer>
-            <IconButton disableRipple>
-              <StarRate htmlColor={colors.gold} />
-              <ButtonText style={{ fontWeight: "bold" }}>
-                &nbsp;{parseFloat(rating).toFixed(1)}
-              </ButtonText>
-              <ButtonText>{"(" + reviews + ")"}</ButtonText>
-            </IconButton>
-            <IconButton disableRipple>
-              <Visibility htmlColor={colors.gray} />
-              <ButtonText style={{ fontWeight: "bold" }}>
-                &nbsp;{views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-              </ButtonText>
-            </IconButton>
-            <IconButton>
-              <FavoriteBorder htmlColor={colors.googleRed} />
-              <ButtonText
-                style={{ fontWeight: "bold", color: colors.googleRed }}
-              >
-                &nbsp;Save
-              </ButtonText>
-            </IconButton>
-          </ReviewContainer>
-          <ImageGallery
-            showFullscreenButton={false}
-            showPlayButton={false}
-            items={items}
-            additionalClass="imageGallery"
-          />
-        </SubContainer1>
-        <SubContainer2>
-          <GigPricePlanMini />
-        </SubContainer2>
+        <Wrapper>
+          <SubContainer1>
+            <Heading>
+              Get your premium quality product logo designing and | rebranding
+              material in very low price
+            </Heading>
+            <ReviewDetailsContainer>
+              <IconButton style={{ paddingLeft: "0px" }} disableRipple>
+                <StarRate htmlColor={colors.gold} />
+                <ButtonText style={{ fontWeight: "bold" }}>
+                  &nbsp;{parseFloat(rating).toFixed(1)}
+                </ButtonText>
+                <ButtonText>{"(" + reviews + ")"}</ButtonText>
+              </IconButton>
+              <IconButton disableRipple>
+                <Visibility htmlColor={colors.gray} />
+                <ButtonText style={{ fontWeight: "bold" }}>
+                  &nbsp;{views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                </ButtonText>
+              </IconButton>
+              <IconButton>
+                <FavoriteBorder htmlColor={colors.googleRed} />
+                <ButtonText
+                  style={{ fontWeight: "bold", color: colors.googleRed }}
+                >
+                  &nbsp;Save
+                </ButtonText>
+              </IconButton>
+            </ReviewDetailsContainer>
+            <ImageGallery
+              showFullscreenButton={false}
+              showPlayButton={false}
+              items={items}
+              additionalClass="imageGallery"
+            />
+            <Description>
+              Laboris id laborum irure in amet anim ad laboris reprehenderit
+              nostrud quis. Lorem proident sint voluptate sit incididunt
+              pariatur. Esse qui quis dolore tempor quis aute qui duis irure
+              amet. Laboris nostrud dolore excepteur excepteur cupidatat laboris
+              non labore officia aute. Id anim amet proident Lorem exercitation
+              elit ullamco id Lorem. Incididunt veniam do velit nostrud elit
+              proident aliqua reprehenderit magna. Sint do eiusmod enim
+              reprehenderit proident enim commodo sit minim nulla. Sint do dolor
+              est officia ut aliquip commodo adipisicing ullamco consequat.
+              Dolore ullamco sit non ipsum cupidatat consectetur qui do. Aliqua
+              in ad quis veniam nulla sint aliqua. Labore enim qui officia
+              ullamco cupidatat cupidatat consequat ut sit Lorem. Nostrud elit
+              consectetur laboris consequat excepteur magna elit nulla. Aliqua
+              nulla et cupidatat quis magna fugiat ipsum et minim anim
+              exercitation reprehenderit. Lorem labore est cupidatat quis
+              voluptate non. Tempor pariatur voluptate magna sit quis labore
+              sint Lorem nostrud tempor Lorem. Sint veniam consectetur laboris
+              magna laborum velit voluptate cupidatat fugiat pariatur dolor
+              labore. Dolor culpa reprehenderit commodo excepteur ad consequat
+              Lorem. Dolore deserunt adipisicing velit est minim excepteur in
+              tempor ea deserunt id aliqua. Sit nisi ipsum ad ea ad officia
+              deserunt. Deserunt exercitation aliquip proident laborum ea
+              ullamco tempor ad officia in proident minim velit.
+              <br />
+              <br />
+              Laboris id laborum irure in amet anim ad laboris reprehenderit
+              nostrud quis. Lorem proident sint voluptate sit incididunt
+              pariatur. Esse qui quis dolore tempor quis aute qui duis irure
+              amet. Laboris nostrud dolore excepteur excepteur cupidatat laboris
+              non labore officia aute. Id anim amet proident Lorem exercitation
+              elit ullamco id Lorem. Incididunt veniam do velit nostrud elit
+              proident aliqua reprehenderit magna. Sint do eiusmod enim
+              reprehenderit proident enim commodo sit minim nulla. Sint do dolor
+              est officia ut aliquip commodo adipisicing ullamco consequat.
+              Dolore ullamco sit non ipsum cupidatat consectetur qui do. Aliqua
+              in ad quis veniam nulla sint aliqua. Labore enim qui officia
+              ullamco cupidatat cupidatat consequat ut sit Lorem. Nostrud elit
+              consectetur laboris consequat excepteur magna elit nulla. Aliqua
+              nulla et cupidatat quis magna fugiat ipsum et minim anim
+              exercitation reprehenderit. Lorem labore est cupidatat quis
+              voluptate non. Tempor pariatur voluptate magna sit quis labore
+              sint Lorem nostrud tempor Lorem. Sint veniam consectetur laboris
+              magna laborum velit voluptate cupidatat fugiat pariatur dolor
+              labore. Dolor culpa reprehenderit commodo excepteur ad consequat
+              Lorem. Dolore deserunt adipisicing velit est minim excepteur in
+              tempor ea deserunt id aliqua. Sit nisi ipsum ad ea ad officia
+              deserunt. Deserunt exercitation aliquip proident laborum ea
+              ullamco tempor ad officia in proident minim velit.
+            </Description>
+            <SubHeading>{reviews} Client Reviews</SubHeading>
+            <ReviewContainer>
+              <Review />
+              <Review />
+              <Review />
+              <Review />
+            </ReviewContainer>
+          </SubContainer1>
+          <SubContainer2>
+            <GigPricePlanMini />
+          </SubContainer2>
+        </Wrapper>
       </Container>
       <Footer />
     </>
@@ -253,19 +313,20 @@ function SellerGig({
 export default SellerGig;
 
 const Container = styled.div`
+  padding-top: 5rem;
+  padding-inline: 7%;
   display: flex;
-  margin-top: 5rem;
-  padding-inline: 15%;
-  box-sizing: border-box;
-  overflow-x: hidden;
-  img .image-gallery-slide .image-gallery-image {
-    height: 100%;
-    border: 0px;
-  }
+  flex: 1;
   ${tablet({
-    padding: "7%",
+    paddingInline: "7%",
     marginTop: "0rem",
   })}
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
   ${miniTablet({
     flexDirection: "column",
   })}
@@ -274,7 +335,6 @@ const Container = styled.div`
 const SubContainer1 = styled.div`
   flex: 1.3;
   flex-grow: 1;
-  height: 60rem;
   /* background-color: aliceblue; */
 `;
 const Heading = styled.h1`
@@ -288,7 +348,7 @@ const Heading = styled.h1`
     marginRight: "0rem",
   })}
 `;
-const ReviewContainer = styled.div`
+const ReviewDetailsContainer = styled.div`
   display: flex;
 `;
 const ButtonText = styled.p`
@@ -299,8 +359,8 @@ const ButtonText = styled.p`
 
 const SubContainer2 = styled.div`
   flex: 0.6;
-  background-color: antiquewhite;
-  margin-left: 5rem;
+  display: flex;
+  margin-left: 4rem;
   ${tablet({
     paddingInline: 0,
   })}
@@ -309,10 +369,18 @@ const SubContainer2 = styled.div`
   })}
 `;
 
-const Wrapper = styled.div``;
+const PakageContainer = styled.div``;
 
-const pakageContainer = styled.div``;
+const Description = styled.p`
+  text-align: justify;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+`;
 
-const description = styled.p``;
+const ReviewContainer = styled.div``;
 
-const reviewContainer = styled.div``;
+const SubHeading = styled.h2`
+  font-weight: 500;
+  font-size: 1.4rem;
+  margin-block: 2rem;
+`;
