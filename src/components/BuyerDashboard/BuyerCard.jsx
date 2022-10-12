@@ -12,8 +12,8 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import styled from "styled-components";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
-import { teamImg } from "../../assets";
-const BuyerCard = () => {
+
+const BuyerCard = (props) => {
   return (
     <Card
       sx={{
@@ -27,19 +27,16 @@ const BuyerCard = () => {
     >
       <CardMedia
         component="img"
-        image={teamImg}
+        image={props.GigImage}
         alt="Gig Image"
         sizes="contain"
         border-radius="15px"
+        style={{ cursor: "pointer" }}
       />
       <CardHeader
+        style={{ cursor: "pointer" }}
         sx={{ paddingTop: "2px", paddingBottom: "0px" }}
-        avatar={
-          <Avatar
-            aria-label="recipe"
-            src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-          ></Avatar>
-        }
+        avatar={<Avatar aria-label="recipe" src={props.Avatar}></Avatar>}
         action={
           <Tooltip title="Save To List" placement="right">
             <IconButton
@@ -50,18 +47,26 @@ const BuyerCard = () => {
             </IconButton>
           </Tooltip>
         }
-        title="Muhammad Haseeb"
-        subheader="Level rana Seller"
+        title={props.SellerName}
+        subheader={props.SellerLevel}
       />
       <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
-        <Typography variant="h5" sx={{ color: "black", fontWeight: 400 }}>
-          I will assassinate Talha and Umer with pressure
+        <Typography
+          variant="h5"
+          sx={{ color: "black", fontWeight: 400 }}
+          style={{ cursor: "pointer" }}
+        >
+          {props.GigTitle}
         </Typography>
         <Wrapper>
           <GradeSharpIcon sx={{ color: "#FFBE5B" }} />
           <MiniWrapper>
-            <p style={{ color: "#FFBE5B" }}>5.0</p>
-            <p style={{ marginLeft: "2px" }}>(33)</p>
+            <p style={{ color: "#FFBE5B", marginBottom: "0px" }}>
+              {props.SellerRating}
+            </p>
+            <p style={{ marginLeft: "2px", marginBottom: "0px" }}>
+              {props.GigReviewsTotal}
+            </p>
           </MiniWrapper>
         </Wrapper>
       </CardContent>
@@ -78,7 +83,7 @@ const BuyerCard = () => {
             <FavoriteBorderOutlinedIcon sx={{ color: "#045c4a" }} />
           </IconButton>
         </Tooltip>
-        <MiniWrapper>
+        <MiniWrapper2>
           <p
             style={{ color: "grey", fontFamily: "'Gemunu Libre', sans-serif" }}
           >
@@ -90,11 +95,12 @@ const BuyerCard = () => {
               fontWeight: "500",
               fontSize: "2rem",
               color: "#045c4a",
+              cursor: "pointer",
             }}
           >
-            $50
+            {props.GigStartPrice}
           </p>
-        </MiniWrapper>
+        </MiniWrapper2>
       </CardActions>
     </Card>
   );
@@ -113,4 +119,10 @@ const MiniWrapper = styled.div`
   align-items: center;
   margin-left: 5px;
   margin-top: 2px;
+`;
+const MiniWrapper2 = styled.div`
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  margin-top: 4px;
 `;

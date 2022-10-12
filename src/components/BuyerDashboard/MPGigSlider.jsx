@@ -7,6 +7,7 @@ import React from "react";
 import BuyerCard from "./BuyerCard";
 import colors from "../../utils/colors";
 import { mobile } from "../../responsive";
+import { teamImg } from "../../assets";
 
 const MPGigSlider = () => {
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
@@ -14,7 +15,7 @@ const MPGigSlider = () => {
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
   };
-  const categoryRef = useRef();
+  const GigRef = useRef();
 
   return (
     <Container>
@@ -40,15 +41,27 @@ const MPGigSlider = () => {
               textTransform: "capitalize",
               minWidth: "1rem",
             }}
-            onClick={() => scroll(-categoryRef.current.offsetWidth)}
+            onClick={() => scroll(-GigRef.current.offsetWidth)}
           >
             <ArrowBackIcon fontSize="medium" />
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
           {a.map((c) => (
-            <div ref={categoryRef}>
-              <BuyerCard count={c} />
+            <div ref={GigRef}>
+              <BuyerCard
+                count={c}
+                GigImage={teamImg}
+                Avatar={
+                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+                }
+                SellerName={"Muhammad Haseeb"}
+                SellerLevel={"Level Rana Seller"}
+                GigTitle={"I will assassinate Talha and Umer with pressure"}
+                SellerRating={"5.0"}
+                GigReviewsTotal={"33"}
+                GigStartPrice={"$50"}
+              />
             </div>
           ))}
         </BuyerContainer>
@@ -66,7 +79,7 @@ const MPGigSlider = () => {
                 " linear-gradient(130deg, #172f33, #43856b) border-box",
               textTransform: "capitalize",
             }}
-            onClick={() => scroll(categoryRef.current.offsetWidth)}
+            onClick={() => scroll(GigRef.current.offsetWidth)}
           >
             <ArrowForwardIcon fontSize="medium" />
           </Button>
@@ -85,7 +98,7 @@ const MPGigSlider = () => {
               marginTop: "5rem",
               textTransform: "capitalize",
             }}
-            onClick={() => scroll(categoryRef.current.offsetWidth)}
+            onClick={() => scroll(GigRef.current.offsetWidth)}
           >
             <ArrowForwardIcon fontSize="medium" />
           </Button>
@@ -107,7 +120,7 @@ const MPGigSlider = () => {
               minWidth: "1rem",
               marginTop: "1rem",
             }}
-            onClick={() => scroll(-categoryRef.current.offsetWidth)}
+            onClick={() => scroll(-GigRef.current.offsetWidth)}
           >
             <ArrowBackIcon fontSize="medium" />
           </Button>

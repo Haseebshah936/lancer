@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import CustomFilledButton from "../CustomFilledButton";
 import Carousel from "react-bootstrap/Carousel";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 import { social } from "../../assets";
 
 const TopSlider = () => {
@@ -21,10 +21,20 @@ const TopSlider = () => {
       <SecondSection>
         <Carousel style={{ height: "200px" }}>
           <Carousel.Item>
-            <img className="d-block w-100" src={social} alt="First slide" />
+            <img
+              className="d-block w-100"
+              src={social}
+              alt="First slide"
+              style={{ objectFit: "contain" }}
+            />
           </Carousel.Item>
           <Carousel.Item>
-            <img className="d-block w-100" src={social} alt="Second slide" />
+            <img
+              className="d-block w-100"
+              src={social}
+              alt="Second slide"
+              style={{ objectFit: "contain" }}
+            />
           </Carousel.Item>
           <Carousel.Item>
             <img
@@ -32,6 +42,7 @@ const TopSlider = () => {
               // style={{ sizes: "contain" }}
               src={social}
               alt="Third slide"
+              style={{ objectFit: "contain" }}
             />
           </Carousel.Item>
         </Carousel>
