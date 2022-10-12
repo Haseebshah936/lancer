@@ -28,7 +28,7 @@ function App(props) {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/home" element={<Landing />} />
           <Route path="/pinfo" element={<PInfo></PInfo>}>
-            <Route path="" element={<PInfoPersonalDetailsAndSkills></PInfoPersonalDetailsAndSkills>}></Route>
+            {/* <Route path="" element={<PInfoPersonalDetailsAndSkills></PInfoPersonalDetailsAndSkills>}></Route> */}
             <Route path="personaldetailsandskills" element={<PInfoPersonalDetailsAndSkills></PInfoPersonalDetailsAndSkills>}></Route>
             <Route path="experienceandeducation" element={<PInfoExperienceAndEducation></PInfoExperienceAndEducation>}></Route>
             <Route path="pinfoprojectsandrewards" element={<PInfoProjectsAndRewards></PInfoProjectsAndRewards>}></Route>

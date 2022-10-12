@@ -15,5 +15,6 @@ const colors = {
     becomePartnerButtonGreen: "#05ad8c",
     darkBlue: "#242f6b",
     gray: "gray",
+    red: "#FF5852"
 }
 export default colors;
