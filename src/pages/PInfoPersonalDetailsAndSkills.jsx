@@ -65,7 +65,7 @@ export default function PInfoPersonalDetailsAndSkills() {
   return (
     <MainDiv className="p-3 rounded">
       {/* Header Start */}
-      <div className="ps-2 pe-2 pb-3 rounded">
+      <div className=" pe-2 pb-3 rounded">
         <div className="mt-2 border p-2 rounded">
           <HeaderDiv>
             <div className="ps-2 d-flex flex-row align-items-center">
@@ -533,9 +533,12 @@ export default function PInfoPersonalDetailsAndSkills() {
         {/* Enter Skills Box Ends here */}
       </div>
       <div>
-        <div className="border rounded pt-1 pb-1 mt-2 mb-5 ps-5 pe-5">
+        <div
+          className="border rounded pt-1 pb-1 mt-2 mb-5 d-flex justify-content-center"
+          style={{ width: "90%" }}
+        >
           <Grid container>
-            <Grid item sm={12} md={10}>
+            <Grid item sm={9} md={9}>
               <h4 className="text-center mt-3">
                 Update all the latest chages made by you. By clicking on 'Save
                 and Continue' button, you will be redirected to the next page.
@@ -624,7 +627,7 @@ const ProfileImageDiv = styled.div`
   }
 `;
 const BannerImageDiv = styled.div`
-  width: 55vw;
+  width: 95%;
   height: 24vh;
   margin-bottom: 2vh;
   border: 2px solid #f2f2f2;

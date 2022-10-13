@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+
 import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -16,8 +18,11 @@ import ActivePageMarker from "./../components/ActivePageMarker";
 import { height } from "@mui/system";
 import { Years } from "../utils/Years";
 import menu from "../utils/menu.png";
+import CustomTextInpputD from "../components/CustomTextInpputD";
 
 export default function PInfoExperienceAndEducation() {
+  const navigate = useNavigate();
+
   const [jobExpArr, setJobExpArr] = React.useState([]);
   const [educationArr, setEducationArr] = React.useState([]);
   const [eduVar, setEduVar] = React.useState({
@@ -72,6 +77,12 @@ export default function PInfoExperienceAndEducation() {
   }, [eduStartingDate]);
   const removeJobExpHandeler = (title) => {
     setJobExpArr(jobExpArr.filter((item) => item.companyTitle !== title));
+  };
+  const removeEduExpHandeler = (title) => {
+    console.log(title);
+    setEducationArr(
+      educationArr.filter((item) => item.educationTitle !== title)
+    );
   };
 
   return (
@@ -181,39 +192,21 @@ export default function PInfoExperienceAndEducation() {
               }}
             />
           </Grid>
-          <Grid item xs={12} className="d-flex justify-content-center">
-            <TextField
-              id="outlined-multiline-static"
-              label="Your Job Discription"
-              multiline
-              rows={4}
-              // defaultValue="Default Value"
-              className="mt-4"
-              value={jobExperienceVar.jobDiscription}
-              onChange={(e) => {
-                setJobExperienceVar({
-                  ...jobExperienceVar,
-                  jobDiscription: e.target.value,
-                });
-              }}
-              sx={{ width: { xs: "99%", sm: "80", md: "94%", lg: "80%" } }}
-            />
-          </Grid>
+          <CustomTextInpputD
+            value={jobExperienceVar}
+            handleChange={setJobExperienceVar}
+          />
 
           <Grid item xs={12} className="d-flex justify-content-center mt-3">
             <Button
               variant="contained"
-              sx={{ height: 30 }}
               style={{ backgroundColor: "#FF5852" }}
+              sx={{
+                height: 30,
+                width: { xs: "90%", sm: "50%", md: "50%", lg: "50%" },
+              }}
               onClick={() => {
                 setJobExpArr([...jobExpArr, jobExperienceVar]);
-                // setJobExperienceVar({
-                //   companyTitle: "",
-                //   startingDate: "",
-                //   endingDate: null,
-                //   jobTitle: "",
-                //   jobDiscription: "",
-                // });
               }}
             >
               Add Experience
@@ -375,7 +368,10 @@ export default function PInfoExperienceAndEducation() {
           <Grid item xs={12} className="d-flex justify-content-center mt-3">
             <Button
               variant="contained"
-              sx={{ height: 30 }}
+              sx={{
+                height: 30,
+                width: { xs: "90%", sm: "50%", md: "50%", lg: "50%" },
+              }}
               style={{ backgroundColor: "#FF5852" }}
               onClick={() => {
                 setEducationArr([...educationArr, eduVar]);
@@ -384,7 +380,7 @@ export default function PInfoExperienceAndEducation() {
               Add Education
             </Button>
           </Grid>
-          <Grid item xs={12} className="mt-2">
+          <Grid item xs={12} className="mt-2 mb-3">
             {educationArr.map((eduVar) => (
               <div
                 style={{ width: "100%", height: "auto" }}
@@ -402,7 +398,7 @@ export default function PInfoExperienceAndEducation() {
                     backgroundColor: "#FF5852",
                   }}
                   onClick={() => {
-                    removeJobExpHandeler(eduVar.educationTitle);
+                    removeEduExpHandeler(eduVar.educationTitle);
                   }}
                 >
                   X
@@ -412,13 +408,41 @@ export default function PInfoExperienceAndEducation() {
           </Grid>
         </Grid>
       </Box>
+      <div>
+        <div className="border rounded pt-1 pb-1 mt-2 mb-5 ps-5 pe-5">
+          <Grid container>
+            <Grid item sm={12} md={10}>
+              <h4 className="text-center mt-3">
+                Update all the latest chages made by you. By clicking on 'Save
+                and Continue' button, you will be redirected to the next page.
+              </h4>
+            </Grid>
+            <Grid
+              xs={12}
+              md={2}
+              className="d-flex justify-content-center align-items-center"
+            >
+              <div>
+                <Button
+                  variant="contained"
+                  sx={{ height: 30 }}
+                  style={{ backgroundColor: "#FF5852" }}
+                  onClick={() => navigate("/home")}
+                >
+                  Save and Continue
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
+        </div>
+      </div>
     </div>
   );
 }
 const HeaderDiv = styled.div`
-  ${mobile({ width: "99%", paddinfRight: "50px" })}
-  ${miniTablet({ width: "90%" })}
-  ${tablet({ width: "85%" })}
+  ${mobile({ width: "99%", paddinfRight: "50px" })};
+  ${miniTablet({ width: "90%" })};
+  ${tablet({ width: "85%" })};
 `;
 const BoxDiv = styled.div`
   ${mobile({ width: "90%" })}

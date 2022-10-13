@@ -20,7 +20,7 @@ export default function PInfo() {
   }, [location.pathname]);
   return (
     <>
-      <Header></Header>
+      {/* <Header></Header> */}
 
       <div
         className="container border d-flex to-row rounded"
