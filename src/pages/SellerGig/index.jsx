@@ -10,25 +10,43 @@ import { FavoriteBorder, StarRate, Visibility } from "@mui/icons-material";
 import colors from "../../utils/colors";
 import GigPricePlanMini from "./GigPricePlanMini";
 import Review from "../../components/Review";
+import Gallery from "./Gallery";
 
 const images = [
   {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
     thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    type: "img",
   },
   {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
     thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    type: "img",
   },
   {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
     thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    type: "img",
   },
   {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
     thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    embedUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    type: "img",
+  },
+  {
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
+    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    type: "img",
+  },
+  {
+    url: "https://api.lorem.space/image/car?w=1000&h=600",
+    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    type: "img",
+  },
+  {
+    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
+    url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    type: "video",
   },
 ];
 
@@ -236,12 +254,9 @@ function SellerGig({
                 </ButtonText>
               </IconButton>
             </ReviewDetailsContainer>
-            <ImageGallery
-              showFullscreenButton={false}
-              showPlayButton={false}
-              items={items}
-              additionalClass="imageGallery"
-            />
+            
+            <Gallery items={images} />
+            
             <Description>
               Laboris id laborum irure in amet anim ad laboris reprehenderit
               nostrud quis. Lorem proident sint voluptate sit incididunt
@@ -314,28 +329,28 @@ export default SellerGig;
 
 const Container = styled.div`
   padding-top: 5rem;
+  width: 100%;
   padding-inline: 7%;
-  display: flex;
-  flex: 1;
+  overflow-x: hidden;
   ${tablet({
-    paddingInline: "7%",
     marginTop: "0rem",
   })}
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
-  flex: 1;
-  justify-content: space-between;
   ${miniTablet({
     flexDirection: "column",
   })}
 `;
 
 const SubContainer1 = styled.div`
-  flex: 1.3;
-  flex-grow: 1;
-  /* background-color: aliceblue; */
+  width: 60%;
+  ${miniTablet({
+    width: "100%",
+    flexDirection: "column",
+  })}
 `;
 const Heading = styled.h1`
   text-align: justify;
@@ -358,14 +373,14 @@ const ButtonText = styled.p`
 `;
 
 const SubContainer2 = styled.div`
-  flex: 0.6;
-  display: flex;
+  width: 40%;
   margin-left: 4rem;
   ${tablet({
     paddingInline: 0,
   })}
   ${mobile({
     marginLeft: 0,
+    display: "none",
   })}
 `;
 
@@ -383,4 +398,21 @@ const SubHeading = styled.h2`
   font-weight: 500;
   font-size: 1.4rem;
   margin-block: 2rem;
+`;
+
+const Indicator = styled.div`
+  overflow-x: scroll;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: nowrap;
+  cursor: pointer;
+  justify-content: center;
+  margin-top: 2rem;
+  background-color: aliceblue;
+  height: 20rem;
+`;
+const ImageIndicator = styled.img`
+  height: 8rem;
+  width: 12rem;
+  margin-inline: 1rem;
 `;
