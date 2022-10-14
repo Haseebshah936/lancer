@@ -10,6 +10,7 @@ import Box from "@mui/material/Box";
 import colors from "../../utils/colors";
 import { bgcolor } from "@mui/system";
 import { BorderBottom } from "@mui/icons-material";
+import styled from "styled-components";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -62,14 +63,7 @@ function GigPricePlanMini(props) {
   };
 
   return (
-    <Box
-      sx={{
-        bgcolor: "background.paper",
-        width: "100%",
-        height: "100%",
-        minHeight: "40rem",
-        border: "1px solid rgba(0,0,0,0.2)",
-      }}
+    <CustomBox
     >
       {/* <AppBar position="static"> */}
       <Tabs
@@ -83,10 +77,8 @@ function GigPricePlanMini(props) {
         <Tab
           sx={[
             {
-              border: ".5px solid rgba(0,0,0,0.2)",
-              marginLeft: "-1px",
               bgcolor: colors.lightGrey,
-              padding: ".8rem 1rem"
+              padding: ".5rem 1rem"
             },
             value === 0 && activeStyle,
           ]}
@@ -96,9 +88,7 @@ function GigPricePlanMini(props) {
         <Tab
           sx={[
             {
-              border: ".5px solid rgba(0,0,0,0.2)",
-              marginLeft: "-1px",
-              bgcolor: colors.lightGrey,padding: ".8rem 1rem"
+              bgcolor: colors.lightGrey,              padding: ".5rem 1rem"
             },
             value === 1 && activeStyle,
           ]}
@@ -108,10 +98,7 @@ function GigPricePlanMini(props) {
         <Tab
           sx={[
             {
-              border: ".5px solid rgba(0,0,0,0.2)",
-              marginLeft: "-1px",
-              marginRight: "-1px",
-              bgcolor: colors.lightGrey,padding: ".8rem 1rem"
+              bgcolor: colors.lightGrey,              padding: ".5rem 1rem"
             },
             value === 2 && activeStyle,
           ]}
@@ -135,8 +122,19 @@ function GigPricePlanMini(props) {
           Item Three
         </TabPanel>
       </SwipeableViews>
-    </Box>
+    </CustomBox>
   );
 }
 
 export default GigPricePlanMini;
+
+const CustomBox = styled(Box)`
+  background-color: ${colors.white};
+  width: 100%;
+  margin-bottom: 10rem;
+  min-height: 50rem;
+  box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
+  -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
+  -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
+
+`

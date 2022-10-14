@@ -1,16 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-import { miniTablet, mobile, tablet } from "../../responsive";
+import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { IconButton } from "@mui/material";
-import { FavoriteBorder, StarRate, Visibility } from "@mui/icons-material";
 import colors from "../../utils/colors";
 import GigPricePlanMini from "./GigPricePlanMini";
 import Review from "../../components/Review";
 import Gallery from "./Gallery";
+import ProfileReviewDetails from "./ProfileReviewDetails";
+import SellerProfileBox from "./SellerProfileBox";
+import OtherServices from "./OtherServices";
 
 const images = [
   {
@@ -50,12 +50,14 @@ const images = [
   },
 ];
 
-function SellerGig({
-  rating = 5.0,
-  items = images,
-  reviews = 20,
-  views = 10000,
-}) {
+function SellerGig(props) {
+
+  const rating = 5.0;
+  const reviews = 20;
+  const views = 10000;
+
+  const [save, setSave] = useState(false)
+
   const packages = [
     {
       name: "Starter",
@@ -221,6 +223,8 @@ function SellerGig({
     },
   ];
 
+  const handleSave = () => setSave(!save)
+
   return (
     <>
       <Header />
@@ -231,30 +235,7 @@ function SellerGig({
               Get your premium quality product logo designing and | rebranding
               material in very low price
             </Heading>
-            <ReviewDetailsContainer>
-              <IconButton style={{ paddingLeft: "0px" }} disableRipple>
-                <StarRate htmlColor={colors.gold} />
-                <ButtonText style={{ fontWeight: "bold" }}>
-                  &nbsp;{parseFloat(rating).toFixed(1)}
-                </ButtonText>
-                <ButtonText>{"(" + reviews + ")"}</ButtonText>
-              </IconButton>
-              <IconButton disableRipple>
-                <Visibility htmlColor={colors.gray} />
-                <ButtonText style={{ fontWeight: "bold" }}>
-                  &nbsp;{views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </ButtonText>
-              </IconButton>
-              <IconButton>
-                <FavoriteBorder htmlColor={colors.googleRed} />
-                <ButtonText
-                  style={{ fontWeight: "bold", color: colors.googleRed }}
-                >
-                  &nbsp;Save
-                </ButtonText>
-              </IconButton>
-            </ReviewDetailsContainer>
-            
+            <ProfileReviewDetails rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
             <Gallery items={images} />
             
             <Description>
@@ -307,16 +288,22 @@ function SellerGig({
               deserunt. Deserunt exercitation aliquip proident laborum ea
               ullamco tempor ad officia in proident minim velit.
             </Description>
+            <SubHeading>More Services</SubHeading>
+            <OtherServices />
             <SubHeading>{reviews} Client Reviews</SubHeading>
             <ReviewContainer>
               <Review />
               <Review />
+              <Review reply="Thanks for your trust and belive."/>
+              <Review />
               <Review />
               <Review />
             </ReviewContainer>
+            
           </SubContainer1>
           <SubContainer2>
             <GigPricePlanMini />
+            <SellerProfileBox handleSave={handleSave} saved={save}/>
           </SubContainer2>
         </Wrapper>
       </Container>
@@ -330,25 +317,36 @@ export default SellerGig;
 const Container = styled.div`
   padding-top: 5rem;
   width: 100%;
-  padding-inline: 7%;
-  overflow-x: hidden;
-  ${tablet({
+  height: 100%;
+  padding-inline: 15%;
+  ${miniPc({
+    paddingInline: "10%",
     marginTop: "0rem",
+  })}
+  ${tablet({
+    paddingInline: "7%",
   })}
 `;
 
 const Wrapper = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-between;
   ${miniTablet({
     flexDirection: "column",
   })}
 `;
 
 const SubContainer1 = styled.div`
-  width: 60%;
+  width: 65%;
+  margin-right: 4rem;
+  ${miniPc({
+    width: "60%",
+    flexDirection: "column",
+  })}
   ${miniTablet({
     width: "100%",
+    marginRight: 0,
     flexDirection: "column",
   })}
 `;
@@ -363,18 +361,10 @@ const Heading = styled.h1`
     marginRight: "0rem",
   })}
 `;
-const ReviewDetailsContainer = styled.div`
-  display: flex;
-`;
-const ButtonText = styled.p`
-  margin-block: 0.5rem;
-  color: ${colors.black};
-  font-size: 1.2rem;
-`;
 
 const SubContainer2 = styled.div`
   width: 40%;
-  margin-left: 4rem;
+  max-width: 30rem;
   ${tablet({
     paddingInline: 0,
   })}
@@ -383,8 +373,6 @@ const SubContainer2 = styled.div`
     display: "none",
   })}
 `;
-
-const PakageContainer = styled.div``;
 
 const Description = styled.p`
   text-align: justify;
@@ -395,24 +383,7 @@ const Description = styled.p`
 const ReviewContainer = styled.div``;
 
 const SubHeading = styled.h2`
-  font-weight: 500;
-  font-size: 1.4rem;
+  font-weight: 600;
+  font-size: 1.6rem;
   margin-block: 2rem;
-`;
-
-const Indicator = styled.div`
-  overflow-x: scroll;
-  box-sizing: border-box;
-  display: flex;
-  flex-wrap: nowrap;
-  cursor: pointer;
-  justify-content: center;
-  margin-top: 2rem;
-  background-color: aliceblue;
-  height: 20rem;
-`;
-const ImageIndicator = styled.img`
-  height: 8rem;
-  width: 12rem;
-  margin-inline: 1rem;
 `;
