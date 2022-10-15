@@ -13,7 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import styled from "styled-components";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
 
-const BuyerCard = (props) => {
+const BuyerCard = ({hideProfileInfo=true,...props}) => {
   return (
     <Card
       sx={{
@@ -33,7 +33,7 @@ const BuyerCard = (props) => {
         border-radius="15px"
         style={{ cursor: "pointer" }}
       />
-      <CardHeader
+      {hideProfileInfo && <CardHeader
         style={{ cursor: "pointer" }}
         sx={{ paddingTop: "2px", paddingBottom: "0px" }}
         avatar={<Avatar aria-label="recipe" src={props.Avatar}></Avatar>}
@@ -49,7 +49,7 @@ const BuyerCard = (props) => {
         }
         title={props.SellerName}
         subheader={props.SellerLevel}
-      />
+      />}
       <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
         <Typography
           variant="h5"

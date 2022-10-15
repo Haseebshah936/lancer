@@ -44,6 +44,7 @@ function OtherServices({a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
           {a.map((c) => (
             <div ref={GigRef}>
               <BuyerCard
+                hideProfileInfo={false}
                 count={c}
                 GigImage={teamImg}
                 Avatar={
