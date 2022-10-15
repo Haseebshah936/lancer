@@ -27,6 +27,10 @@ const TopSlider = () => {
               alt="First slide"
               style={{ objectFit: "contain" }}
             />
+            <Carousel.Caption>
+              <h3>APP DEVELOPMENT</h3>
+              <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+            </Carousel.Caption>
           </Carousel.Item>
           <Carousel.Item>
             <img
@@ -59,7 +63,7 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   min-height: 20rem;
-  margin-top: 1rem;
+  margin-top: 5rem;
   margin-inline: 7%;
   position: relative;
   border-radius: 5px;

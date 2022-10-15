@@ -1,6 +1,7 @@
 import * as React from "react";
 import { styled, alpha } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
+import * as styled2 from "styled-components";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -11,17 +12,22 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
-import AccountCircle from "@mui/icons-material/AccountCircle";
-import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import colors from "../../utils/colors";
+import { Link, NavLink } from "react-router-dom";
+import logo from "../../assets/logo.png";
+import { borderBottom } from "@mui/system";
+import { mobile } from "../../responsive";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  backgroundColor: alpha(colors.textGreen, 0.15),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(colors.textGreen, 0.25),
   },
   marginRight: theme.spacing(2),
   marginLeft: 0,
@@ -40,6 +46,7 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
+  color: colors.textGreen,
 }));
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
@@ -51,12 +58,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "30ch",
     },
   },
 }));
 
-export default function Header() {
+const Header = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -122,7 +129,7 @@ export default function Header() {
       <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="error">
-            <MailIcon />
+            <MailOutlineIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
@@ -134,7 +141,7 @@ export default function Header() {
           color="inherit"
         >
           <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
+            <NotificationsOutlinedIcon />
           </Badge>
         </IconButton>
         <p>Notifications</p>
@@ -147,7 +154,7 @@ export default function Header() {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          <AccountCircleOutlinedIcon />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -156,52 +163,90 @@ export default function Header() {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: colors.white,
+          paddingInline: "5%",
+        }}
+      >
         <Toolbar>
           <IconButton
             size="large"
             edge="start"
             color="inherit"
             aria-label="open drawer"
-            sx={{ mr: 2 }}
+            sx={{
+              mr: 2,
+              color: colors.textGreen,
+              display: "none",
+              "@media (max-width: 786px)": {
+                display: "flex",
+              },
+            }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ fontSize: "2.5rem" }} />
           </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="div"
-            sx={{ display: { xs: "none", sm: "block" } }}
+            sx={{
+              display: {
+                xs: "none",
+                sm: "block",
+                color: colors.textGreen,
+              },
+            }}
           >
-            MUI
+            <Link to="/">
+              {" "}
+              <img src={logo} style={{ width: "6rem", height: "2.5rem" }} />
+            </Link>
           </Typography>
-          <Search>
+
+          <Search
+            sx={{
+              border: "1px",
+              borderRadius: "30px",
+              borderColor: colors.textGreen,
+            }}
+          >
             <SearchIconWrapper>
-              <SearchIcon />
+              <SearchIcon sx={{ fontSize: "2.5rem" }} />
             </SearchIconWrapper>
             <StyledInputBase
-              placeholder="Search…"
+              placeholder="Which Service do you want?"
               inputProps={{ "aria-label": "search" }}
+              sx={{ color: colors.textGreen, fontSize: "1.5rem" }}
             />
           </Search>
           <Box sx={{ flexGrow: 1 }} />
+
+          <NavLinkContainer>
+            <NavLink to="/home">Your&nbsp;Orders</NavLink>
+            <NavLink to="/about">Seller&nbsp;Mode</NavLink>
+          </NavLinkContainer>
+
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
             <IconButton
               size="large"
               aria-label="show 4 new mails"
               color="inherit"
+              sx={{ color: colors.textGreen }}
             >
               <Badge badgeContent={4} color="error">
-                <MailIcon />
+                <MailOutlineIcon sx={{ fontSize: "2.5rem" }} />
               </Badge>
             </IconButton>
             <IconButton
               size="large"
               aria-label="show 17 new notifications"
               color="inherit"
+              sx={{ color: colors.textGreen }}
             >
               <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
+                <NotificationsOutlinedIcon sx={{ fontSize: "2.5rem" }} />
               </Badge>
             </IconButton>
             <IconButton
@@ -212,8 +257,9 @@ export default function Header() {
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
+              sx={{ color: colors.textGreen }}
             >
-              <AccountCircle />
+              <AccountCircleOutlinedIcon sx={{ fontSize: "2.5rem" }} />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -234,4 +280,18 @@ export default function Header() {
       {renderMenu}
     </Box>
   );
-}
+};
+export default Header;
+
+const NavLinkContainer = styled2.default.div`
+width:20%;
+display:flex;
+
+${mobile({ display: "none" })};
+a:hover{color:${colors.textGreen} !important};
+a{text-decoration: none !important;
+  font-size: 1.5rem !important;
+  margin-right: 2.5rem !important};
+
+
+`;

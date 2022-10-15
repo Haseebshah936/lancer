@@ -4,16 +4,21 @@ import Header from "../components/BuyerDashboard/Header";
 import TopSlider from "../components/BuyerDashboard/TopSlider";
 import GigsYML from "../components/BuyerDashboard/GigsYML";
 import GigsRPS from "../components/BuyerDashboard/GigsRPS";
+import Footer from "../components/Footer";
+import BottomSlider from "../components/BuyerDashboard/BottomSlider";
 
 const BuyerDashboard = () => {
   return (
-    <div>
-      <Header></Header>
-      <TopSlider></TopSlider>
-      <MPGigSlider></MPGigSlider>
-      <GigsYML></GigsYML>
-      <GigsRPS></GigsRPS>
-    </div>
+    <>
+      <Header />
+      <TopSlider />
+      <MPGigSlider />
+      <GigsYML />
+      <GigsRPS />
+      <BottomSlider />
+
+      <Footer />
+    </>
   );
 };
 
