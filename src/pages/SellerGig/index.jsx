@@ -1,207 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
-import { miniTablet, mobile, tablet } from "../../responsive";
+import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import { IconButton } from "@mui/material";
-import { FavoriteBorder, StarRate, Visibility } from "@mui/icons-material";
 import colors from "../../utils/colors";
 import GigPricePlanMini from "./GigPricePlanMini";
 import Review from "../../components/Review";
+import Gallery from "./Gallery";
+import ProfileReviewDetails from "./ProfileReviewDetails";
+import SellerProfileBox from "./SellerProfileBox";
+import OtherServices from "./OtherServices";
+import Reviews from "./Reviews";
+import { packages, sellerSliderData } from "../../utils/dummyData";
 
-const images = [
-  {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-  },
-  {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-  },
-  {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-  },
-  {
-    original: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    embedUrl:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-  },
-];
 
-function SellerGig({
-  rating = 5.0,
-  items = images,
-  reviews = 20,
-  views = 10000,
-}) {
-  const packages = [
-    {
-      name: "Starter",
-      cost: 250,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: false,
-        noOfinitialConcept: 2,
-        noOfRevisions: 2,
-        deliveryTime: {
-          time: 2,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 100,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-    {
-      name: "Popular Plan",
-      cost: 450,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: true,
-        noOfinitialConcept: 2,
-        noOfRevisions: 5,
-        deliveryTime: {
-          time: 3,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 350,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-    {
-      name: "Premium Plan",
-      cost: 900,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: true,
-        noOfinitialConcept: 4,
-        noOfRevisions: "unlimited",
-        deliveryTime: {
-          time: 3,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 500,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-  ];
+
+function SellerGig(props) {
+  const title = "Get your premium quality product logo designing and | rebranding material in very low price"
+  const rating = 5.0;
+  const reviews = 20;
+  const views = 10000;
+
+  const [save, setSave] = useState(false)
+
+  
+  const handleSave = () => setSave(!save)
 
   return (
     <>
@@ -210,38 +34,11 @@ function SellerGig({
         <Wrapper>
           <SubContainer1>
             <Heading>
-              Get your premium quality product logo designing and | rebranding
-              material in very low price
+              {title}
             </Heading>
-            <ReviewDetailsContainer>
-              <IconButton style={{ paddingLeft: "0px" }} disableRipple>
-                <StarRate htmlColor={colors.gold} />
-                <ButtonText style={{ fontWeight: "bold" }}>
-                  &nbsp;{parseFloat(rating).toFixed(1)}
-                </ButtonText>
-                <ButtonText>{"(" + reviews + ")"}</ButtonText>
-              </IconButton>
-              <IconButton disableRipple>
-                <Visibility htmlColor={colors.gray} />
-                <ButtonText style={{ fontWeight: "bold" }}>
-                  &nbsp;{views.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
-                </ButtonText>
-              </IconButton>
-              <IconButton>
-                <FavoriteBorder htmlColor={colors.googleRed} />
-                <ButtonText
-                  style={{ fontWeight: "bold", color: colors.googleRed }}
-                >
-                  &nbsp;Save
-                </ButtonText>
-              </IconButton>
-            </ReviewDetailsContainer>
-            <ImageGallery
-              showFullscreenButton={false}
-              showPlayButton={false}
-              items={items}
-              additionalClass="imageGallery"
-            />
+            <ProfileReviewDetails rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
+            <Gallery items={sellerSliderData} />
+            
             <Description>
               Laboris id laborum irure in amet anim ad laboris reprehenderit
               nostrud quis. Lorem proident sint voluptate sit incididunt
@@ -292,16 +89,14 @@ function SellerGig({
               deserunt. Deserunt exercitation aliquip proident laborum ea
               ullamco tempor ad officia in proident minim velit.
             </Description>
+            <SubHeading>More Services</SubHeading>
+            <OtherServices />
             <SubHeading>{reviews} Client Reviews</SubHeading>
-            <ReviewContainer>
-              <Review />
-              <Review />
-              <Review />
-              <Review />
-            </ReviewContainer>
+            <Reviews />
           </SubContainer1>
           <SubContainer2>
-            <GigPricePlanMini />
+            <GigPricePlanMini pakages={packages}/>
+            <SellerProfileBox handleSave={handleSave} saved={save}/>
           </SubContainer2>
         </Wrapper>
       </Container>
@@ -314,18 +109,21 @@ export default SellerGig;
 
 const Container = styled.div`
   padding-top: 5rem;
-  padding-inline: 7%;
-  display: flex;
-  flex: 1;
+  width: 100%;
+  height: 100%;
+  padding-inline: 15%;
+  ${miniPc({
+    paddingInline: "10%",
+    marginTop: "0rem",
+  })}
   ${tablet({
     paddingInline: "7%",
-    marginTop: "0rem",
   })}
 `;
 
 const Wrapper = styled.div`
+  width: 100%;
   display: flex;
-  flex: 1;
   justify-content: space-between;
   ${miniTablet({
     flexDirection: "column",
@@ -333,9 +131,17 @@ const Wrapper = styled.div`
 `;
 
 const SubContainer1 = styled.div`
-  flex: 1.3;
-  flex-grow: 1;
-  /* background-color: aliceblue; */
+  width: 65%;
+  margin-right: 4rem;
+  ${miniPc({
+    width: "60%",
+    flexDirection: "column",
+  })}
+  ${miniTablet({
+    width: "100%",
+    marginRight: 0,
+    flexDirection: "column",
+  })}
 `;
 const Heading = styled.h1`
   text-align: justify;
@@ -348,28 +154,18 @@ const Heading = styled.h1`
     marginRight: "0rem",
   })}
 `;
-const ReviewDetailsContainer = styled.div`
-  display: flex;
-`;
-const ButtonText = styled.p`
-  margin-block: 0.5rem;
-  color: ${colors.black};
-  font-size: 1.2rem;
-`;
 
 const SubContainer2 = styled.div`
-  flex: 0.6;
-  display: flex;
-  margin-left: 4rem;
+  width: 40%;
+  max-width: 30rem;
   ${tablet({
     paddingInline: 0,
   })}
   ${mobile({
     marginLeft: 0,
+    display: "none",
   })}
 `;
-
-const PakageContainer = styled.div``;
 
 const Description = styled.p`
   text-align: justify;
@@ -377,10 +173,10 @@ const Description = styled.p`
   font-size: 1.2rem;
 `;
 
-const ReviewContainer = styled.div``;
+
 
 const SubHeading = styled.h2`
-  font-weight: 500;
-  font-size: 1.4rem;
+  font-weight: 600;
+  font-size: 1.6rem;
   margin-block: 2rem;
 `;
