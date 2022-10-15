@@ -62,7 +62,6 @@ function App(props) {
       <Router>
         <Routes>
           <Route path="/" element={<SellerGig />} />
-          <Route path="/howitwork" element={<HowitWork />} />
           <Route path="/about" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
           <Route path="/signup" element={<Signup />} />

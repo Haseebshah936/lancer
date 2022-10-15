@@ -54,7 +54,7 @@ export default SellerProfileBox;
 const Container = styled.div`
   width: 100%;
   background-color: ${colors.white};
-  padding-inline: 7%;
+  padding-inline: 9%;
   padding-top: 7rem;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
@@ -63,6 +63,8 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 5rem;
+  min-height: 46rem;
+
 `;
 
 const Image = styled.img`
@@ -103,5 +105,4 @@ const CustomIconButton = styled(Button)`
   padding-block: 1rem !important;
   text-transform: none !important;
   font-weight: bold !important;
-  
 `

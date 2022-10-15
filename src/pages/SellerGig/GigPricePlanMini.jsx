@@ -9,8 +9,11 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import colors from "../../utils/colors";
 import { bgcolor } from "@mui/system";
-import { BorderBottom } from "@mui/icons-material";
+import { ArrowRightAlt, BorderBottom } from "@mui/icons-material";
 import styled from "styled-components";
+import CustomButton from "./CustomButton";
+import PackageOfferings from "./PackageOfferings";
+import PackagePlan from "./PackagePlan";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,7 +48,7 @@ function a11yProps(index) {
   };
 }
 
-function GigPricePlanMini(props) {
+function GigPricePlanMini({pakages=[]}) {
   const theme = useTheme();
   const [value, setValue] = React.useState(0);
 
@@ -58,14 +61,12 @@ function GigPricePlanMini(props) {
   };
 
   const activeStyle = {
-    backgroundColor: colors.white,
+    backgroundColor: `${colors.white} !important`,
     marginBottom: "-1px",
   };
 
   return (
-    <CustomBox
-    >
-      {/* <AppBar position="static"> */}
+    <CustomBox>
       <Tabs
         value={value}
         onChange={handleChange}
@@ -74,53 +75,27 @@ function GigPricePlanMini(props) {
         variant="fullWidth"
         aria-label="full width tabs example"
       >
-        <Tab
-          sx={[
-            {
-              bgcolor: colors.lightGrey,
-              padding: ".5rem 1rem"
-            },
-            value === 0 && activeStyle,
-          ]}
-          label="Item One"
+        {
+          pakages.map((e,i) => {
+            return <CustomTab id={i}
+          sx={value === i && activeStyle}
+          label={e.name}
           {...a11yProps(0)}
         />
-        <Tab
-          sx={[
-            {
-              bgcolor: colors.lightGrey,              padding: ".5rem 1rem"
-            },
-            value === 1 && activeStyle,
-          ]}
-          label="Item Two"
-          {...a11yProps(1)}
-        />
-        <Tab
-          sx={[
-            {
-              bgcolor: colors.lightGrey,              padding: ".5rem 1rem"
-            },
-            value === 2 && activeStyle,
-          ]}
-          label="Item Three"
-          {...a11yProps(2)}
-        />
+          })
+        }
+        
       </Tabs>
-      {/* </AppBar> */}
       <SwipeableViews
         axis={theme.direction === "rtl" ? "x-reverse" : "x"}
         index={value}
         onChangeIndex={handleChangeIndex}
       >
-        <TabPanel value={value} index={0} dir={theme.direction}>
-          Item One
-        </TabPanel>
-        <TabPanel value={value} index={1} dir={theme.direction}>
-          Item Two
-        </TabPanel>
-        <TabPanel value={value} index={2} dir={theme.direction}>
-          Item Three
-        </TabPanel>
+        {
+          pakages.map((e, i) => {
+            return <PackagePlan key={i} value={value} index={i} theme={theme} plan={e}/>
+          })
+        }
       </SwipeableViews>
     </CustomBox>
   );
@@ -136,5 +111,11 @@ const CustomBox = styled(Box)`
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
+`;
 
-`
+const CustomTab = styled(Tab)`
+  background-color: ${colors.lightGrey} !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 1rem !important;
+  font-weight: bold !important;
+`;

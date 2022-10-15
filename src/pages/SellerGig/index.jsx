@@ -11,218 +11,20 @@ import Gallery from "./Gallery";
 import ProfileReviewDetails from "./ProfileReviewDetails";
 import SellerProfileBox from "./SellerProfileBox";
 import OtherServices from "./OtherServices";
+import Reviews from "./Reviews";
+import { packages, sellerSliderData } from "../../utils/dummyData";
 
-const images = [
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    type: "video",
-  },
-];
+
 
 function SellerGig(props) {
-
+  const title = "Get your premium quality product logo designing and | rebranding material in very low price"
   const rating = 5.0;
   const reviews = 20;
   const views = 10000;
 
   const [save, setSave] = useState(false)
 
-  const packages = [
-    {
-      name: "Starter",
-      cost: 250,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: false,
-        noOfinitialConcept: 2,
-        noOfRevisions: 2,
-        deliveryTime: {
-          time: 2,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 100,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-    {
-      name: "Popular Plan",
-      cost: 450,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: true,
-        noOfinitialConcept: 2,
-        noOfRevisions: 5,
-        deliveryTime: {
-          time: 3,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 350,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-    {
-      name: "Premium Plan",
-      cost: 900,
-      details: "",
-      features: {
-        logoTransparency: true,
-        highResolution: true,
-        vectorFile: true,
-        noOfinitialConcept: 4,
-        noOfRevisions: "unlimited",
-        deliveryTime: {
-          time: 3,
-          addditionalCost: 0,
-        },
-        fastDelivery: {
-          time: 1,
-          additionalCost: 500,
-        },
-      },
-      additionalFeatures: {
-        additionalRevision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        includedSocialKit: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        contentUpload: {
-          details: "This requires 1 more days to complete",
-          additionalCost: 50,
-        },
-        stationaryDesign: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 80,
-        },
-        hugeSizeFile: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        additionalLogoConcept: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        include3DVision: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-        bussinessCard: {
-          details: "This requires 2 more days to complete",
-          additionalCost: 100,
-        },
-      },
-    },
-  ];
-
+  
   const handleSave = () => setSave(!save)
 
   return (
@@ -232,11 +34,10 @@ function SellerGig(props) {
         <Wrapper>
           <SubContainer1>
             <Heading>
-              Get your premium quality product logo designing and | rebranding
-              material in very low price
+              {title}
             </Heading>
             <ProfileReviewDetails rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
-            <Gallery items={images} />
+            <Gallery items={sellerSliderData} />
             
             <Description>
               Laboris id laborum irure in amet anim ad laboris reprehenderit
@@ -291,18 +92,10 @@ function SellerGig(props) {
             <SubHeading>More Services</SubHeading>
             <OtherServices />
             <SubHeading>{reviews} Client Reviews</SubHeading>
-            <ReviewContainer>
-              <Review />
-              <Review />
-              <Review reply="Thanks for your trust and belive."/>
-              <Review />
-              <Review />
-              <Review />
-            </ReviewContainer>
-            
+            <Reviews />
           </SubContainer1>
           <SubContainer2>
-            <GigPricePlanMini />
+            <GigPricePlanMini pakages={packages}/>
             <SellerProfileBox handleSave={handleSave} saved={save}/>
           </SubContainer2>
         </Wrapper>
@@ -380,7 +173,7 @@ const Description = styled.p`
   font-size: 1.2rem;
 `;
 
-const ReviewContainer = styled.div``;
+
 
 const SubHeading = styled.h2`
   font-weight: 600;

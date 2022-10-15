@@ -8,10 +8,19 @@ import Button from "@mui/material/Button";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 function Gallery({ items = [] }) {
   const [images, setImages] = useState([]);
   const [videos, setVideos] = useState([]);
   const [index, setIndex] = useState(0);
+  const prevIndex = usePrevious(index);
   const ref = useRef();
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
@@ -22,6 +31,12 @@ function Gallery({ items = [] }) {
   const handleSelect = (selectedIndex, e) => {
     setIndex(selectedIndex);
   };
+
+  useEffect(() => {
+    console.log("Current Index", index)
+    console.log("previousIndex", prevIndex)
+      scroll(categoryRef.current?.offsetWidth*(index-prevIndex))
+  }, [index])
   
 
   useEffect(() => {
@@ -33,7 +48,6 @@ function Gallery({ items = [] }) {
 
     setImages(images);
     setVideos(videos);
-    
   }, []);
 
   return (
@@ -151,6 +165,7 @@ const Video = styled.video`
     width: 100%;
     object-fit: cover;
     height: 50rem;
+    background-color: ${colors.black};
     ${pc({height: "45rem"})}
     ${miniPc({height: "40rem"})};
     ${tablet({height: "35rem"})};
@@ -163,7 +178,8 @@ const Image = styled.img`
     width: 100%;
     object-fit: cover;
     height: 50rem;
-    ${pc({height: "45rem"})}
+    background-color: ${colors.black};
+    ${pc({height: "45rem"})};
     ${miniPc({height: "40rem"})};
     ${tablet({height: "35rem"})};
     ${miniTablet({height: "40rem"})};
