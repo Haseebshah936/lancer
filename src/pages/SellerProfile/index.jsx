@@ -13,8 +13,8 @@ function index(props) {
         <>
         <Header />
         <Container>
-                <SellerProfileInfo style={{minWidth: "30rem", maxHeight: "30vh", flex: .2}}/>
-                <SellerProfileTabs style={{minWidth: "30rem", flex: .75}}/>
+                <SellerProfileInfo style={{minWidth: "30rem", maxHeight: "30vh", flex: .25}}/>
+                <SellerProfileTabs style={{minWidth: "30rem", flex: .7}}/>
         </Container>
         <Footer />
         </>

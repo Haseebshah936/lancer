@@ -1,5 +1,5 @@
 import { Button } from "@material-ui/core";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import Review from "../ReviewComponent";
 import colors from "../../utils/colors";
@@ -26,7 +26,7 @@ function Reviews({showReplies=true}) {
   );
 }
 
-export default Reviews;
+export default memo(Reviews);
 
 const ReviewContainer = styled.div`
     display: flex;

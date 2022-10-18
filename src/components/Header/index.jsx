@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Backdrop, Button, CircularProgress } from "@mui/material";
 import Head from "./Head";
 import ResponsiveDrawer from "./ResponsiveDrawer";
@@ -44,4 +44,4 @@ function Header(props) {
   );
 }
 
-export default Header;
+export default memo(Header);

@@ -7,7 +7,7 @@ import PricingPlan from "../../components/PricingPlan";
 import Gallery from "../../components/Gallery";
 import SellerProfileInfo from "../../components/SellerProfileInfo";
 import OtherServices from "./OtherServices";
-import Reviews from "../../components/Reviews";
+import Reviews from "../../components/ReviewsComponent";
 import { packages, sellerSliderData } from "../../utils/dummyData";
 import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
 

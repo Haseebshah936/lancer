@@ -1,14 +1,14 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import colors from '../../utils/colors';
-import styled from 'styled-components';
-import Portfolios from './Portfolios';
-import { Pagination } from '@mui/material';
-import Reviews from "../../components/Reviews";
+import * as React from "react";
+import PropTypes from "prop-types";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import colors from "../../utils/colors";
+import styled from "styled-components";
+import Portfolios from "./Portfolios";
+import { Pagination } from "@mui/material";
+import Reviews from "../../components/ReviewsComponent";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -22,7 +22,7 @@ function TabPanel(props) {
       {...other}
     >
       {value === index && (
-        <Box sx={{ p: 3}}>
+        <Box sx={{ p: 3 }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -39,59 +39,82 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
-export default function SellerProfileTabs({style}) {
+export default function SellerProfileTabs({ style }) {
   const [value, setValue] = React.useState(0);
   const [pagination, setPagination] = React.useState(1);
   const [count, setCount] = React.useState(1);
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   React.useEffect(() => {
-    setCount(Math.ceil(a.length / 6));
-  }, [pagination])
+    setCount(Math.ceil(a.length / 8));
+  }, [pagination]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
-    <Box sx={{ width: '100%' }} style={style}>
+    <Box sx={{ width: "100%" }} style={style}>
       <Box sx={{ borderBottom: 1, borderColor: colors.becomePartnerGreen }}>
-        <CustomTabContainer value={value} onChange={handleChange} aria-label="basic tabs example">
+        <CustomTabContainer
+          value={value}
+          onChange={handleChange}
+          aria-label="basic tabs example"
+        >
           <CustomTab label="About" {...a11yProps(0)} />
-          <CustomTab label="Portfolios" {...a11yProps(1)} />
-          <CustomTab label="Reviews" {...a11yProps(2)} />
+
+          <CustomTab onClick={() => document.getElementById('portfolio').scrollIntoView(true)} label="Portfolios" {...a11yProps(1)} />
+
+          <CustomTab onClick={() => document.getElementById('reviews').scrollIntoView(true)} label="Reviews" {...a11yProps(2)} />
         </CustomTabContainer>
       </Box>
-      <TabPanel value={value} index={0}>
-        Item One
-      </TabPanel>
-      <TabPanel value={value} index={1}>
-        <Portfolios data={a.slice((pagination-1)*6, pagination*6)}/>
-        <Box mt={"4rem"} display="flex" justifyContent="center" alignContent={"center"} width="100%">
-          <Pagination count={count} page={pagination} onChange={(e, page) => setPagination(page)} />
+        <SubHeading id="portfolio"/>
+      <Box id="portfolio" mt={"4rem"} mb={"2rem"}>
+        <Portfolios data={a.slice((pagination - 1) * 8, pagination * 8)} />
+
+        <Box
+          mt={"4rem"}
+          display="flex"
+          justifyContent="center"
+          alignContent={"center"}
+          width="100%"
+        >
+          <Pagination
+            count={count}
+            page={pagination}
+            onChange={(e, page) => setPagination(page)}
+          />
         </Box>
-      </TabPanel>
-      <TabPanel value={value} index={2}>
+      </Box>
+      <Box mb={"4rem"} mt={"4rem"} id="reviews">
+        <SubHeading>Reviews</SubHeading>
         <Reviews />
-      </TabPanel>
+      </Box>
+
+     
     </Box>
   );
 }
 
 const CustomTabContainer = styled(Tabs)`
+position: -webkit-sticky;
+  .MuiBox-root .css-1y84imo{
+
+    position: sticky;
+    top: 0;
+    background-color: yellow;
+  }
   .css-1aquho2-MuiTabs-indicator {
     background-color: ${colors.becomePartnerGreen} !important;
   }
-  .Mui-selected{
+  .Mui-selected {
     color: ${colors.becomePartnerGreen} !important;
   }
   min-height: 4rem !important;
-
-`
-
+`;
 
 const CustomTab = styled(Tab)`
   /* background-color: ${colors.lightGrey} !important; */
@@ -103,4 +126,14 @@ const CustomTab = styled(Tab)`
   .css-1aquho2-MuiTabs-indicator {
     background-color: ${colors.textGreen} !important;
   }
+`;
+const SubHeading = styled.h2`
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-block: 2rem;
+`;
+
+const CustomAnchor = styled.a`
+  text-decoration: none;
+  color: inherit;
 `;
