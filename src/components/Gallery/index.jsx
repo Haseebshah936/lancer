@@ -62,14 +62,14 @@ function Gallery({
       >
         {images.map((e, i) => {
           return (
-            <Carousel.Item id={i}>
+            <Carousel.Item key={i}>
               <Image  src={e?.url} alt={e?.alt ? e?.alt : ""} />
             </Carousel.Item>
           );
         })}
         {videos.map((e, i) => {
           return (
-            <Carousel.Item id={i + images.length}>
+            <Carousel.Item key={i} id={i + images.length}>
               <Video  controls>
                 <source
                   src={e?.url}
@@ -87,7 +87,7 @@ function Gallery({
             {images.map((e, i) => {
               return (
                 <IndicatorImage
-                  
+                  key={i}
                   borderColor={miniScrollBorderColor}
                   ref={categoryRef}
                   className={index === i ? "active" : ""}
@@ -103,7 +103,7 @@ function Gallery({
             {videos.map((e, i) => {
               return (
                 <IndicatorImage
-                  
+                  key={i}
                   borderColor={miniScrollBorderColor}
                   ref={categoryRef}
                   className={index === i + images.length ? "active" : ""}

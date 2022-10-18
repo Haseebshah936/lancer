@@ -26,8 +26,8 @@ function Categories(props) {
       </HeadingContainer>
       <CategoryListContainer>
         <CategoryContainer ref={ref}>
-          {a.map((c) => (
-            <div ref={categoryRef}>
+          {a.map((c, i) => (
+            <div key={i} ref={categoryRef}>
               <Category count={c} />
             </div>
           ))}

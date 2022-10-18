@@ -18,9 +18,9 @@ function TopSellers(props) {
       </HeadingContainer>
 
       <ProfileContainer>
-        {a.map((c) => (
+        {a.map((c,i) => (
           // <div className="col-xxl-3 col-lg-4 col-md-6 col-xs-1">
-          <ProfileComponent count={c} />
+          <ProfileComponent key={i} count={c} />
           // </div>
         ))}
       </ProfileContainer>

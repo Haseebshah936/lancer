@@ -48,8 +48,8 @@ function FeaturedSeller(props) {
           </Button>
         </ButtonContainer>
         <CategoryContainer ref={ref}>
-          {a.map((c) => (
-            <div ref={categoryRef}>
+          {a.map((c, i) => (
+            <div key={i} ref={categoryRef}>
               <Seller count={c} />
             </div>
           ))}

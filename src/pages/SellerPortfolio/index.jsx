@@ -11,7 +11,7 @@ import Reviews from "./Reviews";
 import { packages, sellerSliderData } from "../../utils/dummyData";
 import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
 
-function SellerGig(props) {
+function SellerPortfolio(props) {
   const title = "Get your premium quality product logo designing and | rebranding material in very low price"
   const rating = 5.0;
   const reviews = 20;
@@ -102,7 +102,7 @@ function SellerGig(props) {
   );
 }
 
-export default SellerGig;
+export default SellerPortfolio;
 
 const Container = styled.div`
   padding-top: 5rem;

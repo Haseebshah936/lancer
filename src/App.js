@@ -13,7 +13,7 @@ import { CustomContextProvider } from "./Hooks/useCustomContext";
 import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
 import BuyerDashboard from "./pages/BuyerDashboard";
-import SellerGig from "./pages/SellerGig";
+import SellerPortfolio from "./pages/SellerPortfolio";
 
 const images = [
   {
@@ -65,7 +65,7 @@ function App(props) {
           <Route path="/signup" element={<Signup />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
-          <Route path="/portfolio/:id" element={<SellerGig />} />
+          <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>

@@ -46,7 +46,7 @@ function PackagePlan({value, index,theme, plan}) {
           <Heading style={{marginBottom: "1rem"}}>Package Includes</Heading>
           {
             plan.features.map((e, i) => {
-                return <PackageOfferings active={e.active} text={`${e?.quantity? e?.quantity: ""} ${e.title}`}/>
+                return <PackageOfferings key={i} active={e.active} text={`${e?.quantity? e?.quantity: ""} ${e.title}`}/>
         })
           }
           <CustomIconButton

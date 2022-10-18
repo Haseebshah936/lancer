@@ -82,7 +82,7 @@ function Signup(props) {
     if (error) {
       const { details } = error;
       console.log(details);
-      details.map((e) => {
+      details.map((e,i) => {
         console.log(e.path[0], e.message);
       });
       return;

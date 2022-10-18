@@ -9,8 +9,9 @@ function Reviews(props) {
  
   return (
     <ReviewContainer>
-      {reviews.map((e) => (
+      {reviews.map((e, i) => (
         <Review
+          key={i}
           reply={e.reply}
           img={e.img}
           rating={e.rating}

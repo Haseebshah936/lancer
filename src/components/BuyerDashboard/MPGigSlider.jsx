@@ -47,8 +47,8 @@ const MPGigSlider = () => {
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
-          {a.map((c) => (
-            <div ref={GigRef}>
+          {a.map((c,i) => (
+            <div key={i} ref={GigRef}>
               <PortfolioCard
                 count={c}
                 GigImage={teamImg}

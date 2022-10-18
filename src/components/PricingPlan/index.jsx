@@ -73,7 +73,7 @@ function PricingPlan({pakages=[]}) {
       >
         {
           pakages.map((e,i) => {
-            return <CustomTab id={i}
+            return <CustomTab key={i} id={i}
           sx={value === i && activeStyle}
           label={e.name}
           {...a11yProps(0)}

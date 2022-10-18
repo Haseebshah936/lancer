@@ -41,8 +41,8 @@ function OtherServices({a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
-          {a.map((c) => (
-            <div ref={GigRef}>
+          {a.map((c,i) => (
+            <div key={i} ref={GigRef}>
               <BuyerCard
                 hideProfileInfo={false}
                 count={c}
