@@ -2,6 +2,7 @@ import { ChatBubbleOutline, TaskAlt } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
 import React from "react";
 import styled from "styled-components";
+import { miniTablet, mobile } from "../../responsive";
 import colors from "../../utils/colors";
 import ProfileReviewInfo from "../ProfileReviewsInfo";
 
@@ -22,29 +23,31 @@ function SellerProfileInfo({
 }) {
   return (
     <Container>
-      <Image src={profilePic} />
-      <Name>
-       {name} <TaskAlt sx={{ fontSize: "1rem", color: approved? colors.becomePartnerButtonGreen
-       : colors.googleRed }} />
-      </Name>
-      <GigDescription>
-        {description}
-      </GigDescription>
-      <ProfileReviewInfo
-        size={1}
-        rating={rating}
-        reviews={reviews}
-        views={views}
-        saved={saved}
-        handleSave={handleSave}
-      />
-
-      <SubHeading>Location:</SubHeading>
-      <Text>{city}, {country}</Text>
-      <SubHeading>Languages:</SubHeading>
-      <Text>{languages.join(', ')}</Text>
-      <SubHeading>English level:</SubHeading>
-      <Text>{englishLevel}</Text>
+      <Wrapper>
+        <Image src={profilePic} />
+        <Name>
+         {name} <TaskAlt sx={{ fontSize: "1rem", color: approved? colors.becomePartnerButtonGreen
+         : colors.googleRed }} />
+        </Name>
+        <GigDescription>
+          {description}
+        </GigDescription>
+        <ProfileReviewInfo
+          size={1}
+          rating={rating}
+          reviews={reviews}
+          views={views}
+          saved={saved}
+          handleSave={handleSave}
+        />
+        <SubHeading>Location:</SubHeading>
+        <Text>{city}, {country}</Text>
+        <SubHeading>Languages:</SubHeading>
+        <Text>{languages.join(', ')}</Text>
+        <SubHeading>English level:</SubHeading>
+        <Text>{englishLevel}</Text>
+        
+      </Wrapper>
       <CustomIconButton variant="contained">
         <ChatBubbleOutline />
         &nbsp;&nbsp;Contact to this seller
@@ -58,7 +61,8 @@ export default SellerProfileInfo;
 const Container = styled.div`
   width: 100%;
   background-color: ${colors.white};
-  padding-inline: 9%;
+  padding-inline: 24px;
+  padding-bottom: 24px;
   padding-top: 7rem;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
@@ -66,10 +70,18 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin-top: 5rem;
   min-height: 46rem;
-
+  ${miniTablet({
+    marginRight: "3rem"
+  })}
+  ${mobile({
+    marginRight: "0rem"
+  })}
 `;
+
+const Wrapper = styled.div``
 
 const Image = styled.img`
   width: 10rem;
@@ -97,6 +109,8 @@ const SubHeading = styled.h3`
 const Text = styled.p`
   font-weight: bold;
   font-size: 1.2rem;
+  margin-bottom: 2rem;
+
 `;
 
 const CustomIconButton = styled(Button)`

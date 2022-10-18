@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import colors from "../../utils/colors";
 import styled from "styled-components";
 import PackagePlan from "./PackagePlan";
+import { miniMobile, miniTablet, mobile } from "../../responsive";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -102,6 +103,12 @@ const CustomBox = styled(Box)`
   background-color: ${colors.white};
   width: 100%;
   margin-bottom: 10rem;
+  ${miniTablet({
+    marginBottom: 0,
+  })}
+  ${mobile({
+    marginBottom: "5rem"
+  })}
   min-height: 50rem;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);

@@ -143,6 +143,7 @@ const BuyerContainer = styled.div`
   padding: 1rem 2rem;
   justify-content: space-between;
   overflow-x: scroll;
+  scroll-snap-type: x proximity !important;
   ::-webkit-scrollbar {
     display: none;
   }

@@ -33,7 +33,6 @@ function SellerGig(props) {
             </Heading>
             <ProfileReviewInfo rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
             <Gallery items={sellerSliderData} />
-            
             <Description>
               Laboris id laborum irure in amet anim ad laboris reprehenderit
               nostrud quis. Lorem proident sint voluptate sit incididunt
@@ -84,17 +83,20 @@ function SellerGig(props) {
               deserunt. Deserunt exercitation aliquip proident laborum ea
               ullamco tempor ad officia in proident minim velit.
             </Description>
-            <SubHeading>More Services</SubHeading>
-            <OtherServices />
-            <SubHeading>{reviews} Client Reviews</SubHeading>
-            <Reviews />
           </SubContainer1>
           <SubContainer2>
             <PricingPlan pakages={packages}/>
             <SellerProfileInfo handleSave={handleSave} saved={save}/>
           </SubContainer2>
         </Wrapper>
+        <DetailsContainer>
+        <SubHeading>More Services</SubHeading>
+        <OtherServices />
+        <SubHeading>{reviews} Client Reviews</SubHeading>
+        <Reviews />
+        </DetailsContainer>
       </Container>
+      
       <Footer />
     </>
   );
@@ -106,9 +108,9 @@ const Container = styled.div`
   padding-top: 5rem;
   width: 100%;
   height: 100%;
-  padding-inline: 15%;
+  padding-inline: 7%;
   ${miniPc({
-    paddingInline: "10%",
+    paddingInline: "7%",
     marginTop: "0rem",
   })}
   ${tablet({
@@ -124,6 +126,16 @@ const Wrapper = styled.div`
     flexDirection: "column",
   })}
 `;
+
+const DetailsContainer = styled.div`
+  width: 65%;
+  ${miniPc({
+    width: "60%",
+  })}
+  ${miniTablet({
+    width: "100%",
+  })}
+`
 
 const SubContainer1 = styled.div`
   width: 65%;
@@ -153,12 +165,19 @@ const Heading = styled.h1`
 const SubContainer2 = styled.div`
   width: 40%;
   max-width: 30rem;
-  ${tablet({
-    paddingInline: 0,
-  })}
+  
+  ${miniTablet({
+      display: "flex",
+      width: "100%",
+      maxWidth: "100%",
+      justifyContent: "space-between",
+      flexDirection: "row-reverse",
+      marginBlock: "4rem"
+    })}
   ${mobile({
     marginLeft: 0,
-    display: "none",
+    display: "flex",
+    flexDirection: "column",
   })}
 `;
 

@@ -10,7 +10,7 @@ export const miniMobile = (props) => {
 
 export const mobile = (props) => {
   return css`
-    @media (max-width: 500px) {
+    @media (max-width: 550px) {
       ${props}
     }
   `;
