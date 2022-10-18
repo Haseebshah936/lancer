@@ -2,7 +2,7 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import styled from "styled-components";
-import BuyerCard from "./BuyerCard";
+import PortfolioCard from "../PortfolioCard";
 import { teamImg } from "../../assets";
 
 const GigsYML = () => {
@@ -16,7 +16,7 @@ const GigsYML = () => {
         <Grid container spacing={2}>
           {a.map((c) => (
             <Grid item lg={2} md={3} sm={4}>
-              <BuyerCard
+              <PortfolioCard
                 count={c}
                 GigImage={teamImg}
                 Avatar={

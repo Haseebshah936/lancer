@@ -2,9 +2,9 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import styled from "styled-components";
-import BuyerCard from "./BuyerCard";
 import { teamImg } from "../../assets";
 import colors from "../../utils/colors";
+import PortfolioCard from "../PortfolioCard";
 
 const GigsRPS = () => {
   const a = [1, 2, 3, 4, 5, 6];
@@ -49,7 +49,7 @@ const GigsRPS = () => {
           <Grid container spacing={2}>
             {a.map((c) => (
               <Grid item lg={2} md={3} sm={4}>
-                <BuyerCard
+                <PortfolioCard
                   count={c}
                   GigImage={teamImg}
                   Avatar={

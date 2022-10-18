@@ -1,20 +1,15 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import "react-image-gallery/styles/css/image-gallery.css";
 import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import colors from "../../utils/colors";
-import GigPricePlanMini from "./GigPricePlanMini";
-import Review from "../../components/Review";
-import Gallery from "./Gallery";
-import ProfileReviewDetails from "./ProfileReviewDetails";
-import SellerProfileBox from "./SellerProfileBox";
+import PricingPlan from "../../components/PricingPlan";
+import Gallery from "../../components/Gallery";
+import SellerProfileInfo from "../../components/SellerProfileInfo";
 import OtherServices from "./OtherServices";
 import Reviews from "./Reviews";
 import { packages, sellerSliderData } from "../../utils/dummyData";
-
-
+import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
 
 function SellerGig(props) {
   const title = "Get your premium quality product logo designing and | rebranding material in very low price"
@@ -36,7 +31,7 @@ function SellerGig(props) {
             <Heading>
               {title}
             </Heading>
-            <ProfileReviewDetails rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
+            <ProfileReviewInfo rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
             <Gallery items={sellerSliderData} />
             
             <Description>
@@ -95,8 +90,8 @@ function SellerGig(props) {
             <Reviews />
           </SubContainer1>
           <SubContainer2>
-            <GigPricePlanMini pakages={packages}/>
-            <SellerProfileBox handleSave={handleSave} saved={save}/>
+            <PricingPlan pakages={packages}/>
+            <SellerProfileInfo handleSave={handleSave} saved={save}/>
           </SubContainer2>
         </Wrapper>
       </Container>

@@ -1,7 +1,7 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import styled from "styled-components";
-import Review from "../../components/Review";
+import Review from "../../components/ReviewComponent";
 import colors from "../../utils/colors";
 import { reviews } from "../../utils/dummyData";
 

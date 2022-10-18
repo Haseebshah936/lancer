@@ -16,7 +16,6 @@ const BuyerDashboard = () => {
       <GigsYML />
       <GigsRPS />
       <BottomSlider />
-
       <Footer />
     </>
   );

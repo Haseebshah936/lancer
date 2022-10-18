@@ -4,7 +4,7 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import styled from 'styled-components';
 import { mobile } from '../../responsive';
-import PortfolioCard from '../../components/PortfolioCard';
+import BuyerCard from '../BuyerDashboard/BuyerCard';
 import { teamImg } from '../../assets';
 import colors from '../../utils/colors';
 
@@ -43,7 +43,7 @@ function OtherServices({a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
         <BuyerContainer ref={ref}>
           {a.map((c) => (
             <div ref={GigRef}>
-              <PortfolioCard
+              <BuyerCard
                 hideProfileInfo={false}
                 count={c}
                 GigImage={teamImg}
