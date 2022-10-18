@@ -90,7 +90,7 @@ const Container = styled.div`
   align-items: center;
   padding-block: 1.5rem;
   @media (max-width: 786px) {
-    padding-inline: 3%;
+    padding-inline: 7%;
   }
 `;
 const Menucontainer = styled.div`

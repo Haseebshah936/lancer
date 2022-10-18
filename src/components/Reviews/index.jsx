@@ -1,18 +1,18 @@
 import { Button } from "@material-ui/core";
 import React from "react";
 import styled from "styled-components";
-import Review from "../../components/ReviewComponent";
+import Review from "../ReviewComponent";
 import colors from "../../utils/colors";
 import { reviews } from "../../utils/dummyData";
 
-function Reviews(props) {
+function Reviews({showReplies=true}) {
  
   return (
     <ReviewContainer>
       {reviews.map((e, i) => (
         <Review
           key={i}
-          reply={e.reply}
+          reply={showReplies?e?.reply:null}
           img={e.img}
           rating={e.rating}
           text={e.text}

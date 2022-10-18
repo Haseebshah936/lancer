@@ -12,10 +12,13 @@ import Tooltip from "@mui/material/Tooltip";
 import AddIcon from "@mui/icons-material/Add";
 import styled from "styled-components";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
+import colors from "../../utils/colors";
 
-const PortfolioCard = ({hideProfileInfo=true,...props}) => {
+const PortfolioCard = ({hideProfileInfo=true, style,...props}) => {
   return (
+    
     <Card
+      style={style}
       sx={{
         maxWidth: "20rem",
         minWidth: "20rem",
@@ -60,13 +63,13 @@ const PortfolioCard = ({hideProfileInfo=true,...props}) => {
           {props.GigTitle}
         </Typography>
         <Wrapper>
-          <GradeSharpIcon sx={{ color: "#FFBE5B" }} />
+          <GradeSharpIcon sx={{ color: colors.gold, paddingRight: 0 }} />
           <MiniWrapper>
-            <p style={{ color: "#FFBE5B", marginBottom: "0px" }}>
+            <p style={{ color: colors.gold, marginBottom: "0px" }}>
               {props.SellerRating}
             </p>
             <p style={{ marginLeft: "2px", marginBottom: "0px" }}>
-              {props.GigReviewsTotal}
+              ({props.GigReviewsTotal})
             </p>
           </MiniWrapper>
         </Wrapper>
@@ -76,12 +79,13 @@ const PortfolioCard = ({hideProfileInfo=true,...props}) => {
         sx={{
           paddingTop: "0px",
           display: "flex",
+          marginRight: "1rem",
           justifyContent: "space-between",
         }}
       >
         <Tooltip title="Save To Favourites" placement="bottom">
           <IconButton aria-label="add to favorites">
-            <FavoriteBorderOutlinedIcon sx={{ color: "#045c4a" }} />
+            <FavoriteBorderOutlinedIcon sx={{ color: colors.googleRed, fontSize: "2rem!important" }} />
           </IconButton>
         </Tooltip>
         <MiniWrapper2>
@@ -95,7 +99,7 @@ const PortfolioCard = ({hideProfileInfo=true,...props}) => {
               marginLeft: "5px",
               fontWeight: "500",
               fontSize: "2rem",
-              color: "#045c4a",
+              color: colors.black,
               cursor: "pointer",
             }}
           >
@@ -118,7 +122,7 @@ const Wrapper = styled.div`
 const MiniWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-left: 5px;
+  margin-left: 2px;
   margin-top: 2px;
 `;
 const MiniWrapper2 = styled.div`

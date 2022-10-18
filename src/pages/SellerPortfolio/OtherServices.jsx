@@ -9,7 +9,7 @@ import { teamImg } from '../../assets';
 import colors from '../../utils/colors';
 
 
-function OtherServices({a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}) {
+function OtherServices({data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}) {
   const ref = useRef();
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
@@ -41,7 +41,7 @@ function OtherServices({a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
-          {a.map((c, i) => (
+          {data.map((c, i) => (
             <div key={i} ref={GigRef}>
               <PortfolioCard
                 hideProfileInfo={false}

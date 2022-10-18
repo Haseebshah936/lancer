@@ -7,7 +7,7 @@ import PricingPlan from "../../components/PricingPlan";
 import Gallery from "../../components/Gallery";
 import SellerProfileInfo from "../../components/SellerProfileInfo";
 import OtherServices from "./OtherServices";
-import Reviews from "./Reviews";
+import Reviews from "../../components/Reviews";
 import { packages, sellerSliderData } from "../../utils/dummyData";
 import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
 
@@ -110,12 +110,9 @@ const Container = styled.div`
   height: 100%;
   padding-inline: 7%;
   ${miniPc({
-    paddingInline: "7%",
     marginTop: "0rem",
   })}
-  ${tablet({
-    paddingInline: "7%",
-  })}
+  
 `;
 
 const Wrapper = styled.div`

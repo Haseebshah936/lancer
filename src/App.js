@@ -13,6 +13,7 @@ import { CustomContextProvider } from "./Hooks/useCustomContext";
 import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
 import BuyerDashboard from "./pages/BuyerDashboard";
+import SellerProfile from "./pages/SellerProfile";
 import SellerPortfolio from "./pages/SellerPortfolio";
 
 const images = [
@@ -59,6 +60,7 @@ function App(props) {
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
         <Routes>
+          <Route path="/" element={<SellerProfile />} />
           <Route path="/home" element={<Landing />} />
           <Route path="/about" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
@@ -70,7 +72,6 @@ function App(props) {
         </Routes>
       </Router>
     </CustomContextProvider>
-    // <BuyerDashboard></BuyerDashboard>
   );
 }
 

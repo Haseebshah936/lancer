@@ -1,6 +1,6 @@
 import { ChatBubbleOutline, TaskAlt } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { miniTablet, mobile } from "../../responsive";
 import colors from "../../utils/colors";
@@ -19,10 +19,12 @@ function SellerProfileInfo({
   handleSave,
   name="Haseeb",
   approved=false,
-  description="I will be your MERN developer and will develope anything you want."
+  description="I will be your MERN developer and will develope anything you want.",
+  style
 }) {
+  
   return (
-    <Container>
+    <Container style={style}>
       <Wrapper>
         <Image src={profilePic} />
         <Name>
@@ -56,7 +58,7 @@ function SellerProfileInfo({
   );
 }
 
-export default SellerProfileInfo;
+export default memo(SellerProfileInfo);
 
 const Container = styled.div`
   width: 100%;
