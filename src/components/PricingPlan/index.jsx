@@ -105,9 +105,10 @@ const CustomBox = styled(Box)`
   margin-bottom: 10rem;
   ${miniTablet({
     marginBottom: 0,
+    
   })}
   ${mobile({
-    marginBottom: "5rem"
+    marginBottom: "5rem",
   })}
   min-height: 50rem;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);

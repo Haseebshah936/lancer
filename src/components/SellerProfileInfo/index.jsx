@@ -74,10 +74,11 @@ const Container = styled.div`
   margin-top: 5rem;
   min-height: 46rem;
   ${miniTablet({
-    marginRight: "3rem"
+    marginRight: "3rem",
+    boxShadow: "none",
   })}
   ${mobile({
-    marginRight: "0rem"
+    marginRight: "0rem",
   })}
 `;
 
@@ -103,7 +104,7 @@ const GigDescription = styled.h3`
 const SubHeading = styled.h3`
   color: #808080b8;
   font-size: 1.3rem;
-  margin-top: 1rem;
+  margin-top: 2rem;
 `;
 
 const Text = styled.p`
