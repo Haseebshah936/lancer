@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import { teamImg } from "../../assets";
 import PortfolioCard from "../../components/PortfolioCard";
+import { miniTablet } from "../../responsive";
 
 function Portfolios({
   data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -35,8 +36,7 @@ export default Portfolios;
 
 const Container = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  ${miniTablet({ alignItems: "center", justifyContent: "center" })}
   flex-wrap: wrap;
   gap: 3rem;
 `;

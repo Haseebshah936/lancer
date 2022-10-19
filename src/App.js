@@ -60,7 +60,6 @@ function App(props) {
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
         <Routes>
-          <Route path="/" element={<SellerProfile />} />
           <Route path="/home" element={<Landing />} />
           <Route path="/about" element={<About />} />
           <Route path="/contactus" element={<ContactUs />} />
@@ -68,6 +67,7 @@ function App(props) {
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
+          <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>

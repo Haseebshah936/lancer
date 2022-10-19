@@ -10,7 +10,7 @@ import colors from "../utils/colors";
 import { useGoogleLogin } from "@react-oauth/google";
 import * as joi from "joi";
 import axios from "axios";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props"
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import * as queryString from "query-string";
 import { signup } from "../assets";
 
@@ -59,14 +59,17 @@ function Signup(props) {
   // }
 
   const responseFacebook = async (res) => {
-    console.log(res)
-    const {accessToken,id} = res;
-    const response = await axios.post("http://localhost:3003/api/auth/facebook/", {
-      id,
-      accessToken
-    })
+    console.log(res);
+    const { accessToken, id } = res;
+    const response = await axios.post(
+      "http://localhost:3003/api/auth/facebook/",
+      {
+        id,
+        accessToken,
+      }
+    );
     console.log("Response From facebook", response);
-  }
+  };
 
   const handleChange = ({ target }) => {
     const newData = {
@@ -82,7 +85,7 @@ function Signup(props) {
     if (error) {
       const { details } = error;
       console.log(details);
-      details.map((e,i) => {
+      details.map((e, i) => {
         console.log(e.path[0], e.message);
       });
       return;
@@ -134,16 +137,21 @@ function Signup(props) {
                 <Twitter htmlColor={colors.twitterBlue} />
               </SocialIcon>
               {/* <a href={facebookLoginUrl}> */}
-                <FacebookLogin 
+              <FacebookLogin
                 appId="881136853269267"
                 autoLoad={false}
                 fields="name,email,picture"
                 callback={responseFacebook}
-                render={(renderProps) => <SocialIcon onClick={renderProps.onClick} c={colors.facebookBlue}>
-                <FacebookTwoTone htmlColor={colors.facebookBlue} />
-              </SocialIcon>}
-                />
-                 {/* <SocialIcon c={colors.facebookBlue}>
+                render={(renderProps) => (
+                  <SocialIcon
+                    onClick={renderProps.onClick}
+                    c={colors.facebookBlue}
+                  >
+                    <FacebookTwoTone htmlColor={colors.facebookBlue} />
+                  </SocialIcon>
+                )}
+              />
+              {/* <SocialIcon c={colors.facebookBlue}>
                 <FacebookTwoTone htmlColor={colors.facebookBlue} />
               </SocialIcon> */}
               {/* </a> */}

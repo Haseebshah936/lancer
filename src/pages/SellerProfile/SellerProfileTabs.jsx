@@ -80,7 +80,12 @@ export default function SellerProfileTabs({ style }) {
       </Box>
 
       <TabPanel value={value} index={0}>
-        <Box id="portfolio" mt={{ md: "2rem", xs: 0 }} mb={"2rem"}>
+        <Box
+          id="portfolio"
+          mt={{ md: "2rem", xs: 0 }}
+          px={{ lg: "4rem", md: "2rem", xs: "0rem" }}
+          mb={"2rem"}
+        >
           <Portfolios data={a.slice((pagination - 1) * 6, pagination * 6)} />
           <Box
             mt={"4rem"}
