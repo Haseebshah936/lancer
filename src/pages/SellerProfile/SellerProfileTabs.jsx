@@ -9,6 +9,8 @@ import styled from "styled-components";
 import Portfolios from "./Portfolios";
 import { Pagination } from "@mui/material";
 import Reviews from "../../components/ReviewsComponent";
+import AboutSeller from "../../components/AboutSeller/AboutSeller";
+import { miniTablet } from "../../responsive";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -49,7 +51,7 @@ export default function SellerProfileTabs({ style }) {
   const [count, setCount] = React.useState(1);
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   React.useEffect(() => {
-    setCount(Math.ceil(a.length / 8));
+    setCount(Math.ceil(a.length / 6));
   }, [pagination]);
 
   const handleChange = (event, newValue) => {
@@ -57,56 +59,70 @@ export default function SellerProfileTabs({ style }) {
   };
 
   return (
-    <Box sx={{ width: "100%" }} style={style}>
+    <Box
+      sx={{
+        width: "100%",
+        minHeight: "46rem",
+        height: "100%",
+      }}
+      style={style}
+    >
       <Box sx={{ borderBottom: 1, borderColor: colors.becomePartnerGreen }}>
         <CustomTabContainer
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <CustomTab label="About" {...a11yProps(0)} />
-
-          <CustomTab onClick={() => document.getElementById('portfolio').scrollIntoView(true)} label="Portfolios" {...a11yProps(1)} />
-
-          <CustomTab onClick={() => document.getElementById('reviews').scrollIntoView(true)} label="Reviews" {...a11yProps(2)} />
+          <CustomTab label="Portfolios" {...a11yProps(1)} />
+          <CustomTab label="Reviews" {...a11yProps(2)} />
+          <CustomTab label="About" sx={{ display: "none" }} {...a11yProps(0)} />
         </CustomTabContainer>
       </Box>
-        <SubHeading id="portfolio"/>
-      <Box id="portfolio" mt={"4rem"} mb={"2rem"}>
-        <Portfolios data={a.slice((pagination - 1) * 8, pagination * 8)} />
 
-        <Box
-          mt={"4rem"}
-          display="flex"
-          justifyContent="center"
-          alignContent={"center"}
-          width="100%"
-        >
-          <Pagination
-            count={count}
-            page={pagination}
-            onChange={(e, page) => setPagination(page)}
-          />
+      <TabPanel value={value} index={0}>
+        <Box id="portfolio" mt={{ md: "2rem", xs: 0 }} mb={"2rem"}>
+          <Portfolios data={a.slice((pagination - 1) * 6, pagination * 6)} />
+          <Box
+            mt={"4rem"}
+            display="flex"
+            justifyContent="center"
+            alignContent={"center"}
+            width="100%"
+          >
+            <Pagination
+              count={count}
+              page={pagination}
+              onChange={(e, page) => setPagination(page)}
+            />
+          </Box>
         </Box>
-      </Box>
-      <Box mb={"4rem"} mt={"4rem"} id="reviews">
-        <SubHeading>Reviews</SubHeading>
-        <Reviews />
-      </Box>
-
-     
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <Box
+          mt={{ md: "2rem", xs: "0rem" }}
+          mb={"2rem"}
+          px={{ md: "2rem", xs: "0rem" }}
+          id="reviews"
+        >
+          <Reviews />
+        </Box>
+      </TabPanel>
+      <CustomTabPanel value={value} index={2}>
+        <Box
+          mt={{ md: "2rem", xs: "0rem" }}
+          mb={"2rem"}
+          px={{ md: "2rem", xs: "0rem" }}
+          id="about"
+          display={{ md: "none", xs: "flex" }}
+        >
+          <AboutSeller />
+        </Box>
+      </CustomTabPanel>
     </Box>
   );
 }
 
 const CustomTabContainer = styled(Tabs)`
-position: -webkit-sticky;
-  .MuiBox-root .css-1y84imo{
-
-    position: sticky;
-    top: 0;
-    background-color: yellow;
-  }
   .css-1aquho2-MuiTabs-indicator {
     background-color: ${colors.becomePartnerGreen} !important;
   }
@@ -114,6 +130,7 @@ position: -webkit-sticky;
     color: ${colors.becomePartnerGreen} !important;
   }
   min-height: 4rem !important;
+  ${miniTablet({ display: "flex", flexDirection: "row-reverse" })}
 `;
 
 const CustomTab = styled(Tab)`
@@ -126,6 +143,8 @@ const CustomTab = styled(Tab)`
   .css-1aquho2-MuiTabs-indicator {
     background-color: ${colors.textGreen} !important;
   }
+  ${(props) =>
+    props.label === "About" && miniTablet({ display: " flex !important" })}
 `;
 const SubHeading = styled.h2`
   font-weight: 600;
@@ -133,7 +152,10 @@ const SubHeading = styled.h2`
   margin-block: 2rem;
 `;
 
-const CustomAnchor = styled.a`
-  text-decoration: none;
-  color: inherit;
+const CustomTabPanel = styled(TabPanel)`
+  /* display: none;
+  padding: 2rem;
+  ${miniTablet({
+    display: "flex !important",
+  })} */
 `;

@@ -1,6 +1,6 @@
 import { StarRate } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   border-bottom: 1px solid ${colors.lightGrey};
   padding-bottom: 1.5rem;
   margin-top: 1rem;
-`
+`;
 
 const Container = styled.div`
   display: flex;
@@ -77,7 +77,7 @@ const ReviewTextContainer = styled.div`
 
 const ReviewText = styled.h4`
   font-size: 1.2rem;
-  margin-bottom: .2rem;
+  margin-bottom: 0.2rem;
 `;
 
 const ReviewTime = styled.p`
@@ -85,26 +85,26 @@ const ReviewTime = styled.p`
 `;
 
 const CustomIconButton = styled(IconButton)`
-  padding-left: 0px!important; 
-  padding-block: 0px!important; 
-  align-items: center!important;
-  display: flex!important;
-`
+  padding-left: 0px !important;
+  padding-block: 0px !important;
+  align-items: center !important;
+  display: flex !important;
+`;
 
 const ButtonText = styled.p`
   color: ${colors.black};
   font-size: 1.2rem;
-  margin-bottom: 0px!important;
-  align-self: flex-end!important;
+  margin-bottom: 0px !important;
+  align-self: flex-end !important;
 `;
 
 const ReplyContainer = styled.div`
   display: flex;
   align-items: center;
   margin-left: 15%;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
   padding-bottom: 1rem;
   border-bottom: 1px solid ${colors.lightGrey};
 `;
 
-export default Review;
+export default memo(Review);

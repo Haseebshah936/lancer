@@ -2,38 +2,48 @@ import { ChatBubbleOutline, TaskAlt } from "@mui/icons-material";
 import { Button, IconButton } from "@mui/material";
 import React, { memo } from "react";
 import styled from "styled-components";
+import AboutSeller from "../AboutSeller/AboutSeller";
 import { miniTablet, mobile } from "../../responsive";
 import colors from "../../utils/colors";
 import ProfileReviewInfo from "../ProfileReviewsInfo";
 
 function SellerProfileInfo({
-  languages=["Urdu", "English", "Chinese"],
-  city="Lahore",
-  country="Paksitan",
-  englishLevel="Intermediate",
-  profilePic="https://api.lorem.space/image/face?w=100&h=100&hash=w7ejlc5z",
+  languages = ["Urdu", "English", "Chinese"],
+  city = "Lahore",
+  country = "Paksitan",
+  englishLevel = "Intermediate",
+  profilePic = "https://api.lorem.space/image/face?w=100&h=100&hash=w7ejlc5z",
   rating = 5.0,
   reviews = 20,
   views = 10000,
-  saved=false,
+  saved = false,
   handleSave,
-  name="Haseeb",
-  approved=false,
-  description="I will be your MERN developer and will develope anything you want.",
-  style
+  name = "Haseeb",
+  approved = false,
+  description = "I will be your MERN developer and will develope anything you want.",
+  style,
+  showExtraInfo = false,
+  skills = [],
+  educationalBackground = [],
+  experence = [],
+  achivements = [],
 }) {
-  
   return (
-    <Container style={style}>
+    <Container style={{ ...style, maxHeight: showExtraInfo ? "100%" : "30vh" }}>
       <Wrapper>
         <Image src={profilePic} />
         <Name>
-         {name} <TaskAlt sx={{ fontSize: "1rem", color: approved? colors.becomePartnerButtonGreen
-         : colors.googleRed }} />
+          {name}{" "}
+          <TaskAlt
+            sx={{
+              fontSize: "1rem",
+              color: approved
+                ? colors.becomePartnerButtonGreen
+                : colors.googleRed,
+            }}
+          />
         </Name>
-        <GigDescription>
-          {description}
-        </GigDescription>
+        <GigDescription>{description}</GigDescription>
         <ProfileReviewInfo
           size={1}
           rating={rating}
@@ -43,17 +53,19 @@ function SellerProfileInfo({
           handleSave={handleSave}
         />
         <SubHeading>Location:</SubHeading>
-        <Text>{city}, {country}</Text>
+        <Text>
+          {city}, {country}
+        </Text>
         <SubHeading>Languages:</SubHeading>
-        <Text>{languages.join(', ')}</Text>
+        <Text>{languages.join(", ")}</Text>
         <SubHeading>English level:</SubHeading>
         <Text>{englishLevel}</Text>
-        
+        <CustomIconButton variant="contained">
+          <ChatBubbleOutline />
+          &nbsp;&nbsp;Contact to this seller
+        </CustomIconButton>
       </Wrapper>
-      <CustomIconButton variant="contained">
-        <ChatBubbleOutline />
-        &nbsp;&nbsp;Contact to this seller
-      </CustomIconButton>
+      <AboutContainer>{showExtraInfo && <AboutSeller />}</AboutContainer>
     </Container>
   );
 }
@@ -72,7 +84,6 @@ const Container = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   margin-top: 5rem;
   min-height: 46rem;
   ${miniTablet({
@@ -84,7 +95,10 @@ const Container = styled.div`
   })}
 `;
 
-const Wrapper = styled.div``
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 
 const Image = styled.img`
   width: 10rem;
@@ -106,14 +120,13 @@ const GigDescription = styled.h3`
 const SubHeading = styled.h3`
   color: #808080b8;
   font-size: 1.3rem;
-  margin-top: 2rem;
+  margin-top: 1rem;
 `;
 
 const Text = styled.p`
   font-weight: bold;
   font-size: 1.2rem;
   margin-bottom: 2rem;
-
 `;
 
 const CustomIconButton = styled(Button)`
@@ -126,4 +139,10 @@ const CustomIconButton = styled(Button)`
   padding-block: 1rem !important;
   text-transform: none !important;
   font-weight: bold !important;
-`
+`;
+
+const AboutContainer = styled.div`
+  ${miniTablet({
+    display: "none",
+  })}
+`;

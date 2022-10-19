@@ -5,14 +5,13 @@ import Review from "../ReviewComponent";
 import colors from "../../utils/colors";
 import { reviews } from "../../utils/dummyData";
 
-function Reviews({showReplies=true}) {
- 
+function Reviews({ showReplies = true }) {
   return (
     <ReviewContainer>
       {reviews.map((e, i) => (
         <Review
           key={i}
-          reply={showReplies?e?.reply:null}
+          reply={showReplies ? e?.reply : null}
           img={e.img}
           rating={e.rating}
           text={e.text}
@@ -29,11 +28,11 @@ function Reviews({showReplies=true}) {
 export default memo(Reviews);
 
 const ReviewContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 `;
 
-const CustomButton = styled(Button)`
+const CustomButton = styled.button`
   align-self: center;
   margin-top: 2rem !important;
   margin-bottom: 2.5rem !important;
@@ -45,4 +44,5 @@ const CustomButton = styled(Button)`
   padding-block: 1rem !important;
   text-transform: none !important;
   font-weight: bold !important;
+  border: none !important;
 `;
