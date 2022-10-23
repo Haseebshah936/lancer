@@ -15,6 +15,10 @@ import ContactUs from "./pages/ContactUs";
 import BuyerDashboard from "./pages/BuyerDashboard";
 import SellerProfile from "./pages/SellerProfile";
 import SellerPortfolio from "./pages/SellerPortfolio";
+import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
+import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
+import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
+import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 
 const images = [
   {
@@ -68,6 +72,10 @@ function App(props) {
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
+          <Route path="/gig/gigserviceintroduction" element={<GigServiceIntroduction />} />
+          <Route path="/gig/gigmediaattachment" element={<GigMediaAttachment />} />
+          <Route path="/gig/gigmyservicepricning" element={<GigMyServicePricing />} />
+          <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>

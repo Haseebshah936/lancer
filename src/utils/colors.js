@@ -17,6 +17,8 @@ const colors = {
     gray: "gray",
     yellow: "yellow",
     gold: "gold",
-    lightGrey: "rgba(0,0,0,0.1)"
+    lightGrey: "rgba(0,0,0,0.1)",
+    saveAndContinueButton: "#0075D5",
+
 }
 export default colors;
