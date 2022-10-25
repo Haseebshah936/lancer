@@ -1,4 +1,5 @@
 import React from "react";
+import Joi from "joi-browser";
 import ImageUploading from "react-images-uploading";
 import { Box, Grid } from "@mui/material";
 import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
@@ -12,15 +13,29 @@ import Footer from "../../components/Footer";
 
 export default function GigMediaAttachment() {
   const [images, setImages] = React.useState([]);
+  const [errors, setErrors] = React.useState({});
+  const schema = {
+    images: Joi.array().items().min(1).label("Images"),
+  };
+  const validate = () => {
+    const result = Joi.validate({ images }, schema, { abortEarly: false });
+    if (!result.error) {
+      setErrors({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) errors[item.path[0]] = item.message;
+    setErrors(errors);
+    console.log("media Errors:", errors);
+    return errors;
+  };
   const maxNumber = 3;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
     console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
-  const validate = () => {
-    return null;
-  };
+
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -43,6 +58,11 @@ export default function GigMediaAttachment() {
           <p>
             Add 3 pictures atleast 1 that you want to show as your gig picture.
           </p>
+          {errors.images && (
+            <div className="alert alert-danger">
+              {"Kindly select atleast 1 Images"}
+            </div>
+          )}
         </Grid>
         <Grid item xs={12}></Grid>
         <Grid
@@ -85,18 +105,25 @@ export default function GigMediaAttachment() {
                   <Grid
                     item
                     xs={11}
-                    sm={4}
+                    sm={3.5}
                     display="flex"
                     justifyContent="center"
+                    marginRight={"10px"}
+                    boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+                    marginTop="10px"
+                    marginBottom="10px"
+                    borderRadius={"5px"}
                   >
-                    <div key={index}>
+                    <div key={index} style={{ overflow: "hidden" }}>
                       <Box
                         component="img"
                         sx={{
-                          height: 233,
-                          width: 350,
-                          maxHeight: { xs: 200, md: 167 },
-                          maxWidth: { xs: 200, md: 250 },
+                          // height: 233,
+                          // width: 350,
+                          maxHeight: { xs: 200, md: 160 },
+                          minHeight: { xs: 200, md: 160 },
+                          minWidth: { xs: 200, md: 240 },
+                          maxWidth: { xs: 200, md: 240 },
                         }}
                         src={image.data_url}
                         alt=""
@@ -106,13 +133,14 @@ export default function GigMediaAttachment() {
                         <Button
                           variant="contained"
                           onClick={() => onImageUpdate(index)}
-                          className="me-3"
+                          className="me-3 mb-2"
                         >
                           Update
                         </Button>
                         <Button
                           variant="contained"
                           onClick={() => onImageRemove(index)}
+                          className="mb-2"
                         >
                           Remove
                         </Button>

@@ -323,3 +323,9 @@ export const reviews = [
     userImg: "https://api.lorem.space/image/face?w=100&h=100&hash=qecd5c51",
   },
 ];
+
+export const biddingTypes = [
+  { value: 1, label: "Fixed Budget Price" },
+  { value: 2, label: "Hourly Pricing" },
+  { value: 3, label: "Bidding Price" }
+];

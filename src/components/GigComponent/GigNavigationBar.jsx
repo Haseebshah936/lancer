@@ -3,7 +3,7 @@ import { Grid, Box, Button } from "@mui/material";
 import colors from "../../utils/colors";
 import { useNavigate } from "react-router";
 
-export default function GigNavigationBar({ title, pathName, validate }) {
+export default function GigNavigationBar({ title, pathName, validate, sData }) {
   const navigate = useNavigate();
   return (
     <Grid
@@ -34,7 +34,12 @@ export default function GigNavigationBar({ title, pathName, validate }) {
           alignItems="center"
         >
           <Grid item xs={12} sm={5} md={5}>
-            <h3 style={{ color: colors.white, fontWeight: "bold" }}>{title}</h3>
+            <h3
+              className="text-center"
+              style={{ color: colors.white, fontWeight: "bold" }}
+            >
+              {title}
+            </h3>
           </Grid>
           <Grid item xs={7} sm={5} md={4}>
             <h5 style={{ color: colors.white }}>

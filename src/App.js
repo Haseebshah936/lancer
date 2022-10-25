@@ -19,6 +19,7 @@ import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
 import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
 import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
+import PostProject from "./pages/PostProject/PostProject";
 
 const images = [
   {
@@ -76,6 +77,7 @@ function App(props) {
           <Route path="/gig/gigmediaattachment" element={<GigMediaAttachment />} />
           <Route path="/gig/gigmyservicepricning" element={<GigMyServicePricing />} />
           <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
+          <Route path="/postProject" element={<PostProject></PostProject>} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>

@@ -12,7 +12,6 @@ import {
 import { CountryNAME } from "../../utils/Countries";
 import { Button, TextField } from "@mui/material";
 import colors from "../../utils//colors";
-import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
 import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
 import TextFieldComp from "./../../components/GigComponent/TextFieldComp";
 import DropDownInputComp from "./../../components/GigComponent/DropDownInputComp";
@@ -41,7 +40,7 @@ export default function GigServiceIntroduction() {
     gigCategory: Joi.string().required().label("Gig Category"),
     gigDescription: Joi.string().required().label("Gig Description"),
     language: Joi.string().required().label("Language"),
-    tage: Joi.array().items(Joi.string()).required().label("Tage"),
+    tage: Joi.array().items(Joi.string()).min(3).label("Tages"),
     country: Joi.string().required().label("Country"),
     addres: Joi.string().required().label("Address"),
   };
@@ -94,6 +93,7 @@ export default function GigServiceIntroduction() {
         title="Add/ Edit service"
         pathName="/gig/gigmediaattachment"
         validate={validate}
+        sData={gigIntroduction}
       ></GigNavigationBar>
       {/* Service Introduction*/}
       <Grid container display="flex" justifyContent="center" paddingTop="10px">
@@ -175,7 +175,7 @@ export default function GigServiceIntroduction() {
                 variant="outlined"
               />
               {errors.tage && (
-                <p style={{ color: "red", fontSize: "12px" }}>{errors.tage}</p>
+                <div className="alert alert-danger">{errors.tage}</div>
               )}
             </Grid>
             <Grid

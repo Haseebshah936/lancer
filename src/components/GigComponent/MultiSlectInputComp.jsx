@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Grid } from "@mui/material";
+const counter = 0;
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,7 +59,7 @@ export default function MultiSlectInputComp({
         >
           {list.map((li) => (
             <MenuItem
-              key={li.label}
+              key={li.value}
               value={li.label}
               style={getStyles(li.label, value, theme)}
             >

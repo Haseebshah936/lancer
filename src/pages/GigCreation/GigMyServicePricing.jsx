@@ -506,6 +506,9 @@ export default function GigMyServicePlanning() {
                 ></InputField>
               </Box>
             </Grid>
+            <Grid item xs={12} sm={0} marginTop={{ xs: "250px", sm: "1px" }}>
+              {}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
