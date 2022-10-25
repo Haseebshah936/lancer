@@ -21,44 +21,6 @@ import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 import PostProject from "./pages/PostProject/PostProject";
 
-const images = [
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    type: "video",
-  },
-];
-
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
@@ -73,9 +35,18 @@ function App(props) {
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
-          <Route path="/gig/gigserviceintroduction" element={<GigServiceIntroduction />} />
-          <Route path="/gig/gigmediaattachment" element={<GigMediaAttachment />} />
-          <Route path="/gig/gigmyservicepricning" element={<GigMyServicePricing />} />
+          <Route
+            path="/gig/gigserviceintroduction"
+            element={<GigServiceIntroduction />}
+          />
+          <Route
+            path="/gig/gigmediaattachment"
+            element={<GigMediaAttachment />}
+          />
+          <Route
+            path="/gig/gigmyservicepricning"
+            element={<GigMyServicePricing />}
+          />
           <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
           <Route path="/postProject" element={<PostProject></PostProject>} />
           <Route path="*" element={<Navigate to="/home" replace />} />
