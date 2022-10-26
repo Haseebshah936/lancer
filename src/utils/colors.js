@@ -20,5 +20,6 @@ const colors = {
   lightGrey: "rgba(0,0,0,0.1)",
   saveAndContinueButton: "#0075D5",
   lightGreen: "#71d810",
+  userChatMessageBackground: "#e8efff",
 };
 export default colors;

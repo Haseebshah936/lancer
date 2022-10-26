@@ -327,5 +327,93 @@ export const reviews = [
 export const biddingTypes = [
   { value: 1, label: "Fixed Budget Price" },
   { value: 2, label: "Hourly Pricing" },
-  { value: 3, label: "Bidding Price" }
+  { value: 3, label: "Bidding Price" },
+];
+
+// !NOTE: This is just a sample data for the demo purpose of chat
+export const chat = [
+  {
+    position: 1,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 2,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 3,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 4,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 1,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 2,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 3,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 3,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 2,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 1,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 2,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example hey there how are you. I thought you were dead or some thing !",
+  },
+  {
+    position: 4,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    position: 2,
+    type: "text",
+    title: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    position: 1,
+    type: "text",
+    title: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
 ];

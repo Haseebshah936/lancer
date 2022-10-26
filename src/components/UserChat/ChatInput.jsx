@@ -1,9 +1,9 @@
 import { AttachFile, Mic, Send } from "@mui/icons-material";
-import { Avatar, IconButton } from "@mui/material";
+import { IconButton } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useState } from "react";
 import colors from "../../utils/colors";
-import { Input } from "react-chat-elements";
+import { Avatar, Input } from "react-chat-elements";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import useLongPress from "../../Hooks/useLongPress";
@@ -16,7 +16,9 @@ function ChatInput(props) {
   };
 
   const onClick = () => {
-    console.log("click is triggered");
+    if (audioRecording) {
+      setAudioRecording(false);
+    }
   };
 
   const defaultOptions = {
@@ -31,14 +33,18 @@ function ChatInput(props) {
         <Avatar
           src="https://avatars.githubusercontent.com/u/80540635?v=4"
           alt="avatar"
-          size="xlarge"
+          size="large"
           type="circle"
         />
         <Input
           multiline={true}
           placeholder="Type Here..."
           onChange={(e) => setMessage(e.target.value)}
-          inputStyle={{ flex: 1, background: "transparent", flexGrow: 1 }}
+          inputStyle={{
+            flex: 1,
+            background: "transparent",
+            flexGrow: 1,
+          }}
         />
         <IconButton
           sx={{
@@ -83,7 +89,7 @@ const Container = styled.div`
 const TextInputContainer = styled.div`
   display: flex;
   background-color: #78787819;
-  padding: 1rem 1rem;
+  padding: 0.8rem 0.8rem;
   margin: 1rem;
   border-radius: 3rem;
   align-items: flex-end;
