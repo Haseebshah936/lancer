@@ -15,6 +15,7 @@ export default function PostProject() {
     category: "",
     pricingType: "",
     budget: "",
+    days: "",
     experties: [],
     links: [],
     description: "",
@@ -29,6 +30,7 @@ export default function PostProject() {
     budget: Joi.string().required().label("Budget"),
     experties: Joi.array().items(Joi.string()).min(3).label("Experties"),
     description: Joi.string().required().label("Discription"),
+    days: Joi.number().required().label("Days"),
   };
   const validate = () => {
     const result = Joi.validate(postProjectData, schema, { abortEarly: false });
@@ -116,6 +118,16 @@ export default function PostProject() {
       ) : (
         <div></div>
       )}
+      {/* Adding No. of Days */}
+      <TextFeildComp
+        label={"No. of Days"}
+        placeholder={"Enter No. of Days"}
+        value={postProjectData.days}
+        error={error.days}
+        onChange={(e) =>
+          setPostProjectData({ ...postProjectData, days: e.target.value })
+        }
+      ></TextFeildComp>
       {/* Experties */}
       <Grid container display="flex" justifyContent={"center"}>
         <Grid item xs={11.4}>

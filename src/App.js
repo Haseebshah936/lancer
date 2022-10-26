@@ -20,6 +20,7 @@ import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
 import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 import PostProject from "./pages/PostProject/PostProject";
+import EProjects from './pages/EmployerProjects/EProjects';
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -35,6 +36,7 @@ function App(props) {
           <Route path="/buyerdashboard" element={<BuyerDashboard />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
+          <Route path="/eprojects/:id" element={<EProjects />} />
           <Route
             path="/gig/gigserviceintroduction"
             element={<GigServiceIntroduction />}
