@@ -21,7 +21,10 @@
     "joi-browser": "^13.4.0",
     "query-string": "^7.1.1",
     "react": "^18.2.0",
+    "react-autolink-text": "^2.0.0",
+    "react-autolink-text2": "^3.3.0",
     "react-bootstrap": "^2.5.0",
+    "react-chat-elements": "^12.0.5",
     "react-dom": "^18.2.0",
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
@@ -30,6 +33,7 @@
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "react-swipeable-views": "^0.14.0",
+    "react-textarea-autosize": "^8.3.4",
     "styled-components": "^5.3.6",
     "web-vitals": "^3.0.2"
   },

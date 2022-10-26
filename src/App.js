@@ -20,6 +20,7 @@ import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
 import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 import PostProject from "./pages/PostProject/PostProject";
+import Chat from "./pages/Chat";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ function App(props) {
             path="/gig/gigmyservicepricning"
             element={<GigMyServicePricing />}
           />
+          <Route path="/chat/:id" element={<Chat />} />
           <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
           <Route path="/postProject" element={<PostProject></PostProject>} />
           <Route path="*" element={<Navigate to="/home" replace />} />
