@@ -99,5 +99,6 @@ const TextInputContainer = styled.div`
     min-width: auto;
     flex: 1;
     background: transparent;
+    align-self: center;
   }
 `;
