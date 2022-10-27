@@ -4,7 +4,10 @@ import styled from "styled-components";
 import AutoLinkText from "react-autolink-text2";
 import colors from "../../utils/colors";
 
-function CustomMessageBox({ position, text, title, type, ...props }) {
+function CustomMessageBox({ position, title, type, ...props }) {
+  const handleDownload = (e) => {
+    alert("Download", e);
+  };
   return (
     <Container>
       {position === "left" && (
@@ -25,8 +28,10 @@ function CustomMessageBox({ position, text, title, type, ...props }) {
           position={position}
           type={type}
           title={title}
-          text={<AutoLinkText text={text} />}
+          text={props?.text && <AutoLinkText text={props?.text} />}
+          data={props?.data}
           {...props}
+          onDownload={() => handleDownload(props?.data?.uri)}
         />
         <Triangle position={position} />
       </Wrapper>
@@ -47,8 +52,59 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
-  margin-bottom: 2rem;
+  margin-block: 2.5rem;
   margin-inline: 1rem;
+  .rce-mbox-photo {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0.1rem;
+    width: 100%;
+  }
+  .rce-mbox-photo img {
+    width: 100%;
+  }
+  .rce-mbox--clear-padding {
+    padding-bottom: 1.5rem;
+  }
+  .rce-mbox-video {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 0rem;
+    width: 100%;
+  }
+  .rce-mbox-video.padding-time {
+    padding-bottom: 0rem;
+  }
+  video {
+    float: left;
+    align-self: flex-start;
+  }
+  .rce-mbox-audio {
+    padding-bottom: 0;
+  }
+  audio {
+    background-color: #090080;
+    width: 100%;
+  }
+  .rce-mbox-text {
+    margin: 0;
+    text-align: justify;
+  }
+  .rce-mbox-text::after {
+    display: none;
+  }
+  .rce-mbox-time-block {
+    display: none;
+  }
+  .rce-mbox-file > button {
+    background-color: transparent;
+    width: 100%;
+  }
+  .rce-avatar-container.default.default {
+    display: none;
+  }
 `;
 
 const Wrapper = styled.div`
@@ -64,7 +120,7 @@ const Triangle = styled.div`
       ? colors.becomePartnerButtonGreen
       : colors.userChatMessageBackground};
   position: absolute;
-  bottom: 20%;
+  bottom: 2rem;
   left: ${(props) => (props.position === "left" ? "-1rem" : "97.5%")};
   clip-path: polygon(
     0 ${(props) => (props.position === "left" ? "100%" : "0")},

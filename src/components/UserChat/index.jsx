@@ -50,6 +50,10 @@ function Chat(props) {
   const [chatRooms, setChatRooms] = useState(ChatRoomsData);
   const [chatRoomsData, setChatRoomsData] = useState(ChatRoomsData);
 
+  useEffect(() => {
+    setData(chat);
+  }, [chat]);
+
   const handleChatRoomClick = (chatRoom) => {
     console.log("ChatRoom", chatRoom);
     setActive(chatRoom);
@@ -59,7 +63,17 @@ function Chat(props) {
     setActive(false);
   };
 
-  const handleSend = (message) => {};
+  const handleSend = (message) => {
+    console.log("message", message);
+    setData((prev) => [
+      ...prev,
+      {
+        ...message,
+        avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
+        alt: "kursat_avatar",
+      },
+    ]);
+  };
 
   const handleMuteChatRoom = (chatRoom) => {
     console.log("Mute ChatRoom", chatRoom);
@@ -103,13 +117,12 @@ function Chat(props) {
           onClickVideoCall={handleVideoCall}
         />
         <MessageListContainer>
-          {data.map(({ position, title, type, text, e }, i) => {
+          {data.map(({ userId, userName, type, ...e }, i) => {
             return (
               <CustomMessageBox
-                position={position % 2 === 0 ? "right" : "left"}
-                title={title}
+                position={userId == 1 ? "right" : "left"}
+                title={userName}
                 type={type}
-                text={text}
                 key={i}
                 {...e}
               />
@@ -118,7 +131,7 @@ function Chat(props) {
           <div ref={messageRef} />
         </MessageListContainer>
 
-        <ChatInput />
+        <ChatInput onSend={handleSend} />
       </MessageContainer>
     </Container>
   );
@@ -184,12 +197,15 @@ const MessageListContainer = styled.div`
     min-width: auto;
   }
   .rce-mbox {
-    width: 70%;
+    max-width: 85%;
+    padding-right: 1.5rem;
     color: white;
     min-width: auto;
     box-shadow: none;
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
+    padding-bottom: 1.2rem;
+    min-width: 40%;
   }
   .rce-mbox.rce-mbox-right {
     color: black;

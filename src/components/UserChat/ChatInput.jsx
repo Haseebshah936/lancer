@@ -1,36 +1,54 @@
 import { AttachFile, Mic, Send } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
-import { Box } from "@mui/system";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import colors from "../../utils/colors";
 import { Avatar, Input } from "react-chat-elements";
-import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import useLongPress from "../../Hooks/useLongPress";
 import { miniMobile } from "../../responsive";
+import AudioRecorder from "./AudioRecorder";
 
-function ChatInput(props) {
+function ChatInput({ onSend }) {
   const [message, setMessage] = useState("");
-  const [audioRecording, setAudioRecording] = useState(false);
-  const [input, setInput] = useState(false);
+  const [audioRecording, setAudioRecording] = useState(true);
+  const [clear, setClear] = useState(false);
+  const inputRef = useRef(null);
   const onLongPress = () => {
     console.log("longpress is triggered");
   };
 
+  const sendTextMessage = () => {
+    if (!message) return;
+    const msg = {
+      userId: 1,
+      userName: "Haseeb",
+      type: "text",
+      text: message,
+    };
+    inputRef.current.value = "";
+    onSend(msg);
+    setMessage("");
+  };
+
+  const sendAudio = () => {};
+
   const onClick = () => {
     if (audioRecording) {
       setAudioRecording(false);
+      return;
     }
+    sendTextMessage();
   };
 
-  const defaultOptions = {
-    shouldPreventDefault: true,
-    delay: 500,
-  };
-  const longPress = useLongPress(setAudioRecording, onClick, defaultOptions);
+  // const defaultOptions = {
+  //   shouldPreventDefault: true,
+  //   delay: 500,
+  // };
+  // const longPress = useLongPress(setAudioRecording, onClick, defaultOptions);
 
   return (
     <Container>
+      <AudioRecorder />
       <TextInputContainer>
         <Avatar
           src="https://avatars.githubusercontent.com/u/80540635?v=4"
@@ -42,13 +60,19 @@ function ChatInput(props) {
         <Input
           multiline={true}
           placeholder="Type Here..."
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={(e) => {
+            setAudioRecording(false);
+            setMessage(e.target.value);
+          }}
+          referance={inputRef}
+          defaultValue={message}
+          clear={clear}
+          onSubmit={sendTextMessage}
           inputStyle={{
             flex: 1,
             background: "transparent",
             flexGrow: 1,
           }}
-          onFocus={() => props.onFocus()}
         />
         <IconButton
           sx={{
@@ -69,7 +93,8 @@ function ChatInput(props) {
             },
             marginLeft: "1rem",
           }}
-          {...longPress}
+          onClick={onClick}
+          // {...longPress}
         >
           {!audioRecording ? (
             <Send sx={{ color: colors.white, fontSize: "2rem" }} />

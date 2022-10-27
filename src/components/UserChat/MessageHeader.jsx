@@ -75,7 +75,6 @@ const Container = styled.div`
   padding-inline: 2rem;
   align-items: center;
   padding-bottom: 1rem;
-  margin-bottom: 2rem;
   min-width: auto;
   border-bottom: 1px solid ${colors.lightGrey};
   ${mobile({ paddingInline: "1rem" })}
