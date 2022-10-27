@@ -7,6 +7,7 @@ import { Avatar, Input } from "react-chat-elements";
 import TextareaAutosize from "react-textarea-autosize";
 import styled from "styled-components";
 import useLongPress from "../../Hooks/useLongPress";
+import { miniMobile } from "../../responsive";
 
 function ChatInput(props) {
   const [message, setMessage] = useState("");
@@ -36,6 +37,7 @@ function ChatInput(props) {
           alt="avatar"
           size="large"
           type="circle"
+          className="avatar"
         />
         <Input
           multiline={true}
@@ -101,4 +103,9 @@ const TextInputContainer = styled.div`
     background: transparent;
     align-self: center;
   }
+  ${miniMobile({
+    ".avatar": {
+      display: "none",
+    },
+  })}
 `;

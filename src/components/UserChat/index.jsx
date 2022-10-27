@@ -4,7 +4,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { MessageBox, MessageList } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import styled from "styled-components";
-import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
+import {
+  miniMobile,
+  miniPc,
+  miniTablet,
+  mobile,
+  tablet,
+} from "../../responsive";
 import colors from "../../utils/colors";
 import ChatRooms from "./ChatRooms";
 import MessageHeader from "./MessageHeader";
@@ -172,6 +178,7 @@ const MessageContainer = styled.div`
 const MessageListContainer = styled.div`
   scroll-behavior: smooth;
   overflow-y: scroll;
+  padding-inline: 1rem;
   .rce-container-mbox {
     width: 100%;
     min-width: auto;
@@ -200,5 +207,10 @@ const MessageListContainer = styled.div`
   }
   ${miniTablet({
     flexDirection: "column",
+  })}
+  ${miniMobile({
+    ".rce-mbox": {
+      width: "85%",
+    },
   })}
 `;
