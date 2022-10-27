@@ -29,20 +29,14 @@
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
     "react-image-gallery": "^1.2.11",
-<<<<<<< HEAD
     "react-number-format": "^5.0.1",
-=======
     "react-images-uploading": "^3.1.7",
->>>>>>> 905ebb93c3ce9136eccec6d84f0de488c646d744
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
     "react-search-autocomplete": "^8.0.0",
     "react-swipeable-views": "^0.14.0",
-<<<<<<< HEAD
     "recharts": "^2.1.15",
-=======
     "react-textarea-autosize": "^8.3.4",
->>>>>>> 905ebb93c3ce9136eccec6d84f0de488c646d744
     "styled-components": "^5.3.6",
     "use-long-press": "^2.0.2",
     "web-vitals": "^3.0.2"

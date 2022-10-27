@@ -14,11 +14,18 @@ import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
 import SellerProfile from "./pages/SellerProfile";
 import SellerPortfolio from "./pages/SellerPortfolio";
-<<<<<<< HEAD
 import SearchResults from "./pages/SearchResults";
 import BuyerMain from "./pages/BuyerMain";
 import SellerDashboard from "./pages/SellerDashboard";
 
+import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
+import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
+import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
+import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
+import PostProject from "./pages/PostProject/PostProject";
+import Chat from "./pages/Chat";
+import EProjects from "./pages/EmployerProjects/EProjects";
+import FProjects from "./pages/FreelancerProjects/FProjects";
 const images = [
   {
     url: "https://api.lorem.space/image/car?w=1000&h=600",
@@ -56,17 +63,6 @@ const images = [
     type: "video",
   },
 ];
-=======
-import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
-import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
-import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
-import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
-import PostProject from "./pages/PostProject/PostProject";
-import Chat from "./pages/Chat";
-import EProjects from './pages/EmployerProjects/EProjects';
-import FProjects from './pages/FreelancerProjects/FProjects';
->>>>>>> 905ebb93c3ce9136eccec6d84f0de488c646d744
-
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
