@@ -323,3 +323,119 @@ export const reviews = [
     userImg: "https://api.lorem.space/image/face?w=100&h=100&hash=qecd5c51",
   },
 ];
+
+export const biddingTypes = [
+  { value: 1, label: "Fixed Budget Price" },
+  { value: 2, label: "Hourly Pricing" },
+  { value: 3, label: "Bidding Price" },
+];
+
+// !NOTE: This is just a sample data for the demo purpose of chat
+export const chat = [
+  {
+    userId: 1,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    userId: 2,
+    type: "text",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    userId: 3,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    userId: 4,
+    type: "text",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    userId: 1,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    userId: 2,
+    type: "text",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    userId: 3,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    userId: 3,
+    type: "text",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+  },
+  {
+    userId: 2,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+  },
+  {
+    userId: 1,
+    type: "file",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+    data: {
+      uri: "https://www.sample-videos.com/pdf/Sample-pdf-5mb.pdf",
+      status: {
+        click: false,
+        loading: 0,
+      },
+    },
+  },
+  {
+    userId: 2,
+    type: "text",
+    userName: "Kursat",
+    text: "Give me a message list example hey there how are you. I thought you were dead or some thing !",
+  },
+  {
+    userId: 4,
+    type: "video",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+    data: {
+      videoURL:
+        "https://www.sample-videos.com/video123/mp4/240/big_buck_bunny_240p_1mb.mp4",
+      status: {
+        click: true,
+        loading: 0.5,
+        download: true,
+      },
+    },
+  },
+  {
+    userId: 2,
+    type: "photo",
+    userName: "Kursat",
+    text: "Give me a message list example !",
+    data: {
+      uri: "https://api.lorem.space/image/face?w=2000&h=2000&hash=qecd5c51",
+    },
+  },
+  {
+    userId: 1,
+    type: "audio",
+    userName: "Emre",
+    text: "Hi there how are you doing I thought ",
+    data: {
+      audioURL: "https://www.sample-videos.com/audio/mp3/crowd-cheering.mp3",
+    },
+  },
+];

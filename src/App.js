@@ -14,6 +14,7 @@ import Ranking from "./pages/Ranking";
 import ContactUs from "./pages/ContactUs";
 import SellerProfile from "./pages/SellerProfile";
 import SellerPortfolio from "./pages/SellerPortfolio";
+<<<<<<< HEAD
 import SearchResults from "./pages/SearchResults";
 import BuyerMain from "./pages/BuyerMain";
 import SellerDashboard from "./pages/SellerDashboard";
@@ -55,6 +56,16 @@ const images = [
     type: "video",
   },
 ];
+=======
+import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
+import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
+import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
+import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
+import PostProject from "./pages/PostProject/PostProject";
+import Chat from "./pages/Chat";
+import EProjects from './pages/EmployerProjects/EProjects';
+import FProjects from './pages/FreelancerProjects/FProjects';
+>>>>>>> 905ebb93c3ce9136eccec6d84f0de488c646d744
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -72,6 +83,24 @@ function App(props) {
           <Route path="/sellerdashboard" element={<SellerDashboard />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
+          <Route path="/eprojects/:id" element={<EProjects />} />
+          <Route path="/fprojects/:id" element={<FProjects />} />
+
+          <Route
+            path="/gig/gigserviceintroduction"
+            element={<GigServiceIntroduction />}
+          />
+          <Route
+            path="/gig/gigmediaattachment"
+            element={<GigMediaAttachment />}
+          />
+          <Route
+            path="/gig/gigmyservicepricning"
+            element={<GigMyServicePricing />}
+          />
+          <Route path="/chat/:id" element={<Chat />} />
+          <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
+          <Route path="/postProject" element={<PostProject></PostProject>} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>
