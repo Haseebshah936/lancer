@@ -6,7 +6,8 @@ import colors from "../../utils/colors";
 
 function CustomMessageBox({ position, title, type, ...props }) {
   const handleDownload = (e) => {
-    alert("Download", e);
+    console.log("Download", e);
+    window.open(e);
   };
   return (
     <Container>

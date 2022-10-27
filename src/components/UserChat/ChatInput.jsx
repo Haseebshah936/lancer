@@ -13,7 +13,25 @@ function ChatInput({ onSend }) {
   const [audioRecording, setAudioRecording] = useState(true);
   const [clear, setClear] = useState(false);
   const inputRef = useRef(null);
-  const onLongPress = () => {
+
+  const startRecording = () => {
+    console.log("recording started");
+  };
+
+  const stopRecording = () => {
+    console.log("recording stopped");
+  };
+
+  const onLongPress = (state) => {
+    if (message) {
+      setAudioRecording(false);
+      return;
+    }
+    if (state) {
+      setAudioRecording(state);
+      startRecording();
+      return;
+    }
     console.log("longpress is triggered");
   };
 
@@ -35,16 +53,17 @@ function ChatInput({ onSend }) {
   const onClick = () => {
     if (audioRecording) {
       setAudioRecording(false);
+      stopRecording();
       return;
     }
     sendTextMessage();
   };
 
-  // const defaultOptions = {
-  //   shouldPreventDefault: true,
-  //   delay: 500,
-  // };
-  // const longPress = useLongPress(setAudioRecording, onClick, defaultOptions);
+  const defaultOptions = {
+    shouldPreventDefault: true,
+    delay: 500,
+  };
+  const longPress = useLongPress(onLongPress, onClick, defaultOptions);
 
   return (
     <Container>
@@ -93,8 +112,7 @@ function ChatInput({ onSend }) {
             },
             marginLeft: "1rem",
           }}
-          onClick={onClick}
-          // {...longPress}
+          {...longPress}
         >
           {!audioRecording ? (
             <Send sx={{ color: colors.white, fontSize: "2rem" }} />
