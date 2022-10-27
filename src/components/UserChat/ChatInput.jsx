@@ -11,6 +11,7 @@ import useLongPress from "../../Hooks/useLongPress";
 function ChatInput(props) {
   const [message, setMessage] = useState("");
   const [audioRecording, setAudioRecording] = useState(false);
+  const [input, setInput] = useState(false);
   const onLongPress = () => {
     console.log("longpress is triggered");
   };
@@ -45,6 +46,7 @@ function ChatInput(props) {
             background: "transparent",
             flexGrow: 1,
           }}
+          onFocus={() => props.onFocus()}
         />
         <IconButton
           sx={{
@@ -52,7 +54,7 @@ function ChatInput(props) {
             height: "4.5rem",
           }}
         >
-          <AttachFile width={"2.5rem"} height={"2.5rem"} />
+          <AttachFile sx={{ fontSize: "2rem" }} />
         </IconButton>
         <IconButton
           sx={{
@@ -68,9 +70,9 @@ function ChatInput(props) {
           {...longPress}
         >
           {!audioRecording ? (
-            <Send width={"3rem"} height={"3rem"} sx={{ color: colors.white }} />
+            <Send sx={{ color: colors.white, fontSize: "2rem" }} />
           ) : (
-            <Mic width={"3rem"} height={"3rem"} sx={{ color: colors.white }} />
+            <Mic sx={{ color: colors.white, fontSize: "2rem" }} />
           )}
         </IconButton>
       </TextInputContainer>
