@@ -14,8 +14,8 @@ const GigsYML = () => {
       </HeadingContainer>
       <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
-          {a.map((c,i) => (
-            <Grid key={i} item lg={2} md={3} sm={4}>
+          {a.map((c) => (
+            <Grid item lg={2} md={3} sm={4}>
               <PortfolioCard
                 count={c}
                 GigImage={teamImg}

@@ -4,10 +4,10 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useRef } from "react";
 import React from "react";
+import PortfolioCard from "../PortfolioCard";
 import colors from "../../utils/colors";
 import { mobile } from "../../responsive";
 import { teamImg } from "../../assets";
-import PortfolioCard from "../PortfolioCard";
 
 const MPGigSlider = () => {
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
@@ -47,8 +47,8 @@ const MPGigSlider = () => {
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
-          {a.map((c,i) => (
-            <div key={i} ref={GigRef}>
+          {a.map((c) => (
+            <div ref={GigRef}>
               <PortfolioCard
                 count={c}
                 GigImage={teamImg}

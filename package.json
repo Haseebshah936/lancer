@@ -25,9 +25,12 @@
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
     "react-image-gallery": "^1.2.11",
+    "react-number-format": "^5.0.1",
     "react-router-dom": "^6.4.1",
     "react-scripts": "5.0.1",
+    "react-search-autocomplete": "^8.0.0",
     "react-swipeable-views": "^0.14.0",
+    "recharts": "^2.1.15",
     "styled-components": "^5.3.6",
     "web-vitals": "^3.0.2"
   },

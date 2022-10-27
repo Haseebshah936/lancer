@@ -63,7 +63,6 @@ const Container = styled.div`
   justify-content: space-around;
   align-items: center;
   min-height: 20rem;
-  margin-top: 5rem;
   margin-inline: 7%;
   position: relative;
   border-radius: 5px;

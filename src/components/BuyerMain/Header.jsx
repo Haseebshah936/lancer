@@ -21,51 +21,51 @@ import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { borderBottom } from "@mui/system";
 import { mobile } from "../../responsive";
+import { Avatar } from "@mui/material";
+import { ReactSearchAutocomplete } from "react-search-autocomplete";
 
-const Search = styled("div")(({ theme }) => ({
-  position: "relative",
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: alpha(colors.textGreen, 0.15),
-  "&:hover": {
-    backgroundColor: alpha(colors.textGreen, 0.25),
-  },
-  marginRight: theme.spacing(2),
-  marginLeft: 0,
-  width: "100%",
-  [theme.breakpoints.up("sm")]: {
-    marginLeft: theme.spacing(3),
-    width: "auto",
-  },
-}));
+const Suggest = [
+  { title: "Web Dev" },
+  { title: "App Dev" },
+  { title: "App Dev" },
+  { title: "App Dev" },
+  { title: "App Dev" },
+  { title: "App Dev" },
+  { title: "UI/UX Dev" },
+  { title: "SEO" },
+];
 
-const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: "100%",
-  position: "absolute",
-  pointerEvents: "none",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  color: colors.textGreen,
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: "inherit",
-  "& .MuiInputBase-input": {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create("width"),
-    width: "100%",
-    [theme.breakpoints.up("md")]: {
-      width: "30ch",
-    },
-  },
-}));
-
-const Header = () => {
+const Header = ({
+  img = "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
+}) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const handleOnSearch = (string, results) => {
+    console.log(string, results);
+  };
+
+  const handleOnHover = (result) => {
+    console.log(result);
+  };
+
+  const handleOnSelect = (item) => {
+    console.log(item);
+  };
+
+  const handleOnFocus = () => {
+    console.log("Focused");
+  };
+
+  const formatResult = (item) => {
+    return (
+      <>
+        <span style={{ display: "block", textAlign: "left" }}>
+          {item.title}
+        </span>
+      </>
+    );
+  };
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -154,7 +154,7 @@ const Header = () => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircleOutlinedIcon />
+          avatar={<Avatar aria-label="recipe" src={img}></Avatar>}
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -162,12 +162,14 @@ const Header = () => {
   );
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, marginBottom: "5rem" }}>
       <AppBar
         position="static"
         sx={{
           backgroundColor: colors.white,
           paddingInline: "5%",
+          boxShadow: "0",
+          // borderBottom: `1px solid ${colors.textGreen}`,
         }}
       >
         <Toolbar>
@@ -205,22 +207,24 @@ const Header = () => {
             </Link>
           </Typography>
 
-          <Search
-            sx={{
-              border: "1px",
-              borderRadius: "30px",
-              borderColor: colors.textGreen,
-            }}
+          <SearchBoxContainer
+            style={{ marginLeft: "30px", width: "55ch", zIndex: "5" }}
           >
-            <SearchIconWrapper>
-              <SearchIcon sx={{ fontSize: "2.5rem" }} />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Which Service do you want?"
-              inputProps={{ "aria-label": "search" }}
-              sx={{ color: colors.textGreen, fontSize: "1.5rem" }}
+            <ReactSearchAutocomplete
+              fuseOptions={{ keys: ["title"] }}
+              placeholder="What Services do you want?"
+              resultStringKeyName="title"
+              items={Suggest}
+              styling={{ height: "40px", fontSize: "1.5rem" }}
+              onSearch={handleOnSearch}
+              onHover={handleOnHover}
+              onSelect={handleOnSelect}
+              onFocus={handleOnFocus}
+              autoFocus
+              formatResult={formatResult}
             />
-          </Search>
+          </SearchBoxContainer>
+
           <Box sx={{ flexGrow: 1 }} />
 
           <NavLinkContainer>
@@ -235,7 +239,7 @@ const Header = () => {
               color="inherit"
               sx={{ color: colors.textGreen }}
             >
-              <Badge badgeContent={4} color="error">
+              <Badge variant="dot" color="error">
                 <MailOutlineIcon sx={{ fontSize: "2.5rem" }} />
               </Badge>
             </IconButton>
@@ -245,7 +249,7 @@ const Header = () => {
               color="inherit"
               sx={{ color: colors.textGreen }}
             >
-              <Badge badgeContent={17} color="error">
+              <Badge variant="dot" color="error">
                 <NotificationsOutlinedIcon sx={{ fontSize: "2.5rem" }} />
               </Badge>
             </IconButton>
@@ -259,7 +263,7 @@ const Header = () => {
               color="inherit"
               sx={{ color: colors.textGreen }}
             >
-              <AccountCircleOutlinedIcon sx={{ fontSize: "2.5rem" }} />
+              <Avatar aria-label="avatar" src={img}></Avatar>
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: "flex", md: "none" } }}>
@@ -294,4 +298,7 @@ a{text-decoration: none !important;
   margin-right: 2.5rem !important};
 
 
+`;
+
+const SearchBoxContainer = styled2.default.div`
 `;
