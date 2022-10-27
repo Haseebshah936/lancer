@@ -197,7 +197,7 @@ const MessageListContainer = styled.div`
     min-width: auto;
   }
   .rce-mbox {
-    max-width: 85%;
+    max-width: 70%;
     padding-right: 1.5rem;
     color: white;
     min-width: auto;

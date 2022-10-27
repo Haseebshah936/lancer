@@ -86,8 +86,9 @@ const Container = styled.div`
     padding-bottom: 0;
   }
   audio {
-    background-color: #090080;
+    background-color: #f1f3f4;
     width: 100%;
+    height: 4rem;
   }
   .rce-mbox-text {
     margin: 0;
