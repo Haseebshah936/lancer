@@ -1,19 +1,20 @@
 {
   "files": {
-    "main.css": "/lancer/static/css/main.558968a6.css",
-    "main.js": "/lancer/static/js/main.5abe3bf8.js",
+    "main.css": "/lancer/static/css/main.1b0e89cd.css",
+    "main.js": "/lancer/static/js/main.0e954438.js",
     "static/js/496.c4a38b74.chunk.js": "/lancer/static/js/496.c4a38b74.chunk.js",
     "static/media/becomeAPartner.png": "/lancer/static/media/becomeAPartner.de0e5de62c0c73580830.png",
+    "static/media/social.jpg": "/lancer/static/media/social.800ce2ba840750f5fa0e.jpg",
     "static/media/signup.png": "/lancer/static/media/signup.c63c0a55aa1a265af4a5.png",
     "static/media/1.svg": "/lancer/static/media/1.f409685d66852150ed88c46e0a03cb5b.svg",
     "static/media/logo.png": "/lancer/static/media/logo.992be1268d6be2b4d2d9.png",
     "index.html": "/lancer/index.html",
-    "main.558968a6.css.map": "/lancer/static/css/main.558968a6.css.map",
-    "main.5abe3bf8.js.map": "/lancer/static/js/main.5abe3bf8.js.map",
+    "main.1b0e89cd.css.map": "/lancer/static/css/main.1b0e89cd.css.map",
+    "main.0e954438.js.map": "/lancer/static/js/main.0e954438.js.map",
     "496.c4a38b74.chunk.js.map": "/lancer/static/js/496.c4a38b74.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.558968a6.css",
-    "static/js/main.5abe3bf8.js"
+    "static/css/main.1b0e89cd.css",
+    "static/js/main.0e954438.js"
   ]
 }
