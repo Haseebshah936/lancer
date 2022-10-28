@@ -395,7 +395,6 @@ export const chat = [
       uri: "https://www.sample-videos.com/pdf/Sample-pdf-5mb.pdf",
       status: {
         click: false,
-        loading: 0,
       },
     },
   },
@@ -414,8 +413,6 @@ export const chat = [
       videoURL:
         "https://www.sample-videos.com/video123/mp4/240/big_buck_bunny_240p_1mb.mp4",
       status: {
-        click: true,
-        loading: 0.5,
         download: true,
       },
     },

@@ -128,7 +128,7 @@ function Chat(props) {
               />
             );
           })}
-          <div ref={messageRef} />
+          <div style={{ height: ".1rem" }} ref={messageRef} />
         </MessageListContainer>
 
         <ChatInput onSend={handleSend} />
@@ -192,13 +192,14 @@ const MessageListContainer = styled.div`
   scroll-behavior: smooth;
   overflow-y: scroll;
   padding-inline: 1rem;
+  overflow-x: hidden;
   .rce-container-mbox {
     width: 100%;
     min-width: auto;
   }
   .rce-mbox {
     max-width: 70%;
-    padding-right: 1.5rem;
+    padding-right: 1.2rem;
     color: white;
     min-width: auto;
     box-shadow: none;
@@ -224,9 +225,14 @@ const MessageListContainer = styled.div`
   ${miniTablet({
     flexDirection: "column",
   })}
+  ${mobile({
+    ".rce-mbox": {
+      maxWidth: "85%",
+    },
+  })}
   ${miniMobile({
     ".rce-mbox": {
-      width: "85%",
+      maxWidth: "95%",
     },
   })}
 `;
