@@ -419,6 +419,7 @@ const ProgressBar = styled.div`
   justify-content: center;
   align-items: center;
   position: absolute;
+  z-index: 10;
 `;
 const Audio = styled.audio`
   height: 4rem;
