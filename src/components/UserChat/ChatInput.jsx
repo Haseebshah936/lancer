@@ -264,7 +264,11 @@ function ChatInput({ onSend }) {
                   onClick={() => {
                     removeAttachment(i);
                   }}
-                  sx={{ position: "absolute", zIndex: 100 }}
+                  sx={{
+                    position: "absolute",
+                    zIndex: 100,
+                    background: colors.lightGrey,
+                  }}
                 >
                   <Cancel
                     style={{
