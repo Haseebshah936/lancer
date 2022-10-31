@@ -146,8 +146,13 @@ function ChatInput({ onSend }) {
     const split = e.target.files[0].name.split(".");
     const extension = split[split.length - 1];
     const controller = new AbortController();
+    const size = e.target.files[0].size / (1024 * 1024);
     let msg = {};
     if (extension === "mp4" || extension === "mov" || extension === "webm") {
+      if (size > 100) {
+        alert("Video size can be not be more than 100MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -167,6 +172,10 @@ function ChatInput({ onSend }) {
       extension === "wav" ||
       extension === "ogg"
     ) {
+      if (size > 10) {
+        alert("Audio size can not be more than 10MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -186,6 +195,10 @@ function ChatInput({ onSend }) {
       extension === "png" ||
       extension === "jpeg"
     ) {
+      if (size > 10) {
+        alert("Image size can not be more than 10MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -198,6 +211,10 @@ function ChatInput({ onSend }) {
         controller,
       };
     } else {
+      if (size > 10) {
+        alert("File size can not be more than 10MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -459,6 +476,25 @@ const AttachmentsContainer = styled.div`
   flex-direction: row;
   overflow: scroll;
   padding-bottom: 1rem;
+  scrollbar-width: 10px;
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-button {
+    display: none;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10rem;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-corner {
+    display: none;
+  }
+  ::-webkit-resizer {
+    display: none;
+  }
 `;
 
 const AttachmentContainer = styled.div`
