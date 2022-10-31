@@ -34,6 +34,7 @@ function CustomMessageBox({ position, title, type, ...props }) {
           data={props?.data}
           {...props}
           onDownload={() => handleDownload(props?.data?.uri)}
+          // onClick={() => handleDownload(props?.data?.uri)}
         />
         <Triangle position={position} />
       </Wrapper>

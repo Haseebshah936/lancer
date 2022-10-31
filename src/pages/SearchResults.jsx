@@ -1,3 +1,5 @@
+import React from "react";
+
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Filters from "../components/SearchResults/Filters";
@@ -7,8 +9,18 @@ import Footer from "../components/Footer";
 import SearchGrid from "../components/SearchResults/SearchGrid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { tablet } from "../responsive";
+import { Pagination } from "@mui/material";
 
 const SearchResults = () => {
+  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
+
+  const [pagination, setPagination] = React.useState(1);
+  const [count, setCount] = React.useState(1);
+
+  React.useEffect(() => {
+    setCount(Math.ceil(data.length / 12));
+  }, [pagination]);
+
   return (
     <>
       <Header />
@@ -30,8 +42,29 @@ const SearchResults = () => {
               <Grid item mobile={12} tablet={3}>
                 <Filters></Filters>
               </Grid>
-              <Grid item mobile={12} tablet={9}>
-                <SearchGrid></SearchGrid>
+              <Grid
+                item
+                mobile={12}
+                tablet={9}
+                rowspacing={2}
+                columnSpacing={2}
+              >
+                <SearchGrid
+                  data={data.slice((pagination - 1) * 12, pagination * 12)}
+                ></SearchGrid>
+                <Box
+                  mt={"4rem"}
+                  display="flex"
+                  justifyContent="center"
+                  alignContent={"center"}
+                  width="100%"
+                >
+                  <Pagination
+                    count={count}
+                    page={pagination}
+                    onChange={(e, page) => setPagination(page)}
+                  />
+                </Box>
               </Grid>
             </Grid>
           </ThemeProvider>

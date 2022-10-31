@@ -146,8 +146,13 @@ function ChatInput({ onSend }) {
     const split = e.target.files[0].name.split(".");
     const extension = split[split.length - 1];
     const controller = new AbortController();
+    const size = Math.floor(e.target.files[0].size / (1024 * 1024));
     let msg = {};
     if (extension === "mp4" || extension === "mov" || extension === "webm") {
+      if (size > 100) {
+        alert("Video size must not ge grater than 100MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -167,6 +172,10 @@ function ChatInput({ onSend }) {
       extension === "wav" ||
       extension === "ogg"
     ) {
+      if (size > 10) {
+        alert("Audio size must not ge grater than 10MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -184,8 +193,13 @@ function ChatInput({ onSend }) {
     } else if (
       extension === "jpg" ||
       extension === "png" ||
-      extension === "jpeg"
+      extension === "jpeg" ||
+      extension === "gif"
     ) {
+      if (size > 10) {
+        alert("Image size must not ge grater than 10MB");
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",
@@ -198,6 +212,11 @@ function ChatInput({ onSend }) {
         controller,
       };
     } else {
+      if (size > 10) {
+        alert("File size must not ge grater than 100MB");
+
+        return;
+      }
       msg = {
         userId: 1,
         userName: "Haseeb",

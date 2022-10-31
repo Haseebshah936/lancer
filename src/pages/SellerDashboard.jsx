@@ -4,14 +4,19 @@ import styled from "styled-components";
 import Header from "../components/BuyerMain/Header";
 import Footer from "../components/Footer";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Sidebar from "../components/SellerDashboard/Sidebar";
+import Sidebar from "../components/DashboardComponents/Sidebar";
+import StatCardWidget from "../components/DashboardComponents/StatCardWidget";
+import LineGraphWidget from "../components/DashboardComponents/LineGraphWidget";
+import RadialChartWidget from "../components/DashboardComponents/RadialChartWidget";
+import OngoingOrdersWidget from "../components/DashboardComponents/OngoingOrdersWidget";
+import PastOrdersWidget from "../components/DashboardComponents/PastOrdersWidget";
 
 const SellerDashboard = () => {
   return (
     <>
       <Header />
       <Container>
-        <Box sx={{ flexGrow: 1 }}>
+        <Box sx={{ flexGrow: 1, pt: 1, pb: 1 }}>
           <ThemeProvider
             theme={createTheme({
               breakpoints: {
@@ -25,27 +30,90 @@ const SellerDashboard = () => {
             })}
           >
             <Grid container spacing={2}>
-              <Grid mobile={12} laptop={4} tablet={5} desktop={3}>
-                <Sidebar />
+              <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
+                <Sidebar />{" "}
               </Grid>
+
               <Grid
+                item
                 mobile={12}
                 tablet={7}
                 laptop={8}
                 desktop={9}
-                sx={{ backgroundColor: "aqua" }}
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Grid container>
-                  <Grid item desktop={3} sx={{ backgroundColor: "blue" }}>
-                    as
+                <Grid
+                  item
+                  container
+                  columnSpacing={2}
+                  rowSpacing={2}
+                  style={{
+                    paddingRight: "5px",
+                    marginRight: "-5px",
+                    paddingBottom: "5px",
+                    marginBottom: "-5px",
+                    overflow: "hidden",
+                  }}
+                >
+                  <Grid
+                    item
+                    rowSpacing={2}
+                    laptop={5}
+                    desktop={4}
+                    tablet={5}
+                    mobile={12}
+                  >
+                    <StatCardWidget />
                   </Grid>
-                  <Grid item desktop={3} sx={{ backgroundColor: "red" }}>
-                    as
+                  <Grid
+                    item
+                    rowSpacing={2}
+                    laptop={5}
+                    desktop={4}
+                    tablet={5}
+                    mobile={12}
+                  >
+                    <StatCardWidget Heading="Task Completed" Value={30} />
                   </Grid>
-                  <Grid item desktop={3} sx={{ backgroundColor: "green" }}>
-                    as
+                  <Grid
+                    item
+                    rowSpacing={2}
+                    laptop={5}
+                    desktop={4}
+                    tablet={5}
+                    mobile={12}
+                  >
+                    <StatCardWidget Heading="Reviews" Value={30} />
+                  </Grid>
+                  <Grid item container columnSpacing={2} rowSpacing={2}>
+                    <Grid
+                      item
+                      rowSpacing={2}
+                      laptop={12}
+                      desktop={8}
+                      tablet={12}
+                      mobile={12}
+                    >
+                      <LineGraphWidget />
+                    </Grid>
+                    <Grid
+                      item
+                      rowSpacing={2}
+                      laptop={12}
+                      desktop={4}
+                      tablet={12}
+                      mobile={12}
+                    >
+                      <RadialChartWidget />
+                    </Grid>
+                  </Grid>
+
+                  <Grid item rowSpacing={2} mobile={12}>
+                    <OngoingOrdersWidget />
+                  </Grid>
+                  <Grid item rowSpacing={2} mobile={12}>
+                    <PastOrdersWidget />
                   </Grid>
                 </Grid>
               </Grid>
