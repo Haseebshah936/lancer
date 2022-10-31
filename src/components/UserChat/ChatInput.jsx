@@ -146,11 +146,11 @@ function ChatInput({ onSend }) {
     const split = e.target.files[0].name.split(".");
     const extension = split[split.length - 1];
     const controller = new AbortController();
-    const size = Math.floor(e.target.files[0].size / (1024 * 1024));
+    const size = e.target.files[0].size / (1024 * 1024);
     let msg = {};
     if (extension === "mp4" || extension === "mov" || extension === "webm") {
       if (size > 100) {
-        alert("Video size must not ge grater than 100MB");
+        alert("Video size can not be more than 100MB");
         return;
       }
       msg = {
@@ -173,7 +173,7 @@ function ChatInput({ onSend }) {
       extension === "ogg"
     ) {
       if (size > 10) {
-        alert("Audio size must not ge grater than 10MB");
+        alert("Audio size can not be more than 10MB");
         return;
       }
       msg = {
@@ -197,7 +197,7 @@ function ChatInput({ onSend }) {
       extension === "gif"
     ) {
       if (size > 10) {
-        alert("Image size must not ge grater than 10MB");
+        alert("Image size can not be more than 10MB");
         return;
       }
       msg = {
@@ -213,8 +213,7 @@ function ChatInput({ onSend }) {
       };
     } else {
       if (size > 10) {
-        alert("File size must not ge grater than 100MB");
-
+        alert("File size can not be more than 10MB");
         return;
       }
       msg = {
@@ -478,6 +477,27 @@ const AttachmentsContainer = styled.div`
   flex-direction: row;
   overflow: scroll;
   padding-bottom: 1rem;
+  scrollbar-width: 0.2rem;
+  &::-webkit-scrollbar {
+    width: 0.2rem;
+    height: 0.6rem;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colors.gray};
+    border-radius: 10rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+  &::-webkit-resizer {
+    display: none;
+  }
 `;
 
 const AttachmentContainer = styled.div`

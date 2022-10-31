@@ -200,16 +200,23 @@ const MessageListContainer = styled.div`
   .rce-mbox {
     max-width: 70%;
     padding-right: 1.2rem;
-    color: white;
+    color: #4b3030;
     min-width: auto;
     box-shadow: none;
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
     padding-bottom: 1.2rem;
   }
+  .rce-mbox-text {
+    color: white;
+  }
+
   .rce-mbox.rce-mbox-right {
     color: black;
     background-color: ${colors.userChatMessageBackground};
+    .rce-mbox-text {
+      color: black;
+    }
   }
   .rce-mbox-title {
     color: white;
@@ -219,6 +226,27 @@ const MessageListContainer = styled.div`
     color: black;
   }
   [class*="notch"] {
+    display: none;
+  }
+  scrollbar-width: 0.6rem;
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+    height: 0.6rem;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colors.gray};
+    border-radius: 10rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+  &::-webkit-resizer {
     display: none;
   }
   ${miniTablet({
