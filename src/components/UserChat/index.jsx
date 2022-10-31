@@ -208,14 +208,14 @@ const MessageListContainer = styled.div`
     padding-bottom: 1.2rem;
   }
   .rce-mbox-text {
-    color: white;
+    color: ${colors.white};
   }
 
   .rce-mbox.rce-mbox-right {
-    color: black;
+    color: ${colors.black};
     background-color: ${colors.userChatMessageBackground};
     .rce-mbox-text {
-      color: black;
+      color: ${colors.black};
     }
   }
   .rce-mbox-title {

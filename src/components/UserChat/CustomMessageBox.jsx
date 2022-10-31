@@ -50,6 +50,7 @@ const Container = styled.div`
   overflow: hidden;
   margin-block: 2.5rem;
   margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
+
   .rce-mbox-photo {
     display: flex;
     flex-direction: column;
