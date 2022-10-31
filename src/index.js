@@ -4,11 +4,14 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { CloudinaryContext } from "cloudinary-react";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <GoogleOAuthProvider clientId="30719619583-j2d2baepb0dkbscqrm3661mb6bomooch.apps.googleusercontent.com">
-    <App />
+    <CloudinaryContext cloudName="dhc9yqbjh">
+      <App />
+    </CloudinaryContext>
   </GoogleOAuthProvider>
 );
 

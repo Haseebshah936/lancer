@@ -15,6 +15,7 @@ import useLongPress from "../../Hooks/useLongPress";
 import { miniMobile } from "../../responsive";
 import AudioRecorder from "./AudioRecorder";
 import { Box } from "@mui/system";
+import axios from "axios";
 
 function ChatInput({ onSend }) {
   const [message, setMessage] = useState("");
@@ -47,7 +48,7 @@ function ChatInput({ onSend }) {
     }
   };
 
-  const sendTextMessage = () => {
+  const sendTextMessage = (attachments) => {
     if (attachments.length > 0) {
       attachments.forEach((attachment, i) => {
         if (
@@ -59,7 +60,7 @@ function ChatInput({ onSend }) {
           inputRef.current.value = "";
           setMessage("");
         }
-        const { uploading, ...rest } = attachment;
+        const { uploading, progress, ...rest } = attachment;
         onSend(rest);
       });
       setAttachments([]);
@@ -85,20 +86,66 @@ function ChatInput({ onSend }) {
     setAttachments([]);
   };
 
-  const uploadAttachment = (file, index) => {
-    setTimeout(() => {
-      console.log("uploaded attachment ", index);
-      setAttachments((prev) => {
-        const arr = [...prev];
-        arr[index].uploading = false;
-        return arr;
+  const uploadAttachment = (file, index, controller) => {
+    // setTimeout(() => {
+    //   console.log("uploaded attachment ", index);
+    //   setAttachments((prev) => {
+    //     const arr = [...prev];
+    //     arr[index].uploading = false;
+    //     return arr;
+    //   });
+    // }, 10000);
+
+    const option = {
+      onUploadProgress: (progressEvent) => {
+        const { loaded, total } = progressEvent;
+        const percent = Math.floor((loaded * 100) / total);
+        if (percent < 100) {
+          setAttachments((prev) => {
+            const arr = [...prev];
+            arr[index].uploading = true;
+            arr[index].progress = percent;
+            return arr;
+          });
+        }
+      },
+      signal: controller.signal,
+    };
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "f8ci6zlz");
+    formData.append("cloud_name", "dhc9yqbjh");
+
+    axios
+      .post(
+        "https://api.cloudinary.com/v1_1/dhc9yqbjh/auto/upload",
+        formData,
+        option
+      )
+      .then((res) => {
+        console.log(res);
+        setAttachments((prev) => {
+          const arr = [...prev];
+          arr[index].uploading = false;
+          if (arr[index].type === "video")
+            arr[index].data.videoURL = res.data.secure_url;
+          else if (arr[index].type === "audio")
+            arr[index].data.audioURL = res.data.secure_url;
+          else arr[index].data.uri = res.data.secure_url;
+          return arr;
+        });
+      })
+      .catch((err) => {
+        if (err.message !== "canceled") console.log(err);
+        console.log("canceled");
       });
-    }, 10000);
   };
 
   const handleFileSelection = (e) => {
     const split = e.target.files[0].name.split(".");
     const extension = split[split.length - 1];
+    const controller = new AbortController();
     let msg = {};
     if (extension === "mp4" || extension === "mov" || extension === "webm") {
       msg = {
@@ -112,6 +159,8 @@ function ChatInput({ onSend }) {
             download: true,
           },
         },
+        progress: 0,
+        controller,
       };
     } else if (
       extension === "mp3" ||
@@ -129,6 +178,8 @@ function ChatInput({ onSend }) {
             download: true,
           },
         },
+        progress: 0,
+        controller,
       };
     } else if (
       extension === "jpg" ||
@@ -143,6 +194,8 @@ function ChatInput({ onSend }) {
         data: {
           uri: URL.createObjectURL(e.target.files[0]),
         },
+        progress: 0,
+        controller,
       };
     } else {
       msg = {
@@ -158,17 +211,27 @@ function ChatInput({ onSend }) {
             loading: 0,
           },
         },
+        progress: 0,
+        controller,
       };
     }
     console.log("Attachment", msg, attachments.indexOf(msg));
     if (attachments.indexOf(msg) === -1) {
       setAttachments([...attachments, msg]);
-      uploadAttachment(e.target.files[0], attachments.length);
+      uploadAttachment(e.target.files[0], attachments.length, controller);
     }
   };
 
   const removeAttachment = (i) => {
-    setAttachments([...attachments.slice(0, i), ...attachments.slice(i + 1)]);
+    attachments[i].controller.abort();
+    setAttachments((prev) => {
+      const arr = [...prev];
+      arr[i] = {
+        ...arr[i],
+        removed: true,
+      };
+      return arr;
+    });
   };
 
   const sendAudio = () => {};
@@ -179,10 +242,10 @@ function ChatInput({ onSend }) {
       stopRecording();
       return;
     }
-    const allow = attachments.filter((attachment) => attachment.uploading);
-    if (!allow.length) {
-      sendTextMessage();
-    }
+    const allow = attachments.filter(
+      (attachment) => attachment?.removed === undefined
+    );
+    sendTextMessage(allow);
   };
 
   const defaultOptions = {
@@ -192,6 +255,7 @@ function ChatInput({ onSend }) {
   const longPress = useLongPress(onLongPress, onClickSend, defaultOptions);
 
   useEffect(() => {
+    console.log("attachments", attachments);
     if (attachments.length) {
       setAudioRecording(false);
       return;
@@ -224,75 +288,80 @@ function ChatInput({ onSend }) {
       />
       <Container>
         <AttachmentsContainer>
-          {attachments.map((attachment, i) => (
-            <AttachmentContainer
-              key={i}
-              style={{
-                background:
-                  attachment.type === "file" ? colors.white : colors.white,
-              }}
-            >
-              <Attachment
-                component={
-                  attachment.type === "photo"
-                    ? "img"
-                    : attachment.type === "audio"
-                    ? "div"
-                    : attachment.type
-                }
-                src={
-                  attachment.type === "photo" || attachment.type === "file"
-                    ? attachment.data.uri
-                    : attachment.data.videoURL
-                    ? attachment.data.videoURL
-                    : attachment.data.audioURL
-                }
-                controls={attachment.type === "video"}
-                type={attachment.type}
-              />
-              <ProgressBar>
-                {attachment.uploading && (
-                  <CircularProgress
-                    style={{
-                      color: colors.becomePartnerButtonGreen,
-                      fontSize: ".5rem",
-                    }}
-                    size={28}
-                  />
-                )}
-                <IconButton
-                  onClick={() => {
-                    removeAttachment(i);
-                  }}
-                  sx={{
-                    position: "absolute",
-                    zIndex: 100,
-                    background: colors.lightGrey,
+          {attachments.map(
+            (attachment, i) =>
+              !attachment?.removed && (
+                <AttachmentContainer
+                  key={i}
+                  style={{
+                    background:
+                      attachment.type === "file" ? colors.white : colors.white,
                   }}
                 >
-                  <Cancel
-                    style={{
-                      fontSize: "2rem",
-                      color: colors.white,
-                    }}
+                  <Attachment
+                    component={
+                      attachment.type === "photo"
+                        ? "img"
+                        : attachment.type === "audio"
+                        ? "div"
+                        : attachment.type
+                    }
+                    src={
+                      attachment.type === "photo" || attachment.type === "file"
+                        ? attachment.data.uri
+                        : attachment.data.videoURL
+                        ? attachment.data.videoURL
+                        : attachment.data.audioURL
+                    }
+                    controls={attachment.type === "video"}
+                    type={attachment.type}
                   />
-                </IconButton>
-              </ProgressBar>
-              {attachment.type === "file" && (
-                <InsertDriveFile
-                  style={{
-                    fontSize: "4rem",
-                    opacity: 0.5,
-                    position: "absolute",
-                    zIndex: 1,
-                  }}
-                />
-              )}
-              {attachment.type === "audio" && (
-                <Audio src={attachment.data.audioURL} controls />
-              )}
-            </AttachmentContainer>
-          ))}
+                  <ProgressBar>
+                    {attachment.uploading && (
+                      <CircularProgress
+                        value={attachment.progress}
+                        style={{
+                          color: colors.becomePartnerButtonGreen,
+                          fontSize: ".5rem",
+                        }}
+                        size={28}
+                        variant="determinate"
+                      />
+                    )}
+                    <IconButton
+                      onClick={() => {
+                        removeAttachment(i);
+                      }}
+                      sx={{
+                        position: "absolute",
+                        zIndex: 100,
+                        background: colors.lightGrey,
+                      }}
+                    >
+                      <Cancel
+                        style={{
+                          fontSize: "2rem",
+                          color: colors.white,
+                        }}
+                      />
+                    </IconButton>
+                  </ProgressBar>
+                  {attachment.type === "file" && (
+                    <InsertDriveFile
+                      style={{
+                        fontSize: "4rem",
+                        opacity: 0.5,
+                        position: "absolute",
+                        zIndex: 1,
+                      }}
+                    />
+                  )}
+                  {attachment.type === "audio" && (
+                    <Audio src={attachment.data.audioURL} controls />
+                  )}
+                </AttachmentContainer>
+              )
+          )}
         </AttachmentsContainer>
         <TextInputContainer>
           <Avatar
@@ -408,6 +477,7 @@ const AttachmentContainer = styled.div`
 const Attachment = styled(Box)`
   width: ${(props) => (props.type === "audio" ? "25rem" : "10rem")};
   min-width: 10rem;
+  height: 10rem;
   min-height: 10rem;
   object-fit: cover;
   background-color: ${(props) =>

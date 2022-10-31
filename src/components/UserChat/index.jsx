@@ -206,7 +206,6 @@ const MessageListContainer = styled.div`
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
     padding-bottom: 1.2rem;
-    min-width: 40%;
   }
   .rce-mbox.rce-mbox-right {
     color: black;

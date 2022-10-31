@@ -77,6 +77,7 @@ const Container = styled.div`
   video {
     float: left;
     align-self: flex-start;
+    outline: none;
   }
   .rce-mbox-audio {
     padding-bottom: 0;
@@ -85,7 +86,7 @@ const Container = styled.div`
     background-color: ${colors.audioBox};
     width: 100%;
     height: 4rem;
-    min-width: 10rem;
+    min-width: 25rem;
   }
   .rce-mbox-text {
     margin: 0;
