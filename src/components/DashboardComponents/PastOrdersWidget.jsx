@@ -14,7 +14,8 @@ import CustomFilledButton from "../CustomFilledButton";
 const Orders = [
   {
     id: 1,
-    Title: "I want some customization and installation on wordpress ",
+    Title:
+      "I want some customization and installation on I want some customization and installation on wordpress want some customization and installation on wordpressI want some customization and installation on wordpress ",
     DateCompleted: "October 5, 2021",
     ProfileName: "Haseeb Iqbal",
     AmmountEarned: "$100",
@@ -125,7 +126,11 @@ const PastOrdersWidget = () => {
               laptop={7}
               direction="column"
             >
-              <OrderTitle variant="h6">{order.Title}</OrderTitle>
+              <OrderTitle variant="h6">
+                {order.Title.length > 60
+                  ? order.Title.slice(0, 60)
+                  : order.Title}
+              </OrderTitle>
 
               <DateCompleted>{order.DateCompleted}</DateCompleted>
             </Grid>
