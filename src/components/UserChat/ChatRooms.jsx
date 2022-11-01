@@ -40,7 +40,7 @@ export default ChatRooms;
 
 const ChatRoomsContainer = styled.div`
   display: flex;
-  margin: 2rem 0rem;
+  padding: 2rem 0rem;
   flex-direction: column;
   height: 100%;
   flex-shrink: 1;

@@ -147,7 +147,8 @@ const Container = styled.div`
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
-  height: 82vh;
+  height: 86vh;
+  overflow-y: hidden;
   ${tablet({ marginInline: "2%" })}
   ${miniTablet({
     flexDirection: "column",
