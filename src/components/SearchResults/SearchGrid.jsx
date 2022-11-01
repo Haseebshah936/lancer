@@ -7,7 +7,7 @@ import { Pagination } from "@mui/material";
 const SearchGrid = ({ data }) => {
   return (
     <>
-      <Grid container spacing={2} sx={{ marginTop: "4px", marginLeft: "0px" }}>
+      <Grid container justifyContent="center" alignItems="center" spacing={2}>
         {data.map((c) => (
           <Grid
             item

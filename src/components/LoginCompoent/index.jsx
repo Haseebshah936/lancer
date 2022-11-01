@@ -134,7 +134,7 @@ const Input = styled.input`
     border: 0.2rem solid ${colors.primaryGreen};
   }
   ::placeholder {
-    color: rgba(0,0,0, 0.7);
+    color: rgba(0, 0, 0, 0.7);
   }
 `;
 
@@ -167,7 +167,8 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
+      border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;

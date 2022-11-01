@@ -1,6 +1,6 @@
 import React from "react";
 import MPGigSlider from "../components/BuyerMain/MPGigSlider";
-import Header from "../components/BuyerMain/Header";
+import Header from "../components/HeaderLoggedIn";
 import TopSlider from "../components/BuyerMain/TopSlider";
 import GigsYML from "../components/BuyerMain/GigsYML";
 import GigsRPS from "../components/BuyerMain/GigsRPS";

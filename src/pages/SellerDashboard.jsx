@@ -1,7 +1,7 @@
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import styled from "styled-components";
-import Header from "../components/BuyerMain/Header";
+import Header from "../components/HeaderLoggedIn";
 import Footer from "../components/Footer";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Sidebar from "../components/DashboardComponents/Sidebar";

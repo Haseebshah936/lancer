@@ -79,5 +79,10 @@ ${mobile({ display: "none" })}
 
 const FilterButton = styled2.default.div`
 display: none;
-${mobile({ display: "flex" })}
+${mobile({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+})}
 `;
