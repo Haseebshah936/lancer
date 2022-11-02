@@ -6,6 +6,8 @@ import {
   Route,
   Routes,
 } from "react-router-dom";
+import * as Realm from "realm-web";
+
 import Landing from "./pages/Landing";
 import About from "./pages/About";
 import Signup from "./pages/Signup";
@@ -26,43 +28,7 @@ import PostProject from "./pages/PostProject/PostProject";
 import Chat from "./pages/Chat";
 import EProjects from "./pages/EmployerProjects/EProjects";
 import FProjects from "./pages/FreelancerProjects/FProjects";
-const images = [
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    url: "https://api.lorem.space/image/car?w=1000&h=600",
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    type: "img",
-  },
-  {
-    thumbnail: "https://api.lorem.space/image/car?w=250&h=150",
-    url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    type: "video",
-  },
-];
+
 function App(props) {
   const [open, setOpen] = useState(false);
   return (
