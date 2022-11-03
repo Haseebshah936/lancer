@@ -6,9 +6,24 @@ import Login from "../LoginCompoent";
 import { ClickAwayListener } from "@material-ui/core";
 import Modal from "@mui/material/Modal";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import MessageList from "./MessageList";
 
 function Header(props) {
   const [state, setState] = useState(false);
+  const [anchor, setAnchor] = useState(null);
+  const [anchor2, setAnchor2] = useState(null);
+
+  const toggleMessage = (event) => {
+    setAnchor(event.currentTarget);
+  };
+
+  const toggleNotification = (event) => {
+    setAnchor2(event.currentTarget);
+  };
+
+  const CloseList = () => {
+    setAnchor(null);
+  };
 
   const toggleDrawer = (state) => {
     setState(state);
@@ -26,12 +41,18 @@ function Header(props) {
 
   return (
     <>
-      <Head toggleDrawer={toggleDrawer} toggleLogin={handleToggle} />
+      <Head
+        toggleDrawer={toggleDrawer}
+        toggleLogin={handleToggle}
+        toggleMessage={toggleMessage}
+      />
       <ResponsiveDrawer
         state={state}
         toggleLogin={handleToggle}
         toggleDrawer={toggleDrawer}
       />
+      <MessageList anchor={anchor} CloseList={CloseList} />
+
       <Modal
         open={open}
         style={{ backgroundColor: "rgba(0,0,0,0.5)" }}

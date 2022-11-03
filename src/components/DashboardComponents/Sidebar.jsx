@@ -21,6 +21,7 @@ import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { mobile } from "../../responsive";
+import { Link, NavLink } from "react-router-dom";
 
 const CustomList = styled(List)({
   color: colors.black,
@@ -28,6 +29,12 @@ const CustomList = styled(List)({
   "& .MuiListItemIcon-root": {
     minWidth: 0,
     marginRight: "10px",
+  },
+
+  a: { textDecoration: "none" },
+  "a:hover": { color: colors.textGreen },
+  "a:active": {
+    color: `${colors.textGreen} !important`,
   },
 });
 
@@ -119,6 +126,7 @@ const Sidebar = () => {
                     disableTypography={true}
                   />
                 </CustomListItem>
+
                 <CustomListItem disablePadding>
                   <ListItemIcon>
                     <WorkOutlineOutlinedIcon
@@ -158,18 +166,23 @@ const Sidebar = () => {
                   </ListItemIcon>
                   <CustomListText primary="Reviews" disableTypography={true} />
                 </CustomListItem>
-                <CustomListItem disablePadding>
-                  <ListItemIcon>
-                    <MessageOutlinedIcon
-                      sx={{
-                        color: colors.textGreen,
-                        fontSize: "2.2rem",
-                        cursor: "pointer",
-                      }}
+                <NavLink to="/chat/1">
+                  <CustomListItem disablePadding>
+                    <ListItemIcon>
+                      <MessageOutlinedIcon
+                        sx={{
+                          color: colors.textGreen,
+                          fontSize: "2.2rem",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </ListItemIcon>
+                    <CustomListText
+                      primary="Messages"
+                      disableTypography={true}
                     />
-                  </ListItemIcon>
-                  <CustomListText primary="Messages" disableTypography={true} />
-                </CustomListItem>
+                  </CustomListItem>
+                </NavLink>
                 <CustomListItem disablePadding>
                   <ListItemIcon>
                     <GroupsOutlinedIcon

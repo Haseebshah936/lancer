@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import UserChat from "../../components/UserChat";
 import Footer from "../../components/Footer";
-import Header from "../../components/Header";
+import Header from "../../components/HeaderLoggedIn";
 import CustomIconButton from "../../components/CustomIconButton";
 import { ArrowBack } from "@mui/icons-material";
 import colors from "../../utils/colors";

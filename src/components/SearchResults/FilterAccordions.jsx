@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
+import CustomFilledButton from "../CustomFilledButton";
 
 const RelatedCategories = [
   { id: 1, title: "Wordpress Creation" },
@@ -242,6 +243,18 @@ const FilterAccordions = () => {
               </>
             ))}
           </FormControl>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
+          </div>
         </AccordionDetails>
       </Accordion>{" "}
       <Accordion>
@@ -302,6 +315,18 @@ const FilterAccordions = () => {
               </>
             ))}
           </FormControl>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
+          </div>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -422,6 +447,11 @@ const FilterAccordions = () => {
                 </NumberField>
               </FormGroup>
             </FormControl>
+
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ marginTop: "10px", margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
           </>
         </AccordionDetails>
       </Accordion>

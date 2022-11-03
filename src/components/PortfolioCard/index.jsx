@@ -15,30 +15,36 @@ import GradeSharpIcon from "@mui/icons-material/GradeSharp";
 import colors from "../../utils/colors";
 import { Box, Checkbox } from "@mui/material";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
-import Modal from "@mui/material/Modal";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import Slide from "@mui/material/Slide";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-const modalstyle = {
-  textAlign: "center",
-  color: colors.textGreen,
-  borderRadius: "15px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  border: `2px solid ${colors.textGreen}`,
-  boxShadow: 24,
-  p: 4,
-};
+const CustomCardHeader = styled(CardHeader)({
+  a: { textDecoration: "none" },
+  "a:hover": { color: colors.black },
+});
 
 const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
   return (
     <>
       <Card
@@ -64,10 +70,14 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
           />
         </Link>
         {hideProfileInfo && (
-          <CardHeader
+          <CustomCardHeader
             style={{ cursor: "pointer" }}
             sx={{ paddingTop: "2px", paddingBottom: "0px" }}
-            avatar={<Avatar aria-label="recipe" src={props.Avatar}></Avatar>}
+            avatar={
+              <NavLink to="/profile/1">
+                <Avatar aria-label="recipe" src={props.Avatar}></Avatar>
+              </NavLink>
+            }
             action={
               <Tooltip title="Save To List" placement="right">
                 <IconButton
@@ -79,7 +89,7 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
                 </IconButton>
               </Tooltip>
             }
-            title={props.SellerName}
+            title={<NavLink to="/profile/1">{props.SellerName}</NavLink>}
             subheader={props.SellerLevel}
           />
         )}
@@ -153,20 +163,24 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
             </p>
           </MiniWrapper2>
         </CardActions>
+        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+          <Alert
+            onClose={handleClose}
+            severity="success"
+            sx={{
+              width: "30rem",
+              "@media (max-width: 550px)": {
+                width: "100%",
+              },
+              color: colors.textGreen,
+              fontSize: "1.5rem",
+              backgroundColor: colors.white,
+            }}
+          >
+            This is a success message!
+          </Alert>
+        </Snackbar>
       </Card>
-
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalstyle}>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Added to List
-          </Typography>
-        </Box>
-      </Modal>
     </>
   );
 };

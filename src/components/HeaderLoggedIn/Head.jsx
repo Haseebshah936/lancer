@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { Avatar, Badge, Button, IconButton } from "@mui/material";
+import { Avatar, Badge, Button, IconButton, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import colors from "../../utils/colors";
 import logo from "../../assets/logo.png";
@@ -21,7 +21,10 @@ const Suggest = [
   { title: "SEO" },
 ];
 
-function Head({ toggleDrawer, toggleLogin }) {
+function Head({ toggleDrawer, toggleLogin, toggleMessage }) {
+  const navigate = useNavigate();
+  const [searchVisible, setSearchVisible] = React.useState(false);
+
   const handleOnSearch = (string, results) => {
     console.log(string, results);
   };
@@ -32,6 +35,7 @@ function Head({ toggleDrawer, toggleLogin }) {
 
   const handleOnSelect = (item) => {
     console.log(item);
+    navigate("/search");
   };
 
   const handleOnFocus = () => {
@@ -47,108 +51,143 @@ function Head({ toggleDrawer, toggleLogin }) {
       </>
     );
   };
-  const navigate = useNavigate();
-  return (
-    <Container>
-      <Menucontainer>
-        <IconButton
-          aria-label="menu"
-          id="menu"
-          onClick={() => toggleDrawer(true)}
-        >
-          <MenuIcon fontSize="large" />
-        </IconButton>
-        <Link to="/">
-          <Image src={logo} />
-        </Link>
 
-        <SearchContainer>
-          <ReactSearchAutocomplete
-            fuseOptions={{ keys: ["title"] }}
-            placeholder="What Services do you want?"
-            resultStringKeyName="title"
-            items={Suggest}
-            styling={{ height: "40px", fontSize: "1.5rem" }}
-            onSearch={handleOnSearch}
-            onHover={handleOnHover}
-            onSelect={handleOnSelect}
-            onFocus={handleOnFocus}
-            autoFocus
-            formatResult={formatResult}
-          />
-        </SearchContainer>
-      </Menucontainer>
-      <Wrapper>
-        <SearchMobile>
-          <ReactSearchAutocomplete
-            fuseOptions={{ keys: ["title"] }}
-            placeholder="What Services do you want?"
-            resultStringKeyName="title"
-            items={Suggest}
-            styling={{ height: "40px", fontSize: "1.5rem" }}
-            onSearch={handleOnSearch}
-            onHover={handleOnHover}
-            onSelect={handleOnSelect}
-            onFocus={handleOnFocus}
-            autoFocus
-            formatResult={formatResult}
-          />
-        </SearchMobile>
-        <SubContainer>
-          <NavLink to="/home">SellerMode</NavLink>
-          <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
-          <NavLink to="/contactus">Dashboard</NavLink>
-          {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
-        </SubContainer>
-        <ButtonContainer>
+  return (
+    <>
+      <Container>
+        <Menucontainer>
           <IconButton
-            sx={{
-              "@media (max-width: 786px)": {
-                display: "none",
-              },
-            }}
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
+            aria-label="menu"
+            id="menu"
+            onClick={() => toggleDrawer(true)}
           >
-            <Badge badgeContent={4} variant="dot" color="error">
-              <MailOutlineIcon
-                sx={{ fontSize: "2.5rem", color: colors.textGreen }}
-              />
-            </Badge>
+            <MenuIcon fontSize="large" />
           </IconButton>
-          <IconButton
-            sx={{
-              "@media (max-width: 786px)": {
-                display: "none",
-              },
-            }}
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
-            <Badge badgeContent={4} variant="dot" color="error">
-              <NotificationsOutlinedIcon
-                sx={{ fontSize: "2.5rem", color: colors.textGreen }}
-              />
-            </Badge>
-          </IconButton>
-          <IconButton>
-            <Avatar
+          <Link to="/">
+            <Image src={logo} />
+          </Link>
+
+          <SearchContainer>
+            <ReactSearchAutocomplete
+              fuseOptions={{ keys: ["title"] }}
+              placeholder="What Services do you want?"
+              resultStringKeyName="title"
+              items={Suggest}
+              styling={{ height: "40px", fontSize: "1.5rem" }}
+              onSearch={handleOnSearch}
+              onHover={handleOnHover}
+              onSelect={handleOnSelect}
+              onFocus={handleOnFocus}
+              autoFocus
+              formatResult={formatResult}
+            />
+          </SearchContainer>
+        </Menucontainer>
+        <Wrapper>
+          <SubContainer>
+            <NavLink to="/home">SellerMode</NavLink>
+            <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
+            <NavLink to="/sellerdashboard">Dashboard</NavLink>
+            {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
+          </SubContainer>
+          <ButtonContainer>
+            <IconButton
               sx={{
-                height: "3rem",
-                width: "3rem",
                 "@media (max-width: 786px)": {
                   display: "none",
                 },
               }}
-              aria-label="avatar"
-              src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-            ></Avatar>
-          </IconButton>
-        </ButtonContainer>
-      </Wrapper>
-    </Container>
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} variant="dot" color="error">
+                {" "}
+                <MailOutlineIcon
+                  onClick={toggleMessage}
+                  sx={{ fontSize: "2.0rem", color: colors.textGreen }}
+                />
+              </Badge>
+            </IconButton>
+            <IconButton
+              sx={{
+                "@media (max-width: 786px)": {
+                  display: "none",
+                },
+              }}
+              size="large"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              <Badge badgeContent={4} variant="dot" color="error">
+                <NotificationsOutlinedIcon
+                  sx={{ fontSize: "2.0rem", color: colors.textGreen }}
+                />
+              </Badge>
+            </IconButton>
+            <IconButton
+              onClick={() => setSearchVisible((prev) => !prev)}
+              sx={{
+                display: "none",
+                " @media (max-width: 700px)": {
+                  display: "flex",
+                },
+              }}
+            >
+              <SearchOutlinedIcon
+                style={{ fontSize: "2rem", color: colors.textGreen }}
+              />
+            </IconButton>
+            <IconButton>
+              <Avatar
+                sx={{
+                  height: "4rem",
+                  width: "4rem",
+                  "@media (max-width: 786px)": {
+                    display: "none",
+                  },
+                }}
+                aria-label="avatar"
+                src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+              ></Avatar>
+            </IconButton>
+          </ButtonContainer>
+        </Wrapper>
+      </Container>
+      {searchVisible && (
+        <Box
+          sx={{
+            height: "6rem",
+            width: "100%",
+            marginBottom: "2rem",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            boxShadow: "3px 2px 16px 3px rbga(0,0,0,0.5)",
+            display: "none",
+            " @media (max-width: 700px)": {
+              display: "flex",
+            },
+          }}
+        >
+          <SearchMobile>
+            <ReactSearchAutocomplete
+              fuseOptions={{ keys: ["title"] }}
+              placeholder="What Services do you want?"
+              resultStringKeyName="title"
+              items={Suggest}
+              styling={{ height: "40px", fontSize: "1.5rem" }}
+              onSearch={handleOnSearch}
+              onHover={handleOnHover}
+              onSelect={handleOnSelect}
+              onFocus={handleOnFocus}
+              autoFocus
+              formatResult={formatResult}
+            />
+          </SearchMobile>
+        </Box>
+      )}
+    </>
   );
 }
 
@@ -164,6 +203,7 @@ const Container = styled.div`
   @media (max-width: 786px) {
     padding-inline: 7%;
   }
+  overflow: hidden;
 `;
 const Menucontainer = styled.div`
   display: flex;
@@ -228,16 +268,12 @@ const SearchContainer = styled.div`
   margin-left: 30px;
   width: 55ch;
   z-index: 10;
-  @media (max-width: 786px) {
+  @media (max-width: 700px) {
     display: none;
   } ;
 `;
 
 const SearchMobile = styled.div`
-  width: 50rem;
+  width: 95%;
   z-index: 10;
-
-  @media (min-width: 786px) {
-    display: none;
-  } ;
 `;
