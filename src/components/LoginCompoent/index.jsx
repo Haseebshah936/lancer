@@ -15,10 +15,12 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
 import colors from "../../utils/colors";
+import { useRealmContext } from "../../db/RealmContext";
 
 function Login({ toggleClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { logIn } = useRealmContext();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -44,6 +46,7 @@ function Login({ toggleClose }) {
     //       alert(errorCode.substring(5, errorCode.length).replaceAll("-", " "));
     //     });
     // }
+    logIn(email, password);
   };
 
   return (

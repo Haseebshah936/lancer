@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import {
   BrowserRouter as Router,
@@ -28,6 +28,9 @@ import PostProject from "./pages/PostProject/PostProject";
 import Chat from "./pages/Chat";
 import EProjects from "./pages/EmployerProjects/EProjects";
 import FProjects from "./pages/FreelancerProjects/FProjects";
+import PrivateRoutes from "./Routes/PrivateRoutes";
+import { useRealmContext } from "./db/RealmContext";
+import AuthRoutes from "./Routes/AuthRoutes";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -35,35 +38,44 @@ function App(props) {
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
         <Routes>
-          <Route path="/home" element={<Landing />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/ranking" element={<Ranking />} />
+          <Route element={<AuthRoutes />}>
+            <Route path="/home" element={<Landing />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/ranking" element={<Ranking />} />
+            <Route path="/signup" element={<Signup />} />
+          </Route>
           <Route path="/Search" element={<SearchResults />} />
-          <Route path="/buyermain" element={<BuyerMain />} />
-          <Route path="/sellerdashboard" element={<SellerDashboard />} />
+
+          <Route element={<PrivateRoutes />}>
+            <Route path="/buyermain" element={<BuyerMain />} />
+            <Route path="/sellerdashboard" element={<SellerDashboard />} />
+            <Route path="/chat/:id" element={<Chat />} />
+            <Route
+              path="/gig/gigserviceintroduction"
+              element={<GigServiceIntroduction />}
+            />
+            <Route
+              path="/gig/gigmediaattachment"
+              element={<GigMediaAttachment />}
+            />
+            <Route
+              path="/gig/gigmyservicepricning"
+              element={<GigMyServicePricing />}
+            />
+            <Route
+              path="/gig/gigquestionapage"
+              element={<GigQuestionAPage />}
+            />
+            <Route path="/postProject" element={<PostProject />} />
+          </Route>
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/eprojects/:id" element={<EProjects />} />
           <Route path="/fprojects/:id" element={<FProjects />} />
 
-          <Route
-            path="/gig/gigserviceintroduction"
-            element={<GigServiceIntroduction />}
-          />
-          <Route
-            path="/gig/gigmediaattachment"
-            element={<GigMediaAttachment />}
-          />
-          <Route
-            path="/gig/gigmyservicepricning"
-            element={<GigMyServicePricing />}
-          />
-          <Route path="/chat/:id" element={<Chat />} />
-          <Route path="/gig/gigquestionapage" element={<GigQuestionAPage />} />
-          <Route path="/postProject" element={<PostProject></PostProject>} />
-          <Route path="*" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/home" replace />} />
+          {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
         </Routes>
       </Router>
     </CustomContextProvider>

@@ -37,6 +37,7 @@
     "react-search-autocomplete": "^8.0.0",
     "react-swipeable-views": "^0.14.0",
     "react-textarea-autosize": "^8.3.4",
+    "react-toastify": "^9.1.0",
     "realm-web": "^2.0.0",
     "recharts": "^2.1.15",
     "styled-components": "^5.3.6",
