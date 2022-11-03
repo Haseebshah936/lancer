@@ -31,6 +31,8 @@ import FProjects from "./pages/FreelancerProjects/FProjects";
 import PrivateRoutes from "./Routes/PrivateRoutes";
 import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -78,6 +80,18 @@ function App(props) {
           {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
         </Routes>
       </Router>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </CustomContextProvider>
   );
 }
