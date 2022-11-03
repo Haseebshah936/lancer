@@ -1,5 +1,5 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Alert, Button } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -13,10 +13,16 @@ import axios from "axios";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import * as queryString from "query-string";
 import { signup } from "../assets";
+import { useRealmContext } from "../db/RealmContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const schema = joi.object({
-  email: joi.string().required(),
-  password: joi.string().min(8).required(),
+  email: joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+  password: joi.string().min(6).max(128).required(),
 });
 
 function Signup(props) {
@@ -25,8 +31,13 @@ function Signup(props) {
     email: "",
     password: "",
   });
+  const [error, setError] = useState({
+    email: "",
+    password: "",
+  });
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
+  const { signup } = useRealmContext();
 
   useEffect(() => {
     setOpen(false);
@@ -85,21 +96,30 @@ function Signup(props) {
     if (error) {
       const { details } = error;
       console.log(details);
+      const message = [];
       details.map((e, i) => {
-        console.log(e.path[0], e.message);
+        message.push(e.message);
+        toast.error(e.message);
       });
       return;
     } else {
       try {
-        const response = await axios.post(
-          "http://localhost:3003/api/auth/signup",
-          {
-            ...user,
-          }
-        );
-        console.log(response.data);
+        // const response = await axios.post(
+        //   "http://localhost:3003/api/auth/signup",
+        //   {
+        //     ...user,
+        //   }
+        // );
+        // console.log(response.data);
+
+        signup(user.email, user.password);
       } catch (error) {
         console.log(error.response.data);
+      } finally {
+        setError({
+          email: "",
+          password: "",
+        });
       }
     }
   };
@@ -209,6 +229,18 @@ function Signup(props) {
         </SubContainer>
         <Image />
       </Wrapper>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </Container>
   );
 }
