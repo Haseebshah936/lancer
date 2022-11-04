@@ -16,12 +16,12 @@ const BuyerMain = () => {
   const [collection, setCollection] = React.useState(null);
   useEffect(() => {
     let breakAsyncIterator = false; // Later used to exit async iterator
-
     (async () => {
       const mongo = currentUser.mongoClient("mongodb-atlas");
       const collection = mongo.db("test").collection("test");
       setCollection(collection);
       for await (const change of collection.watch()) {
+        console.log(breakAsyncIterator);
         if (breakAsyncIterator) return; // Exit async iterator
         switch (change.operationType) {
           case "insert": {
