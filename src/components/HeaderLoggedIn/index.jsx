@@ -7,6 +7,7 @@ import { ClickAwayListener } from "@material-ui/core";
 import Modal from "@mui/material/Modal";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import MessageList from "./MessageList";
+import NotificationList from "./NotificationList";
 
 function Header(props) {
   const [state, setState] = useState(false);
@@ -23,6 +24,10 @@ function Header(props) {
 
   const CloseList = () => {
     setAnchor(null);
+  };
+
+  const CloseList2 = () => {
+    setAnchor2(null);
   };
 
   const toggleDrawer = (state) => {
@@ -45,6 +50,7 @@ function Header(props) {
         toggleDrawer={toggleDrawer}
         toggleLogin={handleToggle}
         toggleMessage={toggleMessage}
+        toggleNotification={toggleNotification}
       />
       <ResponsiveDrawer
         state={state}
@@ -52,6 +58,7 @@ function Header(props) {
         toggleDrawer={toggleDrawer}
       />
       <MessageList anchor={anchor} CloseList={CloseList} />
+      <NotificationList anchor={anchor2} CloseList={CloseList2} />
 
       <Modal
         open={open}

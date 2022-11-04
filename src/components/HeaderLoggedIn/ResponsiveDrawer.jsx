@@ -52,8 +52,8 @@ export default function ResponsiveDrawer({
                   </Typography>
                 </ProfileHeader>
 
-                <NavLink to="/home">Messages</NavLink>
-                <NavLink to="/about">Dashboard</NavLink>
+                <NavLink to="/chat/1">Messages</NavLink>
+                <NavLink to="/sellerdashboard">Dashboard</NavLink>
                 <NavLink to="/contactus">Seller&nbsp;Mode</NavLink>
                 <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
                 {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}

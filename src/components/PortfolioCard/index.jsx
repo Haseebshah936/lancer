@@ -177,7 +177,7 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
               backgroundColor: colors.white,
             }}
           >
-            This is a success message!
+            Added to List
           </Alert>
         </Snackbar>
       </Card>

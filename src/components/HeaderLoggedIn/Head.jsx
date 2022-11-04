@@ -21,7 +21,12 @@ const Suggest = [
   { title: "SEO" },
 ];
 
-function Head({ toggleDrawer, toggleLogin, toggleMessage }) {
+function Head({
+  toggleDrawer,
+  toggleLogin,
+  toggleMessage,
+  toggleNotification,
+}) {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
 
@@ -121,6 +126,7 @@ function Head({ toggleDrawer, toggleLogin, toggleMessage }) {
             >
               <Badge badgeContent={4} variant="dot" color="error">
                 <NotificationsOutlinedIcon
+                  onClick={toggleNotification}
                   sx={{ fontSize: "2.0rem", color: colors.textGreen }}
                 />
               </Badge>

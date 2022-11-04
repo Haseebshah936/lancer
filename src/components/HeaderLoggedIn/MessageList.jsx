@@ -1,6 +1,8 @@
-import { Box, Grow, List, Paper, Popover, Typography } from "@mui/material";
+import { Box, Paper, Popover, Typography } from "@mui/material";
 import React from "react";
 import { ChatList } from "react-chat-elements";
+import { Link, NavLink } from "react-router-dom";
+import styled from "styled-components";
 import colors from "../../utils/colors";
 
 const chats = [
@@ -65,6 +67,22 @@ const MessageList = ({ anchor, CloseList }) => {
             }}
           >
             <ChatList className="chat-list" dataSource={chats} />
+            <LinkWrapper>
+              <Link
+                to="/chat/1"
+                style={{
+                  textDecoration: "none",
+                  color: colors.textGreen,
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ ":hover": { color: "#045c4ab9 !important" } }}
+                >
+                  View All Messages
+                </Typography>
+              </Link>
+            </LinkWrapper>
           </Paper>
         </Box>
       </Popover>
@@ -73,3 +91,18 @@ const MessageList = ({ anchor, CloseList }) => {
 };
 
 export default MessageList;
+
+const LinkWrapper = styled.div`
+  width: 100%;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  a: {
+    text-decoration: none !important;
+  }
+  a:hover {
+    color: #045c4ac4 !important;
+  }
+`;
