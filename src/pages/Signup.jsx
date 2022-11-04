@@ -1,5 +1,5 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
-import { Alert, Button } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
@@ -14,8 +14,7 @@ import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props
 import * as queryString from "query-string";
 import { signup } from "../assets";
 import { useRealmContext } from "../db/RealmContext";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 const schema = joi.object({
   email: joi
@@ -31,10 +30,7 @@ function Signup(props) {
     email: "",
     password: "",
   });
-  const [error, setError] = useState({
-    email: "",
-    password: "",
-  });
+  const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
   const { signup } = useRealmContext();
@@ -92,15 +88,14 @@ function Signup(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { error } = schema.validate(user, { abortEarly: false });
     if (error) {
       const { details } = error;
-      console.log(details);
-      const message = [];
       details.map((e, i) => {
-        message.push(e.message);
         toast.error(e.message);
       });
+      setLoading(false);
       return;
     } else {
       try {
@@ -112,14 +107,21 @@ function Signup(props) {
         // );
         // console.log(response.data);
 
-        signup(user.email, user.password);
+        signup(user.email, user.password)
+          .then(() => {
+            setLoading(false);
+            toast.success("Signup Successfull");
+            navigate("/home");
+          })
+          .catch((err) => {
+            setLoading(false);
+            const { message } = err;
+            const msg = message.split(":");
+            // console.log(msg[msg.length - 1]);
+            toast.error(msg[msg.length - 1].split("(")[0]);
+          });
       } catch (error) {
         console.log(error.response.data);
-      } finally {
-        setError({
-          email: "",
-          password: "",
-        });
       }
     }
   };
@@ -216,7 +218,17 @@ function Signup(props) {
                 </label>
               </RemberMeContainer>
               <Btn type={"submit"}>
-                <BtnText>Sign up</BtnText>
+                {!loading ? (
+                  <BtnText>Sign up</BtnText>
+                ) : (
+                  <CircularProgress
+                    style={{
+                      color: colors.primaryGreen,
+                      fontSize: ".5rem",
+                    }}
+                    size={20}
+                  />
+                )}
               </Btn>
             </ButtonContainer>
           </Form>
@@ -229,18 +241,6 @@ function Signup(props) {
         </SubContainer>
         <Image />
       </Wrapper>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
     </Container>
   );
 }

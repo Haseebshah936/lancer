@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import styled from "styled-components";
 import {
   FacebookTwoTone,
@@ -16,37 +16,49 @@ import { Link, useNavigate } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
 import colors from "../../utils/colors";
 import { useRealmContext } from "../../db/RealmContext";
+import Joi from "joi";
+import { toast } from "react-toastify";
+
+const schema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+  password: Joi.string().min(6).required(),
+});
 
 function Login({ toggleClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { logIn } = useRealmContext();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (!(email === "" || password === "")) {
-    //   const auth = getAuth(firebaseApp);
-    //   signInWithEmailAndPassword(auth, email, password)
-    //     .then((userCredential) => {
-    //       const user = userCredential.user;
-    //       if (!user.emailVerified) {
-    //         sendEmailVerification(auth.currentUser).then(() => {
-    //           alert(
-    //             "A verification link was sent to you Please verify your Email"
-    //           );
-    //         });
-    //         setLogin(false);
-    //       } else {
-    //         setLogin(user);
-    //         setLoaded(false);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       const errorCode = error.code;
-    //       alert(errorCode.substring(5, errorCode.length).replaceAll("-", " "));
-    //     });
-    // }
-    logIn(email, password);
+    setLoading(true);
+    const { error } = schema.validate(
+      { email, password },
+      { abortEarly: false }
+    );
+    if (error) {
+      const { details } = error;
+      details.map((e, i) => {
+        toast.error(e.message);
+      });
+      setLoading(false);
+      return;
+    }
+    logIn(email, password)
+      .then(() => {
+        setLoading(false);
+        toggleClose();
+      })
+      .catch((err) => {
+        setLoading(false);
+        const { message } = err;
+        const msg = message.split(":");
+        // console.log(msg[msg.length - 1]);
+        toast.error(msg[msg.length - 1].split("(")[0]);
+      });
   };
 
   return (
@@ -71,7 +83,17 @@ function Login({ toggleClose }) {
             }}
           />
           <Btn type={"submit"}>
-            <BtnText>Login</BtnText>
+            {!loading ? (
+              <BtnText>Login</BtnText>
+            ) : (
+              <CircularProgress
+                style={{
+                  color: colors.primaryGreen,
+                  fontSize: ".5rem",
+                }}
+                size={20}
+              />
+            )}
           </Btn>
           <SocialContainer>
             <SocialIcon c={colors.twitterBlue}>

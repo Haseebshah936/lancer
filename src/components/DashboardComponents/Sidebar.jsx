@@ -22,6 +22,7 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { mobile } from "../../responsive";
 import { Link, NavLink } from "react-router-dom";
+import { useRealmContext } from "../../db/RealmContext";
 
 const CustomList = styled(List)({
   color: colors.black,
@@ -50,6 +51,7 @@ const CustomListItem = styled(ListItem)({
 });
 
 const Sidebar = () => {
+  const { logOut } = useRealmContext();
   return (
     <>
       <Sticky>
@@ -229,7 +231,11 @@ const Sidebar = () => {
                       }}
                     />
                   </ListItemIcon>
-                  <CustomListText primary="Logout" disableTypography={true} />
+                  <CustomListText
+                    onClick={logOut}
+                    primary="Logout"
+                    disableTypography={true}
+                  />
                 </CustomListItem>
               </CustomList>
             </nav>

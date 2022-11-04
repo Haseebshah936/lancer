@@ -32,9 +32,9 @@ export function RealmAppProvider({ appId, children }) {
   );
   // Wrap the current user's logOut function to remove the logged out user from state
   const logOut = React.useCallback(async () => {
+    setCurrentUser(null);
     await currentUser?.logOut();
     await realmApp.removeUser(currentUser);
-    setCurrentUser(realmApp.currentUser);
   }, [realmApp, currentUser]);
 
   const signup = React.useCallback(
