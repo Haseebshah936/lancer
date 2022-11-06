@@ -79,17 +79,17 @@ function Signup(props) {
   });
 
   // const facebookAuth = async () => {
-  const stringifiedParams = queryString.stringify({
-    client_id: "881136853269267",
-    redirect_uri: "https://localhost:3000",
-    scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
-    response_type: "code",
-    auth_type: "rerequest",
-    display: "popup",
-  });
+  // const stringifiedParams = queryString.stringify({
+  //   client_id: "881136853269267",
+  //   redirect_uri: "https://localhost:3000",
+  //   scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
+  //   response_type: "code",
+  //   auth_type: "rerequest",
+  //   display: "popup",
+  // });
 
-  const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
-  // }
+  // const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
+  // // }
 
   const responseFacebook = async (res) => {
     console.log(res);

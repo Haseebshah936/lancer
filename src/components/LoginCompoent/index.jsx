@@ -19,6 +19,8 @@ import { useRealmContext } from "../../db/RealmContext";
 import Joi from "joi";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 const schema = Joi.object({
   email: Joi.string()
@@ -32,6 +34,73 @@ function Login({ toggleClose }) {
   const [password, setPassword] = useState("");
   const { logIn } = useRealmContext();
   const [loading, setLoading] = useState(false);
+
+  const handleLogin = (email, password, rest) => {
+    logIn(email, password, rest)
+      .then(() => {
+        setLoading(false);
+        toggleClose();
+      })
+      .catch((err) => {
+        setLoading(false);
+        const { message } = err;
+        const msg = message.split(":");
+        // console.log(msg[msg.length - 1]);
+        toast.error(msg[msg.length - 1].split("(")[0]);
+      });
+  };
+
+  const googleAuth = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      // console.log(code);
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
+
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/google/login",
+        {
+          // http://localhost:3001/auth/google backend that will exchange the code
+          code,
+        }
+      );
+      const { email, password, ...rest } = response.data;
+      console.log(response);
+      handleLogin(email, password, rest);
+    },
+    redirect_uri: "http://localhost:3000/home",
+  });
+
+  // const facebookAuth = async () => {
+  // const stringifiedParams = queryString.stringify({
+  //   client_id: "881136853269267",
+  //   redirect_uri: "https://localhost:3000",
+  //   scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
+  //   response_type: "code",
+  //   auth_type: "rerequest",
+  //   display: "popup",
+  // });
+
+  // const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
+  // // }
+
+  const responseFacebook = async (res) => {
+    console.log(res);
+    const { accessToken, id } = res;
+    const response = await axios.post(
+      "http://localhost:3003/api/auth/facebook/login",
+      {
+        id,
+        accessToken,
+      }
+    );
+    console.log("Response From facebook", response);
+    const { email, password, ...rest } = response.data;
+    console.log(response);
+    handleLogin(email, password, rest);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -52,19 +121,9 @@ function Login({ toggleClose }) {
       email,
       password,
     });
+    let { email: email1, password: password1, ...rest } = response.data;
     console.log(response);
-    // logIn(email, password)
-    //   .then(() => {
-    //     setLoading(false);
-    //     toggleClose();
-    //   })
-    //   .catch((err) => {
-    //     setLoading(false);
-    //     const { message } = err;
-    //     const msg = message.split(":");
-    //     // console.log(msg[msg.length - 1]);
-    //     toast.error(msg[msg.length - 1].split("(")[0]);
-    //   });
+    handleLogin(email1, password1, rest);
   };
 
   return (
@@ -105,10 +164,21 @@ function Login({ toggleClose }) {
             <SocialIcon c={colors.twitterBlue}>
               <Twitter htmlColor={colors.twitterBlue} />
             </SocialIcon>
-            <SocialIcon c={colors.facebookBlue}>
-              <FacebookTwoTone htmlColor={colors.facebookBlue} />
-            </SocialIcon>
-            <SocialIcon c={colors.googleRed}>
+            <FacebookLogin
+              appId="881136853269267"
+              autoLoad={false}
+              fields="name,email,picture"
+              callback={responseFacebook}
+              render={(renderProps) => (
+                <SocialIcon
+                  onClick={renderProps.onClick}
+                  c={colors.facebookBlue}
+                >
+                  <FacebookTwoTone htmlColor={colors.facebookBlue} />
+                </SocialIcon>
+              )}
+            />
+            <SocialIcon onClick={googleAuth} c={colors.googleRed}>
               <Google htmlColor={colors.googleRed} />
             </SocialIcon>
           </SocialContainer>
