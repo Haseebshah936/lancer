@@ -3,24 +3,48 @@ import { Box, Paper, Popover, Typography, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 import colors from "../../utils/colors";
 import ClearIcon from "@mui/icons-material/Clear";
+import { LensTwoTone } from "@material-ui/icons";
+import { useEffect } from "react";
 
 const Notifications = [
   {
+    key: 0,
     title: "Login Alert !",
     description:
       "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
   },
   {
+    key: 1,
     title: "Login Alert !",
     description:
       "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
   },
   {
+    key: 2,
     title: "Login Alert !",
     description:
       "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
   },
   {
+    key: 3,
+    title: "Login Alert !",
+    description:
+      "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
+  },
+  {
+    key: 4,
+    title: "Login Alert !",
+    description:
+      "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
+  },
+  {
+    key: 5,
+    title: "Login Alert !",
+    description:
+      "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
+  },
+  {
+    key: 6,
     title: "Login Alert !",
     description:
       "A login took place from Lahore, Pakistan at 2:52pm on 04/11/2022",
@@ -28,6 +52,32 @@ const Notifications = [
 ];
 
 const NotificationList = ({ anchor, CloseList }) => {
+  const [ListData, setListData] = React.useState([]);
+  const [count, setCount] = React.useState(0);
+
+  React.useEffect(() => {
+    if (Notifications.length > 4) {
+      setListData(Notifications.slice(0, 4));
+      setCount(4);
+    } else {
+      setListData(Notifications);
+    }
+  }, []);
+
+  const handleDelete = (itemToDelete) => () => {
+    let Items = ListData.filter((item) => item.key !== itemToDelete.key);
+
+    console.log("before", Items);
+
+    if (Items.length < 4 && Notifications.length >= count + 1) {
+      console.log("IN if");
+      Items = [...Items, Notifications.slice(count, count + 1)[0]];
+      setCount(count + 1);
+    }
+    console.log("after", Items);
+    setListData(Items);
+  };
+
   const open = Boolean(anchor);
   return (
     <>
@@ -68,10 +118,11 @@ const NotificationList = ({ anchor, CloseList }) => {
                 paddingLeft: "5px",
               }}
             >
-              {Notifications.map((notify) => (
+              {ListData.map((notify) => (
                 <>
                   {" "}
                   <div
+                    key={notify.key}
                     style={{
                       display: "flex",
                       flexDirection: "column",
@@ -97,6 +148,7 @@ const NotificationList = ({ anchor, CloseList }) => {
                         {notify.title}
                       </div>
                       <ClearIcon
+                        onClick={handleDelete(notify)}
                         sx={{
                           fontSize: "1.5rem",
                           cursor: "pointer",
