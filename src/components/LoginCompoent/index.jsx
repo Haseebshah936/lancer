@@ -18,6 +18,7 @@ import colors from "../../utils/colors";
 import { useRealmContext } from "../../db/RealmContext";
 import Joi from "joi";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const schema = Joi.object({
   email: Joi.string()
@@ -32,7 +33,7 @@ function Login({ toggleClose }) {
   const { logIn } = useRealmContext();
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const { error } = schema.validate(
@@ -47,18 +48,23 @@ function Login({ toggleClose }) {
       setLoading(false);
       return;
     }
-    logIn(email, password)
-      .then(() => {
-        setLoading(false);
-        toggleClose();
-      })
-      .catch((err) => {
-        setLoading(false);
-        const { message } = err;
-        const msg = message.split(":");
-        // console.log(msg[msg.length - 1]);
-        toast.error(msg[msg.length - 1].split("(")[0]);
-      });
+    const response = await axios.post("http://localhost:3003/api/auth/login", {
+      email,
+      password,
+    });
+    console.log(response);
+    // logIn(email, password)
+    //   .then(() => {
+    //     setLoading(false);
+    //     toggleClose();
+    //   })
+    //   .catch((err) => {
+    //     setLoading(false);
+    //     const { message } = err;
+    //     const msg = message.split(":");
+    //     // console.log(msg[msg.length - 1]);
+    //     toast.error(msg[msg.length - 1].split("(")[0]);
+    //   });
   };
 
   return (

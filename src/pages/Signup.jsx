@@ -1,7 +1,7 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
 import { Alert, Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ import * as queryString from "query-string";
 import { signup } from "../assets";
 import { useRealmContext } from "../db/RealmContext";
 import { toast } from "react-toastify";
+import * as Realm from "realm-web";
 
 const schema = joi.object({
   email: joi
@@ -33,21 +34,46 @@ function Signup(props) {
   const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
-  const { signup } = useRealmContext();
+  const { signup, realmApp } = useRealmContext();
 
   useEffect(() => {
     setOpen(false);
   }, []);
 
+  const handleSignup = (email, password) => {
+    signup(email, password)
+      .then(() => {
+        setLoading(false);
+        toast.success("Signup Successfull");
+        navigate("/home");
+      })
+      .catch((err) => {
+        setLoading(false);
+        const { message } = err;
+        const msg = message.split(":");
+        // console.log(msg[msg.length - 1]);
+        toast.error(msg[msg.length - 1].split("(")[0]);
+      });
+  };
+
   const googleAuth = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async ({ code }) => {
-      const tokens = await axios.post("http://localhost:3003/api/auth/google", {
-        // http://localhost:3001/auth/google backend that will exchange the code
-        code,
-      });
+      // console.log(code);
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
-      console.log(tokens);
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/google/signup",
+        {
+          // http://localhost:3001/auth/google backend that will exchange the code
+          code,
+        }
+      );
+      const { email, password } = response.data;
+      handleSignup(email, password);
     },
     redirect_uri: "http://localhost:3000/home",
   });
@@ -69,13 +95,15 @@ function Signup(props) {
     console.log(res);
     const { accessToken, id } = res;
     const response = await axios.post(
-      "http://localhost:3003/api/auth/facebook/",
+      "http://localhost:3003/api/auth/facebook/signup",
       {
         id,
         accessToken,
       }
     );
     console.log("Response From facebook", response);
+    const { email, password } = response.data;
+    handleSignup(email, password);
   };
 
   const handleChange = ({ target }) => {
@@ -99,32 +127,75 @@ function Signup(props) {
       return;
     } else {
       try {
-        // const response = await axios.post(
-        //   "http://localhost:3003/api/auth/signup",
-        //   {
-        //     ...user,
-        //   }
-        // );
-        // console.log(response.data);
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/signup",
+          {
+            ...user,
+          }
+        );
+        console.log(response.data);
 
-        signup(user.email, user.password)
-          .then(() => {
-            setLoading(false);
-            toast.success("Signup Successfull");
-            navigate("/home");
-          })
-          .catch((err) => {
-            setLoading(false);
-            const { message } = err;
-            const msg = message.split(":");
-            // console.log(msg[msg.length - 1]);
-            toast.error(msg[msg.length - 1].split("(")[0]);
-          });
+        const { email, password } = response.data;
+        handleSignup(email, password);
       } catch (error) {
+        setLoading(false);
         console.log(error.response.data);
       }
     }
   };
+
+  // const loadScript = (src) =>
+  //   new Promise((resolve, reject) => {
+  //     if (document.querySelector(`script[src="${src}"]`)) return resolve();
+  //     const script = document.createElement("script");
+  //     script.src = src;
+  //     script.onload = () => resolve();
+  //     script.onerror = (err) => reject(err);
+  //     document.body.appendChild(script);
+  //   });
+
+  // const googleButton = useRef(null);
+
+  // useEffect(() => {
+  //   const src = "https://accounts.google.com/gsi/client";
+  //   const id =
+  //     "30719619583-j2d2baepb0dkbscqrm3661mb6bomooch.apps.googleusercontent.com";
+
+  //   loadScript(src)
+  //     .then(() => {
+  //       /*global google*/
+  //       console.log(google);
+  //       google.accounts.id.initialize({
+  //         client_id: id,
+  //         callback: handleCredentialResponse,
+  //       });
+  //       google.accounts.id.renderButton(googleButton.current, {
+  //         theme: "filled_blue",
+  //         size: "large",
+  //       });
+  //     })
+  //     .catch(console.error);
+
+  //   return () => {
+  //     const scriptTag = document.querySelector(`script[src="${src}"]`);
+  //     if (scriptTag) document.body.removeChild(scriptTag);
+  //   };
+  // }, []);
+
+  // async function handleCredentialResponse(response) {
+  //   console.log("Encoded JWT ID token: " + response.credential);
+  //   // const credentials = Realm.Credentials.jwt(response.credential);
+  //   // try {
+  //   //   // Authenticate the user
+  //   //   const user = await realmApp.logIn(credentials);
+  //   //   // `App.currentUser` updates to match the logged in user
+  //   //   console.assert(user.id === realmApp.currentUser.id);
+  //   //   return user;
+  //   // } catch (err) {
+  //   //   console.error("Failed to log in", err);
+  //   // }
+  //   googleAuth(response.credential);
+  // }
 
   return (
     <Container>

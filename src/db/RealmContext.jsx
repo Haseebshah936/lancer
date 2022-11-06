@@ -50,10 +50,27 @@ export function RealmAppProvider({ appId, children }) {
     [realmApp]
   );
 
+  const googleAuth = React.useCallback(
+    async (jwt) => {
+      const credentials = Realm.Credentials.google(jwt);
+      console.log(credentials);
+      try {
+        // Authenticate the user
+        const user = await realmApp.logIn(credentials);
+        // `App.currentUser` updates to match the logged in user
+        console.assert(user.id === realmApp.currentUser.id);
+        return user;
+      } catch (err) {
+        console.error("Failed to log in", err);
+      }
+    },
+    [realmApp]
+  );
+
   // Override the App's currentUser & logIn properties + include the app-level logout function
   const realmAppContext = React.useMemo(() => {
-    return { ...realmApp, currentUser, logIn, logOut, signup };
-  }, [realmApp, currentUser, logIn, logOut, signup]);
+    return { ...realmApp, currentUser, logIn, logOut, signup, googleAuth };
+  }, [realmApp, currentUser, logIn, logOut, signup, googleAuth]);
 
   return (
     <RealmAppContext.Provider value={realmAppContext}>
