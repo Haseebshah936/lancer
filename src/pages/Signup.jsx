@@ -16,6 +16,7 @@ import { signup } from "../assets";
 import { useRealmContext } from "../db/RealmContext";
 import { toast } from "react-toastify";
 import * as Realm from "realm-web";
+import { handleAuthError, handleRealmError } from "../utils/helperFunctions";
 
 const schema = joi.object({
   email: joi
@@ -49,10 +50,7 @@ function Signup(props) {
       })
       .catch((err) => {
         setLoading(false);
-        const { message } = err;
-        const msg = message.split(":");
-        // console.log(msg[msg.length - 1]);
-        toast.error(msg[msg.length - 1].split("(")[0]);
+        handleRealmError(err);
       });
   };
 
@@ -65,15 +63,19 @@ function Signup(props) {
       //   .logIn(credentials)
       //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
-      const response = await axios.post(
-        "http://localhost:3003/api/auth/google/signup",
-        {
-          // http://localhost:3001/auth/google backend that will exchange the code
-          code,
-        }
-      );
-      const { email, password } = response.data;
-      handleSignup(email, password);
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/google/signup",
+          {
+            // http://localhost:3001/auth/google backend that will exchange the code
+            code,
+          }
+        );
+        const { email, password } = response.data;
+        handleSignup(email, password);
+      } catch (error) {
+        handleAuthError(error.response);
+      }
     },
     redirect_uri: "http://localhost:3000/home",
   });
@@ -94,16 +96,20 @@ function Signup(props) {
   const responseFacebook = async (res) => {
     console.log(res);
     const { accessToken, id } = res;
-    const response = await axios.post(
-      "http://localhost:3003/api/auth/facebook/signup",
-      {
-        id,
-        accessToken,
-      }
-    );
-    console.log("Response From facebook", response);
-    const { email, password } = response.data;
-    handleSignup(email, password);
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/facebook/signup",
+        {
+          id,
+          accessToken,
+        }
+      );
+      console.log("Response From facebook", response);
+      const { email, password } = response.data;
+      handleSignup(email, password);
+    } catch (error) {
+      handleAuthError(error.response);
+    }
   };
 
   const handleChange = ({ target }) => {
@@ -140,6 +146,7 @@ function Signup(props) {
       } catch (error) {
         setLoading(false);
         console.log(error.response.data);
+        handleAuthError(error.response);
       }
     }
   };
@@ -323,7 +330,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 7% 15%;
+  padding: 5% 15% 3% 15%;
   @media (max-width: 450px) {
     padding: 0 0%;
   }
@@ -331,7 +338,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  height: 80vh;
+  height: 85vh;
   background-color: #fdfdfd;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.986);
   -webkit-box-shadow: 3px 2px 16px 5px rgb(240, 240, 240);

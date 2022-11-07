@@ -3,8 +3,6 @@ import { Box, Paper, Popover, Typography, Divider } from "@mui/material";
 import { Link } from "react-router-dom";
 import colors from "../../utils/colors";
 import ClearIcon from "@mui/icons-material/Clear";
-import { LensTwoTone } from "@material-ui/icons";
-import { useEffect } from "react";
 
 const Notifications = [
   {

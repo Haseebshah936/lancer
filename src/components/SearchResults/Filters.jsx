@@ -22,7 +22,14 @@ const modalstyle = {
   p: 4,
 };
 
-const Filters = () => {
+const Filters = ({
+  handleAvail,
+  handlePro,
+  handleLocal,
+  local,
+  pro,
+  avail,
+}) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -44,22 +51,29 @@ const Filters = () => {
           Filters
         </Button>
       </FilterButton>
-      <Modal
+      {/* <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={modalstyle}>
-          {/* <FilterAccordions /> */}
-          <p>adssa</p>
+        <Box sx={modalstyle}> */}
+      {/* <FilterAccordions /> */}
+      {/* <p>adssa</p>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Added to List
           </Typography>
         </Box>
-      </Modal>
+      </Modal> */}
       <Accordions>
-        <FilterAccordions />
+        <FilterAccordions
+          handleAvail={handleAvail}
+          handlePro={handlePro}
+          handleLocal={handleLocal}
+          local={local}
+          pro={pro}
+          avail={avail}
+        />
       </Accordions>
     </Container>
   );

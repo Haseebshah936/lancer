@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 import { useGoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { handleAuthError, handleRealmError } from "../../utils/helperFunctions";
 
 const schema = Joi.object({
   email: Joi.string()
@@ -43,10 +44,7 @@ function Login({ toggleClose }) {
       })
       .catch((err) => {
         setLoading(false);
-        const { message } = err;
-        const msg = message.split(":");
-        // console.log(msg[msg.length - 1]);
-        toast.error(msg[msg.length - 1].split("(")[0]);
+        handleRealmError(err);
       });
   };
 
@@ -59,16 +57,21 @@ function Login({ toggleClose }) {
       //   .logIn(credentials)
       //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
-      const response = await axios.post(
-        "http://localhost:3003/api/auth/google/login",
-        {
-          // http://localhost:3001/auth/google backend that will exchange the code
-          code,
-        }
-      );
-      const { email, password, ...rest } = response.data;
-      console.log(response);
-      handleLogin(email, password, rest);
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/google/login",
+          {
+            // http://localhost:3001/auth/google backend that will exchange the code
+            code,
+          }
+        );
+        const { email, password, ...rest } = response.data;
+        console.log("Respnse", response);
+        handleLogin(email, password, rest);
+      } catch (error) {
+        console.log(error);
+        handleAuthError(error.response);
+      }
     },
     redirect_uri: "http://localhost:3000/home",
   });
@@ -89,17 +92,21 @@ function Login({ toggleClose }) {
   const responseFacebook = async (res) => {
     console.log(res);
     const { accessToken, id } = res;
-    const response = await axios.post(
-      "http://localhost:3003/api/auth/facebook/login",
-      {
-        id,
-        accessToken,
-      }
-    );
-    console.log("Response From facebook", response);
-    const { email, password, ...rest } = response.data;
-    console.log(response);
-    handleLogin(email, password, rest);
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/facebook/login",
+        {
+          id,
+          accessToken,
+        }
+      );
+      console.log("Response From facebook", response);
+      const { email, password, ...rest } = response.data;
+      console.log(response);
+      handleLogin(email, password, rest);
+    } catch (error) {
+      handleAuthError(error.response);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -117,13 +124,21 @@ function Login({ toggleClose }) {
       setLoading(false);
       return;
     }
-    const response = await axios.post("http://localhost:3003/api/auth/login", {
-      email,
-      password,
-    });
-    let { email: email1, password: password1, ...rest } = response.data;
-    console.log(response);
-    handleLogin(email1, password1, rest);
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+      let { email: email1, password: password1, ...rest } = response.data;
+      console.log(response);
+      handleLogin(email1, password1, rest);
+    } catch (error) {
+      setLoading(false);
+      handleAuthError(error.response);
+    }
   };
 
   return (
