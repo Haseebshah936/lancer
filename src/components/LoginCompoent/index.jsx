@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, TextField } from "@mui/material";
+import { Button, CircularProgress, TextField } from "@mui/material";
 import styled from "styled-components";
 import {
   FacebookTwoTone,
@@ -15,35 +15,130 @@ import {
 import { Link, useNavigate } from "react-router-dom";
 import { ClickAwayListener } from "@material-ui/core";
 import colors from "../../utils/colors";
+import { useRealmContext } from "../../db/RealmContext";
+import Joi from "joi";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { useGoogleLogin } from "@react-oauth/google";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { handleAuthError, handleRealmError } from "../../utils/helperFunctions";
+
+const schema = Joi.object({
+  email: Joi.string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+  password: Joi.string().min(6).required(),
+});
 
 function Login({ toggleClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const { logIn } = useRealmContext();
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleLogin = (email, password, rest) => {
+    logIn(email, password, rest)
+      .then(() => {
+        setLoading(false);
+        toggleClose();
+      })
+      .catch((err) => {
+        setLoading(false);
+        handleRealmError(err);
+      });
+  };
+
+  const googleAuth = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      // console.log(code);
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/google/login",
+          {
+            // http://localhost:3001/auth/google backend that will exchange the code
+            code,
+          }
+        );
+        const { email, password, ...rest } = response.data;
+        console.log("Respnse", response);
+        handleLogin(email, password, rest);
+      } catch (error) {
+        console.log(error);
+        handleAuthError(error.response);
+      }
+    },
+    redirect_uri: "http://localhost:3000/home",
+  });
+
+  // const facebookAuth = async () => {
+  // const stringifiedParams = queryString.stringify({
+  //   client_id: "881136853269267",
+  //   redirect_uri: "https://localhost:3000",
+  //   scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
+  //   response_type: "code",
+  //   auth_type: "rerequest",
+  //   display: "popup",
+  // });
+
+  // const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
+  // // }
+
+  const responseFacebook = async (res) => {
+    console.log(res);
+    const { accessToken, id } = res;
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/facebook/login",
+        {
+          id,
+          accessToken,
+        }
+      );
+      console.log("Response From facebook", response);
+      const { email, password, ...rest } = response.data;
+      console.log(response);
+      handleLogin(email, password, rest);
+    } catch (error) {
+      handleAuthError(error.response);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!(email === "" || password === "")) {
-    //   const auth = getAuth(firebaseApp);
-    //   signInWithEmailAndPassword(auth, email, password)
-    //     .then((userCredential) => {
-    //       const user = userCredential.user;
-    //       if (!user.emailVerified) {
-    //         sendEmailVerification(auth.currentUser).then(() => {
-    //           alert(
-    //             "A verification link was sent to you Please verify your Email"
-    //           );
-    //         });
-    //         setLogin(false);
-    //       } else {
-    //         setLogin(user);
-    //         setLoaded(false);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       const errorCode = error.code;
-    //       alert(errorCode.substring(5, errorCode.length).replaceAll("-", " "));
-    //     });
-    // }
+    setLoading(true);
+    const { error } = schema.validate(
+      { email, password },
+      { abortEarly: false }
+    );
+    if (error) {
+      const { details } = error;
+      details.map((e, i) => {
+        toast.error(e.message);
+      });
+      setLoading(false);
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/login",
+        {
+          email,
+          password,
+        }
+      );
+      let { email: email1, password: password1, ...rest } = response.data;
+      console.log(response);
+      handleLogin(email1, password1, rest);
+    } catch (error) {
+      setLoading(false);
+      handleAuthError(error.response);
+    }
   };
 
   return (
@@ -68,16 +163,37 @@ function Login({ toggleClose }) {
             }}
           />
           <Btn type={"submit"}>
-            <BtnText>Login</BtnText>
+            {!loading ? (
+              <BtnText>Login</BtnText>
+            ) : (
+              <CircularProgress
+                style={{
+                  color: colors.primaryGreen,
+                  fontSize: ".5rem",
+                }}
+                size={20}
+              />
+            )}
           </Btn>
           <SocialContainer>
             <SocialIcon c={colors.twitterBlue}>
               <Twitter htmlColor={colors.twitterBlue} />
             </SocialIcon>
-            <SocialIcon c={colors.facebookBlue}>
-              <FacebookTwoTone htmlColor={colors.facebookBlue} />
-            </SocialIcon>
-            <SocialIcon c={colors.googleRed}>
+            <FacebookLogin
+              appId="881136853269267"
+              autoLoad={false}
+              fields="name,email,picture"
+              callback={responseFacebook}
+              render={(renderProps) => (
+                <SocialIcon
+                  onClick={renderProps.onClick}
+                  c={colors.facebookBlue}
+                >
+                  <FacebookTwoTone htmlColor={colors.facebookBlue} />
+                </SocialIcon>
+              )}
+            />
+            <SocialIcon onClick={googleAuth} c={colors.googleRed}>
               <Google htmlColor={colors.googleRed} />
             </SocialIcon>
           </SocialContainer>
@@ -134,7 +250,7 @@ const Input = styled.input`
     border: 0.2rem solid ${colors.primaryGreen};
   }
   ::placeholder {
-    color: rgba(0,0,0, 0.7);
+    color: rgba(0, 0, 0, 0.7);
   }
 `;
 
@@ -167,7 +283,8 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
+      border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;

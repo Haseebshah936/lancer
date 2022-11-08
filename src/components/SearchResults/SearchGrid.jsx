@@ -2,15 +2,22 @@ import React from "react";
 import PortfolioCard from "../PortfolioCard";
 import Grid from "@mui/material/Grid";
 import { teamImg } from "../../assets";
+import { Pagination } from "@mui/material";
 
-const SearchGrid = () => {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8];
-
+const SearchGrid = ({ data }) => {
   return (
     <>
-      <Grid container spacing={2} sx={{ marginTop: "4px", marginLeft: "0px" }}>
+      <Grid container justifyContent="center" alignItems="center" spacing={2}>
         {data.map((c) => (
-          <Grid xs={3} lg={3} md={4} sm={4}>
+          <Grid
+            item
+            xs={3}
+            lg={3}
+            md={4}
+            sm={4}
+            rowspacing={2}
+            columnSpacing={2}
+          >
             <PortfolioCard
               count={c}
               GigImage={teamImg}

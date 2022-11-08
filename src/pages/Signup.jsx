@@ -1,7 +1,7 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
@@ -13,10 +13,17 @@ import axios from "axios";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import * as queryString from "query-string";
 import { signup } from "../assets";
+import { useRealmContext } from "../db/RealmContext";
+import { toast } from "react-toastify";
+import * as Realm from "realm-web";
+import { handleAuthError, handleRealmError } from "../utils/helperFunctions";
 
 const schema = joi.object({
-  email: joi.string().required(),
-  password: joi.string().min(8).required(),
+  email: joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+  password: joi.string().min(6).max(128).required(),
 });
 
 function Signup(props) {
@@ -25,50 +32,84 @@ function Signup(props) {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
+  const { signup, realmApp } = useRealmContext();
 
   useEffect(() => {
     setOpen(false);
   }, []);
 
+  const handleSignup = (email, password) => {
+    signup(email, password)
+      .then(() => {
+        setLoading(false);
+        toast.success("Signup Successfull");
+        navigate("/home");
+      })
+      .catch((err) => {
+        setLoading(false);
+        handleRealmError(err);
+      });
+  };
+
   const googleAuth = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async ({ code }) => {
-      const tokens = await axios.post("http://localhost:3003/api/auth/google", {
-        // http://localhost:3001/auth/google backend that will exchange the code
-        code,
-      });
+      // console.log(code);
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
-      console.log(tokens);
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/google/signup",
+          {
+            // http://localhost:3001/auth/google backend that will exchange the code
+            code,
+          }
+        );
+        const { email, password } = response.data;
+        handleSignup(email, password);
+      } catch (error) {
+        handleAuthError(error.response);
+      }
     },
     redirect_uri: "http://localhost:3000/home",
   });
 
   // const facebookAuth = async () => {
-  const stringifiedParams = queryString.stringify({
-    client_id: "881136853269267",
-    redirect_uri: "https://localhost:3000",
-    scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
-    response_type: "code",
-    auth_type: "rerequest",
-    display: "popup",
-  });
+  // const stringifiedParams = queryString.stringify({
+  //   client_id: "881136853269267",
+  //   redirect_uri: "https://localhost:3000",
+  //   scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
+  //   response_type: "code",
+  //   auth_type: "rerequest",
+  //   display: "popup",
+  // });
 
-  const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
-  // }
+  // const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
+  // // }
 
   const responseFacebook = async (res) => {
     console.log(res);
     const { accessToken, id } = res;
-    const response = await axios.post(
-      "http://localhost:3003/api/auth/facebook/",
-      {
-        id,
-        accessToken,
-      }
-    );
-    console.log("Response From facebook", response);
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/facebook/signup",
+        {
+          id,
+          accessToken,
+        }
+      );
+      console.log("Response From facebook", response);
+      const { email, password } = response.data;
+      handleSignup(email, password);
+    } catch (error) {
+      handleAuthError(error.response);
+    }
   };
 
   const handleChange = ({ target }) => {
@@ -81,13 +122,14 @@ function Signup(props) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const { error } = schema.validate(user, { abortEarly: false });
     if (error) {
       const { details } = error;
-      console.log(details);
       details.map((e, i) => {
-        console.log(e.path[0], e.message);
+        toast.error(e.message);
       });
+      setLoading(false);
       return;
     } else {
       try {
@@ -98,11 +140,69 @@ function Signup(props) {
           }
         );
         console.log(response.data);
+
+        const { email, password } = response.data;
+        handleSignup(email, password);
       } catch (error) {
+        setLoading(false);
         console.log(error.response.data);
+        handleAuthError(error.response);
       }
     }
   };
+
+  // const loadScript = (src) =>
+  //   new Promise((resolve, reject) => {
+  //     if (document.querySelector(`script[src="${src}"]`)) return resolve();
+  //     const script = document.createElement("script");
+  //     script.src = src;
+  //     script.onload = () => resolve();
+  //     script.onerror = (err) => reject(err);
+  //     document.body.appendChild(script);
+  //   });
+
+  // const googleButton = useRef(null);
+
+  // useEffect(() => {
+  //   const src = "https://accounts.google.com/gsi/client";
+  //   const id =
+  //     "30719619583-j2d2baepb0dkbscqrm3661mb6bomooch.apps.googleusercontent.com";
+
+  //   loadScript(src)
+  //     .then(() => {
+  //       /*global google*/
+  //       console.log(google);
+  //       google.accounts.id.initialize({
+  //         client_id: id,
+  //         callback: handleCredentialResponse,
+  //       });
+  //       google.accounts.id.renderButton(googleButton.current, {
+  //         theme: "filled_blue",
+  //         size: "large",
+  //       });
+  //     })
+  //     .catch(console.error);
+
+  //   return () => {
+  //     const scriptTag = document.querySelector(`script[src="${src}"]`);
+  //     if (scriptTag) document.body.removeChild(scriptTag);
+  //   };
+  // }, []);
+
+  // async function handleCredentialResponse(response) {
+  //   console.log("Encoded JWT ID token: " + response.credential);
+  //   // const credentials = Realm.Credentials.jwt(response.credential);
+  //   // try {
+  //   //   // Authenticate the user
+  //   //   const user = await realmApp.logIn(credentials);
+  //   //   // `App.currentUser` updates to match the logged in user
+  //   //   console.assert(user.id === realmApp.currentUser.id);
+  //   //   return user;
+  //   // } catch (err) {
+  //   //   console.error("Failed to log in", err);
+  //   // }
+  //   googleAuth(response.credential);
+  // }
 
   return (
     <Container>
@@ -196,7 +296,17 @@ function Signup(props) {
                 </label>
               </RemberMeContainer>
               <Btn type={"submit"}>
-                <BtnText>Sign up</BtnText>
+                {!loading ? (
+                  <BtnText>Sign up</BtnText>
+                ) : (
+                  <CircularProgress
+                    style={{
+                      color: colors.primaryGreen,
+                      fontSize: ".5rem",
+                    }}
+                    size={20}
+                  />
+                )}
               </Btn>
             </ButtonContainer>
           </Form>
@@ -220,7 +330,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 7% 15%;
+  padding: 5% 15% 3% 15%;
   @media (max-width: 450px) {
     padding: 0 0%;
   }
@@ -228,7 +338,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  height: 80vh;
+  height: 85vh;
   background-color: #fdfdfd;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.986);
   -webkit-box-shadow: 3px 2px 16px 5px rgb(240, 240, 240);

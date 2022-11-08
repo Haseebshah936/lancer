@@ -3,6 +3,7 @@ import { Avatar, MessageBox } from "react-chat-elements";
 import styled from "styled-components";
 import AutoLinkText from "react-autolink-text2";
 import colors from "../../utils/colors";
+import { miniMobile, mobile } from "../../responsive";
 
 function CustomMessageBox({ position, title, type, ...props }) {
   const handleDownload = (e) => {
@@ -10,7 +11,7 @@ function CustomMessageBox({ position, title, type, ...props }) {
     window.open(e);
   };
   return (
-    <Container>
+    <Container position={position}>
       {position === "left" && (
         <Avatar
           src="https://avatars.githubusercontent.com/u/80540635?v=4"
@@ -33,17 +34,10 @@ function CustomMessageBox({ position, title, type, ...props }) {
           data={props?.data}
           {...props}
           onDownload={() => handleDownload(props?.data?.uri)}
+          // onClick={() => handleDownload(props?.data?.uri)}
         />
         <Triangle position={position} />
       </Wrapper>
-      {position === "right" && (
-        <Avatar
-          src="https://avatars.githubusercontent.com/u/80540635?v=4"
-          alt="avatar"
-          size="small"
-          type="circle"
-        />
-      )}
     </Container>
   );
 }
@@ -53,8 +47,10 @@ const Container = styled.div`
   display: flex;
   flex-direction: row;
   align-items: flex-end;
+  overflow: hidden;
   margin-block: 2.5rem;
-  margin-inline: 1rem;
+  margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
+
   .rce-mbox-photo {
     display: flex;
     flex-direction: column;
@@ -64,6 +60,8 @@ const Container = styled.div`
   }
   .rce-mbox-photo img {
     width: 100%;
+    object-fit: contain;
+    height: auto;
   }
   .rce-mbox--clear-padding {
     padding-bottom: 1.5rem;
@@ -81,17 +79,20 @@ const Container = styled.div`
   video {
     float: left;
     align-self: flex-start;
+    outline: none;
   }
   .rce-mbox-audio {
     padding-bottom: 0;
   }
   audio {
-    background-color: #f1f3f4;
+    background-color: ${colors.audioBox};
     width: 100%;
     height: 4rem;
+    min-width: 25rem;
   }
   .rce-mbox-text {
     margin: 0;
+    margin-top: 1rem;
     text-align: justify;
   }
   .rce-mbox-text::after {
@@ -104,6 +105,17 @@ const Container = styled.div`
     background-color: transparent;
     width: 100%;
   }
+  .rce-mbox-file > button > * {
+    padding: 0rem 0.5rem;
+  }
+  ${miniMobile({
+    ".rce-mbox-file>button>*": {
+      padding: "0rem .4rem",
+    },
+    ".rce-mbox-file--text": {
+      fontSize: "1.2rem",
+    },
+  })}
   .rce-avatar-container.default.default {
     display: none;
   }
@@ -123,11 +135,12 @@ const Triangle = styled.div`
       : colors.userChatMessageBackground};
   position: absolute;
   bottom: 2rem;
-  left: ${(props) => (props.position === "left" ? "-1rem" : "97.5%")};
+  left: -1rem;
   clip-path: polygon(
     0 ${(props) => (props.position === "left" ? "100%" : "0")},
     100% ${(props) => (props.position === "left" ? "0" : "100%")},
     100% 100%,
     0 100%
   );
+  display: ${(props) => (props.position === "left" ? "block" : "none")};
 `;

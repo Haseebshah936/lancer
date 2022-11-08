@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
 import Header from "../../components/Header";
@@ -12,15 +12,22 @@ import { packages, sellerSliderData } from "../../utils/dummyData";
 import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
 
 function SellerPortfolio(props) {
-  const title = "Get your premium quality product logo designing and | rebranding material in very low price"
+  const title =
+    "Get your premium quality product logo designing and | rebranding material in very low price";
   const rating = 5.0;
   const reviews = 20;
   const views = 10000;
 
-  const [save, setSave] = useState(false)
+  const [save, setSave] = useState(false);
 
-  
-  const handleSave = () => setSave(!save)
+  const handleSave = () => setSave(!save);
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth",
+    });
+  }, []);
 
   return (
     <>
@@ -28,10 +35,14 @@ function SellerPortfolio(props) {
       <Container>
         <Wrapper>
           <SubContainer1>
-            <Heading>
-              {title}
-            </Heading>
-            <ProfileReviewInfo rating={rating} reviews={reviews} views={views} saved={save} handleSave={handleSave}/>
+            <Heading>{title}</Heading>
+            <ProfileReviewInfo
+              rating={rating}
+              reviews={reviews}
+              views={views}
+              saved={save}
+              handleSave={handleSave}
+            />
             <Gallery items={sellerSliderData} />
             <Description>
               Laboris id laborum irure in amet anim ad laboris reprehenderit
@@ -85,18 +96,18 @@ function SellerPortfolio(props) {
             </Description>
           </SubContainer1>
           <SubContainer2>
-            <PricingPlan pakages={packages}/>
-            <SellerProfileInfo handleSave={handleSave} saved={save}/>
+            <PricingPlan pakages={packages} />
+            <SellerProfileInfo handleSave={handleSave} saved={save} />
           </SubContainer2>
         </Wrapper>
         <DetailsContainer>
-        <SubHeading>More Services</SubHeading>
-        <OtherServices />
-        <SubHeading>{reviews} Client Reviews</SubHeading>
-        <Reviews />
+          <SubHeading>More Services</SubHeading>
+          <OtherServices />
+          <SubHeading>{reviews} Client Reviews</SubHeading>
+          <Reviews />
         </DetailsContainer>
       </Container>
-      
+
       <Footer />
     </>
   );
@@ -112,7 +123,6 @@ const Container = styled.div`
   ${miniPc({
     marginTop: "0rem",
   })}
-  
 `;
 
 const Wrapper = styled.div`
@@ -132,7 +142,7 @@ const DetailsContainer = styled.div`
   ${miniTablet({
     width: "100%",
   })}
-`
+`;
 
 const SubContainer1 = styled.div`
   width: 65%;
@@ -162,15 +172,15 @@ const Heading = styled.h1`
 const SubContainer2 = styled.div`
   width: 40%;
   max-width: 30rem;
-  
+
   ${miniTablet({
-      display: "flex",
-      width: "100%",
-      maxWidth: "100%",
-      justifyContent: "space-between",
-      flexDirection: "row-reverse",
-      marginBlock: "4rem"
-    })}
+    display: "flex",
+    width: "100%",
+    maxWidth: "100%",
+    justifyContent: "space-between",
+    flexDirection: "row-reverse",
+    marginBlock: "4rem",
+  })}
   ${mobile({
     marginLeft: 0,
     display: "flex",
@@ -183,8 +193,6 @@ const Description = styled.p`
   margin-top: 2rem;
   font-size: 1.2rem;
 `;
-
-
 
 const SubHeading = styled.h2`
   font-weight: 600;

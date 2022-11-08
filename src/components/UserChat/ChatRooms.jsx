@@ -6,6 +6,7 @@ import { ChatList } from "react-chat-elements";
 import styled from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
+import MorePoper from "./MorePoper";
 
 function ChatRooms({
   chatrooms = [],
@@ -15,17 +16,20 @@ function ChatRooms({
 }) {
   return (
     <ChatRoomsContainer>
-      <SearchBox>
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search"
-          inputProps={{ "aria-label": "search" }}
-          onChange={(e) => onFilter(e.target.value)}
-        />
-        <IconButton type="button" sx={{ p: "0.rem" }} aria-label="search">
-          <Search sx={{ fontSize: "1.5rem" }} />
-        </IconButton>
-      </SearchBox>
+      <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+        <SearchBox>
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "search" }}
+            onChange={(e) => onFilter(e.target.value)}
+          />
+          {/* <IconButton type="button" sx={{ p: "0.rem" }} aria-label="search">
+            <Search sx={{ fontSize: "1.5rem" }} />
+          </IconButton> */}
+        </SearchBox>
+        <MorePoper />
+      </Box>
       <ChatList
         onClick={onRoomClick}
         onClickMute={onMuteClick}
@@ -40,7 +44,7 @@ export default ChatRooms;
 
 const ChatRoomsContainer = styled.div`
   display: flex;
-  margin: 2rem 0rem;
+  padding: 2rem 0rem;
   flex-direction: column;
   height: 100%;
   flex-shrink: 1;

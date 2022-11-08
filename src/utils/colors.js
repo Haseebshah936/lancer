@@ -21,5 +21,6 @@ const colors = {
   saveAndContinueButton: "#0075D5",
   lightGreen: "#71d810",
   userChatMessageBackground: "#e8efff",
+  audioBox: "#f1f3f4",
 };
 export default colors;

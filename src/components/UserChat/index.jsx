@@ -128,7 +128,7 @@ function Chat(props) {
               />
             );
           })}
-          <div ref={messageRef} />
+          <div style={{ height: ".1rem" }} ref={messageRef} />
         </MessageListContainer>
 
         <ChatInput onSend={handleSend} />
@@ -147,7 +147,8 @@ const Container = styled.div`
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
-  height: 82vh;
+  height: 86vh;
+  overflow-y: hidden;
   ${tablet({ marginInline: "2%" })}
   ${miniTablet({
     flexDirection: "column",
@@ -192,24 +193,31 @@ const MessageListContainer = styled.div`
   scroll-behavior: smooth;
   overflow-y: scroll;
   padding-inline: 1rem;
+  overflow-x: hidden;
   .rce-container-mbox {
     width: 100%;
     min-width: auto;
   }
   .rce-mbox {
     max-width: 70%;
-    padding-right: 1.5rem;
-    color: white;
+    padding-right: 1.2rem;
+    color: #4b3030;
     min-width: auto;
     box-shadow: none;
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
     padding-bottom: 1.2rem;
-    min-width: 40%;
   }
+  .rce-mbox-text {
+    color: ${colors.white};
+  }
+
   .rce-mbox.rce-mbox-right {
-    color: black;
+    color: ${colors.black};
     background-color: ${colors.userChatMessageBackground};
+    .rce-mbox-text {
+      color: ${colors.black};
+    }
   }
   .rce-mbox-title {
     color: white;
@@ -221,12 +229,38 @@ const MessageListContainer = styled.div`
   [class*="notch"] {
     display: none;
   }
+  scrollbar-width: 0.6rem;
+  &::-webkit-scrollbar {
+    width: 0.6rem;
+    height: 0.6rem;
+  }
+  &::-webkit-scrollbar-button {
+    display: none;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${colors.gray};
+    border-radius: 10rem;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-corner {
+    display: none;
+  }
+  &::-webkit-resizer {
+    display: none;
+  }
   ${miniTablet({
     flexDirection: "column",
   })}
+  ${mobile({
+    ".rce-mbox": {
+      maxWidth: "85%",
+    },
+  })}
   ${miniMobile({
     ".rce-mbox": {
-      width: "85%",
+      maxWidth: "95%",
     },
   })}
 `;

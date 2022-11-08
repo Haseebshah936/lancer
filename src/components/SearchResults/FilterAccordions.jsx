@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
+import CustomFilledButton from "../CustomFilledButton";
 
 const RelatedCategories = [
   { id: 1, title: "Wordpress Creation" },
@@ -148,7 +149,14 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const FilterAccordions = () => {
+const FilterAccordions = ({
+  handleAvail,
+  handlePro,
+  handleLocal,
+  local,
+  pro,
+  avail,
+}) => {
   return (
     <>
       <Accordion defaultExpanded={true}>
@@ -242,6 +250,18 @@ const FilterAccordions = () => {
               </>
             ))}
           </FormControl>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
+          </div>
         </AccordionDetails>
       </Accordion>{" "}
       <Accordion>
@@ -302,6 +322,18 @@ const FilterAccordions = () => {
               </>
             ))}
           </FormControl>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "flex-end",
+            }}
+          >
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
+          </div>
         </AccordionDetails>
       </Accordion>
       <Accordion>
@@ -422,6 +454,11 @@ const FilterAccordions = () => {
                 </NumberField>
               </FormGroup>
             </FormControl>
+
+            <CustomFilledButton
+              title={"Apply"}
+              style={{ marginTop: "10px", margin: "5px 0px 0px 0px" }}
+            ></CustomFilledButton>
           </>
         </AccordionDetails>
       </Accordion>
@@ -519,21 +556,36 @@ const FilterAccordions = () => {
         <FormControlLabel
           style={{ marginTop: 10 }}
           control={
-            <AntSwitch sx={{ marginRight: "5px" }} defaultChecked={false} />
+            <AntSwitch
+              sx={{ marginRight: "5px" }}
+              defaultChecked={false}
+              checked={pro}
+              onChange={handlePro}
+            />
           }
           label="Rana&nbsp;Pro&nbsp;Services"
         />
         <FormControlLabel
           style={{ marginTop: 10 }}
           control={
-            <AntSwitch sx={{ marginRight: "5px" }} defaultChecked={false} />
+            <AntSwitch
+              sx={{ marginRight: "5px" }}
+              defaultChecked={false}
+              checked={local}
+              onChange={handleLocal}
+            />
           }
           label="Local&nbsp;Sellers"
         />
         <FormControlLabel
           style={{ marginTop: 10 }}
           control={
-            <AntSwitch sx={{ marginRight: "5px" }} defaultChecked={false} />
+            <AntSwitch
+              sx={{ marginRight: "5px" }}
+              defaultChecked={false}
+              checked={avail}
+              onchange={handleAvail}
+            />
           }
           label="Availabe&nbsp;Now"
         />
