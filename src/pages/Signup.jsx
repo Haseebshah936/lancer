@@ -74,7 +74,7 @@ function Signup(props) {
         const { email, password } = response.data;
         handleSignup(email, password);
       } catch (error) {
-        handleAuthError(error.response);
+        handleAuthError(error);
       }
     },
     redirect_uri: "http://localhost:3000/home",
@@ -108,7 +108,7 @@ function Signup(props) {
       const { email, password } = response.data;
       handleSignup(email, password);
     } catch (error) {
-      handleAuthError(error.response);
+      handleAuthError(error);
     }
   };
 
@@ -145,8 +145,8 @@ function Signup(props) {
         handleSignup(email, password);
       } catch (error) {
         setLoading(false);
-        console.log(error.response.data);
-        handleAuthError(error.response);
+        // console.log(error.data);
+        handleAuthError(error);
       }
     }
   };

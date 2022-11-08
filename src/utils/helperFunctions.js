@@ -2,8 +2,10 @@ import { toast } from "react-toastify";
 
 export const handleAuthError = (error) => {
   console.log(error);
-  if (error.status != 500) {
-    toast.error(error.data);
+  if (error?.response?.status != 500 && error.code !== "ERR_NETWORK") {
+    toast.error(error?.response?.data);
+  } else if (error.code == "ERR_NETWORK") {
+    toast.error(error.message);
   } else {
     console.log(error);
     toast.error("Internal server issue");

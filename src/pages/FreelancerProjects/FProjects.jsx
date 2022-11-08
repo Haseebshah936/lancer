@@ -9,23 +9,8 @@ import CancelledProjects from "../../components/FProject/CancelledProjects";
 import CompletedProjects from "./../../components/FProject/CompletedProjects";
 import MyPerposals from "../../components/FProject/MyPerposals";
 import OnGoingProjects from "../../components/FProject/OnGoingProjects";
-
-const SideBar = () => {
-  const [value, setValue] = React.useState(0);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
-  return (
-    <div>
-      <Box
-        width="100%"
-        height={"510px"}
-        backgroundColor={colors.becomePartnerGreen}
-      ></Box>
-    </div>
-  );
-};
+import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Footer from "./../../components/Footer/index";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
@@ -40,7 +25,7 @@ export default function FProjects() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <SideBar></SideBar>
+              <Sidebar></Sidebar>
             </Grid>
             <Grid
               item
@@ -117,6 +102,7 @@ export default function FProjects() {
           </Grid>
         </Grid>
       </Grid>
+      <Footer></Footer>
     </div>
   );
 }

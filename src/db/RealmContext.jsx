@@ -51,8 +51,8 @@ export function RealmAppProvider({ appId, children }) {
   );
 
   const googleAuth = React.useCallback(
-    async (jwt) => {
-      const credentials = Realm.Credentials.google(jwt);
+    async (code) => {
+      const credentials = Realm.Credentials.google(code);
       console.log(credentials);
       try {
         // Authenticate the user

@@ -70,7 +70,7 @@ function Login({ toggleClose }) {
         handleLogin(email, password, rest);
       } catch (error) {
         console.log(error);
-        handleAuthError(error.response);
+        handleAuthError(error);
       }
     },
     redirect_uri: "http://localhost:3000/home",
@@ -105,7 +105,7 @@ function Login({ toggleClose }) {
       console.log(response);
       handleLogin(email, password, rest);
     } catch (error) {
-      handleAuthError(error.response);
+      handleAuthError(error);
     }
   };
 
@@ -137,7 +137,7 @@ function Login({ toggleClose }) {
       handleLogin(email1, password1, rest);
     } catch (error) {
       setLoading(false);
-      handleAuthError(error.response);
+      handleAuthError(error);
     }
   };
 
