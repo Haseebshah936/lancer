@@ -6,6 +6,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
+
 const steps = [
   "Service Introduction",
   "Media/Attachments",
@@ -40,7 +41,7 @@ export default function GigMuiHeader() {
     >
       <Grid item xs={12} sm={6}>
         <Box sx={{ width: "100%" }} className="mt-5 mb-5">
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "100" }}>
             <Stepper activeStep={activeStepValue} alternativeLabel>
               {steps.map((label) => (
                 <Step key={label}>

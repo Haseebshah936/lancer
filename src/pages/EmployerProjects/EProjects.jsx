@@ -9,18 +9,8 @@ import CompletedProjects from "../../components/EProject/CompletedProjects";
 import OngoingProjects from "../../components/EProject/OngoingProjects";
 import PendingProjects from "../../components/EProject/PendingProjects";
 import CancelledProjects from "./../../components/EProject/CancelledProjects";
-
-const SideBar = () => {
-  return (
-    <div>
-      <Box
-        width="100%"
-        height={"510px"}
-        backgroundColor={colors.becomePartnerGreen}
-      ></Box>
-    </div>
-  );
-};
+import Sidebar from "../../components/SellerDashboard/Sidebar";
+import Footer from "./../../components/Footer/index";
 
 export default function EProjects() {
   const [value, setValue] = React.useState(0);
@@ -35,7 +25,7 @@ export default function EProjects() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <SideBar></SideBar>
+              <Sidebar></Sidebar>
             </Grid>
             <Grid
               item
@@ -112,6 +102,7 @@ export default function EProjects() {
           </Grid>
         </Grid>
       </Grid>
+      <Footer></Footer>
     </div>
   );
 }
