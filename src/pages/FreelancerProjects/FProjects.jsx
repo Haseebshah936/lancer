@@ -9,7 +9,7 @@ import CancelledProjects from "../../components/FProject/CancelledProjects";
 import CompletedProjects from "./../../components/FProject/CompletedProjects";
 import MyPerposals from "../../components/FProject/MyPerposals";
 import OnGoingProjects from "../../components/FProject/OnGoingProjects";
-import Sidebar from "../../components/SellerDashboard/Sidebar";
+import Sidebar from "../../components/DashboardComponents/Sidebar";
 import Footer from "./../../components/Footer/index";
 
 export default function FProjects() {
