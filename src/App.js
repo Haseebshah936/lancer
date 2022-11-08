@@ -33,6 +33,8 @@ import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Dashboard from "./components/SellerDashboardRenders/Dashboard";
+import Favourites from "./components/SellerDashboardRenders/Favourites";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -51,7 +53,10 @@ function App(props) {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/buyermain" element={<BuyerMain />} />
-            <Route path="/sellerdashboard" element={<SellerDashboard />} />
+            <Route path="/sellerdashboard" element={<SellerDashboard />}>
+              <Route path="favourites" element={<Favourites />} />
+              <Route index element={<Dashboard />} />
+            </Route>
             <Route path="/chat/:id" element={<Chat />} />
             <Route
               path="/gig/gigserviceintroduction"
