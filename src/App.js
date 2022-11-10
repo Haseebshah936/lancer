@@ -35,9 +35,20 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/SellerDashboardRenders/Dashboard";
 import Favourites from "./components/SellerDashboardRenders/Favourites";
+import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
+  const { currentUser, setCurrentUser } = useRealmContext();
+  useEffect(() => {
+    console.log("Current User App.js", currentUser);
+    axios
+      .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
+      .then((res) => {
+        setCurrentUser((user) => ({ ...user, user: { ...res.data } }));
+      });
+  }, []);
+
   return (
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>

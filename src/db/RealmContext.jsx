@@ -25,7 +25,6 @@ export function RealmAppProvider({ appId, children }) {
       console.log(email, password);
       const credentials = Realm.Credentials.emailPassword(email, password);
       await realmApp.logIn(credentials);
-      console.log(realmApp.currentUser);
       setCurrentUser({ ...realmApp.currentUser, user: { email, ...rest } });
     },
     [realmApp]
@@ -69,8 +68,24 @@ export function RealmAppProvider({ appId, children }) {
 
   // Override the App's currentUser & logIn properties + include the app-level logout function
   const realmAppContext = React.useMemo(() => {
-    return { ...realmApp, currentUser, logIn, logOut, signup, googleAuth };
-  }, [realmApp, currentUser, logIn, logOut, signup, googleAuth]);
+    return {
+      ...realmApp,
+      currentUser,
+      setCurrentUser,
+      logIn,
+      logOut,
+      signup,
+      googleAuth,
+    };
+  }, [
+    realmApp,
+    currentUser,
+    setCurrentUser,
+    logIn,
+    logOut,
+    signup,
+    googleAuth,
+  ]);
 
   return (
     <RealmAppContext.Provider value={realmAppContext}>
