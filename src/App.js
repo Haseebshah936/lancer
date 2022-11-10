@@ -35,9 +35,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/SellerDashboardRenders/Dashboard";
 import Favourites from "./components/SellerDashboardRenders/Favourites";
+import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
+
   return (
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>

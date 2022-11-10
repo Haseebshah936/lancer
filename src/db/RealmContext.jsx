@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import * as Realm from "realm-web";
 
@@ -19,14 +20,29 @@ export function RealmAppProvider({ appId, children }) {
   }, [appId]);
   // Store the app's current user in state and wrap the built-in auth functions to modify this state
   const [currentUser, setCurrentUser] = React.useState(realmApp.currentUser);
+  const [user, setUser] = React.useState(null);
   // Wrap the base logIn function to save the logged in user in state
+
+  React.useEffect(() => {
+    if (!currentUser) return setUser(null);
+    axios
+      .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
+      .then((res) => {
+        setUser(res.data);
+      });
+  }, []);
+
   const logIn = React.useCallback(
     async (email, password, rest) => {
-      console.log(email, password);
+      // console.log(email, password);
       const credentials = Realm.Credentials.emailPassword(email, password);
       await realmApp.logIn(credentials);
-      console.log(realmApp.currentUser);
-      setCurrentUser({ ...realmApp.currentUser, user: { email, ...rest } });
+      // console.log(realmApp.currentUser);
+      setCurrentUser(realmApp.currentUser);
+      setUser({
+        email,
+        ...rest,
+      });
     },
     [realmApp]
   );
@@ -69,8 +85,18 @@ export function RealmAppProvider({ appId, children }) {
 
   // Override the App's currentUser & logIn properties + include the app-level logout function
   const realmAppContext = React.useMemo(() => {
-    return { ...realmApp, currentUser, logIn, logOut, signup, googleAuth };
-  }, [realmApp, currentUser, logIn, logOut, signup, googleAuth]);
+    return {
+      ...realmApp,
+      currentUser,
+      setCurrentUser,
+      logIn,
+      logOut,
+      signup,
+      googleAuth,
+      user,
+      setUser,
+    };
+  }, [realmApp, currentUser, logIn, logOut, signup, googleAuth, user, setUser]);
 
   return (
     <RealmAppContext.Provider value={realmAppContext}>
