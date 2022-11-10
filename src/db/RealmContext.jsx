@@ -19,13 +19,19 @@ export function RealmAppProvider({ appId, children }) {
   }, [appId]);
   // Store the app's current user in state and wrap the built-in auth functions to modify this state
   const [currentUser, setCurrentUser] = React.useState(realmApp.currentUser);
+  const [user, setUser] = React.useState(null);
   // Wrap the base logIn function to save the logged in user in state
   const logIn = React.useCallback(
     async (email, password, rest) => {
-      console.log(email, password);
+      // console.log(email, password);
       const credentials = Realm.Credentials.emailPassword(email, password);
       await realmApp.logIn(credentials);
-      setCurrentUser({ ...realmApp.currentUser, user: { email, ...rest } });
+      // console.log(realmApp.currentUser);
+      setCurrentUser(realmApp.currentUser);
+      setUser({
+        email,
+        ...rest,
+      });
     },
     [realmApp]
   );
@@ -76,16 +82,10 @@ export function RealmAppProvider({ appId, children }) {
       logOut,
       signup,
       googleAuth,
+      user,
+      setUser,
     };
-  }, [
-    realmApp,
-    currentUser,
-    setCurrentUser,
-    logIn,
-    logOut,
-    signup,
-    googleAuth,
-  ]);
+  }, [realmApp, currentUser, logIn, logOut, signup, googleAuth, user, setUser]);
 
   return (
     <RealmAppContext.Provider value={realmAppContext}>

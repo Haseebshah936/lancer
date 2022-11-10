@@ -39,15 +39,15 @@ import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
-  const { currentUser, setCurrentUser } = useRealmContext();
+  const { currentUser, user, setUser } = useRealmContext();
   useEffect(() => {
-    console.log("Current User App.js", currentUser);
+    if (!currentUser) return setUser(null);
     axios
       .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
       .then((res) => {
-        setCurrentUser((user) => ({ ...user, user: { ...res.data } }));
+        setUser(res.data);
       });
-  }, []);
+  }, [currentUser]);
 
   return (
     <CustomContextProvider value={{ open, setOpen }}>

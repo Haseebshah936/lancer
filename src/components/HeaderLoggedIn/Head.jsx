@@ -31,7 +31,7 @@ function Head({
 }) {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
-  const { currentUser } = useRealmContext();
+  const { user } = useRealmContext();
 
   const handleOnSearch = (string, results) => {
     console.log(string, results);
@@ -61,7 +61,7 @@ function Head({
   };
 
   useEffect(() => {
-    console.log(currentUser);
+    console.log("Header ", user);
   });
 
   return (
@@ -97,8 +97,8 @@ function Head({
         </Menucontainer>
         <Wrapper>
           <SubContainer>
-            <Link to={currentUser?.user?.seller ? "/seller" : "/becomeSeller"}>
-              {currentUser?.user?.seller ? (
+            <Link to={user?.seller ? "/seller" : "/becomeSeller"}>
+              {user?.seller ? (
                 "SellerMode"
               ) : (
                 <p style={{ alignSelf: "center", marginBottom: 0 }}>
@@ -169,7 +169,7 @@ function Head({
                   },
                 }}
                 aria-label="avatar"
-                src={currentUser?.user?.profilePic}
+                src={user?.profilePic}
               ></Avatar>
             </IconButton>
           </ButtonContainer>
