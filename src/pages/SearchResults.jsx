@@ -54,6 +54,7 @@ const SearchResults = () => {
   return (
     <>
       <Header />
+
       <Container>
         <Box sx={{ flexGrow: 1 }}>
           <ThemeProvider

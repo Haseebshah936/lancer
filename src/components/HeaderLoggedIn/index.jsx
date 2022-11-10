@@ -8,14 +8,20 @@ import Modal from "@mui/material/Modal";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import MessageList from "./MessageList";
 import NotificationList from "./NotificationList";
+import UserOptions from "./UserOptions";
 
 function Header(props) {
   const [state, setState] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [anchor2, setAnchor2] = useState(null);
+  const [anchor3, setAnchor3] = useState(null);
 
   const toggleMessage = (event) => {
     setAnchor(event.currentTarget);
+  };
+
+  const toggleUserOptions = (event) => {
+    setAnchor3(event.currentTarget);
   };
 
   const toggleNotification = (event) => {
@@ -28,6 +34,10 @@ function Header(props) {
 
   const CloseList2 = () => {
     setAnchor2(null);
+  };
+
+  const CloseList3 = () => {
+    setAnchor3(null);
   };
 
   const toggleDrawer = (state) => {
@@ -51,6 +61,7 @@ function Header(props) {
         toggleLogin={handleToggle}
         toggleMessage={toggleMessage}
         toggleNotification={toggleNotification}
+        toggleUserOptions={toggleUserOptions}
       />
       <ResponsiveDrawer
         state={state}
@@ -59,6 +70,7 @@ function Header(props) {
       />
       <MessageList anchor={anchor} CloseList={CloseList} />
       <NotificationList anchor={anchor2} CloseList={CloseList2} />
+      <UserOptions anchor={anchor3} CloseList={CloseList3} />
 
       <Modal
         open={open}

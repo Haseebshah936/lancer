@@ -115,14 +115,7 @@ const Sidebar = () => {
             <nav>
               <CustomList>
                 <CustomListItem
-                  sx={{
-                    "&:hover": {
-                      backgroundColor: "inherit",
-                    },
-                  }}
-                  disablePadding
-                  button={true}
-                  disableRipple={true}
+                  sx={{ padding: 0 }}
                   onClick={() => {
                     navigate("/sellerdashboard");
                   }}
@@ -236,7 +229,7 @@ const Sidebar = () => {
                   </ListItemIcon>
                   <CustomListText primary="Settings" disableTypography={true} />
                 </CustomListItem>
-                <CustomListItem disablePadding>
+                <CustomListItem disablePadding onClick={logOut}>
                   <ListItemIcon>
                     <PowerSettingsNewOutlinedIcon
                       sx={{
@@ -246,11 +239,7 @@ const Sidebar = () => {
                       }}
                     />
                   </ListItemIcon>
-                  <CustomListText
-                    onClick={logOut}
-                    primary="Logout"
-                    disableTypography={true}
-                  />
+                  <CustomListText primary="Logout" disableTypography={true} />
                 </CustomListItem>
               </CustomList>
             </nav>

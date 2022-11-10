@@ -26,6 +26,7 @@ function Head({
   toggleLogin,
   toggleMessage,
   toggleNotification,
+  toggleUserOptions,
 }) {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
@@ -78,7 +79,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem" }}
+              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}
@@ -146,6 +147,7 @@ function Head({
             </IconButton>
             <IconButton>
               <Avatar
+                onClick={toggleUserOptions}
                 sx={{
                   height: "4rem",
                   width: "4rem",
@@ -182,7 +184,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem" }}
+              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}
