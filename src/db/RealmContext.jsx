@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import * as Realm from "realm-web";
 
@@ -21,6 +22,16 @@ export function RealmAppProvider({ appId, children }) {
   const [currentUser, setCurrentUser] = React.useState(realmApp.currentUser);
   const [user, setUser] = React.useState(null);
   // Wrap the base logIn function to save the logged in user in state
+
+  React.useEffect(() => {
+    if (!currentUser) return setUser(null);
+    axios
+      .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
+      .then((res) => {
+        setUser(res.data);
+      });
+  }, []);
+
   const logIn = React.useCallback(
     async (email, password, rest) => {
       // console.log(email, password);
