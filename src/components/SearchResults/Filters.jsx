@@ -7,6 +7,8 @@ import Modal from "@mui/material/Modal";
 import Button from "@mui/material/Button";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterAccordions from "./FilterAccordions";
+import PortfolioCardMobile from "../PortfolioCardMobile";
+import { teamImg } from "../../assets";
 
 const modalstyle = {
   textAlign: "center",
@@ -65,6 +67,7 @@ const Filters = ({
           </Typography>
         </Box>
       </Modal> */}
+
       <Accordions>
         <FilterAccordions
           handleAvail={handleAvail}

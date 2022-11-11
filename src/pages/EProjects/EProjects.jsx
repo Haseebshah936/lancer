@@ -8,10 +8,9 @@ import AllProjects from "../../components/EProject/AllProjects";
 import CompletedProjects from "../../components/EProject/CompletedProjects";
 import OngoingProjects from "../../components/EProject/OngoingProjects";
 import PendingProjects from "../../components/EProject/PendingProjects";
-import CancelledProjects from "../../components/EProject/CancelledProjects";
-// import Sidebar from "../../components/DashboardComponents/Sidebar";
-import Sidebar from "../../components/EProject/Sidebar";
-import Footer from "../../components/Footer/index";
+import CancelledProjects from "./../../components/EProject/CancelledProjects";
+import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Footer from "./../../components/Footer/index";
 
 export default function EProjects() {
   const [value, setValue] = React.useState(0);

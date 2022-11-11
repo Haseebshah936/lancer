@@ -9,6 +9,8 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { useRealmContext } from "../../db/RealmContext";
+import { useEffect } from "react";
 
 const Suggest = [
   { title: "Web Dev" },
@@ -26,9 +28,11 @@ function Head({
   toggleLogin,
   toggleMessage,
   toggleNotification,
+  toggleUserOptions,
 }) {
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
+  const { user } = useRealmContext();
 
   const handleOnSearch = (string, results) => {
     console.log(string, results);
@@ -57,6 +61,10 @@ function Head({
     );
   };
 
+  useEffect(() => {
+    console.log("Header ", user);
+  });
+
   return (
     <>
       <Container>
@@ -78,7 +86,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem" }}
+              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}
@@ -90,7 +98,15 @@ function Head({
         </Menucontainer>
         <Wrapper>
           <SubContainer>
-            <NavLink to="/home">SellerMode</NavLink>
+            <Link to={user?.seller ? "/seller" : "/becomeSeller"}>
+              {user?.seller ? (
+                "SellerMode"
+              ) : (
+                <p style={{ alignSelf: "center", marginBottom: 0 }}>
+                  Become&nbsp;a&nbsp;Seller
+                </p>
+              )}
+            </Link>
             <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
             <NavLink to="/sellerdashboard">Dashboard</NavLink>
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
@@ -146,6 +162,7 @@ function Head({
             </IconButton>
             <IconButton>
               <Avatar
+                onClick={toggleUserOptions}
                 sx={{
                   height: "4rem",
                   width: "4rem",
@@ -154,7 +171,7 @@ function Head({
                   },
                 }}
                 aria-label="avatar"
-                src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+                src={user?.profilePic}
               ></Avatar>
             </IconButton>
           </ButtonContainer>
@@ -182,7 +199,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem" }}
+              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}

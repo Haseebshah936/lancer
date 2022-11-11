@@ -12,6 +12,7 @@ import OngoingOrdersWidget from "../components/DashboardComponents/OngoingOrders
 import PastOrdersWidget from "../components/DashboardComponents/PastOrdersWidget";
 import { Button } from "@material-ui/core";
 import { useRealmContext } from "../db/RealmContext";
+import { Outlet } from "react-router-dom";
 
 const SellerDashboard = () => {
   const { currentUser } = useRealmContext();
@@ -63,79 +64,7 @@ const SellerDashboard = () => {
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Grid
-                  item
-                  container
-                  columnSpacing={2}
-                  rowSpacing={2}
-                  style={{
-                    paddingRight: "5px",
-                    marginRight: "-5px",
-                    paddingBottom: "5px",
-                    marginBottom: "-5px",
-                    overflow: "hidden",
-                  }}
-                >
-                  <Grid
-                    item
-                    rowSpacing={2}
-                    laptop={5}
-                    desktop={4}
-                    tablet={5}
-                    mobile={12}
-                  >
-                    <StatCardWidget />
-                  </Grid>
-                  <Grid
-                    item
-                    rowSpacing={2}
-                    laptop={5}
-                    desktop={4}
-                    tablet={5}
-                    mobile={12}
-                  >
-                    <StatCardWidget Heading="Task Completed" Value={30} />
-                  </Grid>
-                  <Grid
-                    item
-                    rowSpacing={2}
-                    laptop={5}
-                    desktop={4}
-                    tablet={5}
-                    mobile={12}
-                  >
-                    <StatCardWidget Heading="Reviews" Value={30} />
-                  </Grid>
-                  <Grid item container columnSpacing={2} rowSpacing={2}>
-                    <Grid
-                      item
-                      rowSpacing={2}
-                      laptop={12}
-                      desktop={8}
-                      tablet={12}
-                      mobile={12}
-                    >
-                      <LineGraphWidget />
-                    </Grid>
-                    <Grid
-                      item
-                      rowSpacing={2}
-                      laptop={12}
-                      desktop={4}
-                      tablet={12}
-                      mobile={12}
-                    >
-                      <RadialChartWidget />
-                    </Grid>
-                  </Grid>
-
-                  <Grid item rowSpacing={2} mobile={12}>
-                    <OngoingOrdersWidget />
-                  </Grid>
-                  <Grid item rowSpacing={2} mobile={12}>
-                    <PastOrdersWidget />
-                  </Grid>
-                </Grid>
+                <Outlet />
               </Grid>
             </Grid>
           </ThemeProvider>

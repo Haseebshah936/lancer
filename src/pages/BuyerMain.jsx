@@ -55,7 +55,7 @@ const BuyerMain = () => {
   return (
     <>
       <Header />
-      <Button
+      {/* <Button
         onClick={async () => {
           const result = await collection.insertOne({
             name: "lily of the valley",
@@ -69,7 +69,7 @@ const BuyerMain = () => {
         }}
       >
         Hello
-      </Button>
+      </Button> */}
       <TopSlider />
       <MPGigSlider />
       <GigsYML />

@@ -2,7 +2,9 @@ import React from "react";
 import PortfolioCard from "../PortfolioCard";
 import Grid from "@mui/material/Grid";
 import { teamImg } from "../../assets";
-import { Pagination } from "@mui/material";
+import PortfolioCardMobile from "../PortfolioCardMobile";
+import styled from "styled-components";
+import { mobile } from "../../responsive";
 
 const SearchGrid = ({ data }) => {
   return (
@@ -18,19 +20,36 @@ const SearchGrid = ({ data }) => {
             rowspacing={2}
             columnSpacing={2}
           >
-            <PortfolioCard
-              count={c}
-              GigImage={teamImg}
-              Avatar={
-                "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-              }
-              SellerName={"Muhammad Haseeb"}
-              SellerLevel={"Level Rana Seller"}
-              GigTitle={"I will assassinate Talha and Umer with pressure"}
-              SellerRating={"5.0"}
-              GigReviewsTotal={"33"}
-              GigStartPrice={"$50"}
-            />
+            <Laptop>
+              <PortfolioCard
+                count={c}
+                GigImage={teamImg}
+                Avatar={
+                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+                }
+                SellerName={"Muhammad Haseeb"}
+                SellerLevel={"Level Rana Seller"}
+                GigTitle={"I will assassinate Talha and Umer with pressure"}
+                SellerRating={"5.0"}
+                GigReviewsTotal={"33"}
+                GigStartPrice={"$50"}
+              />
+            </Laptop>
+
+            <Mobile>
+              <PortfolioCardMobile
+                GigTitle={"I will assassinate Talha and Umer with pressure"}
+                SellerRating={"5.0"}
+                GigReviewsTotal={"33"}
+                GigImage={teamImg}
+                Avatar={
+                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+                }
+                SellerName={"Muhammad Haseeb"}
+                SellerLevel={"Level Rana Seller"}
+                GigStartPrice={"$50"}
+              />
+            </Mobile>
           </Grid>
         ))}
       </Grid>
@@ -39,3 +58,12 @@ const SearchGrid = ({ data }) => {
 };
 
 export default SearchGrid;
+
+const Mobile = styled.div`
+  display: none;
+  ${mobile({ display: "initial" })}
+`;
+
+const Laptop = styled.div`
+  ${mobile({ display: "none" })}
+`;

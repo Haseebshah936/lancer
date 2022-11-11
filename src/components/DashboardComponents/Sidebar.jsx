@@ -2,7 +2,7 @@ import * as React from "react";
 import Paper from "@mui/material/Paper";
 
 import colors from "../../utils/colors";
-
+import { useNavigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import * as styled2 from "styled-components";
 import { styled } from "@mui/material/styles";
@@ -51,6 +51,7 @@ const CustomListItem = styled(ListItem)({
 });
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const { logOut } = useRealmContext();
   return (
     <>
@@ -113,7 +114,12 @@ const Sidebar = () => {
           >
             <nav>
               <CustomList>
-                <CustomListItem disablePadding>
+                <CustomListItem
+                  sx={{ padding: 0 }}
+                  onClick={() => {
+                    navigate("/sellerdashboard");
+                  }}
+                >
                   <ListItemIcon>
                     <DashboardOutlinedIcon
                       sx={{
@@ -141,21 +147,23 @@ const Sidebar = () => {
                   </ListItemIcon>
                   <CustomListText primary="Projects" disableTypography={true} />
                 </CustomListItem>
-                <CustomListItem disablePadding>
-                  <ListItemIcon>
-                    <FavoriteBorderOutlinedIcon
-                      sx={{
-                        color: colors.textGreen,
-                        fontSize: "2.2rem",
-                        cursor: "pointer",
-                      }}
+                <NavLink to="/sellerdashboard/favourites">
+                  <CustomListItem disablePadding>
+                    <ListItemIcon>
+                      <FavoriteBorderOutlinedIcon
+                        sx={{
+                          color: colors.textGreen,
+                          fontSize: "2.2rem",
+                          cursor: "pointer",
+                        }}
+                      />
+                    </ListItemIcon>
+                    <CustomListText
+                      primary="Favourites"
+                      disableTypography={true}
                     />
-                  </ListItemIcon>
-                  <CustomListText
-                    primary="Favourites"
-                    disableTypography={true}
-                  />
-                </CustomListItem>
+                  </CustomListItem>
+                </NavLink>
                 <CustomListItem disablePadding>
                   <ListItemIcon>
                     <StarOutlineOutlinedIcon
@@ -221,7 +229,7 @@ const Sidebar = () => {
                   </ListItemIcon>
                   <CustomListText primary="Settings" disableTypography={true} />
                 </CustomListItem>
-                <CustomListItem disablePadding>
+                <CustomListItem disablePadding onClick={logOut}>
                   <ListItemIcon>
                     <PowerSettingsNewOutlinedIcon
                       sx={{
@@ -231,11 +239,7 @@ const Sidebar = () => {
                       }}
                     />
                   </ListItemIcon>
-                  <CustomListText
-                    onClick={logOut}
-                    primary="Logout"
-                    disableTypography={true}
-                  />
+                  <CustomListText primary="Logout" disableTypography={true} />
                 </CustomListItem>
               </CustomList>
             </nav>

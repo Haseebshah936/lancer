@@ -35,29 +35,10 @@ import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-//EmployerSide
-import EDashborad from "./pages/EDashboard/EDashboard";
-import EProjects from "./pages/EProjects/EProjects";
-import EFavourites from './pages/EFavourites/EFavourites';
-import EReviews from './pages/EReviews/EReviews';
-import EMessages from './pages/EMessages/EMessages';
-import ETeams from "./pages/ETeams/ETeams";
-import EPayments from './pages/EPayments/EPayments';
-import ESettings from "./pages/ESettings/ESettings";
-//FreeLancerSide
-import FDashboard from './pages/FDashboard/FDashboard';
-import FProjects from "./pages/FProjects/FProjects";
-import Favourites from './pages/FFavourites/FFavourites';
-import FReviews from './pages/FReviews/FReviews';
-import FMessages from './pages/FMessages/FMessages';
-import FTeams from "./pages/FTeams/FTeams";
-import FPayments from './pages/FPayments/FPayments';
-import FSettings from "./pages/FSettings/FSettings";
-import FGigs from "./pages/FGigs/FGigs";
-
 
 function App(props) {
   const [open, setOpen] = useState(false);
+
   return (
     <CustomContextProvider value={{ open, setOpen }}>
       <Router>
@@ -73,7 +54,10 @@ function App(props) {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/buyermain" element={<BuyerMain />} />
-            <Route path="/sellerdashboard" element={<SellerDashboard />} />
+            <Route path="/sellerdashboard" element={<SellerDashboard />}>
+              <Route path="favourites" element={<Favourites />} />
+              <Route index element={<Dashboard />} />
+            </Route>
             <Route path="/chat/:id" element={<Chat />} />
             <Route
               path="/gig/gigserviceintroduction"
@@ -127,7 +111,7 @@ function App(props) {
       </Router>
       <ToastContainer
         position="top-right"
-        autoClose={5000}
+        autoClose={2000}
         hideProgressBar={false}
         newestOnTop={false}
         closeOnClick

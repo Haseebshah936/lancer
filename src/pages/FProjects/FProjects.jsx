@@ -9,11 +9,16 @@ import CancelledProjects from "../../components/FProject/CancelledProjects";
 import CompletedProjects from "../../components/FProject/CompletedProjects";
 import MyPerposals from "../../components/FProject/MyPerposals";
 import OnGoingProjects from "../../components/FProject/OnGoingProjects";
+<<<<<<< HEAD:src/pages/FProjects/FProjects.jsx
 import FSideBar from "../../pages/FSideBar/FSideBar";
 
 // import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 import Footer from "../../components/Footer/index";
+=======
+import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Footer from "./../../components/Footer/index";
+>>>>>>> 72fe9d166c67e3fc99c778a4f2199a7b556de522:src/pages/FreelancerProjects/FProjects.jsx
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
