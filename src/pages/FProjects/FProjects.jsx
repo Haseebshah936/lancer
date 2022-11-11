@@ -4,15 +4,18 @@ import Styled from "styled-components";
 import Header from "../../components/Header";
 import colors from "../../utils/colors";
 import { allProject } from "../../utils/EProjectsData";
-import AllProjects from "../../components/EProject/AllProjects";
-import CompletedProjects from "../../components/EProject/CompletedProjects";
-import OngoingProjects from "../../components/EProject/OngoingProjects";
-import PendingProjects from "../../components/EProject/PendingProjects";
-import CancelledProjects from "./../../components/EProject/CancelledProjects";
-import Sidebar from "../../components/SellerDashboard/Sidebar";
-import Footer from "./../../components/Footer/index";
+import AvalibleProjects from "../../components/FProject/AvalibleProjects";
+import CancelledProjects from "../../components/FProject/CancelledProjects";
+import CompletedProjects from "../../components/FProject/CompletedProjects";
+import MyPerposals from "../../components/FProject/MyPerposals";
+import OnGoingProjects from "../../components/FProject/OnGoingProjects";
+import FSideBar from "../../pages/FSideBar/FSideBar";
 
-export default function EProjects() {
+// import Sidebar from "../../components/DashboardComponents/Sidebar";
+
+import Footer from "../../components/Footer/index";
+
+export default function FProjects() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -25,7 +28,7 @@ export default function EProjects() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <Sidebar></Sidebar>
+              <FSideBar></FSideBar>
             </Grid>
             <Grid
               item
@@ -59,11 +62,11 @@ export default function EProjects() {
                   //   indicatorColor={colors.becomePartnerGreen}
                 >
                   <Tab
-                    label="All Projects"
+                    label="Avalible Perposals"
                     style={{ color: colors.black, fontWeight: "bold" }}
                   />
                   <Tab
-                    label="Pending Projects"
+                    label="My Perposals"
                     style={{ color: colors.black, fontWeight: "bold" }}
                   />
                   <Tab
@@ -82,12 +85,12 @@ export default function EProjects() {
               </Box>
               <Grid container>
                 <Grid item xs={12} display="flex" justifyContent={"center"}>
-                  {value === 0 && <AllProjects data={allProject}></AllProjects>}
-                  {value === 1 && (
-                    <PendingProjects data={allProject}></PendingProjects>
+                  {value === 0 && (
+                    <AvalibleProjects data={allProject}></AvalibleProjects>
                   )}
+                  {value === 1 && <MyPerposals data={allProject}></MyPerposals>}
                   {value === 2 && (
-                    <OngoingProjects data={allProject}></OngoingProjects>
+                    <OnGoingProjects data={allProject}></OnGoingProjects>
                   )}
                   {value === 3 && (
                     <CompletedProjects data={allProject}></CompletedProjects>

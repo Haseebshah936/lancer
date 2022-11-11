@@ -8,6 +8,8 @@ import {
   MenuItem,
   FormControl,
 } from "@mui/material";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import Joi from "joi-browser";
 import React from "react";
 import Footer from "../../components/Footer";
@@ -126,6 +128,14 @@ const DropDownComp = ({ list, label, value, onChange, error }) => {
 };
 
 export default function GigMyServicePlanning() {
+  const location = useLocation();
+  const [gData, setgData] = useState({});
+  React.useEffect(() => {
+    console.log("gdata", {
+      ...gData,
+      gigIntroduction: location.state.gdata?.gigIntroduction,
+    });
+  }, []);
   const [basicPlan, setBasicPlan] = React.useState({
     title: "",
     description: "",

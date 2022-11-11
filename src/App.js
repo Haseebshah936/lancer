@@ -20,19 +20,41 @@ import SearchResults from "./pages/SearchResults";
 import BuyerMain from "./pages/BuyerMain";
 import SellerDashboard from "./pages/SellerDashboard";
 
+import PInfoExperienceAndEducation from "./pages/Pinfo/PInfoExperienceAndEducation";
+import PInfoPersonalDetailsAndSkills from "./pages/Pinfo/PInfoPersonalDetailsAndSkills";
+
 import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
 import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
 import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 import PostProject from "./pages/PostProject/PostProject";
 import Chat from "./pages/Chat";
-import EProjects from "./pages/EmployerProjects/EProjects";
-import FProjects from "./pages/FreelancerProjects/FProjects";
+
 import PrivateRoutes from "./Routes/PrivateRoutes";
 import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//EmployerSide
+import EDashborad from "./pages/EDashboard/EDashboard";
+import EProjects from "./pages/EProjects/EProjects";
+import EFavourites from './pages/EFavourites/EFavourites';
+import EReviews from './pages/EReviews/EReviews';
+import EMessages from './pages/EMessages/EMessages';
+import ETeams from "./pages/ETeams/ETeams";
+import EPayments from './pages/EPayments/EPayments';
+import ESettings from "./pages/ESettings/ESettings";
+//FreeLancerSide
+import FDashboard from './pages/FDashboard/FDashboard';
+import FProjects from "./pages/FProjects/FProjects";
+import Favourites from './pages/FFavourites/FFavourites';
+import FReviews from './pages/FReviews/FReviews';
+import FMessages from './pages/FMessages/FMessages';
+import FTeams from "./pages/FTeams/FTeams";
+import FPayments from './pages/FPayments/FPayments';
+import FSettings from "./pages/FSettings/FSettings";
+import FGigs from "./pages/FGigs/FGigs";
+
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -69,12 +91,35 @@ function App(props) {
               path="/gig/gigquestionapage"
               element={<GigQuestionAPage />}
             />
+
+            <Route path="/pdetails" element={<PInfoPersonalDetailsAndSkills />} />
+            <Route path="/pexperience" element={<PInfoExperienceAndEducation />} />
+
             <Route path="/postProject" element={<PostProject />} />
+            <Route path="/e/dashboard" element={<EDashborad />} />
+            <Route path="/e/projects" element={<EProjects />} />
+            <Route path="/e/favourites" element={<EFavourites />} />
+            <Route path="/e/reviews" element={<EReviews />} />
+            <Route path="/e/messages" element={<EMessages />} />
+            <Route path="/e/teams" element={<ETeams />} />
+            <Route path="/e/payments" element={<EPayments />} />
+            <Route path="/e/settings" element={<ESettings />} />
+
+            <Route path="/f/dashboard" element={<FDashboard />} />
+            <Route path="/f/gigs" element={<FGigs />} />
+            <Route path="/f/projects" element={<FProjects />} />
+            <Route path="/f/favourites" element={<Favourites />} />
+            <Route path="/f/reviews" element={<FReviews />} />
+            <Route path="/f/messages" element={<FMessages />} />
+            <Route path="/f/teams" element={<FTeams />} />
+            <Route path="/f/payments" element={<FPayments />} />
+            <Route path="/f/settings" element={<FSettings />} />
+
+
           </Route>
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
-          <Route path="/eprojects/:id" element={<EProjects />} />
-          <Route path="/fprojects/:id" element={<FProjects />} />
+
 
           <Route path="/" element={<Navigate to="/home" replace />} />
           {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}

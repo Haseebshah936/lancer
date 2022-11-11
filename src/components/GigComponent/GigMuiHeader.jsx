@@ -6,6 +6,7 @@ import Stepper from "@mui/material/Stepper";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Typography from "@mui/material/Typography";
+import colors from "./../../utils/colors";
 
 const steps = [
   "Service Introduction",
@@ -42,7 +43,26 @@ export default function GigMuiHeader() {
       <Grid item xs={12} sm={6}>
         <Box sx={{ width: "100%" }} className="mt-5 mb-5">
           <Box sx={{ width: "100" }}>
-            <Stepper activeStep={activeStepValue} alternativeLabel>
+            <Stepper
+              activeStep={activeStepValue}
+              alternativeLabel
+              sx={{
+                "& .MuiStepLabel-root .Mui-completed": {
+                  color: colors.becomePartnerGreen, // circle color (COMPLETED)
+                },
+                "& .MuiStepLabel-label.Mui-completed.MuiStepLabel-alternativeLabel":
+                  {
+                    color: colors.becomePartnerGreen, // Just text label (COMPLETED)
+                  },
+                "& .MuiStepLabel-root .Mui-active": {
+                  color: colors.becomePartnerGreen, // circle color (ACTIVE)
+                },
+
+                "& .MuiStepLabel-root .Mui-active .MuiStepIcon-text": {
+                  fill: "white", // circle's number (ACTIVE)
+                },
+              }}
+            >
               {steps.map((label) => (
                 <Step key={label}>
                   <StepLabel>{label}</StepLabel>

@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Joi from "joi-browser";
+import { useLocation } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 import { Box, Grid } from "@mui/material";
 import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
@@ -12,8 +13,11 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 export default function GigMediaAttachment() {
+  const [gdata, setGdata] = React.useState({});
   const [images, setImages] = React.useState([]);
   const [errors, setErrors] = React.useState({});
+  const location = useLocation();
+
   const schema = {
     images: Joi.array().items().min(1).label("Images"),
   };
@@ -32,9 +36,17 @@ export default function GigMediaAttachment() {
   const maxNumber = 3;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
-    console.log(imageList, addUpdateIndex);
+    // console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
+  useEffect(() => {
+    console.log("media Images:", images);
+  }, [images]);
+  useEffect(() => {
+    // console.log("media Location:", { ...location.state.gData });
+    setGdata({ gigIntroduction: location.state.gData });
+    console.log("gdata at mt", gdata);
+  }, []);
 
   return (
     <div style={{ width: "100vw" }}>
@@ -48,6 +60,10 @@ export default function GigMediaAttachment() {
         title="Add/ edit Services"
         pathName="/gig/gigmyservicepricning"
         validate={validate}
+        gData={{
+          gigMediaAttachment: images,
+          gigIntroduction: { ...location.state },
+        }}
       ></GigNavigationBar>
       <Grid container display="flex" justifyContent="center" paddingTop="10px">
         <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>

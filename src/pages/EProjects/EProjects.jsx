@@ -4,15 +4,16 @@ import Styled from "styled-components";
 import Header from "../../components/Header";
 import colors from "../../utils/colors";
 import { allProject } from "../../utils/EProjectsData";
-import AvalibleProjects from "../../components/FProject/AvalibleProjects";
-import CancelledProjects from "../../components/FProject/CancelledProjects";
-import CompletedProjects from "./../../components/FProject/CompletedProjects";
-import MyPerposals from "../../components/FProject/MyPerposals";
-import OnGoingProjects from "../../components/FProject/OnGoingProjects";
-import Sidebar from "../../components/SellerDashboard/Sidebar";
-import Footer from "./../../components/Footer/index";
+import AllProjects from "../../components/EProject/AllProjects";
+import CompletedProjects from "../../components/EProject/CompletedProjects";
+import OngoingProjects from "../../components/EProject/OngoingProjects";
+import PendingProjects from "../../components/EProject/PendingProjects";
+import CancelledProjects from "../../components/EProject/CancelledProjects";
+// import Sidebar from "../../components/DashboardComponents/Sidebar";
+import Sidebar from "../../components/EProject/Sidebar";
+import Footer from "../../components/Footer/index";
 
-export default function FProjects() {
+export default function EProjects() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
@@ -59,11 +60,11 @@ export default function FProjects() {
                   //   indicatorColor={colors.becomePartnerGreen}
                 >
                   <Tab
-                    label="Avalible Perposals"
+                    label="All Projects"
                     style={{ color: colors.black, fontWeight: "bold" }}
                   />
                   <Tab
-                    label="My Perposals"
+                    label="Pending Projects"
                     style={{ color: colors.black, fontWeight: "bold" }}
                   />
                   <Tab
@@ -82,12 +83,12 @@ export default function FProjects() {
               </Box>
               <Grid container>
                 <Grid item xs={12} display="flex" justifyContent={"center"}>
-                  {value === 0 && (
-                    <AvalibleProjects data={allProject}></AvalibleProjects>
+                  {value === 0 && <AllProjects data={allProject}></AllProjects>}
+                  {value === 1 && (
+                    <PendingProjects data={allProject}></PendingProjects>
                   )}
-                  {value === 1 && <MyPerposals data={allProject}></MyPerposals>}
                   {value === 2 && (
-                    <OnGoingProjects data={allProject}></OnGoingProjects>
+                    <OngoingProjects data={allProject}></OngoingProjects>
                   )}
                   {value === 3 && (
                     <CompletedProjects data={allProject}></CompletedProjects>

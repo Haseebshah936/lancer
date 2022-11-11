@@ -24,7 +24,6 @@ import Footer from "../../components/Footer";
 export default function GigServiceIntroduction() {
   const location = useLocation();
   const [pathName, setPathName] = React.useState(location.pathname);
-
   const [gigIntroduction, setGigIntroduction] = useState({
     gigTitle: "",
     gigCategory: "",
@@ -93,7 +92,7 @@ export default function GigServiceIntroduction() {
         title="Add/ Edit service"
         pathName="/gig/gigmediaattachment"
         validate={validate}
-        sData={gigIntroduction}
+        gData={gigIntroduction}
       ></GigNavigationBar>
       {/* Service Introduction*/}
       <Grid container display="flex" justifyContent="center" paddingTop="10px">
