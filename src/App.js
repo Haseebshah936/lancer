@@ -60,17 +60,11 @@ function App(props) {
             </Route>
             <Route path="/chat/:id" element={<Chat />} />
             <Route
-              path="/gig/gigserviceintroduction"
+              path="/gig/introduction"
               element={<GigServiceIntroduction />}
             />
-            <Route
-              path="/gig/gigmediaattachment"
-              element={<GigMediaAttachment />}
-            />
-            <Route
-              path="/gig/gigmyservicepricning"
-              element={<GigMyServicePricing />}
-            />
+            <Route path="/gig/attachment" element={<GigMediaAttachment />} />
+            <Route path="/gig/pricing" element={<GigMyServicePricing />} />
             <Route
               path="/gig/gigquestionapage"
               element={<GigQuestionAPage />}
