@@ -13,7 +13,11 @@ import { CountryNAME } from "./../../utils/Countries";
 import { currencies } from "./../../utils/currencies";
 import defaultImage from "./../../utils/ProfilePicDemo.webp";
 import colors from "./../../utils/colors";
+import Footer from "../../components/Footer";
+import axios from "axios";
+import { useRealmContext } from "../../db/RealmContext";
 export default function CompleteProfile() {
+  const { user } = useRealmContext();
   const [profileVar, setProfileVar] = useState({
     name: "",
     profilePic: "",
@@ -24,6 +28,28 @@ export default function CompleteProfile() {
   const fileSelect = useRef(null);
   const [image, setImage] = useState();
   const [progress, setProgress] = useState(0);
+
+  const handelNext = () => {
+    setProfileVar({
+      ...profileVar,
+      profilePic: image,
+    });
+    console.log(profileVar);
+    console.log(user?._id);
+    axios
+      .put(
+        `http://localhost:3003/api/user/updateProfile/${user._id}`,
+        profileVar
+      )
+      .then((response) => {
+        console.log("success");
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log("error in complete profile");
+        console.log(error);
+      });
+  };
 
   async function handleImageUpload() {
     if (fileSelect) {
@@ -170,7 +196,9 @@ export default function CompleteProfile() {
                     }
                   >
                     {CountryNAME.map((country) => (
-                      <MenuItem value={country.label}>{country.label}</MenuItem>
+                      <MenuItem key={country.label} value={country.label}>
+                        {country.label}
+                      </MenuItem>
                     ))}
                   </Select>
                 </Box>
@@ -191,46 +219,79 @@ export default function CompleteProfile() {
                     }
                   >
                     {currencies.map((currency) => (
-                      <MenuItem value={currency.code}>{currency.code}</MenuItem>
+                      <MenuItem key={currency.code} value={currency.code}>
+                        {currency.code}
+                      </MenuItem>
                     ))}
                   </Select>
                 </Box>
               </Grid>
+              <Grid item xs={12} mx={1}>
+                <p
+                  className="mt-2 mb-1"
+                  style={{ fontSize: "1.8rem", fontWeight: "600" }}
+                >
+                  Upload Picture
+                </p>
+              </Grid>
               <Grid item xs={12} mx={1} my={1} className="overflow-hidden">
                 <div ref={dropbox}>
                   {image ? (
-                    <DashedBox className="border rounded" width="100%">
+                    <Box
+                      display={"flex"}
+                      justifyContent={{ xs: "center", md: "flex-start" }}
+                    >
                       <div>
                         <img
-                          className="rounded"
+                          className="rounded overflow-hidden"
                           src={image.replace("upload/", "upload/w_600/")}
-                          style={{ height: 200, width: 200 }}
+                          style={{
+                            height: 200,
+                            width: 200,
+                            boxShadow:
+                              "rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px",
+                          }}
                         />
-                        <div className="d-flex justify-centent-center align-items-center mt-2 ">
+                        <div className="d-flex justify-centent-center align-items-center mt-2">
                           <Button
                             variant="contained"
                             onClick={handleCancel}
-                            sx={{ backgroundColor: colors.becomePartnerGreen }}
+                            sx={{
+                              backgroundColor: colors.becomePartnerGreen,
+                              width: "200px",
+                            }}
                           >
-                            Cancel
-                          </Button>
-                          <Button
-                            variant="contained"
-                            onClick={handleSave}
-                            sx={{ backgroundColor: colors.becomePartnerGreen }}
-                          >
-                            Save
+                            Change
                           </Button>
                         </div>
                       </div>
-                    </DashedBox>
+                    </Box>
                   ) : (
-                    <div
-                      className="bg-gray-200 border rounded d-flex justify-content-center align-items-center "
+                    <DashedBox
+                      className="bg-gray-200 rounded d-flex justify-content-center align-items-center "
                       //   style={{ height: 400, width: 600 }}
                     >
                       <form className="d-flex justify-content-center align-items-center">
                         {progress === 0 ? (
+                          <div className="text-gray-700 text-center mt-5">
+                            <p style={{ fontSize: "1.5rem" }}>
+                              Drag and Drop Profile Image here
+                            </p>
+                            <p style={{ fontSize: "1.5rem" }} className="my-2">
+                              or
+                            </p>
+                            <Button
+                              variant="contained"
+                              onClick={handleImageUpload}
+                              sx={{
+                                backgroundColor: colors.becomePartnerGreen,
+                              }}
+                              className="mb-5"
+                            >
+                              Browse
+                            </Button>
+                          </div>
+                        ) : (
                           <div className="text-gray-700 text-center mt-5">
                             <p style={{ fontSize: "1.4rem" }}>
                               Drag and Drop Profile Image here
@@ -249,8 +310,6 @@ export default function CompleteProfile() {
                               Browse
                             </Button>
                           </div>
-                        ) : (
-                          <span className="text-gray-700">{progress}%</span>
                         )}
 
                         <input
@@ -261,7 +320,7 @@ export default function CompleteProfile() {
                           onChange={(e) => handleFiles(e.target.files)}
                         />
                       </form>
-                    </div>
+                    </DashedBox>
                   )}
                 </div>
               </Grid>
@@ -269,6 +328,20 @@ export default function CompleteProfile() {
           </Grid>
         </Grid>
       </Grid>
+      {/* Next Screen Button */}
+      <Grid container>
+        <Grid item xs={12} className="d-flex justify-content-center">
+          <Button
+            variant="contained"
+            sx={{ backgroundColor: colors.becomePartnerGreen, width: "200px" }}
+            onClick={handelNext}
+            className="mb-5"
+          >
+            Save&nbsp;and&nbsp;Continue
+          </Button>
+        </Grid>
+      </Grid>
+      <Footer></Footer>
     </div>
   );
 }

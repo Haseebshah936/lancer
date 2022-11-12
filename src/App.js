@@ -57,6 +57,8 @@ import FGigs from "./pages/FGigs/FGigs";
 import Dashboard from './components/SellerDashboardRenders/Dashboard';
 import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
+import TempPage from "./pages/TempPage/TempPage";
+
 function App(props) {
   const [open, setOpen] = useState(false);
 
@@ -125,8 +127,7 @@ function App(props) {
           </Route>
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
-
-
+          <Route path="/temp" element={<TempPage />} />
           <Route path="/" element={<Navigate to="/home" replace />} />
           {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
         </Routes>
