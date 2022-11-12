@@ -23,6 +23,15 @@ export const packages = [
         active: true,
       },
       {
+        title: "Include source code",
+        active: true,
+      },
+      {
+        title: "Revisions",
+        quantity: 1,
+        active: true,
+      },
+      {
         title: "revisions",
         quantity: 2,
         active: true,
