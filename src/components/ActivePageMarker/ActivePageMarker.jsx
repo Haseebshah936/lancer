@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import colors from "../../utils/colors";
 
 export default function ActivePageMarker() {
   return (
@@ -12,6 +13,6 @@ export default function ActivePageMarker() {
 const Div = styled.div`
   width: 0.23rem;
   height: 2.8rem;
-  background-color: #e85651;
+  background-color: ${colors.becomePartnerGreen};
   margin-right: 1.5rem;
 `;

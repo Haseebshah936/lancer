@@ -35,6 +35,27 @@ import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+//EmployerSide
+import EDashborad from "./pages/EDashboard/EDashboard";
+import EProjects from "./pages/EProjects/EProjects";
+import EFavourites from './pages/EFavourites/EFavourites';
+import EReviews from './pages/EReviews/EReviews';
+import EMessages from './pages/EMessages/EMessages';
+import ETeams from "./pages/ETeams/ETeams";
+import EPayments from './pages/EPayments/EPayments';
+import ESettings from "./pages/ESettings/ESettings";
+//FreeLancerSide
+import FDashboard from './pages/FDashboard/FDashboard';
+import FProjects from "./pages/FProjects/FProjects";
+import Favourites from './pages/FFavourites/FFavourites';
+import FReviews from './pages/FReviews/FReviews';
+import FMessages from './pages/FMessages/FMessages';
+import FTeams from "./pages/FTeams/FTeams";
+import FPayments from './pages/FPayments/FPayments';
+import FSettings from "./pages/FSettings/FSettings";
+import FGigs from "./pages/FGigs/FGigs";
+import Dashboard from './components/SellerDashboardRenders/Dashboard';
+import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -60,28 +81,35 @@ function App(props) {
             </Route>
             <Route path="/chat/:id" element={<Chat />} />
             <Route
-              path="/gig/introduction"
+              path="/gig/intro"
               element={<GigServiceIntroduction />}
             />
-            <Route path="/gig/attachment" element={<GigMediaAttachment />} />
-            <Route path="/gig/pricing" element={<GigMyServicePricing />} />
             <Route
-              path="/gig/gigquestionapage"
+              path="/gig/attachment"
+              element={<GigMediaAttachment />}
+            />
+            <Route
+              path="/gig/pricning"
+              element={<GigMyServicePricing />}
+            />
+            <Route
+              path="/gig/questions"
               element={<GigQuestionAPage />}
             />
 
-            <Route path="/pdetails" element={<PInfoPersonalDetailsAndSkills />} />
+            <Route path="/becomeSeller" element={<PInfoPersonalDetailsAndSkills />} />
+            <Route path="/cprofile" element={<CompleteProfile />}></Route>
             <Route path="/pexperience" element={<PInfoExperienceAndEducation />} />
 
             <Route path="/postProject" element={<PostProject />} />
-            <Route path="/e/dashboard" element={<EDashborad />} />
-            <Route path="/e/projects" element={<EProjects />} />
-            <Route path="/e/favourites" element={<EFavourites />} />
-            <Route path="/e/reviews" element={<EReviews />} />
-            <Route path="/e/messages" element={<EMessages />} />
-            <Route path="/e/teams" element={<ETeams />} />
-            <Route path="/e/payments" element={<EPayments />} />
-            <Route path="/e/settings" element={<ESettings />} />
+            <Route path="/s/dashboard" element={<EDashborad />} />
+            <Route path="/s/projects" element={<EProjects />} />
+            <Route path="/s/favourites" element={<EFavourites />} />
+            <Route path="/s/reviews" element={<EReviews />} />
+            <Route path="/s/messages" element={<EMessages />} />
+            <Route path="/s/teams" element={<ETeams />} />
+            <Route path="/s/payments" element={<EPayments />} />
+            <Route path="/s/settings" element={<ESettings />} />
 
             <Route path="/f/dashboard" element={<FDashboard />} />
             <Route path="/f/gigs" element={<FGigs />} />

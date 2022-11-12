@@ -48,7 +48,7 @@ export default function FGigs() {
               <TitleP>Active Gigs</TitleP>
               <div>
                 <Grid container>
-                  {gigs.map((gig) => (
+                  {gigs?.map((gig) => (
                     <Grid item xs={12} md={4}>
                       <Card sx={{ maxWidth: 250 }}>
                         <CardMedia
@@ -59,7 +59,7 @@ export default function FGigs() {
                         />
                         <CardContent>
                           <Typography gutterBottom variant="h5" component="div">
-                            Lizard
+                            Title
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
                             Lizards are a widespread group of squamate reptiles,
@@ -68,8 +68,9 @@ export default function FGigs() {
                           </Typography>
                         </CardContent>
                         <CardActions>
-                          <Button size="small">Share</Button>
-                          <Button size="small">Learn More</Button>
+                          <Button size="small">Edit</Button>
+                          <Button size="small">Delete</Button>
+                          <Button size="small">Disable</Button>
                         </CardActions>
                       </Card>
                     </Grid>

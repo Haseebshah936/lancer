@@ -12,6 +12,7 @@ import Button from "@mui/material/Button";
 import Select from "@mui/material/Select";
 import styled from "styled-components";
 import Autocomplete from "@mui/material/Autocomplete";
+import axios from "axios";
 
 import Head from "../../components/HeaderLoggedIn";
 import ActivePageMarker from "../../components/ActivePageMarker/ActivePageMarker";
@@ -23,33 +24,60 @@ import colors from "../../utils/colors";
 // import colors from "../../utils/colors";
 // import { height, width } from "@mui/system";
 import Footer from "./../../components/Footer/index";
+import { Years } from "../../utils/Years";
+import HeaderLoggedIn from "../../components/HeaderLoggedIn";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function PInfoPersonalDetailsAndSkills() {
-  const navigate = useNavigate();
+  const { user } = useRealmContext();
   const [gender, setGender] = React.useState("");
-  const [images, setImages] = React.useState([]);
   const [mySkills, setMySkill] = React.useState([]);
   const [mySkillName, setMySkillName] = React.useState("");
   const [mySkillPercentage, setMySkillPercentage] = React.useState("");
 
-  const [bannerimages, setBannerimages] = React.useState([]);
-
-  const maxNumber = 3;
-  const MaxBanners = 1;
-  const onChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
-    setImages(imageList);
-  };
-  const onBnnerChange = (imageList, addUpdateIndex) => {
-    // data for submit
-    console.log(imageList, addUpdateIndex);
-    setBannerimages(imageList);
-  };
-
   const handleChange = (event) => {
     setGender(event.target.value);
   };
+  const handelContinue = () => {
+    function extractValue(arr, prop) {
+      // extract value from property
+      let extractedValue = arr.map((item) => item[prop]);
+      return extractedValue;
+    }
+    const extractedSkills = extractValue(mySkills, "name");
+    const sData = {
+      about: about,
+      skills: extractedSkills,
+      education: educationArr.map((item) => {
+        return {
+          degree: item.educationTitle,
+          institute: item.instituteTitle,
+          starting: item.startingDate,
+          ending: item.endingDate,
+        };
+      }),
+      achivements: achivementsArr.map((item) => {
+        return {
+          title: item.achivementTitle,
+          description: item.description,
+          starting: item.startingDate,
+          ending: item.endingDate,
+        };
+      }),
+    };
+    console.log(sData);
+    console.log(user);
+    axios
+      .put(`http://localhost:3003/api/user/makeSeller/${user._id}`, sData)
+      .then((res) => {
+        console.log(res);
+        console.log("success seller created");
+      })
+      .catch((err) => {
+        console.log("unable to make seller");
+      });
+  };
+
   const addMySkillHandeler = () => {
     let temp = [...mySkills];
     temp.push({ name: mySkillName, percentage: mySkillPercentage });
@@ -63,6 +91,86 @@ export default function PInfoPersonalDetailsAndSkills() {
     temp = temp.filter((item) => item.name !== name);
     setMySkill(temp);
     console.log(name);
+  };
+
+  const navigate = useNavigate();
+
+  const [jobExpArr, setJobExpArr] = React.useState([]);
+  const [educationArr, setEducationArr] = React.useState([]);
+  const [achivementsArr, setAchivementsArr] = React.useState([]);
+
+  const [about, setAbout] = React.useState("");
+  const [eduVar, setEduVar] = React.useState({
+    instituteTitle: "",
+    startingDate: "",
+    endingDate: "",
+    educationTitle: "",
+  });
+  const [jobExperienceVar, setJobExperienceVar] = React.useState({
+    instituteTitle: "",
+    startingDate: "",
+    endingDate: "",
+    jobTitle: "",
+  });
+  const [achivementVar, setAchivementVar] = React.useState({
+    achivementTitle: "",
+    startingDate: "",
+    endingDate: "",
+    description: "",
+  });
+
+  React.useEffect(() => {
+    console.log("Ach vae", achivementVar);
+  }, [achivementVar]);
+
+  const [jobStartingDate, setJobStartingDate] = React.useState(null);
+  const [jobEndingDate, setJobEndingDate] = React.useState(null);
+  const [eduStartingDate, setEduStartingDate] = React.useState(null);
+  const [eduEndingDate, setEduEndingDate] = React.useState(null);
+
+  React.useEffect(() => {
+    console.log(jobExperienceVar);
+  }, [jobExperienceVar]);
+
+  React.useEffect(() => {
+    setJobExperienceVar({
+      ...jobExperienceVar,
+      startingDate: jobStartingDate?.label,
+    });
+
+    console.log(jobExperienceVar);
+  }, [jobStartingDate]);
+  React.useEffect(() => {
+    setJobExperienceVar({
+      ...jobExperienceVar,
+      endingDate: jobEndingDate?.label,
+    });
+
+    console.log(jobExperienceVar);
+  }, [jobEndingDate]);
+
+  React.useEffect(() => {
+    setEduVar({
+      ...eduVar,
+      endingDate: eduEndingDate?.label,
+    });
+    console.log(educationArr);
+  }, [eduEndingDate]);
+  React.useEffect(() => {
+    setEduVar({
+      ...eduVar,
+      startingDate: eduStartingDate?.label,
+    });
+    console.log(educationArr);
+  }, [eduStartingDate]);
+  const removeJobExpHandeler = (title) => {
+    setJobExpArr(jobExpArr.filter((item) => item.companyTitle !== title));
+  };
+  const removeEduExpHandeler = (title) => {
+    console.log(title);
+    setEducationArr(
+      educationArr.filter((item) => item.educationTitle !== title)
+    );
   };
 
   return (
@@ -88,7 +196,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                     <HeaderDiv>
                       <div className="ps-2 d-flex flex-row align-items-center">
                         <ActivePageMarker></ActivePageMarker>
-                        <HeaderP className="pt-1">Your Details</HeaderP>
+                        <HeaderP className="pt-1">About</HeaderP>
                       </div>
                     </HeaderDiv>
                   </div>
@@ -97,357 +205,29 @@ export default function PInfoPersonalDetailsAndSkills() {
               {/* Header End */}
               {/* Personal Details Start */}
               <div className="d-flex justify-content-center">
-                <BoxOuterDiv>
-                  <Grid container>
-                    <Grid item xs={12} sm={6} mt={1}>
-                      <div className="ms-2 me-2 mt-2">
-                        <Box sx={{ minWidth: 120 }}>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                              Age
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={gender}
-                              label="Gender"
-                              onChange={handleChange}
-                            >
-                              <MenuItem value={"male"}>Male</MenuItem>
-                              <MenuItem value={"Female"}>Female</MenuItem>
-                            </Select>
-                          </FormControl>
-                        </Box>
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} sm={6} mt={1}>
-                      <div className="ms-2 me-2 mt-2">
-                        <TextField
-                          fullWidth
-                          label="First Name"
-                          id="fullWidth"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} sm={6} mt={1}>
-                      <div className="ms-2 me-2 mt-2">
-                        <TextField fullWidth label="Last Name" id="fullWidth" />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} sm={6} mt={1}>
-                      <div className="ms-2 me-2 mt-2">
-                        <TextField
-                          fullWidth
-                          label="$ Your Service Hourly Rate"
-                          id="fullWidth"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} mt={1}>
-                      <div className="ms-2 me-2 mt-2">
-                        <TextField
-                          fullWidth
-                          label="Add Your Tagline Here"
-                          id="fullWidth"
-                        />
-                      </div>
-                    </Grid>
-                    <Grid item xs={12} mt={1}>
+                <>
+                  <Grid container display={"flex"} justifyContent={"center"}>
+                    <Grid item xs={10.5} mt={1}>
                       <div className="ms-2 me-2 mt-2">
                         <TextField
                           fullWidth
                           id="outlined-multiline-static"
-                          label="Description"
+                          label="About"
                           multiline
-                          rows={6}
+                          rows={10}
+                          value={about}
+                          onChange={(e) => {
+                            setAbout(e.target.value);
+                            console.log(about);
+                          }}
                           // defaultValue="Description"
                         />
                       </div>
                     </Grid>
                   </Grid>
-                </BoxOuterDiv>
+                </>
               </div>
-              {/* Personal Details End */}
-              {/* upload Profile Photos Box Starts */}
-              <div className="mt-4">
-                <div className="block"></div>
-                <Grid container display={"flex"} justifyContent={"center"}>
-                  <Grid item xs={12} sm={10.65}>
-                    <HeaderDiv>
-                      <div className="ps-2 d-flex flex-row align-items-center">
-                        <ActivePageMarker></ActivePageMarker>
-                        <HeaderP className="pt-1">Profile Photo</HeaderP>
-                      </div>
-                    </HeaderDiv>
-                  </Grid>
-                  <Grid item xs={12} sm={10.65}>
-                    <p className="mt-2 ms-3">
-                      Select and uplaod three photos that you want to show as
-                      your profile picture.
-                    </p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="d-flex flex-row">
-                      <UplaodButttonBox>
-                        <div>
-                          <ImageUploading
-                            multiple
-                            value={images}
-                            onChange={onChange}
-                            maxNumber={maxNumber}
-                            dataURLKey="data_url"
-                            acceptType={["jpg"]}
-                          >
-                            {({
-                              imageList,
-                              onImageUpload,
-                              onImageRemoveAll,
-                              onImageUpdate,
-                              onImageRemove,
-                              isDragging,
-                              dragProps,
-                            }) => (
-                              // write your building UI
-                              <div>
-                                <Button
-                                  variant="contained"
-                                  size="large"
-                                  style={{
-                                    backgroundColor: colors.becomePartnerGreen,
-                                    marginBottom: 10,
-                                  }}
-                                  onClick={onImageUpload}
-                                >
-                                  Select File
-                                </Button>
-                                <Grid
-                                  container
-                                  className="d-flex justify-content-center"
-                                >
-                                  {imageList.map((image, index) => (
-                                    <Grid item xm={12} sm={6} md={4}>
-                                      <div key={index}>
-                                        <ProfileImageDiv>
-                                          <img
-                                            src={image.data_url}
-                                            alt=""
-                                            width="150"
-                                          />
-                                        </ProfileImageDiv>
-                                        <div>
-                                          <Button
-                                            variant="contained"
-                                            size="small"
-                                            style={{
-                                              backgroundColor: "#00CC8D",
-                                              marginBottom: 10,
-                                            }}
-                                            className="ms-2"
-                                            onClick={() => onImageUpdate(index)}
-                                          >
-                                            Update
-                                          </Button>
-                                          <Button
-                                            variant="contained"
-                                            size="small"
-                                            style={{
-                                              backgroundColor: "#00CC8D",
-                                              marginBottom: 10,
-                                            }}
-                                            className="ms-md-4 ms-3"
-                                            onClick={() => onImageRemove(index)}
-                                          >
-                                            Remove
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    </Grid>
-                                  ))}
-                                </Grid>
-                              </div>
-                            )}
-                          </ImageUploading>
-                        </div>
-                        {images?.length > 0 ? (
-                          <div></div>
-                        ) : (
-                          <ProfileImageDiv>
-                            <div>
-                              <img
-                                src={profileImageTemplate}
-                                width="150px"
-                              ></img>
-                            </div>
-                          </ProfileImageDiv>
-                        )}
-                      </UplaodButttonBox>
-                    </div>
-                  </Grid>
-                </Grid>
-              </div>
-              {/* upload Profile Box Starts */}
-              {/* upload Banner Photo Box Starts */}
-              <div className="mt-4">
-                <div className="block"></div>
-                <Grid container display={"flex"} justifyContent={"center"}>
-                  <Grid item xs={12} sm={10.65}>
-                    <HeaderDiv>
-                      <div className="ps-2 d-flex flex-row align-items-center">
-                        <ActivePageMarker></ActivePageMarker>
-                        <HeaderP className="pt-1">Banner Photo</HeaderP>
-                      </div>
-                    </HeaderDiv>
-                  </Grid>
-                  <Grid item xs={12} sm={10.65}>
-                    <p className="mt-2 ms-3">
-                      Select and uplaod Banner photo that you want to show as
-                      your profile Banner.
-                    </p>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <div className="d-flex flex-row">
-                      <UplaodButttonBox>
-                        <div>
-                          <ImageUploading
-                            multiple
-                            value={bannerimages}
-                            onChange={onBnnerChange}
-                            maxNumber={MaxBanners}
-                            dataURLKey="data_url"
-                            acceptType={["jpg"]}
-                          >
-                            {({
-                              imageList,
-                              onImageUpload,
-                              onImageRemoveAll,
-                              onImageUpdate,
-                              onImageRemove,
-                            }) => (
-                              // write your building UI
-                              <div>
-                                <Button
-                                  variant="contained"
-                                  size="large"
-                                  style={{
-                                    backgroundColor: colors.becomePartnerGreen,
-                                    marginBottom: 10,
-                                  }}
-                                  onClick={onImageUpload}
-                                >
-                                  Select Banner Image
-                                </Button>
-                                <div>
-                                  {imageList.map((image, index) => (
-                                    <Grid item xm={12} sm={6} md={4}>
-                                      <div key={index}>
-                                        <BannerImageDiv>
-                                          <img src={image.data_url} alt="" />
-                                        </BannerImageDiv>
-                                        <div>
-                                          <Button
-                                            variant="contained"
-                                            size="small"
-                                            style={{
-                                              backgroundColor: "#00CC8D",
-                                              marginBottom: 10,
-                                            }}
-                                            className="ms-2"
-                                            onClick={() => onImageUpdate(index)}
-                                          >
-                                            Update
-                                          </Button>
-                                          <Button
-                                            variant="contained"
-                                            size="small"
-                                            style={{
-                                              backgroundColor: "#00CC8D",
-                                              marginBottom: 10,
-                                            }}
-                                            className="ms-md-4 ms-3"
-                                            onClick={() => onImageRemove(index)}
-                                          >
-                                            Remove
-                                          </Button>
-                                        </div>
-                                      </div>
-                                    </Grid>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
-                          </ImageUploading>
-                        </div>
-                        {bannerimages?.length > 0 ? (
-                          <div></div>
-                        ) : (
-                          <BannerImageDiv>
-                            <div>
-                              <img src={bannerImageTemplate}></img>
-                            </div>
-                          </BannerImageDiv>
-                        )}
-                      </UplaodButttonBox>
-                    </div>
-                  </Grid>
-                </Grid>
-              </div>
-              {/* upload Banner Photo Box Starts */}
-              {/* Select countries Box Starts */}
-              <div className="mt-4">
-                <div className="block"></div>
-                <Grid container display={"flex"} justifyContent={"center"}>
-                  <Grid item xs={12} sm={10.65}>
-                    <HeaderDiv>
-                      <div className="ps-2 d-flex flex-row align-items-center">
-                        <ActivePageMarker></ActivePageMarker>
-                        <HeaderP className="pt-1">Your Location</HeaderP>
-                      </div>
-                    </HeaderDiv>
-                  </Grid>
-                  <Grid
-                    item
-                    xs={12}
-                    className="pt-4 d-flex justify-content-center"
-                  >
-                    <Grid container>
-                      <Grid
-                        item
-                        xs={12}
-                        md={6}
-                        className="d-flex justify-content-center"
-                      >
-                        <CityNameDiv className="d-flex justify-content-center me-md-4 me-sm-4">
-                          <Autocomplete
-                            disablePortal
-                            id="combo-box-demo"
-                            options={CountryNAME}
-                            sx={{ width: 270 }}
-                            renderInput={(params) => (
-                              <TextField {...params} label="Country" />
-                            )}
-                          />
-                        </CityNameDiv>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={11}
-                        md={6}
-                        className="d-flex justify-content-center"
-                      >
-                        <CityNameDiv className="d-flex justify-content-center ms-5">
-                          <TextField
-                            id="outlined-basic"
-                            label="Enter City"
-                            variant="outlined"
-                            sx={{ width: 270 }}
-                          />
-                        </CityNameDiv>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </div>
-              {/* Select countries Box ends */}
+
               {/* Enter Skills Box Starts */}
               <div className="mt-4">
                 <div className="block"></div>
@@ -519,7 +299,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                     </Grid>
                   </Grid>
                   {/* SHOWING THE ADDED sKILLS */}
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sm={10}>
                     <Grid container className="mt-4">
                       <Grid item xs={12}>
                         {mySkills.map((skill, index) => (
@@ -539,7 +319,9 @@ export default function PInfoPersonalDetailsAndSkills() {
                               <Button
                                 variant="contained"
                                 size="small"
-                                style={{ backgroundColor: "#FF5852" }}
+                                style={{
+                                  backgroundColor: colors.becomePartnerGreen,
+                                }}
                                 className="me-5"
                                 sx={{ height: 30 }}
                                 onClick={() => {
@@ -558,44 +340,578 @@ export default function PInfoPersonalDetailsAndSkills() {
               </div>
               {/* Enter Skills Box Ends here */}
             </div>
-            <Grid conatiner display={"flex"} justifyContent={"center"}>
-              <Grid item xs={11.7} sm={10.65}>
-                <Box
-                  className="border rounded pt-1 pb-1 mt-2 mb-5 "
-                  style={{ width: "100%" }}
-                  display={"flex"}
-                  justifyContent={"center"}
-                >
-                  <Grid container display="flex" justifyContent="center">
-                    <Grid item sm={9} md={9}>
-                      <h4 className="text-center mt-3">
-                        Update all the latest chages made by you. By clicking on
-                        'Save and Continue' button, you will be redirected to
-                        the next page.
-                      </h4>
-                    </Grid>
-                    <Grid
-                      xs={12}
-                      md={2}
-                      className="d-flex justify-content-center align-items-center"
-                    >
-                      <div>
-                        <Button
-                          variant="contained"
-                          sx={{ height: 30 }}
-                          style={{ backgroundColor: colors.becomePartnerGreen }}
-                          onClick={() => navigate("/pexperience")}
-                        >
-                          Save and Continue
-                        </Button>
-                      </div>
-                    </Grid>
-                  </Grid>
-                </Box>
-              </Grid>
-            </Grid>
           </MainDiv>
         </Grid>
+
+        <Grid
+          item
+          xs={12}
+          md={12}
+          display="flex"
+          justifyContent={"center"}
+          flexDirection="column"
+        >
+          <Box
+            width={{ sx: "100%", md: "70%" }}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              flexDirection: "column",
+              margin: "auto",
+            }}
+          >
+            <p style={{ color: "white" }}>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Veniam
+              expedita, cum, fugit quia sapiente repellendus labore, aspernatur
+              in similique tempore illum su
+            </p>
+            {/* Header Start */}
+            <div
+              style={{ width: "100%", height: "1px", overflow: "hidden" }}
+              className="d-flex justify-content-center "
+            ></div>
+            <Grid container display={"flex"} justifyContent={"center"}></Grid>
+
+            {/* Header End */}
+            <Box
+              sx={{ width: "90%", marginLeft: "5vw" }}
+              // style={{ height: "auto", backgroundColor: "black" }}
+            >
+              <Grid
+                container
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                display={"flex"}
+                justifyContent={"space-around"}
+              >
+                <Grid item xs={11}>
+                  <HeaderDiv>
+                    <div className="ps-2 d-flex flex-row align-items-center">
+                      <ActivePageMarker></ActivePageMarker>
+                      <HeaderP className="pt-1">Add Your Experience</HeaderP>
+                    </div>
+                  </HeaderDiv>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Company Title"
+                    variant="outlined"
+                    sx={{ width: 270 }}
+                    className="mt-3"
+                    value={jobExperienceVar.companyTitle}
+                    onChange={(e) => {
+                      setJobExperienceVar({
+                        ...jobExperienceVar,
+                        companyTitle: e.target.value,
+                      });
+                      console.log(jobExperienceVar.companyTitle);
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={jobExperienceVar.startingDate}
+                    onChange={(event, newvalue) => setJobStartingDate(newvalue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Starting Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={jobExperienceVar.endingDate}
+                    onChange={(event, newvalue) => setJobEndingDate(newvalue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Ending Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Your Job Title"
+                    variant="outlined"
+                    sx={{ width: 270 }}
+                    className="mt-3"
+                    value={jobExperienceVar.jobTitle}
+                    onChange={(e) => {
+                      setJobExperienceVar({
+                        ...jobExperienceVar,
+                        jobTitle: e.target.value,
+                      });
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-3"
+                >
+                  <Button
+                    variant="contained"
+                    style={{ backgroundColor: colors.becomePartnerGreen }}
+                    sx={{
+                      height: 30,
+                      width: { xs: "90%", sm: "25%", md: "25%", lg: "25%" },
+                    }}
+                    onClick={() => {
+                      setJobExpArr([...jobExpArr, jobExperienceVar]);
+                    }}
+                  >
+                    Add Experience
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={10} className="mt-2">
+                  {jobExpArr.map((jb) => (
+                    <div
+                      style={{ width: "100%", height: "auto" }}
+                      className="mt-3 pt-3 pb-3 ps-3 border rounded d-flex flex-row justify-content-between align-items-center"
+                    >
+                      <img src={menu} alt="" width={20} />
+                      <h4 className="d-flex align-items-center">
+                        {jobExperienceVar.companyTitle} ({" "}
+                        {jobExperienceVar.startingDate} -{" "}
+                        {jobExperienceVar.endingDate})
+                      </h4>
+                      <Button
+                        variant="contained"
+                        sx={{ height: 30, width: 10 }}
+                        style={{
+                          backgroundColor: colors.becomePartnerGreen,
+                        }}
+                        onClick={() => {
+                          removeJobExpHandeler(jb.companyTitle);
+                        }}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </Grid>
+              </Grid>
+            </Box>
+            {/* Job Experience End */}
+            {/* Education Start */}
+            {/* Header Start */}
+            <div
+              style={{ width: "65%", height: "1px", overflow: "hidden" }}
+              className="d-flex justify-content-center"
+            ></div>
+
+            {/* Header End */}
+            <Box
+              sx={{ width: "90%", marginLeft: "5vw" }}
+              // style={{ height: "auto", backgroundColor: "black" }}
+            >
+              <Grid
+                container
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                display={"flex"}
+                justifyContent={"center"}
+              >
+                <Grid item xs={11} my={1}>
+                  <HeaderDiv>
+                    <div className="ps-2 d-flex flex-row align-items-center">
+                      <ActivePageMarker></ActivePageMarker>
+                      <HeaderP className="pt-1">Add Your Education</HeaderP>
+                    </div>
+                  </HeaderDiv>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Institute Title"
+                    variant="outlined"
+                    sx={{ width: 270 }}
+                    className="mt-3"
+                    value={eduVar.instituteTitle}
+                    onChange={(e) => {
+                      setEduVar({
+                        ...eduVar,
+                        instituteTitle: e.target.value,
+                      });
+                      console.log(eduVar.instituteTitle);
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={eduVar.startingDate}
+                    onChange={(event, newvalue) => setEduStartingDate(newvalue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Starting Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={eduVar.endingDate}
+                    onChange={(event, newvalue) => setEduEndingDate(newvalue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Ending Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Education Title"
+                    variant="outlined"
+                    sx={{ width: 270 }}
+                    className="mt-3"
+                    value={eduVar.educationTitle}
+                    onChange={(e) => {
+                      setEduVar({
+                        ...eduVar,
+                        educationTitle: e.target.value,
+                      });
+                      console.log(eduVar.educationTitle);
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-3"
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      height: 30,
+                      width: { xs: "90%", sm: "25%", md: "25%", lg: "25%" },
+                    }}
+                    style={{ backgroundColor: colors.becomePartnerGreen }}
+                    onClick={() => {
+                      setEducationArr([...educationArr, eduVar]);
+                    }}
+                  >
+                    Add Education
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={10} className="mt-2 mb-3">
+                  {educationArr.map((eduVar) => (
+                    <div
+                      style={{ width: "100%", height: "auto" }}
+                      className="mt-3 pt-3 pb-3 ps-3 border rounded d-flex flex-row justify-content-between align-items-center"
+                    >
+                      <img src={menu} alt="" width={20} />
+                      <h4 className="d-flex align-items-center">
+                        {eduVar.educationTitle} ( {eduVar.startingDate} -{" "}
+                        {eduVar.endingDate})
+                      </h4>
+                      <Button
+                        variant="contained"
+                        sx={{ height: 30, width: 10 }}
+                        style={{
+                          backgroundColor: colors.becomePartnerGreen,
+                        }}
+                        onClick={() => {
+                          removeEduExpHandeler(eduVar.educationTitle);
+                        }}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </Grid>
+              </Grid>
+            </Box>
+            {/* Achivments Start */}
+            <Box
+              sx={{ width: "90%", marginLeft: "5vw" }}
+              // style={{ height: "auto", backgroundColor: "black" }}
+            >
+              <Grid
+                container
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                display={"flex"}
+                justifyContent={"center"}
+              >
+                <Grid item xs={11}>
+                  <HeaderDiv>
+                    <div className="ps-2 d-flex flex-row align-items-center">
+                      <ActivePageMarker></ActivePageMarker>
+                      <HeaderP className="pt-1">Add Your Achivments</HeaderP>
+                    </div>
+                  </HeaderDiv>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Achivement Title"
+                    variant="outlined"
+                    sx={{ width: { xs: 270, sm: "88%", md: "85%" } }}
+                    className="mt-3"
+                    value={achivementVar.achivementTitle}
+                    onChange={(e) => {
+                      setAchivementVar({
+                        ...achivementVar,
+                        achivementTitle: e.target.value,
+                      });
+                      console.log(achivementVar.achivementTitle);
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="mt-3 mb-3 d-flex justify-content-center"
+                >
+                  <Box width={{ xs: 270, sm: "88%", md: "85%" }}>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Discription"
+                      placeholder="Enter discription"
+                      multiline
+                      fullWidth
+                      rows={10}
+                      value={achivementVar.achivementDiscription}
+                      onChange={(e) => {
+                        setAchivementVar({
+                          ...achivementVar,
+                          description: e.target.value,
+                        });
+                        console.log(achivementVar.achivementDiscription);
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={achivementVar.startingDate}
+                    onChange={(event, newvalue) =>
+                      setAchivementVar({
+                        ...achivementVar,
+                        startingDate: newvalue.year,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Starting Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={achivementVar.endingDate}
+                    onChange={(event, newvalue) =>
+                      setAchivementVar({
+                        ...achivementVar,
+                        endingDate: newvalue.year,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Ending Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-3"
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      height: 30,
+                      width: { xs: "90%", sm: "25%", md: "25%", lg: "25%" },
+                    }}
+                    style={{ backgroundColor: colors.becomePartnerGreen }}
+                    onClick={() => {
+                      setAchivementsArr([...achivementsArr, achivementVar]);
+                    }}
+                  >
+                    Add Achivemnets
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12} sm={10} className="mt-2 mb-3">
+                  {achivementsArr.map((ach) => (
+                    <div
+                      style={{ width: "100%", height: "auto" }}
+                      className="mt-3 pt-3 pb-3 ps-3 border rounded d-flex flex-row justify-content-between align-items-center"
+                    >
+                      <img src={menu} alt="" width={20} />
+                      <h4 className="d-flex align-items-center">
+                        {ach.achivementTitle} ( {ach.startingDate} -{" "}
+                        {ach.endingDate})
+                      </h4>
+                      <Button
+                        variant="contained"
+                        sx={{ height: 30, width: 10 }}
+                        style={{
+                          backgroundColor: colors.becomePartnerGreen,
+                        }}
+                        onClick={() => {
+                          setAchivementsArr(
+                            achivementsArr.filter(
+                              (achivementsArr) =>
+                                achivementsArr.achivementTitle !==
+                                ach.achivementTitle
+                            )
+                          );
+                        }}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </Grid>
+              </Grid>
+            </Box>
+            {/* Achivments End */}
+            <Grid conatiner display={"flex"} justifyContent={"center"}>
+              <Grid item xs={10}>
+                <div>
+                  <div className="border rounded pt-1 pb-1 mt-2 mb-5 ps-5 pe-5">
+                    <Grid container>
+                      <Grid item sm={12} md={10}>
+                        <h4 className="text-center mt-3">
+                          Update all the latest chages made by you. By clicking
+                          on 'Save and Continue' button, you will be redirected
+                          to the next page.
+                        </h4>
+                      </Grid>
+                      <Grid
+                        xs={12}
+                        md={2}
+                        className="d-flex justify-content-center align-items-center"
+                      >
+                        <div>
+                          <Button
+                            variant="contained"
+                            sx={{ height: 30 }}
+                            style={{
+                              backgroundColor: colors.becomePartnerGreen,
+                            }}
+                            onClick={() => {
+                              handelContinue();
+                            }}
+                          >
+                            Save&nbsp;and&nbsp;Continue
+                          </Button>
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </div>
+              </Grid>
+            </Grid>
+          </Box>
+        </Grid>
+
         <Grid item xs={12}>
           <Footer></Footer>
         </Grid>

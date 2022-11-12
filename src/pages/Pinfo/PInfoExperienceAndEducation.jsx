@@ -39,6 +39,17 @@ export default function PInfoExperienceAndEducation() {
     jobTitle: "",
     jobDiscription: "",
   });
+  const [achivementVar, setAchivementVar] = React.useState({
+    achivementTitle: "",
+    startingDate: "",
+    endingDate: "",
+    description: "",
+  });
+
+  React.useEffect(() => {
+    console.log("Ach vae", achivementVar);
+  }, [achivementVar]);
+
   const [jobStartingDate, setJobStartingDate] = React.useState(null);
   const [jobEndingDate, setJobEndingDate] = React.useState(null);
   const [eduStartingDate, setEduStartingDate] = React.useState(null);
@@ -248,12 +259,6 @@ export default function PInfoExperienceAndEducation() {
                     }}
                   />
                 </Grid>
-                <CustomTextInpputD
-                  label="Job Discription"
-                  name={"jobDiscription"}
-                  value={jobExperienceVar.jobDiscription}
-                  handleChange={jobDiscriptionHandleChange}
-                />
                 <Grid
                   item
                   xs={12}
@@ -421,12 +426,6 @@ export default function PInfoExperienceAndEducation() {
                     }}
                   />
                 </Grid>
-                <CustomTextInpputD
-                  label="Education Discription"
-                  name={"educationDescription"}
-                  value={eduVar.educationDescription}
-                  handleChange={eduDiscriptionHandleChange}
-                />
                 <Grid
                   item
                   xs={12}
@@ -474,6 +473,176 @@ export default function PInfoExperienceAndEducation() {
                 </Grid>
               </Grid>
             </Box>
+            {/* Achivments Start */}
+            <Box
+              sx={{ width: "90%", marginLeft: "5vw" }}
+              // style={{ height: "auto", backgroundColor: "black" }}
+            >
+              <Grid
+                container
+                columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+                display={"flex"}
+                justifyContent={"center"}
+              >
+                <Grid item xs={11}>
+                  <HeaderDiv>
+                    <div className="ps-2 d-flex flex-row align-items-center">
+                      <ActivePageMarker></ActivePageMarker>
+                      <HeaderP className="pt-1">Add Your Achivments</HeaderP>
+                    </div>
+                  </HeaderDiv>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <TextField
+                    id="outlined-basic"
+                    label="Achivement Title"
+                    variant="outlined"
+                    sx={{ width: { xs: 270, sm: "88%", md: "85%" } }}
+                    className="mt-3"
+                    value={achivementVar.achivementTitle}
+                    onChange={(e) => {
+                      setAchivementVar({
+                        ...achivementVar,
+                        achivementTitle: e.target.value,
+                      });
+                      console.log(achivementVar.achivementTitle);
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  className="mt-3 mb-3 d-flex justify-content-center"
+                >
+                  <Box width={{ xs: 270, sm: "88%", md: "85%" }}>
+                    <TextField
+                      id="outlined-multiline-static"
+                      label="Discription"
+                      placeholder="Enter discription"
+                      multiline
+                      fullWidth
+                      rows={10}
+                      value={achivementVar.achivementDiscription}
+                      onChange={(e) => {
+                        setAchivementVar({
+                          ...achivementVar,
+                          description: e.target.value,
+                        });
+                        console.log(achivementVar.achivementDiscription);
+                      }}
+                    />
+                  </Box>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={achivementVar.startingDate}
+                    onChange={(event, newvalue) =>
+                      setAchivementVar({
+                        ...achivementVar,
+                        startingDate: newvalue.year,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Starting Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  className="d-flex justify-content-center mt-2"
+                >
+                  <Autocomplete
+                    disablePortal
+                    id="combo-box-demo"
+                    options={Years}
+                    sx={{ width: 270 }}
+                    value={achivementVar.endingDate}
+                    onChange={(event, newvalue) =>
+                      setAchivementVar({
+                        ...achivementVar,
+                        endingDate: newvalue.year,
+                      })
+                    }
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Ending Year"
+                        className="mt-3"
+                      />
+                    )}
+                  />
+                </Grid>
+
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center mt-3"
+                >
+                  <Button
+                    variant="contained"
+                    sx={{
+                      height: 30,
+                      width: { xs: "90%", sm: "25%", md: "25%", lg: "25%" },
+                    }}
+                    style={{ backgroundColor: colors.becomePartnerGreen }}
+                    onClick={() => {
+                      setEducationArr([...educationArr, eduVar]);
+                    }}
+                  >
+                    Add Education
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12} className="mt-2 mb-3">
+                  {educationArr.map((eduVar) => (
+                    <div
+                      style={{ width: "100%", height: "auto" }}
+                      className="mt-3 pt-3 pb-3 ps-3 border rounded d-flex flex-row justify-content-between align-items-center"
+                    >
+                      <img src={menu} alt="" width={20} />
+                      <h4 className="d-flex align-items-center">
+                        {eduVar.educationTitle} ( {eduVar.startingDate} -{" "}
+                        {eduVar.endingDate})
+                      </h4>
+                      <Button
+                        variant="contained"
+                        sx={{ height: 30, width: 10 }}
+                        style={{
+                          backgroundColor: "#FF5852",
+                        }}
+                        onClick={() => {
+                          removeEduExpHandeler(eduVar.educationTitle);
+                        }}
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
+                </Grid>
+              </Grid>
+            </Box>
+            {/* Achivments End */}
             <Grid conatiner display={"flex"} justifyContent={"center"}>
               <Grid item xs={10}>
                 <div>
