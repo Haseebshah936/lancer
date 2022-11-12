@@ -38,23 +38,23 @@ import "react-toastify/dist/ReactToastify.css";
 //EmployerSide
 import EDashborad from "./pages/EDashboard/EDashboard";
 import EProjects from "./pages/EProjects/EProjects";
-import EFavourites from './pages/EFavourites/EFavourites';
-import EReviews from './pages/EReviews/EReviews';
-import EMessages from './pages/EMessages/EMessages';
+import EFavourites from "./pages/EFavourites/EFavourites";
+import EReviews from "./pages/EReviews/EReviews";
+import EMessages from "./pages/EMessages/EMessages";
 import ETeams from "./pages/ETeams/ETeams";
-import EPayments from './pages/EPayments/EPayments';
+import EPayments from "./pages/EPayments/EPayments";
 import ESettings from "./pages/ESettings/ESettings";
 //FreeLancerSide
-import FDashboard from './pages/FDashboard/FDashboard';
+import FDashboard from "./pages/FDashboard/FDashboard";
 import FProjects from "./pages/FProjects/FProjects";
-import Favourites from './pages/FFavourites/FFavourites';
-import FReviews from './pages/FReviews/FReviews';
-import FMessages from './pages/FMessages/FMessages';
+import Favourites from "./pages/FFavourites/FFavourites";
+import FReviews from "./pages/FReviews/FReviews";
+import FMessages from "./pages/FMessages/FMessages";
 import FTeams from "./pages/FTeams/FTeams";
-import FPayments from './pages/FPayments/FPayments';
+import FPayments from "./pages/FPayments/FPayments";
 import FSettings from "./pages/FSettings/FSettings";
 import FGigs from "./pages/FGigs/FGigs";
-import Dashboard from './components/SellerDashboardRenders/Dashboard';
+import Dashboard from "./components/SellerDashboardRenders/Dashboard";
 import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
 import TempPage from "./pages/TempPage/TempPage";
@@ -82,26 +82,20 @@ function App(props) {
               <Route index element={<Dashboard />} />
             </Route>
             <Route path="/chat/:id" element={<Chat />} />
-            <Route
-              path="/gig/intro"
-              element={<GigServiceIntroduction />}
-            />
-            <Route
-              path="/gig/attachment"
-              element={<GigMediaAttachment />}
-            />
-            <Route
-              path="/gig/pricning"
-              element={<GigMyServicePricing />}
-            />
-            <Route
-              path="/gig/questions"
-              element={<GigQuestionAPage />}
-            />
+            <Route path="/gig/intro" element={<GigServiceIntroduction />} />
+            <Route path="/gig/attachment" element={<GigMediaAttachment />} />
+            <Route path="/gig/pricing" element={<GigMyServicePricing />} />
+            <Route path="/gig/questions" element={<GigQuestionAPage />} />
 
-            <Route path="/becomeSeller" element={<PInfoPersonalDetailsAndSkills />} />
+            <Route
+              path="/becomeSeller"
+              element={<PInfoPersonalDetailsAndSkills />}
+            />
             <Route path="/cprofile" element={<CompleteProfile />}></Route>
-            <Route path="/pexperience" element={<PInfoExperienceAndEducation />} />
+            <Route
+              path="/pexperience"
+              element={<PInfoExperienceAndEducation />}
+            />
 
             <Route path="/postProject" element={<PostProject />} />
             <Route path="/s/dashboard" element={<EDashborad />} />
@@ -122,12 +116,11 @@ function App(props) {
             <Route path="/f/teams" element={<FTeams />} />
             <Route path="/f/payments" element={<FPayments />} />
             <Route path="/f/settings" element={<FSettings />} />
-
-
           </Route>
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
+
           <Route path="/" element={<Navigate to="/home" replace />} />
           {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
         </Routes>
