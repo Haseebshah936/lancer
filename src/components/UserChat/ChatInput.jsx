@@ -14,8 +14,16 @@ import styled from "styled-components";
 import useLongPress from "../../Hooks/useLongPress";
 import { miniMobile } from "../../responsive";
 import AudioRecorder from "./AudioRecorder";
+import { sha1 } from "crypto-hash";
 import { Box } from "@mui/system";
 import axios from "axios";
+// import cloudinary from "cloudinary-react";
+
+// cloudinary.config({
+//   cloud_name: process.env.REACT_APP_CLOUD_NAME,
+//   api_key: process.env.REACT_APP_API_KEY,
+//   api_secret: process.env.REACT_APP_API_SECRET,
+// });
 
 function ChatInput({ onSend }) {
   const [message, setMessage] = useState("");
@@ -116,7 +124,7 @@ function ChatInput({ onSend }) {
     formData.append("file", file);
     formData.append("upload_preset", "f8ci6zlz");
     formData.append("cloud_name", "dhc9yqbjh");
-
+    formData.append(" return_delete_token", 1);
     axios
       .post(
         "https://api.cloudinary.com/v1_1/dhc9yqbjh/auto/upload",
@@ -124,15 +132,20 @@ function ChatInput({ onSend }) {
         option
       )
       .then((res) => {
-        console.log(res);
+        console.log("Response", res);
         setAttachments((prev) => {
           const arr = [...prev];
           arr[index].uploading = false;
-          if (arr[index].type === "video")
+          if (arr[index].type === "video") {
+            URL.revokeObjectURL(arr[index].data.videoURL);
             arr[index].data.videoURL = res.data.secure_url;
-          else if (arr[index].type === "audio")
+          } else if (arr[index].type === "audio") {
+            URL.revokeObjectURL(arr[index].data.audioURL);
             arr[index].data.audioURL = res.data.secure_url;
-          else arr[index].data.uri = res.data.secure_url;
+          } else {
+            URL.revokeObjectURL(arr[index].data.uri);
+            arr[index].data.uri = res.data.secure_url;
+          }
           return arr;
         });
       })
@@ -194,7 +207,9 @@ function ChatInput({ onSend }) {
       extension === "jpg" ||
       extension === "png" ||
       extension === "jpeg" ||
-      extension === "gif"
+      extension === "gif" ||
+      extension === "svg" ||
+      extension === "webp"
     ) {
       if (size > 10) {
         alert("Image size can not be more than 10MB");
@@ -240,8 +255,42 @@ function ChatInput({ onSend }) {
     }
   };
 
-  const removeAttachment = (i) => {
+  const removeAttachment = async (i) => {
+    // if (attachments[i].uploading) {
     attachments[i].controller.abort();
+    // } else {
+    //   const url = attachments[i].data.uri;
+    //   const uri = url.split("/");
+    //   const publicId = uri[uri.length - 1].split(".")[0];
+    //   console.log(publicId);
+    //   const timestamp = new Date().getTime();
+    //   const string = `public_id=${publicId}&timestamp=${timestamp} mPwSeRqhs5pkymxJ93fsLFJUObo`;
+    //   const signature = await sha1(string);
+    //   const formData = new FormData();
+    //   console.log(signature);
+    //   formData.append("file", url);
+    //   formData.append("api_key", "118251153512448");
+    //   formData.append("public_id", publicId);
+    //   formData.append("timestamp", timestamp);
+    //   formData.append("signature", signature);
+    //   const res = await axios.post(
+    //     "https://api.cloudinary.com/v1_1/dhc9yqbjh/auto/destroy",
+    //     formData
+    //   );
+    //   console.log(res);
+    //   // try {
+    //   //   const resp = await cloudinary.v2.uploader.destroy(
+    //   //     publicId,
+    //   //     function (error, result) {
+    //   //       console.log(result, error);
+    //   //     }
+    //   //   );
+    //   //   console.log(resp);
+    //   // } catch (err) {
+    //   //   console.log("Something went wrong, please try again later.");
+    //   // }
+    // }
+    console.log("remove attachment", attachments[i]);
     setAttachments((prev) => {
       const arr = [...prev];
       arr[i] = {
