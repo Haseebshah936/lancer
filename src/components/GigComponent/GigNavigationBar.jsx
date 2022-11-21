@@ -3,7 +3,13 @@ import { Grid, Box, Button } from "@mui/material";
 import colors from "../../utils/colors";
 import { useNavigate } from "react-router";
 
-export default function GigNavigationBar({ title, pathName, validate, sData }) {
+export default function GigNavigationBar({ title, pathName, validate, gData }) {
+  const [gData1, setGData1] = React.useState({});
+  React.useEffect(() => {
+    setGData1(gData);
+    console.log("Bar Data", gData);
+  }, [gData]);
+
   const navigate = useNavigate();
   return (
     <Grid
@@ -69,7 +75,7 @@ export default function GigNavigationBar({ title, pathName, validate, sData }) {
                 if (v) {
                   console.log("v", v);
                 } else {
-                  navigate(pathName);
+                  navigate(pathName, { state: { gData: gData1 } });
                 }
               }}
             >

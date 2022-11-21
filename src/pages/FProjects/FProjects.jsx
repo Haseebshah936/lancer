@@ -6,11 +6,15 @@ import colors from "../../utils/colors";
 import { allProject } from "../../utils/EProjectsData";
 import AvalibleProjects from "../../components/FProject/AvalibleProjects";
 import CancelledProjects from "../../components/FProject/CancelledProjects";
-import CompletedProjects from "./../../components/FProject/CompletedProjects";
+import CompletedProjects from "../../components/FProject/CompletedProjects";
 import MyPerposals from "../../components/FProject/MyPerposals";
 import OnGoingProjects from "../../components/FProject/OnGoingProjects";
+import FSideBar from "../../pages/FSideBar/FSideBar";
+
+// import Sidebar from "../../components/DashboardComponents/Sidebar";
+
+import Footer from "../../components/Footer/index";
 import Sidebar from "../../components/DashboardComponents/Sidebar";
-import Footer from "./../../components/Footer/index";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
@@ -25,7 +29,7 @@ export default function FProjects() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <Sidebar></Sidebar>
+              <FSideBar></FSideBar>
             </Grid>
             <Grid
               item
