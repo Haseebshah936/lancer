@@ -43,7 +43,12 @@ export default function CreateGig() {
         return <GigMediaAttachment />;
         break;
       case 2:
-        return <GigMyServicePlanning gigIntroduction={gigIntroduction} />;
+        return (
+          <GigMyServicePlanning
+            Category={gigIntroduction.gigCategory}
+            SubCategory={gigIntroduction.gigSubCategory}
+          />
+        );
         break;
       case 3:
         return <GigQuestionAPage />;

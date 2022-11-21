@@ -58,6 +58,7 @@ import Dashboard from "./components/SellerDashboardRenders/Dashboard";
 import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
 import TempPage from "./pages/TempPage/TempPage";
+import CreateGig from "./pages/CreateGig";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -86,6 +87,7 @@ function App(props) {
             <Route path="/gig/attachment" element={<GigMediaAttachment />} />
             <Route path="/gig/pricing" element={<GigMyServicePricing />} />
             <Route path="/gig/questions" element={<GigQuestionAPage />} />
+            <Route path="/gig/:name" element={<CreateGig />} />
 
             <Route
               path="/becomeSeller"

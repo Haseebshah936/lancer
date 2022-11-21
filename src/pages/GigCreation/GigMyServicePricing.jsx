@@ -20,6 +20,7 @@ import Header from "../../components/Header";
 
 import { numebers } from "../../utils/GigDropDownValues";
 import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
+import styled from "styled-components";
 const TitleBox = ({ heading }) => {
   return (
     <Box
@@ -35,28 +36,26 @@ const TitleBox = ({ heading }) => {
 };
 const GigDiscription = ({ value, onChange, styles }) => {
   return (
-    <TextField
+    <CustomTextArea
       fullWidth
       id="outlined-multiline-static"
-      label="Add Description"
-      sx={styles}
-      multiline
-      rows={6}
+      placeholder="Enter Description"
       value={value}
       onChange={onChange}
+      style={{ ...styles, padding: "1rem 0.5rem" }}
     />
   );
 };
 const InputField = ({ label, onChange, value, styles }) => {
   return (
-    <TextField
+    <CustomInput
       fullWidth
+      placeholder="Enter Title"
       id="outlined-basic"
       label={label}
-      variant="outlined"
       onChange={onChange}
       value={value}
-      sx={styles}
+      style={{ ...styles, padding: "1rem 0.5rem" }}
     />
   );
 };
@@ -107,86 +106,12 @@ const DropDownComp = ({ list, label, value, onChange, error }) => {
   );
 };
 
-const Category = {
-  _id: "636fa0c163a0064224d1d4fb",
-  title: "Web Development",
-  category: null,
-  features: [
-    {
-      title: "deployment",
-      quantityBased: false,
-      _id: "636fa0c163a0064224d1d4fc",
-    },
-  ],
-  additionalFeatures: [
-    {
-      title: "sourceCode",
-      quantityBased: false,
-      _id: "636fa0c163a0064224d1d4fd",
-    },
-  ],
-  count: 0,
-  createdAt: "2022-11-12T13:33:53.987Z",
-  __v: 0,
-};
-
-const SubCategory = {
-  _id: "636fa15863a0064224d1d500",
-  title: "MERN Stack",
-  category: {
-    _id: "636fa0c163a0064224d1d4fb",
-    title: "Web Development",
-    category: null,
-    features: [
-      {
-        title: "deployment",
-        quantityBased: false,
-        _id: "636fa0c163a0064224d1d4fc",
-      },
-    ],
-    additionalFeatures: [
-      {
-        title: "sourceCode",
-        quantityBased: false,
-        _id: "636fa0c163a0064224d1d4fd",
-      },
-    ],
-    count: 0,
-    createdAt: "2022-11-12T13:33:53.987Z",
-    __v: 0,
-  },
-  features: [
-    {
-      title: "Responsive",
-      quantityBased: false,
-      _id: "636fa15863a0064224d1d501",
-    },
-    {
-      title: "Screens",
-      quantityBased: true,
-      _id: "636fa15863a0064224d1d502",
-    },
-  ],
-  additionalFeatures: [],
-  count: 0,
-  createdAt: "2022-11-12T13:36:24.079Z",
-  __v: 0,
-};
-
-export default function GigMyServicePlanning() {
+export default function GigMyServicePlanning({ Category, SubCategory }) {
   const location = useLocation();
-  const [gData, setgData] = useState({});
-  React.useEffect(() => {
-    console.log("gdata", {
-      ...gData,
-      gigIntroduction: location.state.gdata?.gigIntroduction,
-    });
-  }, []);
+
   const [basicPlan, setBasicPlan] = React.useState({
     title: "",
     description: "",
-    sourceFile: true,
-    initialConcepts: true,
     revisions: "",
     deliveryTime: "",
     price: "",
@@ -194,8 +119,6 @@ export default function GigMyServicePlanning() {
   const [standardPlan, setStandardPlan] = React.useState({
     title: "",
     description: "",
-    sourceFile: true,
-    initialConcepts: true,
     revision: "",
     deliveryTime: "",
     price: "",
@@ -203,12 +126,11 @@ export default function GigMyServicePlanning() {
   const [premiumPlan, setPremiumPlan] = React.useState({
     title: "",
     description: "",
-    sourceFile: true,
-    initialConcepts: true,
     revision: "",
     deliveryTime: "",
     price: "",
   });
+
   const [basicPlanError, setBasicPlanError] = React.useState({});
   const [standardPlanError, setStandardPlanError] = React.useState({});
   const [premiumPlanError, setPremiumPlanError] = React.useState({});
@@ -292,7 +214,7 @@ export default function GigMyServicePlanning() {
           justifyContent="flex-start"
           alignItems="flex-start"
           mobile={12}
-          sx={{ pt: 2 }}
+          sx={{ py: 2 }}
         >
           <Typography variant="h4">My Service Pricing</Typography>
           <Typography variant="h5" sx={{ pt: 1 }}>
@@ -310,23 +232,35 @@ export default function GigMyServicePlanning() {
           alignItems="center"
           justifyContent="center"
         >
-          <Box className="border-bottom">
-            <Typography variant="h4" sx={{ mt: 2 }}>
+          <Box
+            className="border-bottom"
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: " center",
+              display: "flex",
+            }}
+          >
+            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
               BASIC
             </Typography>
           </Box>
-          <Box className="border-bottom" sx={{ px: 1 }}>
-            <InputField
-              styles={{
-                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
-                mb: 1,
-              }}
-              label="Package Title"
-              value={basicPlan.title}
-              onChange={(e) => {
-                setBasicPlan({ ...basicPlan, title: e.target.value });
-              }}
-            />
+          <Box className="border-bottom" sx={{ width: "100%" }}>
+            <Box className="border-bottom">
+              <InputField
+                styles={{
+                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  mb: 1,
+                  paddingInline: "",
+                }}
+                label="Package Title"
+                value={basicPlan.title}
+                onChange={(e) => {
+                  setBasicPlan({ ...basicPlan, title: e.target.value });
+                }}
+              />
+            </Box>
+
             <GigDiscription
               styles={{
                 backgroundColor: basicPlanError.description
@@ -365,21 +299,29 @@ export default function GigMyServicePlanning() {
           alignItems="center"
           justifyContent="center"
         >
-          <Box classnName="border-bottom">
-            <Typography variant="h4" sx={{ mt: 2 }}>
+          <Box
+            className="border-bottom"
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: " center",
+              display: "flex",
+            }}
+          >
+            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
               STANDARD
             </Typography>
           </Box>
           <Box className="border-bottom" sx={{ px: 1 }}>
             <InputField
               styles={{
-                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                backgroundColor: standardPlanError.title ? "#ffdadb" : "white",
                 mb: 1,
               }}
               label="Package Title"
-              value={basicPlan.title}
+              value={standardPlan.title}
               onChange={(e) => {
-                setBasicPlan({ ...basicPlan, title: e.target.value });
+                setStandardPlan({ ...standardPlan, title: e.target.value });
               }}
             />
             <GigDiscription
@@ -392,7 +334,10 @@ export default function GigMyServicePlanning() {
               value={basicPlan.description}
               error={basicPlanError.description}
               onChange={(e) => {
-                setBasicPlan({ ...basicPlan, description: e.target.value });
+                setStandardPlan({
+                  ...standardPlan,
+                  description: e.target.value,
+                });
               }}
             />
           </Box>
@@ -419,8 +364,16 @@ export default function GigMyServicePlanning() {
           alignItems="center"
           justifyContent="center"
         >
-          <Box classnName="border-bottom">
-            <Typography variant="h4" sx={{ mt: 2 }}>
+          <Box
+            className="border-bottom"
+            sx={{
+              width: "100%",
+              justifyContent: "center",
+              alignItems: " center",
+              display: "flex",
+            }}
+          >
+            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
               PREMIUM
             </Typography>
           </Box>
@@ -467,369 +420,586 @@ export default function GigMyServicePlanning() {
         </Grid>
 
         {Category.features.map((feature) => {
-          console.log("I am in");
-          <>
-            <Grid container mobile={12}>
-              <Grid item container mobile={3} className="border">
-                {feature.title}
+          return (
+            <>
+              <Grid container mobile={12}>
+                <Grid item container mobile={3} className="border">
+                  {feature.title}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {" "}
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {" "}
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
               </Grid>
-              <Grid item container mobile={3} className="border">
-                {feature.quantityBased && (
-                  <DropDownComp
-                    list={numebers}
-                    label="Select"
-                    value={standardPlan.deliveryTime}
-                    error={standardPlanError.deliveryTime}
-                    onChange={(e) => {
-                      setStandardPlan({
-                        ...standardPlan,
-                        deliveryTime: e.target.value,
-                      });
-                    }}
-                  />
-                )}
-                {feature.quantityBased === false && (
-                  <SwitchButtonComp
-                    label="Source File"
-                    checked={basicPlan.sourceFile}
-                    error={basicPlanError.sourceFile}
-                    onChange={(e) => {
-                      setBasicPlan({
-                        ...basicPlan,
-                        sourceFile: e.target.checked,
-                      });
-                    }}
-                  />
-                )}
-              </Grid>
-              <Grid item container mobile={3} className="border">
-                {" "}
-                {feature.quantityBased && (
-                  <DropDownComp
-                    list={numebers}
-                    label="Select"
-                    value={standardPlan.deliveryTime}
-                    error={standardPlanError.deliveryTime}
-                    onChange={(e) => {
-                      setStandardPlan({
-                        ...standardPlan,
-                        deliveryTime: e.target.value,
-                      });
-                    }}
-                  />
-                )}
-                {feature.quantityBased === false && (
-                  <SwitchButtonComp
-                    label="Source File"
-                    checked={basicPlan.sourceFile}
-                    error={basicPlanError.sourceFile}
-                    onChange={(e) => {
-                      setBasicPlan({
-                        ...basicPlan,
-                        sourceFile: e.target.checked,
-                      });
-                    }}
-                  />
-                )}
-              </Grid>
-              <Grid item container mobile={3} className="border">
-                {" "}
-                {feature.quantityBased && (
-                  <DropDownComp
-                    list={numebers}
-                    label="Select"
-                    value={standardPlan.deliveryTime}
-                    error={standardPlanError.deliveryTime}
-                    onChange={(e) => {
-                      setStandardPlan({
-                        ...standardPlan,
-                        deliveryTime: e.target.value,
-                      });
-                    }}
-                  />
-                )}
-                {feature.quantityBased === false && (
-                  <SwitchButtonComp
-                    label="Source File"
-                    checked={basicPlan.sourceFile}
-                    error={basicPlanError.sourceFile}
-                    onChange={(e) => {
-                      setBasicPlan({
-                        ...basicPlan,
-                        sourceFile: e.target.checked,
-                      });
-                    }}
-                  />
-                )}
-              </Grid>
-            </Grid>
-          </>;
+            </>
+          );
         })}
+
+        {/* {SubCategory.features.map((feature) => {
+          return (
+            <>
+              <Grid container mobile={12}>
+                <Grid item container mobile={3} className="border">
+                  {feature.title}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {" "}
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+                <Grid item container mobile={3} className="border">
+                  {" "}
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </>
+          );
+        })} */}
       </Grid>
 
-      <Grid container justifyContent="center" sx={{ mt: 3 }}>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={11} md={7}>
-          <Grid container display="flex" justifyContent={"center"}>
-            <Grid
-              item
-              xs={12}
-              sm={2.8}
-              className="border"
-              display={{ xs: "none", sm: "block" }}
-            >
-              <Box height="230px" className="border-bottom"></Box>
-              <TitleBox heading="Source File"></TitleBox>
-              <TitleBox heading="No. of Initial Concepts"></TitleBox>
-              <TitleBox heading="Revisions"></TitleBox>
-              <TitleBox heading="Delivery Time"></TitleBox>
-              <TitleBox heading="Total"></TitleBox>
-            </Grid>
-            {/* Basic */}
-            <Grid item xs={12} sm={2.8} className="border" height="495px">
-              <Box height="221px" className="border-bottom">
-                <Box className="border-bottom">
-                  <h2 className="text-center mt-3">Baisc </h2>
-                </Box>
-                <InputField
-                  label="Package Title"
-                  value={basicPlan.title}
-                  error={basicPlanError.title}
-                  onChange={(e) => {
-                    setBasicPlan({ ...basicPlan, title: e.target.value });
-                  }}
-                ></InputField>
-                <GigDiscription
-                  value={basicPlan.description}
-                  error={basicPlanError.description}
-                  onChange={(e) => {
-                    setBasicPlan({ ...basicPlan, description: e.target.value });
-                  }}
-                ></GigDiscription>
-                <SwitchButtonComp
-                  label="Source File"
-                  checked={basicPlan.sourceFile}
-                  error={basicPlanError.sourceFile}
-                  onChange={(e) => {
-                    setBasicPlan({
-                      ...basicPlan,
-                      sourceFile: e.target.checked,
-                    });
-                  }}
-                ></SwitchButtonComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Initial Concepts"
-                  value={basicPlan.initialConcepts}
-                  error={basicPlanError.initialConcepts}
-                  onChange={(e) => {
-                    setBasicPlan({
-                      ...basicPlan,
-                      initialConcepts: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Revisions"
-                  value={basicPlan.revision}
-                  error={basicPlanError.revision}
-                  onChange={(e) => {
-                    setBasicPlan({ ...basicPlan, revision: e.target.value });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Delivery Days"
-                  value={basicPlan.deliveryTime}
-                  error={basicPlanError.deliveryTime}
-                  onChange={(e) => {
-                    setBasicPlan({
-                      ...basicPlan,
-                      deliveryTime: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <InputField
-                  label="Total"
-                  value={basicPlan.price}
-                  error={basicPlanError.price}
-                  onChange={(e) => {
-                    setBasicPlan({ ...basicPlan, price: e.target.value });
-                  }}
-                ></InputField>
-              </Box>
-            </Grid>
-            {/* Standard */}
-            <Grid item xs={12} sm={2.8} className="border" height="495px">
-              <Box height="221px" className="border-bottom">
-                <Box className="border-bottom">
-                  <h2 className="text-center mt-3">Standard </h2>
-                </Box>
-                <InputField
-                  label="Package Title"
-                  value={standardPlan.title}
-                  error={standardPlanError.title}
-                  onChange={(e) => {
-                    setStandardPlan({ ...standardPlan, title: e.target.value });
-                  }}
-                ></InputField>
-                <GigDiscription
-                  value={standardPlan.description}
-                  error={standardPlanError.description}
-                  onChange={(e) => {
-                    setStandardPlan({
-                      ...standardPlan,
-                      description: e.target.value,
-                    });
-                  }}
-                ></GigDiscription>
-                <SwitchButtonComp
-                  label="Source File"
-                  checked={standardPlan.sourceFile}
-                  error={standardPlanError.sourceFile}
-                  onChange={(e) => {
-                    setStandardPlan({
-                      ...standardPlan,
-                      sourceFile: e.target.checked,
-                    });
-                  }}
-                ></SwitchButtonComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Initial Concepts"
-                  value={standardPlan.initialConcepts}
-                  error={standardPlanError.initialConcepts}
-                  onChange={(e) => {
-                    setStandardPlan({
-                      ...standardPlan,
-                      initialConcepts: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Revisions"
-                  value={standardPlan.revision}
-                  error={standardPlanError.revision}
-                  onChange={(e) => {
-                    setStandardPlan({
-                      ...standardPlan,
-                      revision: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Delivery Days"
-                  value={standardPlan.deliveryTime}
-                  error={standardPlanError.deliveryTime}
-                  onChange={(e) => {
-                    setStandardPlan({
-                      ...standardPlan,
-                      deliveryTime: e.target.value,
-                    });
-                  }}
-                />
-                <InputField
-                  label="Total"
-                  value={standardPlan.price}
-                  error={standardPlanError.price}
-                  onChange={(e) => {
-                    setStandardPlan({ ...standardPlan, price: e.target.value });
-                  }}
-                ></InputField>
-              </Box>
-            </Grid>
-            {/* Premium */}
-            <Grid item xs={12} sm={2.8} className="border">
-              <Box height="221px" className="border-bottom">
-                <Box className="border-bottom">
-                  <h2 className="text-center mt-3">Platinum</h2>
-                </Box>
-
-                <InputField
-                  label="Package Title"
-                  value={premiumPlan.title}
-                  error={premiumPlanError.title}
-                  onChange={(e) => {
-                    setPremiumPlan({ ...premiumPlan, title: e.target.value });
-                  }}
-                ></InputField>
-                <GigDiscription
-                  value={premiumPlan.description}
-                  error={premiumPlanError.description}
-                  onChange={(e) => {
-                    setPremiumPlan({
-                      ...premiumPlan,
-                      description: e.target.value,
-                    });
-                  }}
-                ></GigDiscription>
-                <SwitchButtonComp
-                  label="Source File"
-                  checked={premiumPlan.sourceFile}
-                  error={premiumPlanError.sourceFile}
-                  onChange={(e) => {
-                    setPremiumPlan({
-                      ...premiumPlan,
-                      sourceFile: e.target.checked,
-                    });
-                  }}
-                ></SwitchButtonComp>
-
-                <DropDownComp
-                  list={numebers}
-                  label="Initial Concepts"
-                  value={premiumPlan.initialConcepts}
-                  error={premiumPlanError.initialConcepts}
-                  onChange={(e) => {
-                    setPremiumPlan({
-                      ...premiumPlan,
-                      initialConcepts: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Revisions"
-                  value={premiumPlan.revision}
-                  error={premiumPlanError.revision}
-                  onChange={(e) => {
-                    setPremiumPlan({
-                      ...premiumPlan,
-                      revision: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <DropDownComp
-                  list={numebers}
-                  label="Delivery Days"
-                  value={premiumPlan.deliveryTime}
-                  error={premiumPlanError.deliveryTime}
-                  onChange={(e) => {
-                    setPremiumPlan({
-                      ...premiumPlan,
-                      deliveryTime: e.target.value,
-                    });
-                  }}
-                ></DropDownComp>
-                <InputField
-                  label="Total"
-                  value={premiumPlan.price}
-                  error={premiumPlanError.price}
-                  onChange={(e) => {
-                    setPremiumPlan({ ...premiumPlan, price: e.target.value });
-                  }}
-                ></InputField>
-              </Box>
-            </Grid>
-            <Grid item xs={12} sm={0} marginTop={{ xs: "250px", sm: "1px" }}>
-              {}
-            </Grid>
-          </Grid>
+      <Grid container>
+        <Grid
+          item
+          container
+          mobile={12}
+          alignItems="flex-start"
+          justifyContent="flex-start"
+          sx={{ my: 2 }}
+        >
+          <Typography variant="h4">Add extra services</Typography>
         </Grid>
+        {Category.additionalFeatures.map((feature) => {
+          return (
+            <>
+              <Grid container mobile={12} className="border">
+                <Grid item container mobile={3}>
+                  {feature.title}
+                </Grid>
+                <Grid
+                  item
+                  container
+                  mobile={9}
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </>
+          );
+        })}
+        {SubCategory.additionalFeatures.map((feature) => {
+          return (
+            <>
+              <Grid container mobile={12} className="border">
+                <Grid item container mobile={3}>
+                  {feature.title}
+                </Grid>
+                <Grid
+                  item
+                  container
+                  mobile={9}
+                  justifyContent="flex-end"
+                  alignItems="center"
+                >
+                  {feature.quantityBased && (
+                    <DropDownComp
+                      list={numebers}
+                      label="Select"
+                      value={standardPlan.deliveryTime}
+                      error={standardPlanError.deliveryTime}
+                      onChange={(e) => {
+                        setStandardPlan({
+                          ...standardPlan,
+                          deliveryTime: e.target.value,
+                        });
+                      }}
+                    />
+                  )}
+                  {feature.quantityBased === false && (
+                    <SwitchButtonComp
+                      label="Source File"
+                      checked={basicPlan.sourceFile}
+                      error={basicPlanError.sourceFile}
+                      onChange={(e) => {
+                        setBasicPlan({
+                          ...basicPlan,
+                          sourceFile: e.target.checked,
+                        });
+                      }}
+                    />
+                  )}
+                </Grid>
+              </Grid>
+            </>
+          );
+        })}
       </Grid>
     </>
   );
 }
+// <Grid container justifyContent="center" sx={{ mt: 3 }}>
+//         <Grid item xs={12}></Grid>
+//         <Grid item xs={11} md={7}>
+//           <Grid container display="flex" justifyContent={"center"}>
+//             <Grid
+//               item
+//               xs={12}
+//               sm={2.8}
+//               className="border"
+//               display={{ xs: "none", sm: "block" }}
+//             >
+//               <Box height="230px" className="border-bottom"></Box>
+//               <TitleBox heading="Source File"></TitleBox>
+//               <TitleBox heading="No. of Initial Concepts"></TitleBox>
+//               <TitleBox heading="Revisions"></TitleBox>
+//               <TitleBox heading="Delivery Time"></TitleBox>
+//               <TitleBox heading="Total"></TitleBox>
+//             </Grid>
+//             {/* Basic */}
+//             <Grid item xs={12} sm={2.8} className="border" height="495px">
+//               <Box height="221px" className="border-bottom">
+//                 <Box className="border-bottom">
+//                   <h2 className="text-center mt-3">Baisc </h2>
+//                 </Box>
+//                 <InputField
+//                   label="Package Title"
+//                   value={basicPlan.title}
+//                   error={basicPlanError.title}
+//                   onChange={(e) => {
+//                     setBasicPlan({ ...basicPlan, title: e.target.value });
+//                   }}
+//                 ></InputField>
+//                 <GigDiscription
+//                   value={basicPlan.description}
+//                   error={basicPlanError.description}
+//                   onChange={(e) => {
+//                     setBasicPlan({ ...basicPlan, description: e.target.value });
+//                   }}
+//                 ></GigDiscription>
+//                 <SwitchButtonComp
+//                   label="Source File"
+//                   checked={basicPlan.sourceFile}
+//                   error={basicPlanError.sourceFile}
+//                   onChange={(e) => {
+//                     setBasicPlan({
+//                       ...basicPlan,
+//                       sourceFile: e.target.checked,
+//                     });
+//                   }}
+//                 ></SwitchButtonComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Initial Concepts"
+//                   value={basicPlan.initialConcepts}
+//                   error={basicPlanError.initialConcepts}
+//                   onChange={(e) => {
+//                     setBasicPlan({
+//                       ...basicPlan,
+//                       initialConcepts: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Revisions"
+//                   value={basicPlan.revision}
+//                   error={basicPlanError.revision}
+//                   onChange={(e) => {
+//                     setBasicPlan({ ...basicPlan, revision: e.target.value });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Delivery Days"
+//                   value={basicPlan.deliveryTime}
+//                   error={basicPlanError.deliveryTime}
+//                   onChange={(e) => {
+//                     setBasicPlan({
+//                       ...basicPlan,
+//                       deliveryTime: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <InputField
+//                   label="Total"
+//                   value={basicPlan.price}
+//                   error={basicPlanError.price}
+//                   onChange={(e) => {
+//                     setBasicPlan({ ...basicPlan, price: e.target.value });
+//                   }}
+//                 ></InputField>
+//               </Box>
+//             </Grid>
+//             {/* Standard */}
+//             <Grid item xs={12} sm={2.8} className="border" height="495px">
+//               <Box height="221px" className="border-bottom">
+//                 <Box className="border-bottom">
+//                   <h2 className="text-center mt-3">Standard </h2>
+//                 </Box>
+//                 <InputField
+//                   label="Package Title"
+//                   value={standardPlan.title}
+//                   error={standardPlanError.title}
+//                   onChange={(e) => {
+//                     setStandardPlan({ ...standardPlan, title: e.target.value });
+//                   }}
+//                 ></InputField>
+//                 <GigDiscription
+//                   value={standardPlan.description}
+//                   error={standardPlanError.description}
+//                   onChange={(e) => {
+//                     setStandardPlan({
+//                       ...standardPlan,
+//                       description: e.target.value,
+//                     });
+//                   }}
+//                 ></GigDiscription>
+//                 <SwitchButtonComp
+//                   label="Source File"
+//                   checked={standardPlan.sourceFile}
+//                   error={standardPlanError.sourceFile}
+//                   onChange={(e) => {
+//                     setStandardPlan({
+//                       ...standardPlan,
+//                       sourceFile: e.target.checked,
+//                     });
+//                   }}
+//                 ></SwitchButtonComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Initial Concepts"
+//                   value={standardPlan.initialConcepts}
+//                   error={standardPlanError.initialConcepts}
+//                   onChange={(e) => {
+//                     setStandardPlan({
+//                       ...standardPlan,
+//                       initialConcepts: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Revisions"
+//                   value={standardPlan.revision}
+//                   error={standardPlanError.revision}
+//                   onChange={(e) => {
+//                     setStandardPlan({
+//                       ...standardPlan,
+//                       revision: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Delivery Days"
+//                   value={standardPlan.deliveryTime}
+//                   error={standardPlanError.deliveryTime}
+//                   onChange={(e) => {
+//                     setStandardPlan({
+//                       ...standardPlan,
+//                       deliveryTime: e.target.value,
+//                     });
+//                   }}
+//                 />
+//                 <InputField
+//                   label="Total"
+//                   value={standardPlan.price}
+//                   error={standardPlanError.price}
+//                   onChange={(e) => {
+//                     setStandardPlan({ ...standardPlan, price: e.target.value });
+//                   }}
+//                 ></InputField>
+//               </Box>
+//             </Grid>
+//             {/* Premium */}
+//             <Grid item xs={12} sm={2.8} className="border">
+//               <Box height="221px" className="border-bottom">
+//                 <Box className="border-bottom">
+//                   <h2 className="text-center mt-3">Platinum</h2>
+//                 </Box>
+
+//                 <InputField
+//                   label="Package Title"
+//                   value={premiumPlan.title}
+//                   error={premiumPlanError.title}
+//                   onChange={(e) => {
+//                     setPremiumPlan({ ...premiumPlan, title: e.target.value });
+//                   }}
+//                 ></InputField>
+//                 <GigDiscription
+//                   value={premiumPlan.description}
+//                   error={premiumPlanError.description}
+//                   onChange={(e) => {
+//                     setPremiumPlan({
+//                       ...premiumPlan,
+//                       description: e.target.value,
+//                     });
+//                   }}
+//                 ></GigDiscription>
+//                 <SwitchButtonComp
+//                   label="Source File"
+//                   checked={premiumPlan.sourceFile}
+//                   error={premiumPlanError.sourceFile}
+//                   onChange={(e) => {
+//                     setPremiumPlan({
+//                       ...premiumPlan,
+//                       sourceFile: e.target.checked,
+//                     });
+//                   }}
+//                 ></SwitchButtonComp>
+
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Initial Concepts"
+//                   value={premiumPlan.initialConcepts}
+//                   error={premiumPlanError.initialConcepts}
+//                   onChange={(e) => {
+//                     setPremiumPlan({
+//                       ...premiumPlan,
+//                       initialConcepts: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Revisions"
+//                   value={premiumPlan.revision}
+//                   error={premiumPlanError.revision}
+//                   onChange={(e) => {
+//                     setPremiumPlan({
+//                       ...premiumPlan,
+//                       revision: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <DropDownComp
+//                   list={numebers}
+//                   label="Delivery Days"
+//                   value={premiumPlan.deliveryTime}
+//                   error={premiumPlanError.deliveryTime}
+//                   onChange={(e) => {
+//                     setPremiumPlan({
+//                       ...premiumPlan,
+//                       deliveryTime: e.target.value,
+//                     });
+//                   }}
+//                 ></DropDownComp>
+//                 <InputField
+//                   label="Total"
+//                   value={premiumPlan.price}
+//                   error={premiumPlanError.price}
+//                   onChange={(e) => {
+//                     setPremiumPlan({ ...premiumPlan, price: e.target.value });
+//                   }}
+//                 ></InputField>
+//               </Box>
+//             </Grid>
+//             <Grid item xs={12} sm={0} marginTop={{ xs: "250px", sm: "1px" }}>
+//               {}
+//             </Grid>
+//           </Grid>
+//         </Grid>
+//       </Grid>
+
+const CustomTextArea = styled.textarea`
+  height: 60px;
+  outline: none;
+  border: 0px;
+`;
+
+const CustomInput = styled.input`
+  outline: none;
+  border: 0px;
+`;

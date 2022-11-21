@@ -45,8 +45,8 @@ export default function GigMediaAttachment() {
   }, [images]);
   useEffect(() => {
     // console.log("media Location:", { ...location.state.gData });
-    setGdata({ gigIntroduction: location.state.gData });
-    console.log("gdata at mt", gdata);
+    // setGdata({ gigIntroduction: location.state.gData });
+    // console.log("gdata at mt", gdata);
   }, []);
 
   return (
