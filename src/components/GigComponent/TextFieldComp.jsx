@@ -1,20 +1,22 @@
 import React from "react";
 import { Grid, TextField } from "@mui/material";
+import colors from "../../utils/colors";
 
 export default function TextFieldComp({ label, value, onChange, name, error }) {
   return (
-    <Grid
-      item
-      xs={10}
-      sm={3.5}
-      display="flex"
-      flexDirection={"column"}
-      justifyContent="center"
-      paddingTop={{ xs: "10px", ms: "10px" }}
-      mx="5px"
-    >
+    <>
       <TextField
-        fullWidth
+        sx={{
+          "& label.Mui-focused": {
+            color: colors.textGreen,
+          },
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: colors.textGreen,
+            },
+          },
+        }}
+        fullWidth={true}
         id="fullWidth"
         variant="outlined"
         name={name}
@@ -23,6 +25,6 @@ export default function TextFieldComp({ label, value, onChange, name, error }) {
         onChange={onChange}
       />
       {error && <div className="alert alert-danger">{error}</div>}
-    </Grid>
+    </>
   );
 }

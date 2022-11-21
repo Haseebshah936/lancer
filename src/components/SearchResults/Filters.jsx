@@ -1,6 +1,6 @@
-import * as React from "react";
+import { useState } from "react";
 import colors from "../../utils/colors";
-import { Box, Typography } from "@mui/material";
+import { Box, Drawer, Typography } from "@mui/material";
 import * as styled2 from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import Modal from "@mui/material/Modal";
@@ -9,20 +9,7 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterAccordions from "./FilterAccordions";
 import PortfolioCardMobile from "../PortfolioCardMobile";
 import { teamImg } from "../../assets";
-
-const modalstyle = {
-  textAlign: "center",
-  color: colors.textGreen,
-  borderRadius: "15px",
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  bgcolor: "background.paper",
-  border: `2px solid ${colors.textGreen}`,
-  boxShadow: 24,
-  p: 4,
-};
+import { SortOutlined } from "@mui/icons-material";
 
 const Filters = ({
   handleAvail,
@@ -32,41 +19,68 @@ const Filters = ({
   pro,
   avail,
 }) => {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => {
-    setOpen(true);
-    console.log(open);
+  const [filterdraw, setFilterdraw] = useState(false);
+  const toggleFilters = (open) => (event) => {
+    console.log("asdsad");
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setFilterdraw(open);
   };
-  const handleClose = () => setOpen(false);
+
   return (
     <Container>
       <FilterButton>
         <Button
-          onclick={handleOpen}
+          onClick={toggleFilters(true)}
           variant="outlined"
           startIcon={<FilterAltOutlinedIcon />}
           sx={{
             color: colors.textGreen,
-            borderColor: colors.textGreen,
+            "&.MuiButton-outlined": {
+              borderColor: colors.textGreen,
+            },
+
+            width: "50%",
           }}
         >
           Filters
         </Button>
+        <Drawer
+          anchor="bottom"
+          open={filterdraw}
+          onClose={toggleFilters(false)}
+        >
+          <Box
+            sx={{
+              height: "100vh",
+              width: "auto",
+              backgroundColor: "red",
+            }}
+            role="presentation"
+            onClick={toggleFilters(false)}
+            onKeyDown={toggleFilters(false)}
+          ></Box>
+        </Drawer>
+        <Button
+          variant="outlined"
+          startIcon={<SortOutlined />}
+          sx={{
+            "&.MuiButton-outlined": {
+              borderColor: colors.textGreen,
+            },
+
+            width: "50%",
+            color: colors.textGreen,
+          }}
+        >
+          Sort
+        </Button>
       </FilterButton>
-      {/* <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={modalstyle}> */}
-      {/* <FilterAccordions /> */}
-      {/* <p>adssa</p>
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Added to List
-          </Typography>
-        </Box>
-      </Modal> */}
 
       <Accordions>
         <FilterAccordions
@@ -101,5 +115,6 @@ ${mobile({
   flexDirection: "row",
   alignItems: "center",
   justifyContent: "center",
+  marginTop: "20px",
 })}
 `;

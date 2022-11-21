@@ -16,7 +16,7 @@ const steps = [
   "Questions",
 ];
 
-export default function GigMuiHeader({ activeStep }) {
+export default function StepperForm({ activeStep }) {
   return (
     <Box sx={{ width: "100%" }}>
       <Stepper activeStep={activeStep} alternativeLabel>

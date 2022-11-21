@@ -6,6 +6,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import { Grid } from "@mui/material";
+import colors from "../../utils/colors";
 const counter = 0;
 
 const ITEM_HEIGHT = 48;
@@ -38,17 +39,20 @@ export default function MultiSlectInputComp({
   const theme = useTheme();
 
   return (
-    <Grid
-      item
-      xs={10}
-      sm={3.5}
-      marginTop="10px"
-      display="flex"
-      flexDirection="column"
-    >
+    <>
       <FormControl sx={{ width: "100%" }}>
         <InputLabel id="demo-multiple-name-label">{label}</InputLabel>
         <Select
+          sx={{
+            "& label.Mui-focused": {
+              color: colors.textGreen,
+            },
+            "& .MuiOutlinedInput-root": {
+              "&.Mui-focused fieldset": {
+                borderColor: colors.textGreen,
+              },
+            },
+          }}
           labelId="demo-multiple-name-label"
           id="demo-multiple-name"
           multiple
@@ -69,6 +73,6 @@ export default function MultiSlectInputComp({
         </Select>
       </FormControl>
       {error && <div className="alert alert-danger">{error}</div>}
-    </Grid>
+    </>
   );
 }

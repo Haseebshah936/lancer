@@ -1,39 +1,52 @@
 import React, { useState, useEffect } from "react";
 import Joi from "joi-browser";
+import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
 
 import {
-  gigCategories,
+  // gigCategories,
   languageList,
   tagsList,
 } from "../../utils/GigDropDownValues";
 import { CountryNAME } from "../../utils/Countries";
-import { Button, TextField } from "@mui/material";
+import { Button, Chip, Paper, TextField, Typography } from "@mui/material";
 import colors from "../../utils//colors";
 import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
 import TextFieldComp from "./../../components/GigComponent/TextFieldComp";
 import DropDownInputComp from "./../../components/GigComponent/DropDownInputComp";
+
 import MultiLineInputComp from "./../../components/GigComponent/MultiLineInputComp";
 import MultiSlectInputComp from "./../../components/GigComponent/MultiSlectInputComp";
-import Header from "../../components/Header";
-import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
-import Footer from "../../components/Footer";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+import AsyncAutoComplete from "../../components/GigComponent/AsyncAutoComplete";
 
-export default function GigServiceIntroduction() {
+export default function GigServiceIntroduction({
+  gigCategories,
+  setGigCategories,
+  gigSubCategories,
+  setGigSubCategories,
+  gigIntroduction,
+  setGigIntroduction,
+}) {
   const location = useLocation();
   const [pathName, setPathName] = React.useState(location.pathname);
+  const [value, setValue] = useState("");
 
-  const [gigIntroduction, setGigIntroduction] = useState({
-    gigTitle: "",
-    gigCategory: "",
-    gigDescription: "",
-    language: "",
-    tage: [],
-    country: "",
-    addres: "",
-  });
+  const handleCategories = (CategoryArray) => {
+    const Array = CategoryArray.map((c, index) => {
+      return {
+        value: index.toString(),
+        label: c.title,
+        id: c._id,
+        features: c.features,
+        additionalFeatures: c.additionalFeatures,
+      };
+    });
+    setGigCategories(Array);
+  };
   const [errors, setErrors] = useState({});
   var schema = {
     gigTitle: Joi.string().required().label("Gig Title"),
@@ -63,6 +76,16 @@ export default function GigServiceIntroduction() {
 
   const [tagsArr, setTagArr] = useState([]);
   const [ctag, setCTag] = useState("");
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:3003/api/category/categories")
+      .then((response) => {
+        handleCategories(response.data);
+        console.log(gigCategories);
+      });
+  }, []);
+
   useEffect(() => {
     setPathName(location.pathname);
     console.log("pathname", `${location.pathname}`);
@@ -81,68 +104,86 @@ export default function GigServiceIntroduction() {
     const name = Object.keys(tagsList[18])[0];
     setTagArr(tagsList[18][name]);
   }, []);
+
   return (
-    <div style={{ width: "100vw" }}>
-      <Header></Header>
-      <Grid container display="flex" justifyContent="center">
-        <Grid item xs={11}>
-          <GigMuiHeader></GigMuiHeader>
+    <>
+      <Grid
+        container
+        direction="column"
+        alignItems="center"
+        justifyContent="center"
+        sx={{ my: 2 }}
+      >
+        <Grid item container mobile={12} justifyContent="flex-start">
+          <Typography variant="h4">Service Introduction</Typography>
         </Grid>
-      </Grid>
-      <GigNavigationBar
-        title="Add/ Edit service"
-        pathName="/gig/gigmediaattachment"
-        validate={validate}
-        sData={gigIntroduction}
-      ></GigNavigationBar>
-      {/* Service Introduction*/}
-      <Grid container display="flex" justifyContent="center" paddingTop="10px">
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <h3 className="text-left">Service Introduction</h3>
+
+        <Grid
+          item
+          container
+          mobile={12}
+          justifyContent="flex-start"
+          sx={{ mt: 2 }}
+        >
+          <TextFieldComp
+            label="Enter Your Service Title"
+            name="serviceTitle"
+            value={gigIntroduction.gigTitle}
+            error={errors.gigTitle}
+            onChange={(e) => {
+              setGigIntroduction({
+                ...gigIntroduction,
+                gigTitle: e.target.value,
+              });
+            }}
+          />
         </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item md={9}>
-          <Grid container display="flex" justifyContent="center">
+
+        <Grid item container mobile={12} sx={{ mt: 2 }}>
+          <Grid item container mobile={5.5}>
             <DropDownInputComp
               list={gigCategories}
-              label="choose Category"
+              label="Select Category"
               name="gigCategory"
               value={gigIntroduction.gigCategory}
               error={errors.gigCategory}
               onChange={(e, value) => {
                 setGigIntroduction({
                   ...gigIntroduction,
-                  gigCategory: value.label,
+                  gigCategory: value,
+                  gigSubCategory: null,
                 });
               }}
-            ></DropDownInputComp>
-            <Grid xs={0} sm={2} md={1}></Grid>
-            <TextFieldComp
-              label="Enter Your Service Title"
-              name="serviceTitle"
-              value={gigIntroduction.gigTitle}
-              error={errors.gigTitle}
-              onChange={(e) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  gigTitle: e.target.value,
-                });
-              }}
-            ></TextFieldComp>
-            <Grid item xs={12}></Grid>
-            <MultiLineInputComp
-              label="Enter Discription"
-              name="serviceDiscription"
-              value={gigIntroduction.gigDescription}
-              error={errors.gigDescription}
-              onChange={(e) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  gigDescription: e.target.value,
-                });
-              }}
-            ></MultiLineInputComp>
-            <Grid item xs={12}></Grid>
+            />
+          </Grid>
+          <Grid item mobile={1}></Grid>
+          <Grid item container mobile={5.5}>
+            <AsyncAutoComplete
+              gigCategory={gigIntroduction.gigCategory}
+              gigSubCategory={gigIntroduction.gigSubCategory}
+              setGigSubCategory={(subCat) =>
+                setGigIntroduction((prev) => {
+                  return { ...prev, gigSubCategory: subCat };
+                })
+              }
+            />
+          </Grid>
+        </Grid>
+        <Grid item container sx={{ mt: 2 }} mobile={12}>
+          <ReactQuill
+            theme="snow"
+            value={value}
+            onChange={setValue}
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              height: "150px",
+            }}
+          />
+        </Grid>
+        <Grid item container sx={{ mt: 2 }} mobile={12}>
+          <Grid item container mobile={5.5}>
             <MultiSlectInputComp
               list={tagsArr}
               name="Tags"
@@ -155,161 +196,165 @@ export default function GigServiceIntroduction() {
                   tage: e.target.value,
                 });
               }}
-            ></MultiSlectInputComp>
-            <Grid xs={0} sm={2.1} md={1.1}></Grid>
-            <Grid
-              xs={10}
-              sm={2.5}
-              marginTop="10px"
-              display="flex"
-              flexDirection="column"
+            />
+          </Grid>
+          <Grid item container mobile={1}></Grid>
+
+          <Grid item container mobile={4.5}>
+            <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: colors.textGreen,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: colors.textGreen,
+                  },
+                },
+              }}
+              value={ctag}
+              onChange={(e) => {
+                setCTag(e.target.value);
+              }}
+              fullWidth
+              id="outlined-basic"
+              label="Enter Custom Tag"
+              variant="outlined"
+            />
+            {errors.tage && (
+              <div className="alert alert-danger">{errors.tage}</div>
+            )}
+          </Grid>
+          <Grid item container mobile={1}>
+            <Button
+              sx={{ ml: 1 }}
+              fullWidth
+              variant="contained"
+              style={{ backgroundColor: colors.textGreen }}
+              onClick={() => {
+                setGigIntroduction({
+                  ...gigIntroduction,
+                  tage: [...gigIntroduction.tage, ctag],
+                });
+                setCTag("");
+              }}
             >
-              <TextField
-                value={ctag}
-                onChange={(e) => {
-                  setCTag(e.target.value);
-                }}
-                fullWidth
-                id="outlined-basic"
-                label="Enter Custom Tag"
+              Add
+            </Button>
+          </Grid>
+          <Grid
+            item
+            container
+            mobile={12}
+            sx={{ mt: gigIntroduction.tage.length === 0 ? 0 : 2 }}
+          >
+            {gigIntroduction.tage.length !== 0 && (
+              <Paper
+                elevation={1}
                 variant="outlined"
-              />
-              {errors.tage && (
-                <div className="alert alert-danger">{errors.tage}</div>
-              )}
-            </Grid>
-            <Grid
-              item
-              xs={6}
-              sm={0.95}
-              display="flex"
-              justifyContent="ceter"
-              alignItems="center"
-              paddingLeft="10px"
-              paddingTop="10px"
-            >
-              <Button
-                fullWidth
-                variant="contained"
-                style={{ backgroundColor: colors.becomePartnerButtonGreen }}
-                onClick={() => {
-                  setGigIntroduction({
-                    ...gigIntroduction,
-                    tage: [...gigIntroduction.tage, ctag],
-                  });
-                  setCTag("");
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-start",
+                  flexWrap: "wrap",
+                  listStyle: "none",
+                  backgroundColor: colors.white,
+                  borderColor: colors.white,
+                  p: 0.5,
+                  m: 0,
                 }}
+                component="ul"
               >
-                Add
-              </Button>
-            </Grid>
-            <Grid item xs={12}></Grid>
-            <Grid
-              item
-              xs={10}
-              sm={9.2}
-              md={8.1}
-              lg={8.1}
-              xl={8}
-              paddingTop="10px"
-            >
-              {gigIntroduction.tage.map((tag) => (
-                <Box
-                  marginTop="10px"
-                  style={{
-                    // border: "1px solid ",
-                    borderRadius: "2px",
-                    paddingTop: "5px",
-                    paddingBottom: "5px",
-                    paddingLeft: "10vw",
-                    boxShadow: "rgba(0, 0, 0, 0.16) 0px 1px 4px",
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <Box display="flex" justifyContent="center">
-                    {tag}
-                  </Box>
-                  <Box marginRight={{ xs: "10px", sm: "5vw" }}>
-                    <button
-                      className="btn"
-                      style={{ backgroundColor: colors.saveAndContinueButton }}
-                      onClick={() => {
+                {gigIntroduction.tage.map((tag) => (
+                  <>
+                    <Chip
+                      sx={{
+                        color: colors.textGreen,
+                        borderColor: colors.textGreen,
+                        mr: 1,
+                        mb: 1,
+                        "&	.MuiChip-deleteIcon": {
+                          color: colors.textGreen,
+                        },
+                      }}
+                      label={tag}
+                      variant="outlined"
+                      onDelete={() => {
                         setGigIntroduction({
                           ...gigIntroduction,
                           tage: gigIntroduction.tage.filter((t) => t !== tag),
                         });
                       }}
-                    >
-                      X
-                    </button>
-                  </Box>
-                </Box>
-              ))}
-            </Grid>
-            <Grid item xs={12}></Grid>
-            <DropDownInputComp
-              list={languageList}
-              name="language"
-              label="Choose Language"
-              error={errors.language}
-              value={gigIntroduction.language}
-              onChange={(e, value) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  language: value.label,
-                });
-              }}
-            ></DropDownInputComp>
-            <Grid xs={0} sm={2} md={1}></Grid>
-            <DropDownInputComp
-              list={CountryNAME}
-              name="Countries"
-              label="Select Country"
-              value={gigIntroduction.country}
-              error={errors.country}
-              onChange={(e, value) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  country: value.label,
-                });
-              }}
-            ></DropDownInputComp>
-            <Grid
-              item
-              xs={10}
-              sm={9.2}
-              md={8.1}
-              lg={8.1}
-              xl={8}
-              my="10px"
-              display="flex"
-              flexDirection="column"
-            >
-              <TextField
-                fullWidth
-                width="100%"
-                id="outlined-basic"
-                label="Enter Your Address"
-                value={gigIntroduction.addres}
-                onChange={(e) => {
+                    />
+                  </>
+                ))}
+              </Paper>
+            )}
+          </Grid>
+
+          <Grid item container mobile={12} sx={{ mt: 2 }}>
+            <Grid item container mobile={5.5}>
+              <DropDownInputComp
+                list={languageList}
+                name="language"
+                label="Choose Language"
+                error={errors.language}
+                value={gigIntroduction.language}
+                onChange={(e, value) => {
                   setGigIntroduction({
                     ...gigIntroduction,
-                    addres: e.target.value,
+                    language: value.label,
                   });
                 }}
-                variant="outlined"
               />
-              {errors.addres && (
-                <div className="alert alert-danger">{errors.addres}</div>
-              )}
             </Grid>
-            <Grid item xs={12}></Grid>
+            <Grid item mobile={1}></Grid>
+            <Grid item container mobile={5.5}>
+              <DropDownInputComp
+                list={CountryNAME}
+                name="Countries"
+                label="Select Country"
+                value={gigIntroduction.country}
+                error={errors.country}
+                onChange={(e, value) => {
+                  setGigIntroduction({
+                    ...gigIntroduction,
+                    country: value.label,
+                  });
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid item container mobile={12} sx={{ mt: 2 }}>
+            <TextField
+              sx={{
+                "& label.Mui-focused": {
+                  color: colors.textGreen,
+                },
+                "& .MuiOutlinedInput-root": {
+                  "&.Mui-focused fieldset": {
+                    borderColor: colors.textGreen,
+                  },
+                },
+              }}
+              fullWidth
+              width="100%"
+              id="outlined-basic"
+              label="Enter Your Address"
+              value={gigIntroduction.addres}
+              onChange={(e) => {
+                setGigIntroduction({
+                  ...gigIntroduction,
+                  addres: e.target.value,
+                });
+              }}
+              variant="outlined"
+            />
+            {errors.addres && (
+              <div className="alert alert-danger">{errors.addres}</div>
+            )}
           </Grid>
         </Grid>
       </Grid>
-      <Footer></Footer>
-    </div>
+    </>
   );
 }

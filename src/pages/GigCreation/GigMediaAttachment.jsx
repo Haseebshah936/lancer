@@ -1,7 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import ImageUploading from "react-images-uploading";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
 import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
 
@@ -10,6 +10,7 @@ import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
 import colors from "../../utils/colors";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import styled from "styled-components";
 
 export default function GigMediaAttachment() {
   const [images, setImages] = React.useState([]);
@@ -37,41 +38,36 @@ export default function GigMediaAttachment() {
   };
 
   return (
-    <div style={{ width: "100vw" }}>
-      <Header></Header>
-      <Grid container display="flex" justifyContent="center">
-        <Grid item xs={11}>
-          <GigMuiHeader></GigMuiHeader>
-        </Grid>
-      </Grid>
-      <GigNavigationBar
-        title="Add/ edit Services"
-        pathName="/gig/gigmyservicepricning"
-        validate={validate}
-      ></GigNavigationBar>
-      <Grid container display="flex" justifyContent="center" paddingTop="10px">
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <h3 className="text-left">Media/ Attachments</h3>
-        </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <p>
+    <>
+      <Grid container>
+        <Grid
+          item
+          container
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          mobile={12}
+          sx={{ pt: 2 }}
+        >
+          <Typography variant="h4">Media Attachments</Typography>
+          <Typography variant="h5" sx={{ pt: 1 }}>
             Add 3 pictures atleast 1 that you want to show as your gig picture.
-          </p>
+          </Typography>
           {errors.images && (
             <div className="alert alert-danger">
               {"Kindly select atleast 1 Images"}
             </div>
           )}
         </Grid>
-        <Grid item xs={12}></Grid>
+
         <Grid
           item
-          xs={11}
-          md={6}
-          paddingLeft={{ xs: "5px", sm: "10px" }}
-          display="flex"
-          justifyContent="center"
+          container
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          mobile={12}
+          sx={{ pt: 2 }}
         >
           <ImageUploading
             multiple
@@ -89,71 +85,99 @@ export default function GigMediaAttachment() {
               dragProps,
             }) => (
               // write your building UI
-              <Grid container width="100%">
-                <Grid item xs={12}>
+              <Grid item container direction="column">
+                <Grid item mobile={12}>
                   <Button
                     variant="contained"
                     onClick={onImageUpload}
                     {...dragProps}
-                    style={{ backgroundColor: colors.becomePartnerButtonGreen }}
+                    style={{ backgroundColor: colors.textGreen }}
                   >
                     Click or Drop here
                   </Button>
                 </Grid>
-
-                {imageList.map((image, index) => (
-                  <Grid
-                    item
-                    xs={11}
-                    sm={3.5}
-                    display="flex"
-                    justifyContent="center"
-                    marginRight={"10px"}
-                    boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
-                    marginTop="10px"
-                    marginBottom="10px"
-                    borderRadius={"5px"}
-                  >
-                    <div key={index} style={{ overflow: "hidden" }}>
-                      <Box
-                        component="img"
-                        sx={{
-                          // height: 233,
-                          // width: 350,
-                          maxHeight: { xs: 200, md: 160 },
-                          minHeight: { xs: 200, md: 160 },
-                          minWidth: { xs: 200, md: 240 },
-                          maxWidth: { xs: 200, md: 240 },
-                        }}
-                        src={image.data_url}
-                        alt=""
-                        width="200"
-                      />
-                      <div className="d-flex justify-content-center mt-3">
-                        <Button
-                          variant="contained"
-                          onClick={() => onImageUpdate(index)}
-                          className="me-3 mb-2"
-                        >
-                          Update
-                        </Button>
-                        <Button
-                          variant="contained"
-                          onClick={() => onImageRemove(index)}
-                          className="mb-2"
-                        >
-                          Remove
-                        </Button>
+                <Grid item container direction="row" mobile={12}>
+                  {imageList.map((image, index) => (
+                    <Grid
+                      item
+                      mobile={4}
+                      marginRight={"10px"}
+                      boxShadow="rgba(0, 0, 0, 0.35) 0px 5px 15px"
+                      marginTop="10px"
+                      marginBottom="10px"
+                      borderRadius={"5px"}
+                    >
+                      <div key={index} style={{ overflow: "hidden" }}>
+                        <Box
+                          component="img"
+                          sx={{
+                            // height: 233,
+                            // width: 350,
+                            maxHeight: "200px",
+                            minHeight: "200px",
+                            minWidth: "200px",
+                            maxWidth: "200px",
+                          }}
+                          src={image.data_url}
+                          alt=""
+                          width="200px"
+                        />
+                        <div className="d-flex justify-content-center mt-3">
+                          <Button
+                            variant="contained"
+                            onClick={() => onImageUpdate(index)}
+                            className="me-3 mb-2"
+                          >
+                            Update
+                          </Button>
+                          <Button
+                            variant="contained"
+                            onClick={() => onImageRemove(index)}
+                            className="mb-2"
+                          >
+                            Remove
+                          </Button>
+                        </div>
                       </div>
-                    </div>
-                  </Grid>
-                ))}
+                    </Grid>
+                  ))}
+                </Grid>
               </Grid>
             )}
           </ImageUploading>
         </Grid>
       </Grid>
-      <Footer></Footer>
-    </div>
+    </>
   );
 }
+
+const AttachmentContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  margin-left: 1.5rem;
+  box-shadow: 3px 2px 10px 1px rgba(209, 209, 209, 0.75);
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+`;
+
+const Attachment = styled(Box)`
+  width: ${(props) => (props.type === "audio" ? "25rem" : "10rem")};
+  min-width: 10rem;
+  height: 10rem;
+  min-height: 10rem;
+  object-fit: cover;
+  background-color: ${(props) =>
+    props.type === "audio" ? colors.audioBox : colors.white};
+`;
+
+const ProgressBar = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 10;
+`;

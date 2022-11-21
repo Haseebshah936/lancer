@@ -86,7 +86,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
+              styling={{ height: "40px", fontSize: "1.5rem" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}
@@ -199,7 +199,7 @@ function Head({
               placeholder="What Services do you want?"
               resultStringKeyName="title"
               items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem", zIndex: "10" }}
+              styling={{ height: "40px", fontSize: "1.5rem" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
               onSelect={handleOnSelect}
@@ -226,7 +226,7 @@ const Container = styled.div`
   @media (max-width: 786px) {
     padding-inline: 7%;
   }
-  overflow: hidden;
+  /* overflow: hidden; */
 `;
 const Menucontainer = styled.div`
   display: flex;

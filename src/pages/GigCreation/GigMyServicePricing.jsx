@@ -7,6 +7,7 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Typography,
 } from "@mui/material";
 import Joi from "joi-browser";
 import React from "react";
@@ -30,42 +31,31 @@ const TitleBox = ({ heading }) => {
     </Box>
   );
 };
-const GigDiscription = ({ value, onChange, error }) => {
+const GigDiscription = ({ value, onChange, styles }) => {
   return (
-    <Box marginTop={"5px"} paddingLeft={"5px"} paddingRight={"5px"}>
-      <TextField
-        fullWidth
-        id="outlined-multiline-static"
-        label="Add Description"
-        style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-        multiline
-        rows={6}
-        value={value}
-        onChange={onChange}
-      />
-    </Box>
+    <TextField
+      fullWidth
+      id="outlined-multiline-static"
+      label="Add Description"
+      sx={styles}
+      multiline
+      rows={6}
+      value={value}
+      onChange={onChange}
+    />
   );
 };
-const InputField = ({ label, onChange, value, error }) => {
+const InputField = ({ label, onChange, value, styles }) => {
   return (
-    <Box
-      height="60px"
-      display={"flex"}
-      alignItems="center"
-      paddingLeft={"5px"}
-      paddingRight={"5px"}
-      marginTop={"5px"}
-    >
-      <TextField
-        fullWidth
-        id="outlined-basic"
-        label={label}
-        variant="outlined"
-        onChange={onChange}
-        value={value}
-        style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-      />
-    </Box>
+    <TextField
+      fullWidth
+      id="outlined-basic"
+      label={label}
+      variant="outlined"
+      onChange={onChange}
+      value={value}
+      sx={styles}
+    />
   );
 };
 const SwitchButtonComp = ({ onChange, checked, label, error }) => {
@@ -96,33 +86,89 @@ const SwitchButtonComp = ({ onChange, checked, label, error }) => {
 
 const DropDownComp = ({ list, label, value, onChange, error }) => {
   return (
-    <Box marginLeft="5px" marginRight="5px">
-      <FormControl
+    <FormControl fullWidth sx={{ height: "40px" }} size="small">
+      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
+      <Select
         fullWidth
-        sx={{ height: "40px" }}
-        size="small"
-        className="mt-3"
-        display="flex"
-        flexDirection="row"
-        justifyContent="center"
+        labelId="demo-simple-select-label"
+        id="demo-simple-select"
+        value={value}
+        label={label}
+        onChange={onChange}
+        style={{ backgroundColor: error ? "#ffdadb" : "white" }}
       >
-        <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-        <Select
-          fullWidth
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={value}
-          label={label}
-          onChange={onChange}
-          style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-        >
-          {list.map((item) => (
-            <MenuItem value={item.value}>{item.value}</MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-    </Box>
+        {list.map((item) => (
+          <MenuItem value={item.value}>{item.value}</MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
+};
+
+const Category = {
+  _id: "636fa0c163a0064224d1d4fb",
+  title: "Web Development",
+  category: null,
+  features: [
+    {
+      title: "deployment",
+      quantityBased: false,
+      _id: "636fa0c163a0064224d1d4fc",
+    },
+  ],
+  additionalFeatures: [
+    {
+      title: "sourceCode",
+      quantityBased: false,
+      _id: "636fa0c163a0064224d1d4fd",
+    },
+  ],
+  count: 0,
+  createdAt: "2022-11-12T13:33:53.987Z",
+  __v: 0,
+};
+
+const SubCategory = {
+  _id: "636fa15863a0064224d1d500",
+  title: "MERN Stack",
+  category: {
+    _id: "636fa0c163a0064224d1d4fb",
+    title: "Web Development",
+    category: null,
+    features: [
+      {
+        title: "deployment",
+        quantityBased: false,
+        _id: "636fa0c163a0064224d1d4fc",
+      },
+    ],
+    additionalFeatures: [
+      {
+        title: "sourceCode",
+        quantityBased: false,
+        _id: "636fa0c163a0064224d1d4fd",
+      },
+    ],
+    count: 0,
+    createdAt: "2022-11-12T13:33:53.987Z",
+    __v: 0,
+  },
+  features: [
+    {
+      title: "Responsive",
+      quantityBased: false,
+      _id: "636fa15863a0064224d1d501",
+    },
+    {
+      title: "Screens",
+      quantityBased: true,
+      _id: "636fa15863a0064224d1d502",
+    },
+  ],
+  additionalFeatures: [],
+  count: 0,
+  createdAt: "2022-11-12T13:36:24.079Z",
+  __v: 0,
 };
 
 export default function GigMyServicePlanning() {
@@ -131,7 +177,7 @@ export default function GigMyServicePlanning() {
     description: "",
     sourceFile: true,
     initialConcepts: true,
-    revision: "",
+    revisions: "",
     deliveryTime: "",
     price: "",
   });
@@ -227,29 +273,291 @@ export default function GigMyServicePlanning() {
     console.log(premiumPlan);
   }, [premiumPlan]);
   return (
-    <div style={{ width: "100vw" }}>
-      <Header></Header>
-      <Grid container display="flex" justifyContent="center">
-        <Grid item xs={11}>
-          <GigMuiHeader></GigMuiHeader>
+    <>
+      <Grid container>
+        <Grid
+          item
+          container
+          direction="column"
+          justifyContent="flex-start"
+          alignItems="flex-start"
+          mobile={12}
+          sx={{ pt: 2 }}
+        >
+          <Typography variant="h4">My Service Pricing</Typography>
+          <Typography variant="h5" sx={{ pt: 1 }}>
+            Enter All the details related to your gig pricing and the services.
+          </Typography>
         </Grid>
       </Grid>
-      <GigNavigationBar
-        title="Add/ Edit service"
-        pathName="/gig/gigquestionapage"
-        validate={validate}
-      ></GigNavigationBar>
-      {/* Service Introduction*/}
-      <Grid container display="flex" justifyContent="center" className="mt-3">
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <h3 className="text-left">My Service Pricing</h3>
+      <Grid container className="border">
+        <Grid item container mobile={3} className="border"></Grid>
+        <Grid
+          item
+          container
+          mobile={3}
+          className="border"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box className="border-bottom">
+            <Typography variant="h4" sx={{ mt: 2 }}>
+              BASIC
+            </Typography>
+          </Box>
+          <Box className="border-bottom" sx={{ px: 1 }}>
+            <InputField
+              styles={{
+                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                mb: 1,
+              }}
+              label="Package Title"
+              value={basicPlan.title}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, title: e.target.value });
+              }}
+            />
+            <GigDiscription
+              styles={{
+                backgroundColor: basicPlanError.description
+                  ? "#ffdadb"
+                  : "white",
+                mb: 1,
+              }}
+              value={basicPlan.description}
+              error={basicPlanError.description}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, description: e.target.value });
+              }}
+            />
+          </Box>
+
+          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
+            <DropDownComp
+              list={numebers}
+              label="Delivery Days"
+              value={standardPlan.deliveryTime}
+              error={standardPlanError.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Box>
         </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <p paddingLeft="10px">
-            Enter All the details related to your gig pricing and the services.
-          </p>
+        <Grid
+          item
+          container
+          mobile={3}
+          className="border"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box classnName="border-bottom">
+            <Typography variant="h4" sx={{ mt: 2 }}>
+              STANDARD
+            </Typography>
+          </Box>
+          <Box className="border-bottom" sx={{ px: 1 }}>
+            <InputField
+              styles={{
+                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                mb: 1,
+              }}
+              label="Package Title"
+              value={basicPlan.title}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, title: e.target.value });
+              }}
+            />
+            <GigDiscription
+              styles={{
+                backgroundColor: basicPlanError.description
+                  ? "#ffdadb"
+                  : "white",
+                mb: 1,
+              }}
+              value={basicPlan.description}
+              error={basicPlanError.description}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, description: e.target.value });
+              }}
+            />
+          </Box>
+          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
+            <DropDownComp
+              list={numebers}
+              label="Delivery Days"
+              value={standardPlan.deliveryTime}
+              error={standardPlanError.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Box>
         </Grid>
+        <Grid
+          item
+          container
+          mobile={3}
+          className="border"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box classnName="border-bottom">
+            <Typography variant="h4" sx={{ mt: 2 }}>
+              PREMIUM
+            </Typography>
+          </Box>
+          <Box className="border-bottom" sx={{ px: 1 }}>
+            <InputField
+              styles={{
+                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                mb: 1,
+              }}
+              label="Package Title"
+              value={basicPlan.title}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, title: e.target.value });
+              }}
+            />
+            <GigDiscription
+              styles={{
+                backgroundColor: basicPlanError.description
+                  ? "#ffdadb"
+                  : "white",
+                mb: 1,
+              }}
+              value={basicPlan.description}
+              error={basicPlanError.description}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, description: e.target.value });
+              }}
+            />
+          </Box>
+          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
+            <DropDownComp
+              list={numebers}
+              label="Delivery Days"
+              value={standardPlan.deliveryTime}
+              error={standardPlanError.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Box>
+        </Grid>
+
+        {Category.features.map((feature) => {
+          console.log("I am in");
+          <>
+            <Grid container mobile={12}>
+              <Grid item container mobile={3} className="border">
+                {feature.title}
+              </Grid>
+              <Grid item container mobile={3} className="border">
+                {feature.quantityBased && (
+                  <DropDownComp
+                    list={numebers}
+                    label="Select"
+                    value={standardPlan.deliveryTime}
+                    error={standardPlanError.deliveryTime}
+                    onChange={(e) => {
+                      setStandardPlan({
+                        ...standardPlan,
+                        deliveryTime: e.target.value,
+                      });
+                    }}
+                  />
+                )}
+                {feature.quantityBased === false && (
+                  <SwitchButtonComp
+                    label="Source File"
+                    checked={basicPlan.sourceFile}
+                    error={basicPlanError.sourceFile}
+                    onChange={(e) => {
+                      setBasicPlan({
+                        ...basicPlan,
+                        sourceFile: e.target.checked,
+                      });
+                    }}
+                  />
+                )}
+              </Grid>
+              <Grid item container mobile={3} className="border">
+                {" "}
+                {feature.quantityBased && (
+                  <DropDownComp
+                    list={numebers}
+                    label="Select"
+                    value={standardPlan.deliveryTime}
+                    error={standardPlanError.deliveryTime}
+                    onChange={(e) => {
+                      setStandardPlan({
+                        ...standardPlan,
+                        deliveryTime: e.target.value,
+                      });
+                    }}
+                  />
+                )}
+                {feature.quantityBased === false && (
+                  <SwitchButtonComp
+                    label="Source File"
+                    checked={basicPlan.sourceFile}
+                    error={basicPlanError.sourceFile}
+                    onChange={(e) => {
+                      setBasicPlan({
+                        ...basicPlan,
+                        sourceFile: e.target.checked,
+                      });
+                    }}
+                  />
+                )}
+              </Grid>
+              <Grid item container mobile={3} className="border">
+                {" "}
+                {feature.quantityBased && (
+                  <DropDownComp
+                    list={numebers}
+                    label="Select"
+                    value={standardPlan.deliveryTime}
+                    error={standardPlanError.deliveryTime}
+                    onChange={(e) => {
+                      setStandardPlan({
+                        ...standardPlan,
+                        deliveryTime: e.target.value,
+                      });
+                    }}
+                  />
+                )}
+                {feature.quantityBased === false && (
+                  <SwitchButtonComp
+                    label="Source File"
+                    checked={basicPlan.sourceFile}
+                    error={basicPlanError.sourceFile}
+                    onChange={(e) => {
+                      setBasicPlan({
+                        ...basicPlan,
+                        sourceFile: e.target.checked,
+                      });
+                    }}
+                  />
+                )}
+              </Grid>
+            </Grid>
+          </>;
+        })}
+      </Grid>
+
+      <Grid container justifyContent="center" sx={{ mt: 3 }}>
         <Grid item xs={12}></Grid>
         <Grid item xs={11} md={7}>
           <Grid container display="flex" justifyContent={"center"}>
@@ -412,7 +720,7 @@ export default function GigMyServicePlanning() {
                       deliveryTime: e.target.value,
                     });
                   }}
-                ></DropDownComp>
+                />
                 <InputField
                   label="Total"
                   value={standardPlan.price}
@@ -512,7 +820,6 @@ export default function GigMyServicePlanning() {
           </Grid>
         </Grid>
       </Grid>
-      <Footer></Footer>
-    </div>
+    </>
   );
 }

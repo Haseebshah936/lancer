@@ -36,6 +36,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Dashboard from "./components/SellerDashboardRenders/Dashboard";
 import Favourites from "./components/SellerDashboardRenders/Favourites";
 import axios from "axios";
+import CreateGig from "./pages/CreateGig";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -60,6 +61,8 @@ function App(props) {
               <Route index element={<Dashboard />} />
             </Route>
             <Route path="/chat/:id" element={<Chat />} />
+
+            <Route path="/gig/:name" element={<CreateGig />} />
             <Route
               path="/gig/gigserviceintroduction"
               element={<GigServiceIntroduction />}
