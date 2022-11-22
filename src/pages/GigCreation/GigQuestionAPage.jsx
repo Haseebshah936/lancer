@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Box, Button, Grid, TextField } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Paper,
+  TextField,
+  Typography,
+} from "@mui/material";
 import Joi from "joi-browser";
 import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
 import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
@@ -9,6 +17,7 @@ import deleteIcon from "../../utils/deleteIcon.png";
 import colors from "../../utils/colors";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
+import { EditOutlined, RemoveCircleOutlineOutlined } from "@mui/icons-material";
 
 export default function GigQuestionAPage() {
   const [questionArr, setQuestionArr] = useState([]);
@@ -39,44 +48,49 @@ export default function GigQuestionAPage() {
   };
 
   return (
-    <div style={{ width: "100vw" }}>
-      <Header></Header>
-      <Grid container display="flex" justifyContent="center">
-        <Grid item xs={11}>
-          <GigMuiHeader></GigMuiHeader>
-        </Grid>
-      </Grid>
-      <GigNavigationBar
-        title="Add/ Edit service"
-        pathName="/"
-      ></GigNavigationBar>
-      <Grid container display="flex" justifyContent="center" className="mt-3">
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <h3 className="text-left">Common FAQ's</h3>
-        </Grid>
-        <Grid item xs={12}></Grid>
-        <Grid item xs={11} md={6} paddingLeft={{ xs: "5px", sm: "10px" }}>
-          <p paddingLeft="10px">
-            Enter All the question thet you want a buyer to answer before they
-            can place a order.
-          </p>
-        </Grid>
-        <Grid item xs={12}></Grid>
-
+    <>
+      <Grid container sx={{ py: 2 }}>
         <Grid
           item
-          xs={11}
-          md={6}
-          paddingLeft={{ xs: "5px", sm: "10px" }}
-          style={{
-            backgroundColor: "#F7F7F7",
-            boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px",
-          }}
+          container
+          alignContent="flex-start"
+          justifyContent="flex-start"
+          direction="column"
         >
-          <Grid container display={"flex"} justifyContent={"center"}>
-            <Grid item xs={11} className="ps-3 pe-3 pt-3 rounded">
-              <h3 className="text-center">Custom Question</h3>
+          <Typography variant="h4">Common FAQ's</Typography>
+          <Typography variant="h5" sx={{ pt: 1 }}>
+            {" "}
+            Enter All the question thet you want a buyer to answer before they
+            can place a order.
+          </Typography>
+        </Grid>
+
+        <Grid item container sx={{ mt: 2 }}>
+          <Paper
+            sx={{
+              p: 2,
+              backgroundColor: "#F7F7F7",
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="h5">Create A Question</Typography>
+            <Grid item container sx={{ py: 1 }}>
               <TextField
+                sx={{
+                  mb: 2,
+                  "& label.Mui-focused": {
+                    color: colors.textGreen,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: colors.textGreen,
+                    },
+                  },
+                }}
                 fullWidth
                 className="bg-white"
                 id="outlined-basic"
@@ -90,9 +104,17 @@ export default function GigQuestionAPage() {
               {errors.title && (
                 <div className="alert alert-danger">{errors.title}</div>
               )}
-            </Grid>
-            <Grid item xs={11} className="ps-3 pe-3 pt-4 rounded">
               <TextField
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.textGreen,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: colors.textGreen,
+                    },
+                  },
+                }}
                 fullWidth
                 id="outlined-multiline-static"
                 label="Enter Description here"
@@ -107,12 +129,12 @@ export default function GigQuestionAPage() {
               {errors.discription && (
                 <div className="alert alert-danger">{errors.discription}</div>
               )}
-            </Grid>
-            <Grid item xs={11} className="ps-3 pe-3 pt-4 pb-4 rounded">
+
               <Button
+                sx={{ mt: 2 }}
                 variant="contained"
                 size="large"
-                style={{ backgroundColor: colors.becomePartnerButtonGreen }}
+                style={{ backgroundColor: colors.textGreen }}
                 onClick={() => {
                   const v = validate();
                   if (v) {
@@ -127,9 +149,10 @@ export default function GigQuestionAPage() {
                 Add to List
               </Button>
             </Grid>
-          </Grid>
+          </Paper>
         </Grid>
-        <Grid item xs={11} md={8} paddingTop="7px">
+
+        <Grid item mobile={12} paddingTop="7px">
           {questionArr.map((item, index) => (
             <Box
               key={index}
@@ -139,40 +162,44 @@ export default function GigQuestionAPage() {
                   "rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px",
               }}
             >
-              <Grid container>
-                <Grid item xs={8} md={10} className="ps-5">
-                  <h3>{item.title}</h3>
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                sx={{ px: 2 }}
+              >
+                <Grid item mobile={10}>
+                  <Typography variant="h5">{item.title}</Typography>
                 </Grid>
-                <Grid item xs={3} md={2} display="flex" justifyContent="center">
-                  <Box
-                    component="img"
-                    className="me-3"
-                    src={editIcon}
-                    sx={{ width: "25px", height: "25px" }}
-                    onClick={() => {
-                      setQuestion(item);
-                      let arr = questionArr;
-                      arr.splice(index, 1);
-                      setQuestionArr(arr);
-                    }}
-                  ></Box>
-                  <Box
-                    component="img"
-                    src={deleteIcon}
-                    sx={{ width: "25px", height: "25px" }}
-                    onClick={() => {
-                      setQuestionArr(
-                        questionArr.filter((item, i) => i !== index)
-                      );
-                    }}
-                  ></Box>
+                <Grid item container mobile={2} justifyContent="flex-end">
+                  <IconButton>
+                    <EditOutlined
+                      sx={{ color: colors.textGreen, fontSize: "2rem" }}
+                      onClick={() => {
+                        setQuestion(item);
+                        let arr = questionArr;
+                        arr.splice(index, 1);
+                        setQuestionArr(arr);
+                      }}
+                    />
+                  </IconButton>
+
+                  <IconButton>
+                    <RemoveCircleOutlineOutlined
+                      sx={{ color: colors.textGreen, fontSize: "2rem" }}
+                      onClick={() => {
+                        setQuestionArr(
+                          questionArr.filter((item, i) => i !== index)
+                        );
+                      }}
+                    />
+                  </IconButton>
                 </Grid>
               </Grid>
             </Box>
           ))}
         </Grid>
       </Grid>
-      <Footer></Footer>
-    </div>
+    </>
   );
 }

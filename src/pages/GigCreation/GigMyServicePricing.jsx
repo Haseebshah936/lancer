@@ -8,6 +8,7 @@ import {
   MenuItem,
   FormControl,
   Typography,
+  Checkbox,
 } from "@mui/material";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
@@ -21,6 +22,8 @@ import Header from "../../components/Header";
 import { numebers } from "../../utils/GigDropDownValues";
 import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
 import styled from "styled-components";
+import colors from "../../utils/colors";
+import { AttachMoneyOutlined } from "@mui/icons-material";
 const TitleBox = ({ heading }) => {
   return (
     <Box
@@ -46,12 +49,12 @@ const GigDiscription = ({ value, onChange, styles }) => {
     />
   );
 };
-const InputField = ({ label, onChange, value, styles }) => {
+const InputField = ({ label, onChange, value, styles, type, placeholder }) => {
   return (
     <CustomInput
+      type={type}
       fullWidth
-      placeholder="Enter Title"
-      id="outlined-basic"
+      placeholder={placeholder}
       label={label}
       onChange={onChange}
       value={value}
@@ -59,29 +62,22 @@ const InputField = ({ label, onChange, value, styles }) => {
     />
   );
 };
-const SwitchButtonComp = ({ onChange, checked, label, error }) => {
+const CheckBox = ({ onChange, checked, label, error }) => {
   return (
-    <Box
-      className="border-bottom"
-      display="flex"
-      flexDirection="row"
-      justifyContent={{ xs: "space-around", sm: "center" }}
-      marginTop="12px"
-      paddingTop={"5px"}
-      style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-      width="100%"
-    >
-      <Box display={{ xs: "block", sm: "none" }} paddingTop="15px">
-        <h5>{label}</h5>
-      </Box>
-      <Box>
-        <Switch
-          checked={checked}
-          onChange={onChange}
-          inputProps={{ "aria-label": "controlled" }}
-        />
-      </Box>
-    </Box>
+    <Checkbox
+      disableRipple
+      checked={checked}
+      onChange={onChange}
+      sx={{
+        "& .MuiSvgIcon-root": {
+          fontSize: "2rem",
+        },
+        color: colors.textGreen,
+        "&.Mui-checked": {
+          color: colors.textGreen,
+        },
+      }}
+    />
   );
 };
 
@@ -106,104 +102,21 @@ const DropDownComp = ({ list, label, value, onChange, error }) => {
   );
 };
 
-export default function GigMyServicePlanning({ Category, SubCategory }) {
-  const location = useLocation();
+export default function GigMyServicePricing({
+  Category,
+  SubCategory,
 
-  const [basicPlan, setBasicPlan] = React.useState({
-    title: "",
-    description: "",
-    revisions: "",
-    deliveryTime: "",
-    price: "",
-  });
-  const [standardPlan, setStandardPlan] = React.useState({
-    title: "",
-    description: "",
-    revision: "",
-    deliveryTime: "",
-    price: "",
-  });
-  const [premiumPlan, setPremiumPlan] = React.useState({
-    title: "",
-    description: "",
-    revision: "",
-    deliveryTime: "",
-    price: "",
-  });
+  setBasicPlan,
+  setStandardPlan,
+  setPremiumPlan,
 
-  const [basicPlanError, setBasicPlanError] = React.useState({});
-  const [standardPlanError, setStandardPlanError] = React.useState({});
-  const [premiumPlanError, setPremiumPlanError] = React.useState({});
-  const Schema = {
-    title: Joi.string().required().label("Title"),
-    description: Joi.string().required().label("Description"),
-    sourceFile: Joi.boolean().required().label("Source File"),
-    initialConcepts: Joi.number().required().label("Initial Concepts"),
-    revision: Joi.number().required().label("Revision"),
-    deliveryTime: Joi.number().required().label("Delivery Time"),
-    price: Joi.number().required().label("Price"),
-  };
-  const basicPlanValidation = () => {
-    console.log("basicPlanValidation", basicPlan);
-    const result = Joi.validate(basicPlan, Schema, { abortEarly: false });
-    if (!result.error) {
-      setBasicPlanError({});
-      console.log("basicPlan", basicPlanError);
-      return null;
-    }
-    const error = {};
-    for (let item of result.error.details) {
-      error[item.path[0]] = item.message;
-    }
-    setBasicPlanError(error);
-    console.log("basicPlan1", basicPlanError);
-    return error;
-  };
-  const standardPlanValidation = () => {
-    const result = Joi.validate(standardPlan, Schema, { abortEarly: false });
-    if (!result.error) {
-      setStandardPlanError({});
-      return null;
-    }
-    const error = {};
-    for (let item of result.error.details) {
-      error[item.path[0]] = item.message;
-    }
-    setStandardPlanError(error);
-    return error;
-  };
-  const premiumPlanValidation = () => {
-    const result = Joi.validate(premiumPlan, Schema, { abortEarly: false });
-    if (!result.error) {
-      setPremiumPlanError({});
-      return null;
-    }
-    const error = {};
-    for (let item of result.error.details) {
-      error[item.path[0]] = item.message;
-    }
-    setPremiumPlanError(error);
-    return error;
-  };
-  const validate = () => {
-    const basicPlanError = basicPlanValidation();
-    const standardPlanError = standardPlanValidation();
-    const premiumPlanError = premiumPlanValidation();
-    if (basicPlanError || standardPlanError || premiumPlanError) {
-      return "error";
-    }
-    return null;
-  };
-
-  React.useEffect(() => {
-    console.log(basicPlan);
-  }, [basicPlan]);
-  React.useEffect(() => {
-    console.log(standardPlan);
-  }, [standardPlan]);
-  React.useEffect(() => {
-    console.log(premiumPlan);
-  }, [premiumPlan]);
+  basicPlan,
+  standardPlan,
+  premiumPlan,
+  basicPlanError,
+  standardPlanError,
+  premiumPlanError,
+}) {
   return (
     <>
       <Grid container>
@@ -223,7 +136,85 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
         </Grid>
       </Grid>
       <Grid container className="border">
-        <Grid item container mobile={3} className="border"></Grid>
+        <Grid
+          item
+          container
+          mobile={3}
+          className="border"
+          sx={{ backgroundColor: "#F5F5F5" }}
+        ></Grid>
+        <Grid
+          item
+          container
+          mobile={3}
+          className="border"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Box
+            className="border-bottom"
+            sx={{
+              backgroundColor: "#F5F5F5",
+              width: "100%",
+              justifyContent: "center",
+              alignItems: " center",
+              display: "flex",
+            }}
+          >
+            <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: "bold" }}>
+              BASIC
+            </Typography>
+          </Box>
+          <Box className="border-bottom" sx={{ width: "100%" }}>
+            <Box className="border-bottom">
+              <InputField
+                placeholder="Enter Title"
+                styles={{
+                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  mb: 1,
+                  paddingInline: "",
+                }}
+                label="BasicPlanTitle"
+                value={basicPlan.title}
+                onChange={(e) => {
+                  setBasicPlan({ ...basicPlan, title: e.target.value });
+                  console.log("Basic Plan log");
+                }}
+              />
+            </Box>
+
+            <GigDiscription
+              styles={{
+                backgroundColor: basicPlanError.description
+                  ? "#ffdadb"
+                  : "white",
+                mb: 1,
+              }}
+              value={basicPlan.description}
+              error={basicPlanError.description}
+              onChange={(e) => {
+                setBasicPlan({ ...basicPlan, description: e.target.value });
+                console.log("Basic Plan log");
+              }}
+            />
+          </Box>
+
+          <Box sx={{ width: "100%", mt: 1 }}>
+            <InputField
+              styles={{ width: "100%" }}
+              placeholder="Delivery Days"
+              type="number"
+              error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Box>
+        </Grid>
         <Grid
           item
           container
@@ -238,16 +229,18 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
               width: "100%",
               justifyContent: "center",
               alignItems: " center",
+              backgroundColor: "#F5F5F5",
               display: "flex",
             }}
           >
-            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
-              BASIC
+            <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: "bold" }}>
+              STANDARD
             </Typography>
           </Box>
           <Box className="border-bottom" sx={{ width: "100%" }}>
             <Box className="border-bottom">
               <InputField
+                placeholder="Enter Title"
                 styles={{
                   backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
                   mb: 1,
@@ -256,7 +249,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                 label="Package Title"
                 value={basicPlan.title}
                 onChange={(e) => {
-                  setBasicPlan({ ...basicPlan, title: e.target.value });
+                  setStandardPlan({ ...basicPlan, title: e.target.value });
                 }}
               />
             </Box>
@@ -276,77 +269,13 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
             />
           </Box>
 
-          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
-            <DropDownComp
-              list={numebers}
-              label="Delivery Days"
-              value={standardPlan.deliveryTime}
-              error={standardPlanError.deliveryTime}
-              onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
-                  deliveryTime: e.target.value,
-                });
-              }}
-            />
-          </Box>
-        </Grid>
-        <Grid
-          item
-          container
-          mobile={3}
-          className="border"
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Box
-            className="border-bottom"
-            sx={{
-              width: "100%",
-              justifyContent: "center",
-              alignItems: " center",
-              display: "flex",
-            }}
-          >
-            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
-              STANDARD
-            </Typography>
-          </Box>
-          <Box className="border-bottom" sx={{ px: 1 }}>
+          <Box sx={{ width: "100%", mt: 1 }}>
             <InputField
-              styles={{
-                backgroundColor: standardPlanError.title ? "#ffdadb" : "white",
-                mb: 1,
-              }}
-              label="Package Title"
-              value={standardPlan.title}
-              onChange={(e) => {
-                setStandardPlan({ ...standardPlan, title: e.target.value });
-              }}
-            />
-            <GigDiscription
-              styles={{
-                backgroundColor: basicPlanError.description
-                  ? "#ffdadb"
-                  : "white",
-                mb: 1,
-              }}
-              value={basicPlan.description}
-              error={basicPlanError.description}
-              onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
-                  description: e.target.value,
-                });
-              }}
-            />
-          </Box>
-          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
-            <DropDownComp
-              list={numebers}
-              label="Delivery Days"
-              value={standardPlan.deliveryTime}
+              styles={{ width: "100%" }}
+              placeholder="Delivery Days"
+              type="number"
               error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
               onChange={(e) => {
                 setStandardPlan({
                   ...standardPlan,
@@ -369,26 +298,32 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
             sx={{
               width: "100%",
               justifyContent: "center",
+              backgroundColor: "#F5F5F5",
               alignItems: " center",
               display: "flex",
             }}
           >
-            <Typography variant="h4" sx={{ mt: 1, mb: 1 }}>
+            <Typography variant="h5" sx={{ mt: 1, mb: 1, fontWeight: "bold" }}>
               PREMIUM
             </Typography>
           </Box>
-          <Box className="border-bottom" sx={{ px: 1 }}>
-            <InputField
-              styles={{
-                backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
-                mb: 1,
-              }}
-              label="Package Title"
-              value={basicPlan.title}
-              onChange={(e) => {
-                setBasicPlan({ ...basicPlan, title: e.target.value });
-              }}
-            />
+          <Box className="border-bottom" sx={{ width: "100%" }}>
+            <Box className="border-bottom">
+              <InputField
+                placeholder="Enter Title"
+                styles={{
+                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  mb: 1,
+                  paddingInline: "",
+                }}
+                label="Package Title"
+                value={basicPlan.title}
+                onChange={(e) => {
+                  setPremiumPlan({ ...basicPlan, title: e.target.value });
+                }}
+              />
+            </Box>
+
             <GigDiscription
               styles={{
                 backgroundColor: basicPlanError.description
@@ -403,12 +338,14 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
               }}
             />
           </Box>
-          <Box sx={{ width: "100%", mt: 1, px: 1 }} className="border-bottom">
-            <DropDownComp
-              list={numebers}
-              label="Delivery Days"
-              value={standardPlan.deliveryTime}
+
+          <Box sx={{ width: "100%", mt: 1 }}>
+            <InputField
+              styles={{ width: "100%" }}
+              placeholder="Delivery Days"
+              type="number"
               error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
               onChange={(e) => {
                 setStandardPlan({
                   ...standardPlan,
@@ -422,17 +359,35 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
         {Category.features.map((feature) => {
           return (
             <>
-              <Grid container mobile={12}>
-                <Grid item container mobile={3} className="border">
-                  {feature.title}
+              <Grid container mobile={12} sx={{ height: "50px" }}>
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  mobile={3}
+                  className="border"
+                  sx={{ backgroundColor: "#F5F5F5" }}
+                >
+                  <Typography variant="h6" sx={{ pl: 1 }}>
+                    {feature.title}
+                  </Typography>
                 </Grid>
-                <Grid item container mobile={3} className="border">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-bottom border-end"
+                >
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -442,7 +397,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -455,14 +410,22 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                 </Grid>
-                <Grid item container mobile={3} className="border">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-bottom border-end"
+                >
                   {" "}
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -472,7 +435,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -485,14 +448,22 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                 </Grid>
-                <Grid item container mobile={3} className="border">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-top border-bottom"
+                >
                   {" "}
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -502,7 +473,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -520,20 +491,44 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
           );
         })}
 
-        {/* {SubCategory.features.map((feature) => {
+        {SubCategory.features.map((feature) => {
           return (
             <>
-              <Grid container mobile={12}>
-                <Grid item container mobile={3} className="border">
-                  {feature.title}
+              <Grid
+                container
+                mobile={12}
+                sx={{ height: "50px" }}
+                // alignItems="center"
+                // justifyContent="center"
+              >
+                <Grid
+                  item
+                  container
+                  mobile={3}
+                  className="border"
+                  alignItems="center"
+                  justifyContent="flex-start"
+                  sx={{ backgroundColor: "#F5F5F5" }}
+                >
+                  <Typography variant="h6" sx={{ pl: 1 }}>
+                    {feature.title}
+                  </Typography>
                 </Grid>
-                <Grid item container mobile={3} className="border">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-end border-bottom"
+                >
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -543,7 +538,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -556,14 +551,21 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                 </Grid>
-                <Grid item container mobile={3} className="border">
-                  {" "}
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-end border-bottom"
+                >
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -573,7 +575,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -586,14 +588,22 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                 </Grid>
-                <Grid item container mobile={3} className="border">
+                <Grid
+                  item
+                  container
+                  alignItems="center"
+                  justifyContent="center"
+                  mobile={3}
+                  className="border border-top border-bottom"
+                >
                   {" "}
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
@@ -603,7 +613,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -619,7 +629,192 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
               </Grid>
             </>
           );
-        })} */}
+        })}
+
+        <Grid container mobile={12} sx={{ height: "50px" }}>
+          <Grid
+            item
+            container
+            mobile={3}
+            className="border"
+            alignItems="center"
+            justifyContent="flex-start"
+            sx={{ backgroundColor: "#F5F5F5" }}
+          >
+            <Typography variant="h6" sx={{ pl: 1 }}>
+              Revisions
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-end border-bottom"
+          >
+            <InputField
+              styles={{ width: "100%" }}
+              placeholder="Enter number of revisions"
+              type="number"
+              error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-end border-bottom"
+          >
+            <InputField
+              styles={{ width: "100%" }}
+              placeholder="Enter number of revisions"
+              type="number"
+              error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-top border-bottom"
+          >
+            <InputField
+              styles={{ width: "100%" }}
+              placeholder="Enter number of revisions"
+              type="number"
+              error={standardPlanError.deliveryTime}
+              value={standardPlan.deliveryTime}
+              onChange={(e) => {
+                setStandardPlan({
+                  ...standardPlan,
+                  deliveryTime: e.target.value,
+                });
+              }}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container mobile={12} sx={{ height: "50px" }}>
+          <Grid
+            item
+            container
+            mobile={3}
+            className="border"
+            alignItems="center"
+            justifyContent="flex-start"
+            sx={{ backgroundColor: "#F5F5F5" }}
+          >
+            <Typography variant="h6" sx={{ pl: 1 }}>
+              Price
+            </Typography>
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-end border-bottom"
+          >
+            <Grid item container direction="row" alignItems="center">
+              <InputField
+                styles={{ width: "90%" }}
+                placeholder="Enter Price"
+                type="number"
+                error={standardPlanError.deliveryTime}
+                value={standardPlan.deliveryTime}
+                onChange={(e) => {
+                  setStandardPlan({
+                    ...standardPlan,
+                    deliveryTime: e.target.value,
+                  });
+                }}
+              />
+              <AttachMoneyOutlined
+                sx={{
+                  color: colors.textGreen,
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-end border-bottom"
+          >
+            <Grid item container direction="row" alignItems="center">
+              <InputField
+                styles={{ width: "90%" }}
+                placeholder="Enter Price"
+                type="number"
+                error={standardPlanError.deliveryTime}
+                value={standardPlan.deliveryTime}
+                onChange={(e) => {
+                  setStandardPlan({
+                    ...standardPlan,
+                    deliveryTime: e.target.value,
+                  });
+                }}
+              />
+              <AttachMoneyOutlined
+                sx={{
+                  color: colors.textGreen,
+                }}
+              />
+            </Grid>
+          </Grid>
+          <Grid
+            item
+            container
+            alignItems="center"
+            justifyContent="center"
+            mobile={3}
+            className="border border-top border-bottom"
+          >
+            <Grid item container direction="row" alignItems="center">
+              <InputField
+                styles={{ width: "90%" }}
+                placeholder="Enter Price"
+                type="number"
+                error={standardPlanError.deliveryTime}
+                value={standardPlan.deliveryTime}
+                onChange={(e) => {
+                  setStandardPlan({
+                    ...standardPlan,
+                    deliveryTime: e.target.value,
+                  });
+                }}
+              />
+              <AttachMoneyOutlined
+                sx={{
+                  color: colors.textGreen,
+                }}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
       </Grid>
 
       <Grid container>
@@ -636,40 +831,45 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
         {Category.additionalFeatures.map((feature) => {
           return (
             <>
-              <Grid container mobile={12} className="border">
-                <Grid item container mobile={3}>
-                  {feature.title}
-                </Grid>
+              <Grid
+                container
+                mobile={12}
+                className="border"
+                sx={{ height: "50px" }}
+              >
                 <Grid
                   item
                   container
                   mobile={9}
-                  justifyContent="flex-end"
+                  justifyContent="flex-start"
                   alignItems="center"
+                  className="border-End"
                 >
+                  <CheckBox
+                    label="Source File"
+                    checked={basicPlan.sourceFile}
+                    error={basicPlanError.sourceFile}
+                    onChange={(e) => {
+                      setBasicPlan({
+                        ...basicPlan,
+                        sourceFile: e.target.checked,
+                      });
+                    }}
+                  />
+                  <Typography variant="h6" sx={{ ml: 1 }}>
+                    {feature.title}
+                  </Typography>
                   {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
+                    <InputField
+                      styles={{ width: "100%" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
                       error={standardPlanError.deliveryTime}
+                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
                         setStandardPlan({
                           ...standardPlan,
                           deliveryTime: e.target.value,
-                        });
-                      }}
-                    />
-                  )}
-                  {feature.quantityBased === false && (
-                    <SwitchButtonComp
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
-                      onChange={(e) => {
-                        setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
                         });
                       }}
                     />
@@ -708,7 +908,7 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
                     />
                   )}
                   {feature.quantityBased === false && (
-                    <SwitchButtonComp
+                    <CheckBox
                       label="Source File"
                       checked={basicPlan.sourceFile}
                       error={basicPlanError.sourceFile}
@@ -729,269 +929,6 @@ export default function GigMyServicePlanning({ Category, SubCategory }) {
     </>
   );
 }
-// <Grid container justifyContent="center" sx={{ mt: 3 }}>
-//         <Grid item xs={12}></Grid>
-//         <Grid item xs={11} md={7}>
-//           <Grid container display="flex" justifyContent={"center"}>
-//             <Grid
-//               item
-//               xs={12}
-//               sm={2.8}
-//               className="border"
-//               display={{ xs: "none", sm: "block" }}
-//             >
-//               <Box height="230px" className="border-bottom"></Box>
-//               <TitleBox heading="Source File"></TitleBox>
-//               <TitleBox heading="No. of Initial Concepts"></TitleBox>
-//               <TitleBox heading="Revisions"></TitleBox>
-//               <TitleBox heading="Delivery Time"></TitleBox>
-//               <TitleBox heading="Total"></TitleBox>
-//             </Grid>
-//             {/* Basic */}
-//             <Grid item xs={12} sm={2.8} className="border" height="495px">
-//               <Box height="221px" className="border-bottom">
-//                 <Box className="border-bottom">
-//                   <h2 className="text-center mt-3">Baisc </h2>
-//                 </Box>
-//                 <InputField
-//                   label="Package Title"
-//                   value={basicPlan.title}
-//                   error={basicPlanError.title}
-//                   onChange={(e) => {
-//                     setBasicPlan({ ...basicPlan, title: e.target.value });
-//                   }}
-//                 ></InputField>
-//                 <GigDiscription
-//                   value={basicPlan.description}
-//                   error={basicPlanError.description}
-//                   onChange={(e) => {
-//                     setBasicPlan({ ...basicPlan, description: e.target.value });
-//                   }}
-//                 ></GigDiscription>
-//                 <SwitchButtonComp
-//                   label="Source File"
-//                   checked={basicPlan.sourceFile}
-//                   error={basicPlanError.sourceFile}
-//                   onChange={(e) => {
-//                     setBasicPlan({
-//                       ...basicPlan,
-//                       sourceFile: e.target.checked,
-//                     });
-//                   }}
-//                 ></SwitchButtonComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Initial Concepts"
-//                   value={basicPlan.initialConcepts}
-//                   error={basicPlanError.initialConcepts}
-//                   onChange={(e) => {
-//                     setBasicPlan({
-//                       ...basicPlan,
-//                       initialConcepts: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Revisions"
-//                   value={basicPlan.revision}
-//                   error={basicPlanError.revision}
-//                   onChange={(e) => {
-//                     setBasicPlan({ ...basicPlan, revision: e.target.value });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Delivery Days"
-//                   value={basicPlan.deliveryTime}
-//                   error={basicPlanError.deliveryTime}
-//                   onChange={(e) => {
-//                     setBasicPlan({
-//                       ...basicPlan,
-//                       deliveryTime: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <InputField
-//                   label="Total"
-//                   value={basicPlan.price}
-//                   error={basicPlanError.price}
-//                   onChange={(e) => {
-//                     setBasicPlan({ ...basicPlan, price: e.target.value });
-//                   }}
-//                 ></InputField>
-//               </Box>
-//             </Grid>
-//             {/* Standard */}
-//             <Grid item xs={12} sm={2.8} className="border" height="495px">
-//               <Box height="221px" className="border-bottom">
-//                 <Box className="border-bottom">
-//                   <h2 className="text-center mt-3">Standard </h2>
-//                 </Box>
-//                 <InputField
-//                   label="Package Title"
-//                   value={standardPlan.title}
-//                   error={standardPlanError.title}
-//                   onChange={(e) => {
-//                     setStandardPlan({ ...standardPlan, title: e.target.value });
-//                   }}
-//                 ></InputField>
-//                 <GigDiscription
-//                   value={standardPlan.description}
-//                   error={standardPlanError.description}
-//                   onChange={(e) => {
-//                     setStandardPlan({
-//                       ...standardPlan,
-//                       description: e.target.value,
-//                     });
-//                   }}
-//                 ></GigDiscription>
-//                 <SwitchButtonComp
-//                   label="Source File"
-//                   checked={standardPlan.sourceFile}
-//                   error={standardPlanError.sourceFile}
-//                   onChange={(e) => {
-//                     setStandardPlan({
-//                       ...standardPlan,
-//                       sourceFile: e.target.checked,
-//                     });
-//                   }}
-//                 ></SwitchButtonComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Initial Concepts"
-//                   value={standardPlan.initialConcepts}
-//                   error={standardPlanError.initialConcepts}
-//                   onChange={(e) => {
-//                     setStandardPlan({
-//                       ...standardPlan,
-//                       initialConcepts: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Revisions"
-//                   value={standardPlan.revision}
-//                   error={standardPlanError.revision}
-//                   onChange={(e) => {
-//                     setStandardPlan({
-//                       ...standardPlan,
-//                       revision: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Delivery Days"
-//                   value={standardPlan.deliveryTime}
-//                   error={standardPlanError.deliveryTime}
-//                   onChange={(e) => {
-//                     setStandardPlan({
-//                       ...standardPlan,
-//                       deliveryTime: e.target.value,
-//                     });
-//                   }}
-//                 />
-//                 <InputField
-//                   label="Total"
-//                   value={standardPlan.price}
-//                   error={standardPlanError.price}
-//                   onChange={(e) => {
-//                     setStandardPlan({ ...standardPlan, price: e.target.value });
-//                   }}
-//                 ></InputField>
-//               </Box>
-//             </Grid>
-//             {/* Premium */}
-//             <Grid item xs={12} sm={2.8} className="border">
-//               <Box height="221px" className="border-bottom">
-//                 <Box className="border-bottom">
-//                   <h2 className="text-center mt-3">Platinum</h2>
-//                 </Box>
-
-//                 <InputField
-//                   label="Package Title"
-//                   value={premiumPlan.title}
-//                   error={premiumPlanError.title}
-//                   onChange={(e) => {
-//                     setPremiumPlan({ ...premiumPlan, title: e.target.value });
-//                   }}
-//                 ></InputField>
-//                 <GigDiscription
-//                   value={premiumPlan.description}
-//                   error={premiumPlanError.description}
-//                   onChange={(e) => {
-//                     setPremiumPlan({
-//                       ...premiumPlan,
-//                       description: e.target.value,
-//                     });
-//                   }}
-//                 ></GigDiscription>
-//                 <SwitchButtonComp
-//                   label="Source File"
-//                   checked={premiumPlan.sourceFile}
-//                   error={premiumPlanError.sourceFile}
-//                   onChange={(e) => {
-//                     setPremiumPlan({
-//                       ...premiumPlan,
-//                       sourceFile: e.target.checked,
-//                     });
-//                   }}
-//                 ></SwitchButtonComp>
-
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Initial Concepts"
-//                   value={premiumPlan.initialConcepts}
-//                   error={premiumPlanError.initialConcepts}
-//                   onChange={(e) => {
-//                     setPremiumPlan({
-//                       ...premiumPlan,
-//                       initialConcepts: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Revisions"
-//                   value={premiumPlan.revision}
-//                   error={premiumPlanError.revision}
-//                   onChange={(e) => {
-//                     setPremiumPlan({
-//                       ...premiumPlan,
-//                       revision: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <DropDownComp
-//                   list={numebers}
-//                   label="Delivery Days"
-//                   value={premiumPlan.deliveryTime}
-//                   error={premiumPlanError.deliveryTime}
-//                   onChange={(e) => {
-//                     setPremiumPlan({
-//                       ...premiumPlan,
-//                       deliveryTime: e.target.value,
-//                     });
-//                   }}
-//                 ></DropDownComp>
-//                 <InputField
-//                   label="Total"
-//                   value={premiumPlan.price}
-//                   error={premiumPlanError.price}
-//                   onChange={(e) => {
-//                     setPremiumPlan({ ...premiumPlan, price: e.target.value });
-//                   }}
-//                 ></InputField>
-//               </Box>
-//             </Grid>
-//             <Grid item xs={12} sm={0} marginTop={{ xs: "250px", sm: "1px" }}>
-//               {}
-//             </Grid>
-//           </Grid>
-//         </Grid>
-//       </Grid>
 
 const CustomTextArea = styled.textarea`
   height: 60px;

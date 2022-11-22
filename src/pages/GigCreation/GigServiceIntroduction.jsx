@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Joi from "joi-browser";
+
 import axios from "axios";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -26,14 +26,21 @@ import AsyncAutoComplete from "../../components/GigComponent/AsyncAutoComplete";
 export default function GigServiceIntroduction({
   gigCategories,
   setGigCategories,
-  gigSubCategories,
-  setGigSubCategories,
   gigIntroduction,
   setGigIntroduction,
+  errors,
 }) {
-  const location = useLocation();
-  const [pathName, setPathName] = React.useState(location.pathname);
-  const [value, setValue] = useState("");
+  const [QuillValue, setQuillValue] = useState("");
+
+  const handleQuill = (e) => {
+    console.log(e);
+    setQuillValue(e);
+    console.log(QuillValue);
+    setGigIntroduction({
+      ...gigIntroduction,
+      gigDescription: QuillValue,
+    });
+  };
 
   const handleCategories = (CategoryArray) => {
     const Array = CategoryArray.map((c, index) => {
@@ -47,35 +54,10 @@ export default function GigServiceIntroduction({
     });
     setGigCategories(Array);
   };
-  const [errors, setErrors] = useState({});
-  var schema = {
-    gigTitle: Joi.string().required().label("Gig Title"),
-    gigCategory: Joi.string().required().label("Gig Category"),
-    gigDescription: Joi.string().required().label("Gig Description"),
-    language: Joi.string().required().label("Language"),
-    tage: Joi.array().items(Joi.string()).min(3).label("Tages"),
-    country: Joi.string().required().label("Country"),
-    addres: Joi.string().required().label("Address"),
-  };
-
-  const validate = () => {
-    const result = Joi.validate(gigIntroduction, schema, { abortEarly: false });
-    if (!result.error) {
-      setErrors({});
-      return null;
-    } else {
-      const errors = {};
-      for (let item of result.error.details) {
-        errors[item.path[0]] = item.message;
-      }
-      setErrors(errors);
-      console.log(errors);
-      return errors;
-    }
-  };
 
   const [tagsArr, setTagArr] = useState([]);
   const [ctag, setCTag] = useState("");
+  const [CatObject, setCatObject] = useState({});
 
   useEffect(() => {
     axios
@@ -86,10 +68,6 @@ export default function GigServiceIntroduction({
       });
   }, []);
 
-  useEffect(() => {
-    setPathName(location.pathname);
-    console.log("pathname", `${location.pathname}`);
-  }, [location.pathname]);
   useEffect(() => {
     const tagslist = tagsList;
     for (var dat in tagslist) {
@@ -148,6 +126,7 @@ export default function GigServiceIntroduction({
               value={gigIntroduction.gigCategory}
               error={errors.gigCategory}
               onChange={(e, value) => {
+                setCatObject(value);
                 setGigIntroduction({
                   ...gigIntroduction,
                   gigCategory: value,
@@ -159,7 +138,7 @@ export default function GigServiceIntroduction({
           <Grid item mobile={1}></Grid>
           <Grid item container mobile={5.5}>
             <AsyncAutoComplete
-              gigCategory={gigIntroduction.gigCategory}
+              gigCategory={CatObject}
               gigSubCategory={gigIntroduction.gigSubCategory}
               setGigSubCategory={(subCat) =>
                 setGigIntroduction((prev) => {
@@ -172,8 +151,8 @@ export default function GigServiceIntroduction({
         <Grid item container sx={{ mt: 2 }} mobile={12}>
           <ReactQuill
             theme="snow"
-            value={value}
-            onChange={setValue}
+            value={QuillValue}
+            onChange={handleQuill}
             style={{
               width: "100%",
               display: "flex",

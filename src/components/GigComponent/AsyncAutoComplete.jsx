@@ -68,7 +68,10 @@ export default function AsyncAutoComplete({
       options={options}
       value={gigSubCategory}
       loading={loading}
-      onChange={(e, v) => setGigSubCategory(v)}
+      onChange={(e, v) => {
+        setGigSubCategory(v);
+        console.log("I am in auto", gigSubCategory);
+      }}
       renderInput={(params) => (
         <TextField
           {...params}

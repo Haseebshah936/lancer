@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-import Joi from "joi-browser";
-import { useLocation } from "react-router-dom";
 import ImageUploading from "react-images-uploading";
 import { Box, Grid, Typography } from "@mui/material";
 import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
@@ -13,41 +11,13 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import styled from "styled-components";
 
-export default function GigMediaAttachment() {
-  const [gdata, setGdata] = React.useState({});
-  const [images, setImages] = React.useState([]);
-  const [errors, setErrors] = React.useState({});
-  const location = useLocation();
-
-  const schema = {
-    images: Joi.array().items().min(1).label("Images"),
-  };
-  const validate = () => {
-    const result = Joi.validate({ images }, schema, { abortEarly: false });
-    if (!result.error) {
-      setErrors({});
-      return null;
-    }
-    const errors = {};
-    for (let item of result.error.details) errors[item.path[0]] = item.message;
-    setErrors(errors);
-    console.log("media Errors:", errors);
-    return errors;
-  };
+export default function GigMediaAttachment({ setImages, images, errors }) {
   const maxNumber = 3;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
     // console.log(imageList, addUpdateIndex);
     setImages(imageList);
   };
-  useEffect(() => {
-    console.log("media Images:", images);
-  }, [images]);
-  useEffect(() => {
-    // console.log("media Location:", { ...location.state.gData });
-    // setGdata({ gigIntroduction: location.state.gData });
-    // console.log("gdata at mt", gdata);
-  }, []);
 
   return (
     <>
@@ -192,4 +162,12 @@ const ProgressBar = styled.div`
   align-items: center;
   position: absolute;
   z-index: 10;
+`;
+
+const Audio = styled.audio`
+  height: 4rem;
+  background-color: ${colors.audioBox};
+  position: absolute;
+  z-index: 1;
+  width: 100%;
 `;

@@ -1,24 +1,53 @@
 import { Grid, ThemeProvider, createTheme } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Footer from "../../components/Footer";
 import NavigationBar from "../../components/GigCreationComponents/NavigationBar";
 import StepperForm from "../../components/GigCreationSteps/StepperForm";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import GigMediaAttachment from "../GigCreation/GigMediaAttachment";
-import GigMyServicePlanning from "../GigCreation/GigMyServicePricing";
+import GigMyServicePricing from "../GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "../GigCreation/GigQuestionAPage";
 import GigServiceIntroduction from "../GigCreation/GigServiceIntroduction";
 
 export default function CreateGig() {
-  const [activeStep, setActiveStep] = useState(0);
+  const [errors, setErrors] = useState({});
 
+  const [images, setImages] = useState([]);
+  const [basicPlanError, setBasicPlanError] = useState({});
+  const [standardPlanError, setStandardPlanError] = useState({});
+  const [premiumPlanError, setPremiumPlanError] = useState({});
+
+  const [basicPlan, setBasicPlan] = useState({
+    title: "",
+    description: "",
+    revisions: "",
+    deliveryTime: "",
+    price: "",
+  });
+  const [standardPlan, setStandardPlan] = useState({
+    title: "",
+    description: "",
+    revision: "",
+    deliveryTime: "",
+    price: "",
+  });
+  const [premiumPlan, setPremiumPlan] = useState({
+    title: "",
+    description: "",
+    revision: "",
+    deliveryTime: "",
+    price: "",
+  });
+
+  const [activeStep, setActiveStep] = useState(0);
   const [gigCategories, setGigCategories] = useState([]);
   const [gigSubCategories, setGigSubCategories] = useState([]);
+
   const [gigIntroduction, setGigIntroduction] = useState({
     gigTitle: "",
     gigCategory: null,
     gigSubCategory: null,
-    gigDescription: "",
+    gigDescription: null,
     language: "",
     tage: [],
     country: "",
@@ -36,17 +65,34 @@ export default function CreateGig() {
             setGigSubCategories={setGigSubCategories}
             gigIntroduction={gigIntroduction}
             setGigIntroduction={setGigIntroduction}
+            errors={errors}
           />
         );
         break;
       case 1:
-        return <GigMediaAttachment />;
+        return (
+          <GigMediaAttachment
+            images={images}
+            setImages={setImages}
+            errors={errors}
+          />
+        );
         break;
       case 2:
         return (
-          <GigMyServicePlanning
+          <GigMyServicePricing
+            errors={errors}
+            basicPlan={basicPlan}
+            standardPlan={standardPlan}
+            premiumPlan={premiumPlan}
+            basicPlanError={basicPlanError}
+            standardPlanError={standardPlanError}
+            premiumPlanError={premiumPlanError}
             Category={gigIntroduction.gigCategory}
             SubCategory={gigIntroduction.gigSubCategory}
+            setBasicPlan={setBasicPlan}
+            setStandardPlan={setStandardPlan}
+            setPremiumPlan={setPremiumPlan}
           />
         );
         break;
@@ -62,11 +108,11 @@ export default function CreateGig() {
     }
   };
 
-  const handleStep = (step) => () => {
+  const handleStep = (step) => {
     if (activeStep < 4) {
       setActiveStep(step);
     }
-    console.log(activeStep);
+    console.log("I am in active step", activeStep);
   };
 
   return (
@@ -94,9 +140,22 @@ export default function CreateGig() {
               <Grid item mobile={10}>
                 {" "}
                 <NavigationBar
+                  images={images}
+                  errors={errors}
+                  gigIntroduction={gigIntroduction}
+                  setErrors={setErrors}
                   activeStep={activeStep}
                   handleStep={handleStep}
                   handleBack={handleBack}
+                  setBasicPlanError={setBasicPlanError}
+                  setStandardPlanError={setStandardPlanError}
+                  setPremiumPlanError={setPremiumPlanError}
+                  basicPlan={basicPlan}
+                  standardPlan={standardPlan}
+                  premiumPlan={premiumPlan}
+                  basicPlanError={basicPlanError}
+                  standardPlanError={standardPlanError}
+                  premiumPlanError={premiumPlanError}
                 />
                 {handleActiveStep(activeStep)}
               </Grid>
