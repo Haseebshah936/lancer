@@ -226,21 +226,25 @@ function Chat(props) {
                 );
               })}
           </ChatContainer1>
-          <MessageListContainer>
-            {data.map((message) => {
-              const newMessage = handleMessageFormation(message);
-              return (
-                <CustomMessageBox
-                  position={user?._id === newMessage?.userId ? "right" : "left"}
-                  title={newMessage?.userName}
-                  type={message?.type}
-                  key={message?._id}
-                  avatar={message?.userId?.profilePic}
-                  {...newMessage}
-                />
-              );
-            })}
-          </MessageListContainer>
+          {data.length && (
+            <MessageListContainer>
+              {data.map((message) => {
+                const newMessage = handleMessageFormation(message);
+                return (
+                  <CustomMessageBox
+                    position={
+                      user?._id === newMessage?.userId ? "right" : "left"
+                    }
+                    title={newMessage?.userName}
+                    type={message?.type}
+                    key={message?._id}
+                    avatar={message?.userId?.profilePic}
+                    {...newMessage}
+                  />
+                );
+              })}
+            </MessageListContainer>
+          )}
         </ChatContainer>
         <div style={{ height: ".5rem" }} ref={messageRef} />
         <ChatInput onSend={handleSend} />
