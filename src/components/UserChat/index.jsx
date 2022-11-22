@@ -208,20 +208,23 @@ function Chat(props) {
         />
         <ChatContainer onScroll={handleScroll} ref={scrollRef}>
           <ChatContainer1>
-            {newData.map((message) => {
-              const newMessage = handleMessageFormation(message);
-              return (
-                <CustomMessageBox
-                  inverted={false}
-                  position={user?._id === newMessage?.userId ? "right" : "left"}
-                  title={newMessage?.userName}
-                  type={message?.type}
-                  key={message?._id}
-                  avatar={message?.userId?.profilePic}
-                  {...newMessage}
-                />
-              );
-            })}
+            {newData.length &&
+              newData.map((message) => {
+                const newMessage = handleMessageFormation(message);
+                return (
+                  <CustomMessageBox
+                    inverted={false}
+                    position={
+                      user?._id === newMessage?.userId ? "right" : "left"
+                    }
+                    title={newMessage?.userName}
+                    type={message?.type}
+                    key={message?._id}
+                    avatar={message?.userId?.profilePic}
+                    {...newMessage}
+                  />
+                );
+              })}
           </ChatContainer1>
           <MessageListContainer>
             {data.map((message) => {
