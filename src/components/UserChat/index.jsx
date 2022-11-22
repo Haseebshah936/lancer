@@ -17,6 +17,14 @@ import MessageHeader from "./MessageHeader";
 import ChatInput from "./ChatInput";
 import CustomMessageBox from "./CustomMessageBox";
 import { chat } from "../../utils/dummyData";
+import axios from "axios";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
+import { handleError } from "../../utils/helperFunctions";
+import {
+  handleMessageCreation,
+  handleMessageFormation,
+} from "./HelperFunctions";
 
 const ChatRoomsData = [
   {
@@ -26,7 +34,6 @@ const ChatRoomsData = [
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(new Date().getTime() - 500000),
     unread: true,
-    statusColor: colors.lightGreen,
     muted: false,
     showMute: true,
   },
@@ -37,7 +44,6 @@ const ChatRoomsData = [
     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
     date: new Date(new Date().getTime() - 500000),
     unread: false,
-    statusColor: colors.gray,
     muted: false,
     showMute: true,
   },
@@ -45,17 +51,40 @@ const ChatRoomsData = [
 
 function Chat(props) {
   const messageRef = useRef();
-  const [data, setData] = useState(chat);
+  const scrollRef = useRef();
+  const [data, setData] = useState([]);
+  const [newData, setNewData] = useState([]);
   const [active, setActive] = useState(false);
-  const [chatRooms, setChatRooms] = useState(ChatRoomsData);
-  const [chatRoomsData, setChatRoomsData] = useState(ChatRoomsData);
+  const [chatRooms, setChatRooms] = useState([]);
+  const [chatRoomsData, setChatRoomsData] = useState([]);
+  const { user } = useRealmContext();
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
-  useEffect(() => {
-    setData(chat);
-  }, [chat]);
+  const getChatRooms = () => {
+    requestMethod
+      .get(`chatroom/getChatroomsById/${user._id}`)
+      .then((res) => {
+        setChatRooms(res.data);
+        setChatRoomsData(res.data);
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const getChatRoomMessages = (chatRoomId) => {
+    requestMethod
+      .get(`message/${chatRoomId}`)
+      .then((res) => {
+        setData(res.data);
+        setNewData([]);
+      })
+      .catch((err) => {
+        console.log(err);
+        handleError(err);
+      });
+  };
 
   const handleChatRoomClick = (chatRoom) => {
-    console.log("ChatRoom", chatRoom);
     setActive(chatRoom);
   };
 
@@ -64,19 +93,40 @@ function Chat(props) {
   };
 
   const handleSend = (message) => {
-    console.log("message", message);
-    setData((prev) => [
-      ...prev,
-      {
-        ...message,
-        avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-        alt: "kursat_avatar",
+    let newMessage = handleMessageCreation(user._id, active.id, message);
+    newMessage = {
+      ...newMessage,
+      userId: {
+        _id: user._id,
+        name: user.name,
       },
-    ]);
+    };
+    setNewData((prev) => [...prev, newMessage]);
+    requestMethod
+      .post("message", newMessage)
+      .then((res) => {})
+      .catch((err) => {
+        console.log(err);
+        handleError(err);
+      });
   };
 
-  const handleMuteChatRoom = (chatRoom) => {
-    console.log("Mute ChatRoom", chatRoom);
+  const handleMuteChatRoom = (chatroom, muted) => {
+    const index = chatRooms.indexOf(chatroom);
+    let newChatRooms = [...chatRooms];
+    newChatRooms[index].muted = !muted;
+    setChatRooms(newChatRooms);
+    requestMethod
+      .put(`chatroom/${muted ? "unMute" : "mute"}Chatroom/${chatroom.id}`, {
+        participantId: chatroom.userParticipantId,
+      })
+      .catch((err) => {
+        console.log("Error", err);
+        newChatRooms = [...chatRooms];
+        newChatRooms[index].muted = muted;
+        setChatRooms(newChatRooms);
+        handleError(err);
+      });
   };
 
   const handleFilter = (value) => {
@@ -95,9 +145,46 @@ function Chat(props) {
 
   const handleVideoCall = () => {};
 
+  // useEffect(() => {
+  //   messageRef.current.scrollIntoView({
+  //     block: "end",
+  //     inline: "nearest",
+  //   });
+  // }, [data, active]);
+
+  const handleScroll = () => {
+    const target = scrollRef.current;
+    const difference = Math.sqrt(
+      Math.pow(target.scrollHeight - target.scrollTop - target.clientHeight, 2)
+    );
+    // console.log(difference);
+    if (difference <= 1 && !loadingMore) {
+      // console.log("I am in");
+      setLoadingMore(true);
+      requestMethod
+        .get(`message/${active.id}?skip=${data.length}`)
+        .then((res) => {
+          // console.log("Load more", res.data);
+          setLoadingMore(false);
+          setData((pre) => [...pre, ...res.data]);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoadingMore(false);
+          handleError(err);
+        });
+    }
+  };
+
   useEffect(() => {
-    messageRef.current.scrollIntoView({ behavior: "smooth" });
-  }, [data, active]);
+    if (active) getChatRoomMessages(active.id);
+  }, [active]);
+
+  useEffect(() => {
+    if (user) {
+      getChatRooms();
+    }
+  }, [user]);
 
   return (
     <Container>
@@ -111,26 +198,48 @@ function Chat(props) {
       </ChatRoomsContainer>
       <MessageContainer active={active}>
         <MessageHeader
+          uri={active.avatar}
           name={active.title}
+          status={active.isOnline}
+          isGroup={active.isGroup}
           onBackClick={handleBackClick}
           onClickCall={handleCall}
           onClickVideoCall={handleVideoCall}
         />
-        <MessageListContainer>
-          {data.map(({ userId, userName, type, ...e }, i) => {
-            return (
-              <CustomMessageBox
-                position={userId == 1 ? "right" : "left"}
-                title={userName}
-                type={type}
-                key={i}
-                {...e}
-              />
-            );
-          })}
-          <div style={{ height: ".1rem" }} ref={messageRef} />
-        </MessageListContainer>
-
+        <ChatContainer onScroll={handleScroll} ref={scrollRef}>
+          <ChatContainer1>
+            {newData.map((message) => {
+              const newMessage = handleMessageFormation(message);
+              return (
+                <CustomMessageBox
+                  inverted={false}
+                  position={user?._id === newMessage?.userId ? "right" : "left"}
+                  title={newMessage?.userName}
+                  type={message?.type}
+                  key={message?._id}
+                  avatar={message?.userId?.profilePic}
+                  {...newMessage}
+                />
+              );
+            })}
+          </ChatContainer1>
+          <MessageListContainer>
+            {data.map((message) => {
+              const newMessage = handleMessageFormation(message);
+              return (
+                <CustomMessageBox
+                  position={user?._id === newMessage?.userId ? "right" : "left"}
+                  title={newMessage?.userName}
+                  type={message?.type}
+                  key={message?._id}
+                  avatar={message?.userId?.profilePic}
+                  {...newMessage}
+                />
+              );
+            })}
+          </MessageListContainer>
+        </ChatContainer>
+        <div style={{ height: ".5rem" }} ref={messageRef} />
         <ChatInput onSend={handleSend} />
       </MessageContainer>
     </Container>
@@ -149,6 +258,9 @@ const Container = styled.div`
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   height: 86vh;
   overflow-y: hidden;
+  img.rce-avatar {
+    object-fit: cover;
+  }
   ${tablet({ marginInline: "2%" })}
   ${miniTablet({
     flexDirection: "column",
@@ -183,17 +295,11 @@ const MessageContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   display: ${(props) => (props.active ? "flex" : "none")};
   ${miniTablet({
     width: "auto",
   })};
-`;
-
-const MessageListContainer = styled.div`
-  scroll-behavior: smooth;
-  overflow-y: scroll;
-  padding-inline: 1rem;
-  overflow-x: hidden;
   .rce-container-mbox {
     width: 100%;
     min-width: auto;
@@ -214,6 +320,7 @@ const MessageListContainer = styled.div`
 
   .rce-mbox.rce-mbox-right {
     color: ${colors.black};
+    padding-top: 1.2rem;
     background-color: ${colors.userChatMessageBackground};
     .rce-mbox-text {
       color: ${colors.black};
@@ -229,27 +336,6 @@ const MessageListContainer = styled.div`
   [class*="notch"] {
     display: none;
   }
-  scrollbar-width: 0.6rem;
-  &::-webkit-scrollbar {
-    width: 0.6rem;
-    height: 0.6rem;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.gray};
-    border-radius: 10rem;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-corner {
-    display: none;
-  }
-  &::-webkit-resizer {
-    display: none;
-  }
   ${miniTablet({
     flexDirection: "column",
   })}
@@ -263,4 +349,22 @@ const MessageListContainer = styled.div`
       maxWidth: "95%",
     },
   })}
+`;
+
+const ChatContainer = styled.div`
+  overflow: scroll;
+  transform: rotateX(180deg);
+`;
+const ChatContainer1 = styled.div`
+  overflow: scroll;
+  transform: rotateX(180deg);
+  .gWUMbg.sc-ibYzZP {
+    margin-top: 0;
+  }
+`;
+
+const MessageListContainer = styled.div`
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;

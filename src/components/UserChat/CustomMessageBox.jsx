@@ -5,20 +5,22 @@ import AutoLinkText from "react-autolink-text2";
 import colors from "../../utils/colors";
 import { miniMobile, mobile } from "../../responsive";
 
-function CustomMessageBox({ position, title, type, ...props }) {
+function CustomMessageBox({
+  position,
+  inverted = true,
+  title,
+  type,
+  avatar,
+  ...props
+}) {
   const handleDownload = (e) => {
     console.log("Download", e);
     window.open(e);
   };
   return (
-    <Container position={position}>
+    <Container position={position} inverted={inverted}>
       {position === "left" && (
-        <Avatar
-          src="https://avatars.githubusercontent.com/u/80540635?v=4"
-          alt="avatar"
-          size="small"
-          type="circle"
-        />
+        <Avatar src={avatar} alt="avatar" size="small" type="circle" />
       )}
       <Wrapper
         style={{
@@ -45,9 +47,12 @@ function CustomMessageBox({ position, title, type, ...props }) {
 export default CustomMessageBox;
 const Container = styled.div`
   display: flex;
+  flex-grow: 1;
   flex-direction: row;
   align-items: flex-end;
   overflow: hidden;
+  transform: ${(props) =>
+    props.inverted ? `rotateX(180deg)` : `rotateX(0deg)`};
   margin-block: 2.5rem;
   margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
 

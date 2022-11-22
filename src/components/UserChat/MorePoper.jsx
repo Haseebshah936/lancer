@@ -15,14 +15,14 @@ export default function SimplePopper() {
   const id = open ? "simple-popper" : undefined;
 
   return (
-    <Box alignSelf={"flex-start"} ml={1}>
+    <Box alignSelf={"center"} ml={1}>
       <IconButton
         type="button"
         onClick={handleClick}
-        sx={{ p: "0.rem" }}
+        sx={{ p: 1, alignSelf: "flex" }}
         aria-label="search"
       >
-        <MoreVert sx={{ fontSize: "1.5rem" }} />
+        <MoreVert fontSize="large" />
       </IconButton>
       <Popper id={id} open={open} anchorEl={anchorEl}>
         <Box sx={{ border: 1, p: 1, bgcolor: "background.paper" }}>

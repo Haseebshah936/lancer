@@ -17,6 +17,7 @@ import AudioRecorder from "./AudioRecorder";
 import { sha1 } from "crypto-hash";
 import { Box } from "@mui/system";
 import axios from "axios";
+import { useRealmContext } from "../../db/RealmContext";
 // import cloudinary from "cloudinary-react";
 
 // cloudinary.config({
@@ -25,13 +26,14 @@ import axios from "axios";
 //   api_secret: process.env.REACT_APP_API_SECRET,
 // });
 
-function ChatInput({ onSend }) {
+function ChatInput({ onSend, profilePic }) {
   const [message, setMessage] = useState("");
   const [audioRecording, setAudioRecording] = useState(true);
   const [clear, setClear] = useState(false);
   const inputRef = useRef(null);
   const [attachments, setAttachments] = useState([]);
   const filePickerRef = useRef(null);
+  const { user } = useRealmContext();
 
   // !NOTE Must add the following
   // Array of timeout listners
@@ -57,6 +59,12 @@ function ChatInput({ onSend }) {
   };
 
   const sendTextMessage = (attachments) => {
+    const uploadCheck = attachments.filter(
+      (attachment) => attachment.uploading && !attachment?.removed
+    );
+    if (uploadCheck.length > 0) {
+      return;
+    }
     if (attachments.length > 0) {
       attachments.forEach((attachment, i) => {
         if (
@@ -432,8 +440,8 @@ function ChatInput({ onSend }) {
         </AttachmentsContainer>
         <TextInputContainer>
           <Avatar
-            src="https://avatars.githubusercontent.com/u/80540635?v=4"
-            alt="avatar"
+            src={user?.profilePic}
+            alt={user?.name + " avatar"}
             size="large"
             type="circle"
             className="avatar"
