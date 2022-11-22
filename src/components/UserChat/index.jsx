@@ -162,7 +162,7 @@ function Chat(props) {
       // console.log("I am in");
       setLoadingMore(true);
       requestMethod
-        .get(`message/${active.id}?skip=${data.length}`)
+        .get(`message/${active.id}?skip=${data.length + newData.length}`)
         .then((res) => {
           // console.log("Load more", res.data);
           setLoadingMore(false);
@@ -367,4 +367,5 @@ const MessageListContainer = styled.div`
   scroll-behavior: smooth;
   overflow-y: scroll;
   overflow-x: hidden;
+  flex: 1;
 `;
