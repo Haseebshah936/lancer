@@ -49,12 +49,21 @@ const GigDiscription = ({ value, onChange, styles }) => {
     />
   );
 };
-const InputField = ({ label, onChange, value, styles, type, placeholder }) => {
+const InputField = ({
+  label,
+  onChange,
+  value,
+  styles,
+  type,
+  placeholder,
+  name,
+}) => {
   return (
     <CustomInput
       type={type}
       fullWidth
       placeholder={placeholder}
+      name={name}
       label={label}
       onChange={onChange}
       value={value}
@@ -204,11 +213,11 @@ export default function GigMyServicePricing({
               styles={{ width: "100%" }}
               placeholder="Delivery Days"
               type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
+              error={basicPlanError.deliveryTime}
+              value={basicPlan.deliveryTime}
               onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
+                setBasicPlan({
+                  ...basicPlan,
                   deliveryTime: e.target.value,
                 });
               }}
@@ -242,29 +251,34 @@ export default function GigMyServicePricing({
               <InputField
                 placeholder="Enter Title"
                 styles={{
-                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  backgroundColor: standardPlanError.title
+                    ? "#ffdadb"
+                    : "white",
                   mb: 1,
                   paddingInline: "",
                 }}
                 label="Package Title"
-                value={basicPlan.title}
+                value={standardPlan.title}
                 onChange={(e) => {
-                  setStandardPlan({ ...basicPlan, title: e.target.value });
+                  setStandardPlan({ ...standardPlan, title: e.target.value });
                 }}
               />
             </Box>
 
             <GigDiscription
               styles={{
-                backgroundColor: basicPlanError.description
+                backgroundColor: standardPlanError.description
                   ? "#ffdadb"
                   : "white",
                 mb: 1,
               }}
-              value={basicPlan.description}
-              error={basicPlanError.description}
+              value={standardPlan.description}
+              error={standardPlanError.description}
               onChange={(e) => {
-                setBasicPlan({ ...basicPlan, description: e.target.value });
+                setStandardPlan({
+                  ...standardPlan,
+                  description: e.target.value,
+                });
               }}
             />
           </Box>
@@ -312,29 +326,29 @@ export default function GigMyServicePricing({
               <InputField
                 placeholder="Enter Title"
                 styles={{
-                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  backgroundColor: premiumPlanError.title ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
                 }}
                 label="Package Title"
-                value={basicPlan.title}
+                value={premiumPlan.title}
                 onChange={(e) => {
-                  setPremiumPlan({ ...basicPlan, title: e.target.value });
+                  setPremiumPlan({ ...premiumPlan, title: e.target.value });
                 }}
               />
             </Box>
 
             <GigDiscription
               styles={{
-                backgroundColor: basicPlanError.description
+                backgroundColor: premiumPlanError.description
                   ? "#ffdadb"
                   : "white",
                 mb: 1,
               }}
-              value={basicPlan.description}
-              error={basicPlanError.description}
+              value={premiumPlan.description}
+              error={premiumPlanError.description}
               onChange={(e) => {
-                setBasicPlan({ ...basicPlan, description: e.target.value });
+                setPremiumPlan({ ...premiumPlan, description: e.target.value });
               }}
             />
           </Box>
@@ -344,11 +358,11 @@ export default function GigMyServicePricing({
               styles={{ width: "100%" }}
               placeholder="Delivery Days"
               type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
+              error={premiumPlanError.deliveryTime}
+              value={premiumPlan.deliveryTime}
               onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
+                setPremiumPlan({
+                  ...premiumPlan,
                   deliveryTime: e.target.value,
                 });
               }}
@@ -389,7 +403,7 @@ export default function GigMyServicePricing({
                       error={standardPlanError.deliveryTime}
                       value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
+                        setBasicPlan({
                           ...standardPlan,
                           deliveryTime: e.target.value,
                         });

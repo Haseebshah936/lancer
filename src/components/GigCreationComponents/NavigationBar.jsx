@@ -33,8 +33,6 @@ export default function NavigationBar({
   const PackageSchema = {
     title: Joi.string().required().label("Title"),
     description: Joi.string().required().label("Description"),
-    sourceFile: Joi.boolean().required().label("Source File"),
-    initialConcepts: Joi.number().required().label("Initial Concepts"),
     revision: Joi.number().required().label("Revision"),
     deliveryTime: Joi.number().required().label("Delivery Time"),
     price: Joi.number().required().label("Price"),
