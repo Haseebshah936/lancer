@@ -19,6 +19,7 @@ function MessageHeader({
   uri = "https://avatars.githubusercontent.com/u/80540635?v=4",
   name = "Haseeb",
   status = true,
+  isGroup = false,
   onClickCall = () => {},
   onClickVideoCall = () => {},
 }) {
@@ -48,12 +49,21 @@ function MessageHeader({
               {name}
             </Typography>
           </ButtonBase>
-          <Typography ml={1.5} variant="h6" sx={{ cursor: "pointer" }}>
-            <FiberManualRecord
-              sx={{ color: status ? colors.lightGreen : colors.lightGrey }}
-            />
-            online
-          </Typography>
+          {!isGroup && (
+            <Typography
+              ml={1.5}
+              variant="h6"
+              sx={{ cursor: "pointer", display: "flex" }}
+            >
+              <FiberManualRecord
+                sx={{
+                  color: status ? colors.lightGreen : colors.lightGrey,
+                  alignSelf: "center",
+                }}
+              />
+              online
+            </Typography>
+          )}
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -77,6 +87,9 @@ const Container = styled.div`
   padding-bottom: 1rem;
   min-width: auto;
   border-bottom: 1px solid ${colors.lightGrey};
+  img.rce-avatar {
+    object-fit: cover;
+  }
   ${mobile({ paddingInline: "1rem" })}
 `;
 

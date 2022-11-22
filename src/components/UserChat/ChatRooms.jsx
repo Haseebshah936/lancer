@@ -2,10 +2,11 @@ import { Search } from "@mui/icons-material";
 import { IconButton, InputBase } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
-import { ChatList } from "react-chat-elements";
+import { ChatItem, ChatList } from "react-chat-elements";
 import styled from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
+import CustomChatItem from "./CustomChatItem";
 import MorePoper from "./MorePoper";
 
 function ChatRooms({
@@ -16,10 +17,15 @@ function ChatRooms({
 }) {
   return (
     <ChatRoomsContainer>
-      <Box display={"flex"} justifyContent={"center"} alignItems={"center"}>
+      <Box
+        marginBottom={"2rem"}
+        display={"flex"}
+        justifyContent={"center"}
+        alignItems={"center"}
+      >
         <SearchBox>
           <InputBase
-            sx={{ ml: 1, flex: 1 }}
+            sx={{ ml: 1, flex: 1, py: 0.5, fontSize: "1.2rem" }}
             placeholder="Search"
             inputProps={{ "aria-label": "search" }}
             onChange={(e) => onFilter(e.target.value)}
@@ -30,12 +36,21 @@ function ChatRooms({
         </SearchBox>
         <MorePoper />
       </Box>
-      <ChatList
+      {/* <ChatList
         onClick={onRoomClick}
         onClickMute={onMuteClick}
         className="chat-list"
         dataSource={chatrooms}
-      />
+      /> */}
+      {chatrooms.map((chatroom) => {
+        return (
+          <CustomChatItem
+            onClick={onRoomClick}
+            onClickMute={onMuteClick}
+            chatroom={chatroom}
+          />
+        );
+      })}
     </ChatRoomsContainer>
   );
 }
@@ -71,7 +86,6 @@ const SearchBox = styled.div`
   min-width: 28rem;
   width: 80%;
   display: flex;
-  margin-bottom: 2rem;
   justify-content: space-between;
   ${miniPc({
     minWidth: "22rem",

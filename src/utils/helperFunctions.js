@@ -18,3 +18,13 @@ export const handleRealmError = (error) => {
   // console.log(msg[msg.length - 1]);
   toast.error(msg[msg.length - 1].split("(")[0]);
 };
+
+export const handleError = (error) => {
+  if (error?.response?.status != 500 && error.code !== "ERR_NETWORK") {
+    toast.error(error?.response?.data);
+  } else if (error.code == "ERR_NETWORK") {
+    toast.error(error.message);
+  } else {
+    toast.error("Internal server issue");
+  }
+};
