@@ -51,17 +51,20 @@ const ChatRoomsData = [
 
 function Chat(props) {
   const messageRef = useRef();
+  const scrollRef = useRef();
   const [data, setData] = useState([]);
+  const [newData, setNewData] = useState([]);
   const [active, setActive] = useState(false);
   const [chatRooms, setChatRooms] = useState([]);
   const [chatRoomsData, setChatRoomsData] = useState([]);
   const { user } = useRealmContext();
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
 
   const getChatRooms = () => {
     requestMethod
       .get(`chatroom/getChatroomsById/${user._id}`)
       .then((res) => {
-        console.log(res.data);
         setChatRooms(res.data);
         setChatRoomsData(res.data);
       })
@@ -72,8 +75,8 @@ function Chat(props) {
     requestMethod
       .get(`message/${chatRoomId}`)
       .then((res) => {
-        console.log(res.data);
         setData(res.data);
+        setNewData([]);
       })
       .catch((err) => {
         console.log(err);
@@ -82,7 +85,6 @@ function Chat(props) {
   };
 
   const handleChatRoomClick = (chatRoom) => {
-    console.log("ChatRoom", chatRoom);
     setActive(chatRoom);
   };
 
@@ -91,7 +93,15 @@ function Chat(props) {
   };
 
   const handleSend = (message) => {
-    const newMessage = handleMessageCreation(user._id, active.id, message);
+    let newMessage = handleMessageCreation(user._id, active.id, message);
+    newMessage = {
+      ...newMessage,
+      userId: {
+        _id: user._id,
+        name: user.name,
+      },
+    };
+    setNewData((prev) => [...prev, newMessage]);
     requestMethod
       .post("message", newMessage)
       .then((res) => {})
@@ -99,24 +109,9 @@ function Chat(props) {
         console.log(err);
         handleError(err);
       });
-    message = {
-      ...newMessage,
-      userId: {
-        _id: user._id,
-        name: user.name,
-      },
-    };
-    console.log("message", message);
-    setData((prev) => [
-      ...prev,
-      {
-        ...message,
-      },
-    ]);
   };
 
   const handleMuteChatRoom = (chatroom, muted) => {
-    console.log("Mute ChatRoom", muted);
     const index = chatRooms.indexOf(chatroom);
     let newChatRooms = [...chatRooms];
     newChatRooms[index].muted = !muted;
@@ -150,12 +145,36 @@ function Chat(props) {
 
   const handleVideoCall = () => {};
 
-  useEffect(() => {
-    // messageRef.current.scrollIntoView({
-    //   block: "end",
-    //   inline: "nearest",
-    // });
-  }, [data, active]);
+  // useEffect(() => {
+  //   messageRef.current.scrollIntoView({
+  //     block: "end",
+  //     inline: "nearest",
+  //   });
+  // }, [data, active]);
+
+  const handleScroll = () => {
+    const target = scrollRef.current;
+    const difference = Math.sqrt(
+      Math.pow(target.scrollHeight - target.scrollTop - target.clientHeight, 2)
+    );
+    // console.log(difference);
+    if (difference <= 1 && !loadingMore) {
+      // console.log("I am in");
+      setLoadingMore(true);
+      requestMethod
+        .get(`message/${active.id}?skip=${data.length}`)
+        .then((res) => {
+          // console.log("Load more", res.data);
+          setLoadingMore(false);
+          setData((pre) => [...pre, ...res.data]);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoadingMore(false);
+          handleError(err);
+        });
+    }
+  };
 
   useEffect(() => {
     if (active) getChatRoomMessages(active.id);
@@ -187,7 +206,23 @@ function Chat(props) {
           onClickCall={handleCall}
           onClickVideoCall={handleVideoCall}
         />
-        <ChatContainer>
+        <ChatContainer onScroll={handleScroll} ref={scrollRef}>
+          <ChatContainer1>
+            {newData.map((message) => {
+              const newMessage = handleMessageFormation(message);
+              return (
+                <CustomMessageBox
+                  inverted={false}
+                  position={user?._id === newMessage?.userId ? "right" : "left"}
+                  title={newMessage?.userName}
+                  type={message?.type}
+                  key={message?._id}
+                  avatar={message?.userId?.profilePic}
+                  {...newMessage}
+                />
+              );
+            })}
+          </ChatContainer1>
           <MessageListContainer>
             {data.map((message) => {
               const newMessage = handleMessageFormation(message);
@@ -202,10 +237,9 @@ function Chat(props) {
                 />
               );
             })}
-            <div style={{ height: ".1rem" }} ref={messageRef} />
           </MessageListContainer>
         </ChatContainer>
-
+        <div style={{ height: ".5rem" }} ref={messageRef} />
         <ChatInput onSend={handleSend} />
       </MessageContainer>
     </Container>
@@ -261,24 +295,11 @@ const MessageContainer = styled.div`
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   display: ${(props) => (props.active ? "flex" : "none")};
   ${miniTablet({
     width: "auto",
   })};
-`;
-
-const ChatContainer = styled.div`
-  transform: rotateX(180deg);
-  flex: 1;
-  overflow: scroll;
-`;
-
-const MessageListContainer = styled.div`
-  scroll-behavior: smooth;
-  overflow-y: scroll;
-  padding-inline: 1rem;
-  overflow-x: hidden;
-  flex: 1;
   .rce-container-mbox {
     width: 100%;
     min-width: auto;
@@ -315,27 +336,6 @@ const MessageListContainer = styled.div`
   [class*="notch"] {
     display: none;
   }
-  scrollbar-width: 0.6rem;
-  &::-webkit-scrollbar {
-    width: 0.6rem;
-    height: 0.6rem;
-  }
-  &::-webkit-scrollbar-button {
-    display: none;
-  }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${colors.gray};
-    border-radius: 10rem;
-  }
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  &::-webkit-scrollbar-corner {
-    display: none;
-  }
-  &::-webkit-resizer {
-    display: none;
-  }
   ${miniTablet({
     flexDirection: "column",
   })}
@@ -349,4 +349,22 @@ const MessageListContainer = styled.div`
       maxWidth: "95%",
     },
   })}
+`;
+
+const ChatContainer = styled.div`
+  overflow: scroll;
+  transform: rotateX(180deg);
+`;
+const ChatContainer1 = styled.div`
+  overflow: scroll;
+  transform: rotateX(180deg);
+  .gWUMbg.sc-ibYzZP {
+    margin-top: 0;
+  }
+`;
+
+const MessageListContainer = styled.div`
+  scroll-behavior: smooth;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
