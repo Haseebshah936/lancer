@@ -10,7 +10,7 @@ import {
   Typography,
   Checkbox,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Joi from "joi-browser";
 import React from "react";
@@ -126,6 +126,28 @@ export default function GigMyServicePricing({
   standardPlanError,
   premiumPlanError,
 }) {
+  useEffect(() => {
+    const all = [...SubCategory.features, ...Category.features];
+
+    const newfeatures = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
+    setBasicPlan({ ...basicPlan, features: newfeatures });
+    setStandardPlan({ ...standardPlan, features: newfeatures });
+    setPremiumPlan({ ...premiumPlan, features: newfeatures });
+  }, []);
+
+  useEffect(() => {
+    console.log("Basic", basicPlan.features);
+    console.log("Premium", premiumPlan.features);
+    console.log("Standard", standardPlan.features);
+  }, [basicPlan, premiumPlan, standardPlan]);
+
   return (
     <>
       <Grid container>
@@ -179,14 +201,14 @@ export default function GigMyServicePricing({
               <InputField
                 placeholder="Enter Title"
                 styles={{
-                  backgroundColor: basicPlanError.title ? "#ffdadb" : "white",
+                  backgroundColor: basicPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
                 }}
                 label="BasicPlanTitle"
-                value={basicPlan.title}
+                value={basicPlan.name}
                 onChange={(e) => {
-                  setBasicPlan({ ...basicPlan, title: e.target.value });
+                  setBasicPlan({ ...basicPlan, name: e.target.value });
                   console.log("Basic Plan log");
                 }}
               />
@@ -251,16 +273,14 @@ export default function GigMyServicePricing({
               <InputField
                 placeholder="Enter Title"
                 styles={{
-                  backgroundColor: standardPlanError.title
-                    ? "#ffdadb"
-                    : "white",
+                  backgroundColor: standardPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
                 }}
                 label="Package Title"
-                value={standardPlan.title}
+                value={standardPlan.name}
                 onChange={(e) => {
-                  setStandardPlan({ ...standardPlan, title: e.target.value });
+                  setStandardPlan({ ...standardPlan, name: e.target.value });
                 }}
               />
             </Box>
@@ -326,14 +346,14 @@ export default function GigMyServicePricing({
               <InputField
                 placeholder="Enter Title"
                 styles={{
-                  backgroundColor: premiumPlanError.title ? "#ffdadb" : "white",
+                  backgroundColor: premiumPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
                 }}
                 label="Package Title"
-                value={premiumPlan.title}
+                value={premiumPlan.name}
                 onChange={(e) => {
-                  setPremiumPlan({ ...premiumPlan, title: e.target.value });
+                  setPremiumPlan({ ...premiumPlan, name: e.target.value });
                 }}
               />
             </Box>
@@ -369,8 +389,7 @@ export default function GigMyServicePricing({
             />
           </Box>
         </Grid>
-
-        {Category.features.map((feature) => {
+        {Category.features.map((feature, i) => {
           return (
             <>
               <Grid container mobile={12} sx={{ height: "50px" }}>
@@ -397,28 +416,31 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
+                      name={feature.title}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
+                        const hold = [...basicPlan.features];
+                        hold[i + SubCategory.features.length].quantity =
+                          e.target.value;
+                        hold[i + SubCategory.features.length].active = true;
                         setBasicPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
+                          ...basicPlan,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
+                        const hold = [...basicPlan.features];
+                        hold[i + SubCategory.features.length].active =
+                          e.target.checked;
                         setBasicPlan({
                           ...basicPlan,
-                          sourceFile: e.target.checked,
+                          features: hold,
                         });
                       }}
                     />
@@ -432,31 +454,32 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-bottom border-end"
                 >
-                  {" "}
                   {feature.quantityBased && (
                     <InputField
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
+                        const hold = [...standardPlan.features];
+                        hold[i + SubCategory.features.length].quantity =
+                          e.target.value;
+                        hold[i + SubCategory.features.length].active = true;
+                        setBasicPlan({
                           ...standardPlan,
-                          deliveryTime: e.target.value,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
+                        const hold = [...standardPlan.features];
+                        hold[i + SubCategory.features.length].active =
+                          e.target.checked;
                         setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
+                          ...standardPlan,
+                          features: hold,
                         });
                       }}
                     />
@@ -470,31 +493,32 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-top border-bottom"
                 >
-                  {" "}
                   {feature.quantityBased && (
                     <InputField
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
+                        const hold = [...premiumPlan.features];
+                        hold[i + SubCategory.features.length].quantity =
+                          e.target.value;
+                        hold[i + SubCategory.features.length].active = true;
+                        setBasicPlan({
+                          ...premiumPlan,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
+                        const hold = [...premiumPlan.features];
+                        hold[i + SubCategory.features.length].active =
+                          e.target.checked;
                         setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
+                          ...premiumPlan,
+                          features: hold,
                         });
                       }}
                     />
@@ -504,8 +528,7 @@ export default function GigMyServicePricing({
             </>
           );
         })}
-
-        {SubCategory.features.map((feature) => {
+        {SubCategory.features.map((feature, i) => {
           return (
             <>
               <Grid
@@ -541,25 +564,25 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
+                        const hold = [...basicPlan.features];
+                        hold[i].quantity = e.target.value;
+                        hold[i].active = true;
+                        setBasicPlan({
+                          ...basicPlan,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
+                        const hold = [...basicPlan.features];
+                        hold[i].active = e.target.checked;
                         setBasicPlan({
                           ...basicPlan,
-                          sourceFile: e.target.checked,
+                          features: hold,
                         });
                       }}
                     />
@@ -578,25 +601,25 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
+                        const hold = [...standardPlan.features];
+                        hold[i].quantity = e.target.value;
+                        hold[i].active = true;
                         setStandardPlan({
                           ...standardPlan,
-                          deliveryTime: e.target.value,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
-                        setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
+                        const hold = [...standardPlan.features];
+                        hold[i].active = e.target.checked;
+                        setStandardPlan({
+                          ...standardPlan,
+                          features: hold,
                         });
                       }}
                     />
@@ -610,31 +633,30 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-top border-bottom"
                 >
-                  {" "}
                   {feature.quantityBased && (
                     <InputField
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
+                        const hold = [...premiumPlan.features];
+                        hold[i].quantity = e.target.value;
+                        hold[i].active = true;
+                        setPremiumPlan({
+                          ...premiumPlan,
+                          features: hold,
                         });
                       }}
                     />
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
                       onChange={(e) => {
-                        setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
+                        const hold = [...premiumPlan.features];
+                        hold[i].active = e.target.checked;
+                        setPremiumPlan({
+                          ...premiumPlan,
+                          features: hold,
                         });
                       }}
                     />
@@ -644,89 +666,6 @@ export default function GigMyServicePricing({
             </>
           );
         })}
-
-        <Grid container mobile={12} sx={{ height: "50px" }}>
-          <Grid
-            item
-            container
-            mobile={3}
-            className="border"
-            alignItems="center"
-            justifyContent="flex-start"
-            sx={{ backgroundColor: "#F5F5F5" }}
-          >
-            <Typography variant="h6" sx={{ pl: 1 }}>
-              Revisions
-            </Typography>
-          </Grid>
-          <Grid
-            item
-            container
-            alignItems="center"
-            justifyContent="center"
-            mobile={3}
-            className="border border-end border-bottom"
-          >
-            <InputField
-              styles={{ width: "100%" }}
-              placeholder="Enter number of revisions"
-              type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
-              onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
-                  deliveryTime: e.target.value,
-                });
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            alignItems="center"
-            justifyContent="center"
-            mobile={3}
-            className="border border-end border-bottom"
-          >
-            <InputField
-              styles={{ width: "100%" }}
-              placeholder="Enter number of revisions"
-              type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
-              onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
-                  deliveryTime: e.target.value,
-                });
-              }}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            alignItems="center"
-            justifyContent="center"
-            mobile={3}
-            className="border border-top border-bottom"
-          >
-            <InputField
-              styles={{ width: "100%" }}
-              placeholder="Enter number of revisions"
-              type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
-              onChange={(e) => {
-                setStandardPlan({
-                  ...standardPlan,
-                  deliveryTime: e.target.value,
-                });
-              }}
-            />
-          </Grid>
-        </Grid>
-
         <Grid container mobile={12} sx={{ height: "50px" }}>
           <Grid
             item

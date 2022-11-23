@@ -18,25 +18,22 @@ export default function CreateGig() {
   const [premiumPlanError, setPremiumPlanError] = useState({});
 
   const [basicPlan, setBasicPlan] = useState({
-    title: "",
+    name: "",
     description: "",
-    revisions: "",
-    deliveryTime: "",
-    price: "",
+    cost: "",
+    features: [],
   });
   const [standardPlan, setStandardPlan] = useState({
-    title: "",
+    name: "",
     description: "",
-    revision: "",
-    deliveryTime: "",
-    price: "",
+    cost: "",
+    features: [],
   });
   const [premiumPlan, setPremiumPlan] = useState({
-    title: "",
+    name: "",
     description: "",
-    revision: "",
-    deliveryTime: "",
-    price: "",
+    cost: "",
+    features: [],
   });
 
   const [activeStep, setActiveStep] = useState(0);

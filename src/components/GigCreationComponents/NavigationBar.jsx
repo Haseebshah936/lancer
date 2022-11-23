@@ -31,10 +31,8 @@ export default function NavigationBar({
   premiumPlanError,
 }) {
   const PackageSchema = {
-    title: Joi.string().required().label("Title"),
+    name: Joi.string().required().label("Name"),
     description: Joi.string().required().label("Description"),
-    revision: Joi.number().required().label("Revision"),
-    deliveryTime: Joi.number().required().label("Delivery Time"),
     price: Joi.number().required().label("Price"),
   };
 
