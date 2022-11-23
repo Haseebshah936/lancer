@@ -253,69 +253,6 @@ export default function GigServiceIntroduction({
               </Paper>
             )}
           </Grid>
-
-          <Grid item container mobile={12} sx={{ mt: 2 }}>
-            <Grid item container mobile={5.5}>
-              <DropDownInputComp
-                list={languageList}
-                name="language"
-                label="Choose Language"
-                error={errors.language}
-                value={gigIntroduction.language}
-                onChange={(e, value) => {
-                  setGigIntroduction({
-                    ...gigIntroduction,
-                    language: value.label,
-                  });
-                }}
-              />
-            </Grid>
-            <Grid item mobile={1}></Grid>
-            <Grid item container mobile={5.5}>
-              <DropDownInputComp
-                list={CountryNAME}
-                name="Countries"
-                label="Select Country"
-                value={gigIntroduction.country}
-                error={errors.country}
-                onChange={(e, value) => {
-                  setGigIntroduction({
-                    ...gigIntroduction,
-                    country: value.label,
-                  });
-                }}
-              />
-            </Grid>
-          </Grid>
-          <Grid item container mobile={12} sx={{ mt: 2 }}>
-            <TextField
-              sx={{
-                "& label.Mui-focused": {
-                  color: colors.textGreen,
-                },
-                "& .MuiOutlinedInput-root": {
-                  "&.Mui-focused fieldset": {
-                    borderColor: colors.textGreen,
-                  },
-                },
-              }}
-              fullWidth
-              width="100%"
-              id="outlined-basic"
-              label="Enter Your Address"
-              value={gigIntroduction.addres}
-              onChange={(e) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  addres: e.target.value,
-                });
-              }}
-              variant="outlined"
-            />
-            {errors.addres && (
-              <div className="alert alert-danger">{errors.addres}</div>
-            )}
-          </Grid>
         </Grid>
       </Grid>
     </>

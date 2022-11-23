@@ -92,27 +92,6 @@ const CheckBox = ({ onChange, checked, label, error }) => {
   );
 };
 
-const DropDownComp = ({ list, label, value, onChange, error }) => {
-  return (
-    <FormControl fullWidth sx={{ height: "40px" }} size="small">
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select
-        fullWidth
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={value}
-        label={label}
-        onChange={onChange}
-        style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-      >
-        {list.map((item) => (
-          <MenuItem value={item.value}>{item.value}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  );
-};
-
 export default function GigMyServicePricing({
   Category,
   SubCategory,
@@ -173,7 +152,6 @@ export default function GigMyServicePricing({
 
     console.log("additional", newadditional);
     setAdditionalFeatures(newadditional);
-
     setBasicPlan({ ...basicPlan, features: [...newfeatures] });
     setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
     setPremiumPlan({ ...premiumPlan, features: [...newfeatures2] });
@@ -271,12 +249,19 @@ export default function GigMyServicePricing({
             />
           </Box>
 
-          <Box sx={{ width: "100%", mt: 1 }}>
+          <Box
+            sx={{
+              width: "100%",
+              mt: 1,
+            }}
+          >
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: basicPlanError.delivery ? "#ffdadb" : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={basicPlanError.delivery}
               value={basicPlan.delivery}
               onChange={(e) => {
                 setBasicPlan({
@@ -346,10 +331,14 @@ export default function GigMyServicePricing({
 
           <Box sx={{ width: "100%", mt: 1 }}>
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: standardPlanError.delivery
+                  ? "#ffdadb"
+                  : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={standardPlanError.delivery}
               value={standardPlan.delivery}
               onChange={(e) => {
                 setStandardPlan({
@@ -416,10 +405,14 @@ export default function GigMyServicePricing({
 
           <Box sx={{ width: "100%", mt: 1 }}>
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: premiumPlanError.delivery
+                  ? "#ffdadb"
+                  : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={premiumPlanError.delivery}
               value={premiumPlan.delivery}
               onChange={(e) => {
                 setPremiumPlan({
@@ -731,10 +724,12 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
-                error={basicPlanError.cost}
                 value={basicPlan.cost}
                 onChange={(e) => {
                   setBasicPlan({
@@ -760,7 +755,10 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
                 error={standardPlanError.cost}
@@ -789,7 +787,10 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
                 error={premiumPlanError.cost}
@@ -844,7 +845,9 @@ export default function GigMyServicePricing({
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
                       hold[i].active = e.target.checked;
+
                       setAdditionalFeatures(hold);
+                      console.log("Additional features ", additionalFeatures);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>

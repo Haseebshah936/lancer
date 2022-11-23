@@ -63,10 +63,7 @@ export default function CreateGig() {
     gigCategory: null,
     gigSubCategory: null,
     gigDescription: null,
-    language: "",
     tage: [],
-    country: "",
-    addres: "",
   });
 
   const handleActiveStep = (activeStep) => {

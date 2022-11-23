@@ -34,7 +34,7 @@ export default function NavigationBar({
     name: Joi.string().required().label("Name"),
     description: Joi.string().required().label("Description"),
     cost: Joi.number().required().label("Price"),
-    delivery: Joi.number().required().label("Price"),
+    delivery: Joi.number().required().label("Delivery"),
   };
 
   var Gigschema = {
@@ -42,10 +42,7 @@ export default function NavigationBar({
     gigCategory: Joi.required().label("Gig Category"),
     gigSubCategory: Joi.required().label("Gig Sub Category"),
     gigDescription: Joi.required().label("Gig Description"),
-    language: Joi.string().required().label("Language"),
     tage: Joi.array().items(Joi.string()).min(3).label("Tages"),
-    country: Joi.string().required().label("Country"),
-    addres: Joi.string().required().label("Address"),
   };
 
   const Mediaschema = {
@@ -161,8 +158,8 @@ export default function NavigationBar({
         validateMedia();
         break;
       case 2:
-        // Packagevalidate();
-        handleStep(activeStep + 1);
+        Packagevalidate();
+
         break;
       case 3:
         handleStep(activeStep + 1);
