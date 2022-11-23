@@ -45,6 +45,7 @@ function ChatRooms({
       {chatrooms.map((chatroom) => {
         return (
           <CustomChatItem
+            key={chatroom.id}
             onClick={onRoomClick}
             onClickMute={onMuteClick}
             chatroom={chatroom}

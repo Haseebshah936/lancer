@@ -829,7 +829,9 @@ export default function GigMyServicePricing({
                   <CheckBox
                     checked={additionalFeatures[i].active}
                     onChange={(e) => {
+                      console.log("Addition feature", additionalFeatures);
                       const hold = [...additionalFeatures];
+                      console.log("Addition Hold", hold);
                       hold[i].active = e.target.checked;
 
                       setAdditionalFeatures(hold);
