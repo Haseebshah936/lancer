@@ -391,6 +391,7 @@ export default function GigMyServicePricing({
             />
           </Box>
         </Grid>
+        //!NOTE issue is here in these grids
         {Category.features.map((feature, i) => {
           return (
             <>
@@ -530,6 +531,7 @@ export default function GigMyServicePricing({
             </>
           );
         })}
+        //!NOTE issue is here in these grids
         {SubCategory.features.map((feature, i) => {
           return (
             <>
@@ -668,6 +670,7 @@ export default function GigMyServicePricing({
             </>
           );
         })}
+        //!NOTE COST is here in these grids
         <Grid container mobile={12} sx={{ height: "50px" }}>
           <Grid
             item
