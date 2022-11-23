@@ -146,6 +146,22 @@ export default function GigMyServicePricing({
       };
     });
 
+    const newfeatures1 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
+    const newfeatures2 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
     const newadditional = allAdditional.map((e) => {
       return {
         title: e.title,
@@ -158,8 +174,8 @@ export default function GigMyServicePricing({
     setAdditionalFeatures([...newadditional]);
 
     setBasicPlan({ ...basicPlan, features: [...newfeatures] });
-    setStandardPlan({ ...standardPlan, features: [...newfeatures] });
-    setPremiumPlan({ ...premiumPlan, features: [...newfeatures] });
+    setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
+    setPremiumPlan({ ...premiumPlan, features: [...newfeatures2] });
   }, []);
 
   useEffect(() => {
@@ -839,7 +855,7 @@ export default function GigMyServicePricing({
                   </Typography>
                   {feature.quantityBased && (
                     <InputField
-                      styles={{ marginLeft: "10px" }}
+                      styles={{ width: "100%", marginLeft: "10px" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       onChange={(e) => {
@@ -855,8 +871,8 @@ export default function GigMyServicePricing({
                     />
                   )}
                   <InputField
-                    styles={{ marginLeft: "10px" }}
-                    placeholder={`Enter Price`}
+                    styles={{ width: "100%", marginLeft: "10px" }}
+                    placeholder={`Enter`}
                     type="number"
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
