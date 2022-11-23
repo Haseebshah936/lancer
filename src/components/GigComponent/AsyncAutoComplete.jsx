@@ -10,6 +10,16 @@ export default function AsyncAutoComplete({
   gigSubCategory = null,
 
   setGigSubCategory,
+
+  additionalFeatures,
+  setAdditionalFeatures,
+  setBasicPlan,
+  setStandardPlan,
+  setPremiumPlan,
+
+  basicPlan,
+  standardPlan,
+  premiumPlan,
 }) {
   const [open, setOpen] = React.useState(false);
   const [options, setOptions] = React.useState([]);
@@ -42,6 +52,57 @@ export default function AsyncAutoComplete({
     }
   }, [gigCategory]);
 
+  const setFeatures = (SubCategory, Category) => {
+    const all = [...SubCategory.features, ...Category.features];
+    const allAdditional = [
+      ...SubCategory.additionalFeatures,
+      ...Category.additionalFeatures,
+    ];
+
+    const newfeatures = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
+    const newfeatures1 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
+    const newfeatures2 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+
+    const newadditional = allAdditional.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+        cost: 0,
+      };
+    });
+
+    console.log("additional", newadditional);
+    setAdditionalFeatures(newadditional);
+    setBasicPlan({ ...basicPlan, features: [...newfeatures] });
+    setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
+    setPremiumPlan({ ...premiumPlan, features: [...newfeatures2] });
+
+    console.log("basic", basicPlan);
+    console.log("standard", standardPlan);
+    console.log("premium", premiumPlan);
+  };
+
   return (
     <Autocomplete
       id="asynchronous-demo"
@@ -70,7 +131,8 @@ export default function AsyncAutoComplete({
       loading={loading}
       onChange={(e, v) => {
         setGigSubCategory(v);
-        console.log("I am in auto", gigSubCategory);
+        console.log("I am in auto", v);
+        setFeatures(v, gigCategory);
       }}
       renderInput={(params) => (
         <TextField

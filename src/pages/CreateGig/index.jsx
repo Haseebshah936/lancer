@@ -10,6 +10,7 @@ import GigQuestionAPage from "../GigCreation/GigQuestionAPage";
 import GigServiceIntroduction from "../GigCreation/GigServiceIntroduction";
 import axios from "axios";
 import { useRealmContext } from "../../db/RealmContext";
+import GigLoading from "../GigCreation/GigLoading";
 
 export default function CreateGig() {
   const { user } = useRealmContext();
@@ -56,6 +57,7 @@ export default function CreateGig() {
     console.log("Basic", basicPlan);
     console.log("Premium", premiumPlan);
     console.log("Standard", standardPlan);
+    console.log("Gig Introduction", gigIntroduction);
   }, [basicPlan, premiumPlan, standardPlan]);
 
   const [gigIntroduction, setGigIntroduction] = useState({
@@ -78,6 +80,14 @@ export default function CreateGig() {
             gigIntroduction={gigIntroduction}
             setGigIntroduction={setGigIntroduction}
             errors={errors}
+            setBasicPlan={setBasicPlan}
+            setStandardPlan={setStandardPlan}
+            setPremiumPlan={setPremiumPlan}
+            additionalFeatures={additionalFeatures}
+            setAdditionalFeatures={setAdditionalFeatures}
+            basicPlan={basicPlan}
+            standardPlan={standardPlan}
+            premiumPlan={premiumPlan}
           />
         );
         break;
@@ -105,6 +115,7 @@ export default function CreateGig() {
             setBasicPlan={setBasicPlan}
             setStandardPlan={setStandardPlan}
             setPremiumPlan={setPremiumPlan}
+            additionalFeatures={additionalFeatures}
             setAdditionalFeatures={setAdditionalFeatures}
             handleBasicPlanFeaturesChange={handleBasicPlanFeaturesChange}
           />
@@ -116,11 +127,11 @@ export default function CreateGig() {
         {
           const Gig = {
             title: gigIntroduction.gigTitle,
-            category: gigIntroduction.SubCategory.id,
+            category: gigIntroduction.gigSubCategory._id,
             ownerId: user._id,
             tags: gigIntroduction.tage,
-            description: gigIntroduction.description,
-            images: images,
+            description: gigIntroduction.gigDescription,
+            images: ["1231234564613", "544554545"],
             video: "asdasdasd",
             packages: [
               {
@@ -147,11 +158,17 @@ export default function CreateGig() {
             ],
             additionalFeatures: additionalFeatures,
           };
-          axios
-            .post("http://localhost:3003/api/product/createProduct", Gig)
-            .then((response) => {
-              console.log(response);
-            });
+
+          return <GigLoading Gig={Gig} />;
+
+          // axios
+          //   .post("http://localhost:3003/api/product/createProduct", Gig)
+          //   .then((response) => {
+          //     console.log(response);
+          //   })
+          //   .catch((response) => {
+          //     console.log(response);
+          //   });
         }
         break;
     }

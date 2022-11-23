@@ -29,6 +29,15 @@ export default function GigServiceIntroduction({
   gigIntroduction,
   setGigIntroduction,
   errors,
+  additionalFeatures,
+  setAdditionalFeatures,
+  setBasicPlan,
+  setStandardPlan,
+  setPremiumPlan,
+
+  basicPlan,
+  standardPlan,
+  premiumPlan,
 }) {
   const [QuillValue, setQuillValue] = useState("");
 
@@ -138,10 +147,18 @@ export default function GigServiceIntroduction({
           <Grid item mobile={1}></Grid>
           <Grid item container mobile={5.5}>
             <AsyncAutoComplete
+              setBasicPlan={setBasicPlan}
+              setStandardPlan={setStandardPlan}
+              setPremiumPlan={setPremiumPlan}
+              additionalFeatures={additionalFeatures}
+              setAdditionalFeatures={setAdditionalFeatures}
+              basicPlan={basicPlan}
+              standardPlan={standardPlan}
+              premiumPlan={premiumPlan}
               gigCategory={CatObject}
               gigSubCategory={gigIntroduction.gigSubCategory}
               setGigSubCategory={(subCat) => {
-                console.log("Subcategory", CatObject);
+                // console.log("Subcategory", CatObject);
                 setGigIntroduction((prev) => {
                   return { ...prev, gigSubCategory: subCat };
                 });
@@ -152,7 +169,7 @@ export default function GigServiceIntroduction({
         <Grid item container sx={{ mt: 2 }} mobile={12}>
           <ReactQuill
             theme="snow"
-            value={QuillValue}
+            value={gigIntroduction.gigDescription}
             onChange={handleQuill}
             style={{
               width: "100%",

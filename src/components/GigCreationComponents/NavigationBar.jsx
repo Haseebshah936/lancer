@@ -35,6 +35,7 @@ export default function NavigationBar({
     description: Joi.string().required().label("Description"),
     cost: Joi.number().required().label("Price"),
     delivery: Joi.number().required().label("Delivery"),
+    features: Joi.array(),
   };
 
   var Gigschema = {

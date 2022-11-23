@@ -4,4 +4,15 @@ import logo from "./logo.png";
 import signup from "./signup.png";
 import social from "./social.jpg";
 import thumbsup from "./ThumbsUp.gif";
-export { teamImg, becomePartner, logo, signup, social, thumbsup };
+import checkmark from "./checkmark.gif";
+import tick from "./tick.json";
+export {
+  teamImg,
+  becomePartner,
+  logo,
+  signup,
+  social,
+  thumbsup,
+  checkmark,
+  tick,
+};
