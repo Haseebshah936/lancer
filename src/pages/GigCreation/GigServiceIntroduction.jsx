@@ -140,11 +140,12 @@ export default function GigServiceIntroduction({
             <AsyncAutoComplete
               gigCategory={CatObject}
               gigSubCategory={gigIntroduction.gigSubCategory}
-              setGigSubCategory={(subCat) =>
+              setGigSubCategory={(subCat) => {
+                console.log("Subcategory", CatObject);
                 setGigIntroduction((prev) => {
                   return { ...prev, gigSubCategory: subCat };
-                })
-              }
+                });
+              }}
             />
           </Grid>
         </Grid>

@@ -8,8 +8,11 @@ import GigMediaAttachment from "../GigCreation/GigMediaAttachment";
 import GigMyServicePricing from "../GigCreation/GigMyServicePricing";
 import GigQuestionAPage from "../GigCreation/GigQuestionAPage";
 import GigServiceIntroduction from "../GigCreation/GigServiceIntroduction";
+import axios from "axios";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function CreateGig() {
+  const { user } = useRealmContext();
   const [errors, setErrors] = useState({});
 
   const [images, setImages] = useState([]);
@@ -105,12 +108,54 @@ export default function CreateGig() {
             setBasicPlan={setBasicPlan}
             setStandardPlan={setStandardPlan}
             setPremiumPlan={setPremiumPlan}
+            setAdditionalFeatures={setAdditionalFeatures}
             handleBasicPlanFeaturesChange={handleBasicPlanFeaturesChange}
           />
         );
         break;
       case 3:
         return <GigQuestionAPage />;
+      case 4:
+        {
+          const Gig = {
+            title: gigIntroduction.gigTitle,
+            category: gigIntroduction.SubCategory.id,
+            ownerId: user._id,
+            tags: gigIntroduction.tage,
+            description: gigIntroduction.description,
+            images: images,
+            video: "asdasdasd",
+            packages: [
+              {
+                name: basicPlan.name,
+                cost: basicPlan.cost,
+                description: basicPlan.description,
+                delivery: basicPlan.delivery,
+                features: basicPlan.features,
+              },
+              {
+                name: standardPlan.name,
+                cost: standardPlan.cost,
+                description: standardPlan.description,
+                delivery: standardPlan.delivery,
+                features: standardPlan.features,
+              },
+              {
+                name: premiumPlan.name,
+                cost: premiumPlan.cost,
+                description: premiumPlan.description,
+                delivery: premiumPlan.delivery,
+                features: premiumPlan.features,
+              },
+            ],
+            additionalFeatures: additionalFeatures,
+          };
+          axios
+            .post("http://localhost:3003/api/product/createProduct", Gig)
+            .then((response) => {
+              console.log(response);
+            });
+        }
         break;
     }
   };

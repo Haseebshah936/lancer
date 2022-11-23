@@ -171,7 +171,8 @@ export default function GigMyServicePricing({
       };
     });
 
-    setAdditionalFeatures([...newadditional]);
+    console.log("additional", newadditional);
+    setAdditionalFeatures(newadditional);
 
     setBasicPlan({ ...basicPlan, features: [...newfeatures] });
     setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
@@ -842,12 +843,8 @@ export default function GigMyServicePricing({
                   <CheckBox
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
-                      hold[i + SubCategory.additionalFeatures.length].active =
-                        e.target.checked;
-                      setAdditionalFeatures({
-                        ...additionalFeatures,
-                        ...hold,
-                      });
+                      hold[i].active = e.target.checked;
+                      setAdditionalFeatures(hold);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>
@@ -855,33 +852,24 @@ export default function GigMyServicePricing({
                   </Typography>
                   {feature.quantityBased && (
                     <InputField
-                      styles={{ width: "100%", marginLeft: "10px" }}
+                      styles={{ marginLeft: "10px" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       onChange={(e) => {
                         const hold = [...additionalFeatures];
-                        hold[
-                          i + SubCategory.additionalFeatures.length
-                        ].quantity = e.target.value;
-                        setAdditionalFeatures({
-                          ...additionalFeatures,
-                          ...hold,
-                        });
+                        hold[i].quantity = e.target.value;
+                        setAdditionalFeatures(hold);
                       }}
                     />
                   )}
                   <InputField
-                    styles={{ width: "100%", marginLeft: "10px" }}
-                    placeholder={`Enter`}
+                    styles={{ marginLeft: "30px" }}
+                    placeholder={`Enter Price`}
                     type="number"
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
-                      hold[i + SubCategory.additionalFeatures.length].cost =
-                        e.target.value;
-                      setAdditionalFeatures({
-                        ...additionalFeatures,
-                        ...hold,
-                      });
+                      hold[i].cost = e.target.value;
+                      setAdditionalFeatures(hold);
                     }}
                   />
                 </Grid>
@@ -910,10 +898,7 @@ export default function GigMyServicePricing({
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
                       hold[i].active = e.target.checked;
-                      setAdditionalFeatures({
-                        ...additionalFeatures,
-                        ...hold,
-                      });
+                      setAdditionalFeatures(hold);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>
@@ -928,13 +913,21 @@ export default function GigMyServicePricing({
                         const hold = [...additionalFeatures];
                         hold[i].quantity = e.target.value;
                         hold[i].active = true;
-                        setAdditionalFeatures({
-                          ...additionalFeatures,
-                          ...hold,
-                        });
+                        setAdditionalFeatures(hold);
                       }}
                     />
                   )}
+                  <InputField
+                    styles={{ marginLeft: "30px" }}
+                    placeholder={`Enter Price`}
+                    type="number"
+                    onChange={(e) => {
+                      const hold = [...additionalFeatures];
+                      hold[i + SubCategory.additionalFeatures.length].cost =
+                        e.target.value;
+                      setAdditionalFeatures(hold);
+                    }}
+                  />
                 </Grid>
               </Grid>
             </>

@@ -33,7 +33,7 @@ export default function NavigationBar({
   const PackageSchema = {
     name: Joi.string().required().label("Name"),
     description: Joi.string().required().label("Description"),
-    price: Joi.number().required().label("Price"),
+    cost: Joi.number().required().label("Price"),
     delivery: Joi.number().required().label("Price"),
   };
 
@@ -161,7 +161,8 @@ export default function NavigationBar({
         validateMedia();
         break;
       case 2:
-        Packagevalidate();
+        // Packagevalidate();
+        handleStep(activeStep + 1);
         break;
       case 3:
         handleStep(activeStep + 1);
