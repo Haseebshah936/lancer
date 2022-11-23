@@ -131,7 +131,7 @@ export default function GigMyServicePricing({
   useEffect(() => {
     const all = [...SubCategory.features, ...Category.features];
 
-    const newfeatures = all.map((e) => {
+    const newfeatures1 = all.map((e) => {
       return {
         title: e.title,
         active: false,
@@ -139,16 +139,30 @@ export default function GigMyServicePricing({
       };
     });
 
-    setBasicPlan({ ...basicPlan, features: [...newfeatures] });
-    setStandardPlan({ ...standardPlan, features: [...newfeatures] });
-    setPremiumPlan({ ...premiumPlan, features: [...newfeatures] });
+    const newfeatures2 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+    const newfeatures3 = all.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+      };
+    });
+    setBasicPlan({ ...basicPlan, features: newfeatures1 });
+    setStandardPlan({ ...standardPlan, features: newfeatures2 });
+    setPremiumPlan({ ...premiumPlan, features: newfeatures3 });
   }, []);
 
-  useEffect(() => {
-    console.log("Basic", basicPlan);
-    console.log("Premium", premiumPlan);
-    console.log("Standard", standardPlan);
-  }, [basicPlan, premiumPlan, standardPlan]);
+  // useEffect(() => {
+  //   console.log("Basic", basicPlan.features);
+  //   console.log("Premium", premiumPlan.features);
+  //   console.log("Standard", standardPlan.features);
+  // }, [basicPlan, premiumPlan, standardPlan]);
 
   return (
     <>
@@ -391,7 +405,7 @@ export default function GigMyServicePricing({
             />
           </Box>
         </Grid>
-        //!NOTE issue is here in these grids
+        //!NOTE Features of category
         {Category.features.map((feature, i) => {
           return (
             <>
@@ -531,7 +545,7 @@ export default function GigMyServicePricing({
             </>
           );
         })}
-        //!NOTE issue is here in these grids
+        //!NOTE Features of subcategory
         {SubCategory.features.map((feature, i) => {
           return (
             <>
@@ -670,7 +684,7 @@ export default function GigMyServicePricing({
             </>
           );
         })}
-        //!NOTE COST is here in these grids
+        //!NOTE COST is here in this grids
         <Grid container mobile={12} sx={{ height: "50px" }}>
           <Grid
             item

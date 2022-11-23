@@ -43,6 +43,17 @@ export default function CreateGig() {
   const [gigCategories, setGigCategories] = useState([]);
   const [gigSubCategories, setGigSubCategories] = useState([]);
 
+  const handleBasicPlanFeaturesChange = (updatedFeatures) => {
+    console.log("updatedFeaturesBasicPlan", updatedFeatures);
+    setBasicPlan({ ...basicPlan, features: [...updatedFeatures] });
+  };
+
+  useEffect(() => {
+    console.log("Basic", basicPlan);
+    console.log("Premium", premiumPlan);
+    console.log("Standard", standardPlan);
+  }, [basicPlan, premiumPlan, standardPlan]);
+
   const [gigIntroduction, setGigIntroduction] = useState({
     gigTitle: "",
     gigCategory: null,
@@ -93,6 +104,7 @@ export default function CreateGig() {
             setBasicPlan={setBasicPlan}
             setStandardPlan={setStandardPlan}
             setPremiumPlan={setPremiumPlan}
+            handleBasicPlanFeaturesChange={handleBasicPlanFeaturesChange}
           />
         );
         break;
