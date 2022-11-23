@@ -207,9 +207,9 @@ function Chat(props) {
           onClickVideoCall={handleVideoCall}
         />
         <ChatContainer onScroll={handleScroll} ref={scrollRef}>
-          <ChatContainer1>
-            {newData.length &&
-              newData.map((message) => {
+          {newData.length > 0 ? (
+            <ChatContainer1>
+              {newData.map((message) => {
                 const newMessage = handleMessageFormation(message);
                 return (
                   <CustomMessageBox
@@ -225,28 +225,25 @@ function Chat(props) {
                   />
                 );
               })}
-          </ChatContainer1>
-          {data.length && (
-            <MessageListContainer>
-              {data.map((message) => {
-                const newMessage = handleMessageFormation(message);
-                return (
-                  <CustomMessageBox
-                    position={
-                      user?._id === newMessage?.userId ? "right" : "left"
-                    }
-                    title={newMessage?.userName}
-                    type={message?.type}
-                    key={message?._id}
-                    avatar={message?.userId?.profilePic}
-                    {...newMessage}
-                  />
-                );
-              })}
-            </MessageListContainer>
-          )}
+            </ChatContainer1>
+          ) : null}
+          <MessageListContainer>
+            {data.map((message) => {
+              const newMessage = handleMessageFormation(message);
+              return (
+                <CustomMessageBox
+                  position={user?._id === newMessage?.userId ? "right" : "left"}
+                  title={newMessage?.userName}
+                  type={message?.type}
+                  key={message?._id}
+                  avatar={message?.userId?.profilePic}
+                  {...newMessage}
+                />
+              );
+            })}
+          </MessageListContainer>
         </ChatContainer>
-        <div style={{ height: ".5rem" }} ref={messageRef} />
+        {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
         <ChatInput onSend={handleSend} />
       </MessageContainer>
     </Container>
@@ -258,7 +255,6 @@ export default Chat;
 const Container = styled.div`
   display: flex;
   margin-inline: 7%;
-  justify-content: space-between;
   margin-top: 2rem;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
@@ -361,6 +357,7 @@ const MessageContainer = styled.div`
 const ChatContainer = styled.div`
   overflow: scroll;
   transform: rotateX(180deg);
+  flex: 1;
 `;
 const ChatContainer1 = styled.div`
   overflow: scroll;
