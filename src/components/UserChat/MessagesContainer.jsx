@@ -44,7 +44,7 @@ function MessagesContainer({
         console.log("User", user._id);
         const id = newData[newData.length - 1]?.userId._id;
         console.log("New Message userId", newData[newData.length - 1]);
-        if (id !== user._id && id)
+        if (id !== user._id)
           requestMethod
             .get(`message/messageId/${newMessage}`)
             .then((res) => {
