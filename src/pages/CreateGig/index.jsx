@@ -21,18 +21,21 @@ export default function CreateGig() {
     name: "",
     description: "",
     cost: "",
+    delivery: "",
     features: [],
   });
   const [standardPlan, setStandardPlan] = useState({
     name: "",
     description: "",
     cost: "",
+    delivery: "",
     features: [],
   });
   const [premiumPlan, setPremiumPlan] = useState({
     name: "",
     description: "",
     cost: "",
+    delivery: "",
     features: [],
   });
 

@@ -162,24 +162,7 @@ export default function GigServiceIntroduction({
           />
         </Grid>
         <Grid item container sx={{ mt: 2 }} mobile={12}>
-          <Grid item container mobile={5.5}>
-            <MultiSlectInputComp
-              list={tagsArr}
-              name="Tags"
-              label="Select Tags"
-              value={gigIntroduction.tage}
-              error={errors.tage}
-              onChange={(e) => {
-                setGigIntroduction({
-                  ...gigIntroduction,
-                  tage: e.target.value,
-                });
-              }}
-            />
-          </Grid>
-          <Grid item container mobile={1}></Grid>
-
-          <Grid item container mobile={4.5}>
+          <Grid item container mobile={11}>
             <TextField
               sx={{
                 "& label.Mui-focused": {

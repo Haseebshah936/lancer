@@ -56,10 +56,12 @@ const InputField = ({
   styles,
   type,
   placeholder,
+  id,
   name,
 }) => {
   return (
     <CustomInput
+      id={id}
       type={type}
       fullWidth
       placeholder={placeholder}
@@ -137,15 +139,15 @@ export default function GigMyServicePricing({
       };
     });
 
-    setBasicPlan({ ...basicPlan, features: newfeatures });
-    setStandardPlan({ ...standardPlan, features: newfeatures });
-    setPremiumPlan({ ...premiumPlan, features: newfeatures });
+    setBasicPlan({ ...basicPlan, features: [...newfeatures] });
+    setStandardPlan({ ...standardPlan, features: [...newfeatures] });
+    setPremiumPlan({ ...premiumPlan, features: [...newfeatures] });
   }, []);
 
   useEffect(() => {
-    console.log("Basic", basicPlan.features);
-    console.log("Premium", premiumPlan.features);
-    console.log("Standard", standardPlan.features);
+    console.log("Basic", basicPlan);
+    console.log("Premium", premiumPlan);
+    console.log("Standard", standardPlan);
   }, [basicPlan, premiumPlan, standardPlan]);
 
   return (
@@ -235,12 +237,12 @@ export default function GigMyServicePricing({
               styles={{ width: "100%" }}
               placeholder="Delivery Days"
               type="number"
-              error={basicPlanError.deliveryTime}
-              value={basicPlan.deliveryTime}
+              error={basicPlanError.delivery}
+              value={basicPlan.delivery}
               onChange={(e) => {
                 setBasicPlan({
                   ...basicPlan,
-                  deliveryTime: e.target.value,
+                  delivery: e.target.value,
                 });
               }}
             />
@@ -308,12 +310,12 @@ export default function GigMyServicePricing({
               styles={{ width: "100%" }}
               placeholder="Delivery Days"
               type="number"
-              error={standardPlanError.deliveryTime}
-              value={standardPlan.deliveryTime}
+              error={standardPlanError.delivery}
+              value={standardPlan.delivery}
               onChange={(e) => {
                 setStandardPlan({
                   ...standardPlan,
-                  deliveryTime: e.target.value,
+                  delivery: e.target.value,
                 });
               }}
             />
@@ -378,12 +380,12 @@ export default function GigMyServicePricing({
               styles={{ width: "100%" }}
               placeholder="Delivery Days"
               type="number"
-              error={premiumPlanError.deliveryTime}
-              value={premiumPlan.deliveryTime}
+              error={premiumPlanError.delivery}
+              value={premiumPlan.delivery}
               onChange={(e) => {
                 setPremiumPlan({
                   ...premiumPlan,
-                  deliveryTime: e.target.value,
+                  delivery: e.target.value,
                 });
               }}
             />
@@ -464,7 +466,7 @@ export default function GigMyServicePricing({
                         hold[i + SubCategory.features.length].quantity =
                           e.target.value;
                         hold[i + SubCategory.features.length].active = true;
-                        setBasicPlan({
+                        setStandardPlan({
                           ...standardPlan,
                           features: hold,
                         });
@@ -477,7 +479,7 @@ export default function GigMyServicePricing({
                         const hold = [...standardPlan.features];
                         hold[i + SubCategory.features.length].active =
                           e.target.checked;
-                        setBasicPlan({
+                        setStandardPlan({
                           ...standardPlan,
                           features: hold,
                         });
@@ -503,7 +505,7 @@ export default function GigMyServicePricing({
                         hold[i + SubCategory.features.length].quantity =
                           e.target.value;
                         hold[i + SubCategory.features.length].active = true;
-                        setBasicPlan({
+                        setPremiumPlan({
                           ...premiumPlan,
                           features: hold,
                         });
@@ -516,7 +518,7 @@ export default function GigMyServicePricing({
                         const hold = [...premiumPlan.features];
                         hold[i + SubCategory.features.length].active =
                           e.target.checked;
-                        setBasicPlan({
+                        setPremiumPlan({
                           ...premiumPlan,
                           features: hold,
                         });
@@ -693,12 +695,12 @@ export default function GigMyServicePricing({
                 styles={{ width: "90%" }}
                 placeholder="Enter Price"
                 type="number"
-                error={standardPlanError.deliveryTime}
-                value={standardPlan.deliveryTime}
+                error={basicPlanError.cost}
+                value={basicPlan.cost}
                 onChange={(e) => {
-                  setStandardPlan({
-                    ...standardPlan,
-                    deliveryTime: e.target.value,
+                  setBasicPlan({
+                    ...basicPlan,
+                    cost: e.target.value,
                   });
                 }}
               />
@@ -722,12 +724,12 @@ export default function GigMyServicePricing({
                 styles={{ width: "90%" }}
                 placeholder="Enter Price"
                 type="number"
-                error={standardPlanError.deliveryTime}
-                value={standardPlan.deliveryTime}
+                error={standardPlanError.cost}
+                value={standardPlan.cost}
                 onChange={(e) => {
                   setStandardPlan({
                     ...standardPlan,
-                    deliveryTime: e.target.value,
+                    cost: e.target.value,
                   });
                 }}
               />
@@ -751,12 +753,12 @@ export default function GigMyServicePricing({
                 styles={{ width: "90%" }}
                 placeholder="Enter Price"
                 type="number"
-                error={standardPlanError.deliveryTime}
-                value={standardPlan.deliveryTime}
+                error={premiumPlanError.cost}
+                value={premiumPlan.cost}
                 onChange={(e) => {
-                  setStandardPlan({
-                    ...standardPlan,
-                    deliveryTime: e.target.value,
+                  setPremiumPlan({
+                    ...premiumPlan,
+                    cost: e.target.value,
                   });
                 }}
               />
