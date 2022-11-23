@@ -25,6 +25,7 @@ import {
   handleMessageCreation,
   handleMessageFormation,
 } from "./HelperFunctions";
+import MessagesContainer from "./MessagesContainer";
 
 const ChatRoomsData = [
   {
@@ -57,9 +58,10 @@ function Chat(props) {
   const [active, setActive] = useState(false);
   const [chatRooms, setChatRooms] = useState([]);
   const [chatRoomsData, setChatRoomsData] = useState([]);
-  const { user } = useRealmContext();
+  const { user, currentUser } = useRealmContext();
   const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [reRender, setReRender] = useState(true);
 
   const getChatRooms = () => {
     requestMethod
@@ -77,6 +79,7 @@ function Chat(props) {
       .then((res) => {
         setData(res.data);
         setNewData([]);
+        setReRender(false);
       })
       .catch((err) => {
         console.log(err);
@@ -177,6 +180,7 @@ function Chat(props) {
   };
 
   useEffect(() => {
+    setReRender(true);
     if (active) getChatRoomMessages(active.id);
   }, [active]);
 
@@ -206,43 +210,17 @@ function Chat(props) {
           onClickCall={handleCall}
           onClickVideoCall={handleVideoCall}
         />
-        <ChatContainer onScroll={handleScroll} ref={scrollRef}>
-          {newData.length > 0 ? (
-            <ChatContainer1>
-              {newData.map((message) => {
-                const newMessage = handleMessageFormation(message);
-                return (
-                  <CustomMessageBox
-                    inverted={false}
-                    position={
-                      user?._id === newMessage?.userId ? "right" : "left"
-                    }
-                    title={newMessage?.userName}
-                    type={message?.type}
-                    key={message?._id}
-                    avatar={message?.userId?.profilePic}
-                    {...newMessage}
-                  />
-                );
-              })}
-            </ChatContainer1>
-          ) : null}
-          <MessageListContainer>
-            {data.map((message) => {
-              const newMessage = handleMessageFormation(message);
-              return (
-                <CustomMessageBox
-                  position={user?._id === newMessage?.userId ? "right" : "left"}
-                  title={newMessage?.userName}
-                  type={message?.type}
-                  key={message?._id}
-                  avatar={message?.userId?.profilePic}
-                  {...newMessage}
-                />
-              );
-            })}
-          </MessageListContainer>
-        </ChatContainer>
+        {!reRender && (
+          <MessagesContainer
+            scrollRef={scrollRef}
+            data={data}
+            active={active}
+            newData={newData}
+            handleScroll={handleScroll}
+            setNewData={setNewData}
+            reRender={reRender}
+          />
+        )}
         {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
         <ChatInput onSend={handleSend} />
       </MessageContainer>

@@ -54,6 +54,7 @@ const Container = styled.div`
   transform: ${(props) =>
     props.inverted ? `rotateX(180deg)` : `rotateX(0deg)`};
   margin-block: 2.5rem;
+  margin-top: ${(props) => (props.inverted ? `2.5rem` : `0rem`)};
   margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
 
   .rce-mbox-photo {

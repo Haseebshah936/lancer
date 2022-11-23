@@ -105,6 +105,7 @@ export default function CreateGig() {
             setBasicPlan={setBasicPlan}
             setStandardPlan={setStandardPlan}
             setPremiumPlan={setPremiumPlan}
+            additionalFeatures={additionalFeatures}
             setAdditionalFeatures={setAdditionalFeatures}
             handleBasicPlanFeaturesChange={handleBasicPlanFeaturesChange}
           />
