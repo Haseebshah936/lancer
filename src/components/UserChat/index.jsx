@@ -59,7 +59,6 @@ function Chat(props) {
   const [chatRooms, setChatRooms] = useState([]);
   const [chatRoomsData, setChatRoomsData] = useState([]);
   const { user, currentUser } = useRealmContext();
-  const [loading, setLoading] = useState(false);
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
 
