@@ -127,9 +127,16 @@ export default function GigMyServicePricing({
   basicPlanError,
   standardPlanError,
   premiumPlanError,
+
+  additionalFeatures,
+  setAdditionalFeatures,
 }) {
   useEffect(() => {
     const all = [...SubCategory.features, ...Category.features];
+    const allAdditional = [
+      ...SubCategory.additionalFeatures,
+      ...Category.additionalFeatures,
+    ];
 
     const newfeatures = all.map((e) => {
       return {
@@ -138,6 +145,17 @@ export default function GigMyServicePricing({
         quantity: 0,
       };
     });
+
+    const newadditional = allAdditional.map((e) => {
+      return {
+        title: e.title,
+        active: false,
+        quantity: 0,
+        cost: 0,
+      };
+    });
+
+    setAdditionalFeatures([...newadditional]);
 
     setBasicPlan({ ...basicPlan, features: [...newfeatures] });
     setStandardPlan({ ...standardPlan, features: [...newfeatures] });
@@ -149,6 +167,10 @@ export default function GigMyServicePricing({
     console.log("Premium", premiumPlan);
     console.log("Standard", standardPlan);
   }, [basicPlan, premiumPlan, standardPlan]);
+
+  useEffect(() => {
+    console.log("additionalFeatures", additionalFeatures);
+  }, [additionalFeatures]);
 
   return (
     <>
@@ -783,7 +805,75 @@ export default function GigMyServicePricing({
         >
           <Typography variant="h4">Add extra services</Typography>
         </Grid>
-        {Category.additionalFeatures.map((feature) => {
+        {Category.additionalFeatures.map((feature, i) => {
+          return (
+            <>
+              <Grid
+                container
+                mobile={12}
+                className="border"
+                sx={{ height: "50px" }}
+              >
+                <Grid
+                  item
+                  container
+                  mobile={9}
+                  justifyContent="flex-start"
+                  alignItems="center"
+                  className="border-End"
+                  direction="row"
+                >
+                  <CheckBox
+                    onChange={(e) => {
+                      const hold = [...additionalFeatures];
+                      hold[i + SubCategory.additionalFeatures.length].active =
+                        e.target.checked;
+                      setAdditionalFeatures({
+                        ...additionalFeatures,
+                        ...hold,
+                      });
+                    }}
+                  />
+                  <Typography variant="h6" sx={{ ml: 1 }}>
+                    {feature.title}
+                  </Typography>
+                  {feature.quantityBased && (
+                    <InputField
+                      styles={{ marginLeft: "10px" }}
+                      placeholder={`Enter ${feature.title}`}
+                      type="number"
+                      onChange={(e) => {
+                        const hold = [...additionalFeatures];
+                        hold[
+                          i + SubCategory.additionalFeatures.length
+                        ].quantity = e.target.value;
+                        setAdditionalFeatures({
+                          ...additionalFeatures,
+                          ...hold,
+                        });
+                      }}
+                    />
+                  )}
+                  <InputField
+                    styles={{ marginLeft: "10px" }}
+                    placeholder={`Enter Price`}
+                    type="number"
+                    onChange={(e) => {
+                      const hold = [...additionalFeatures];
+                      hold[i + SubCategory.additionalFeatures.length].cost =
+                        e.target.value;
+                      setAdditionalFeatures({
+                        ...additionalFeatures,
+                        ...hold,
+                      });
+                    }}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          );
+        })}
+        {SubCategory.additionalFeatures.map((feature, i) => {
           return (
             <>
               <Grid
@@ -801,13 +891,12 @@ export default function GigMyServicePricing({
                   className="border-End"
                 >
                   <CheckBox
-                    label="Source File"
-                    checked={basicPlan.sourceFile}
-                    error={basicPlanError.sourceFile}
                     onChange={(e) => {
-                      setBasicPlan({
-                        ...basicPlan,
-                        sourceFile: e.target.checked,
+                      const hold = [...additionalFeatures];
+                      hold[i].active = e.target.checked;
+                      setAdditionalFeatures({
+                        ...additionalFeatures,
+                        ...hold,
                       });
                     }}
                   />
@@ -819,58 +908,13 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
-                      error={standardPlanError.deliveryTime}
-                      value={standardPlan.deliveryTime}
                       onChange={(e) => {
-                        setStandardPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
-                        });
-                      }}
-                    />
-                  )}
-                </Grid>
-              </Grid>
-            </>
-          );
-        })}
-        {SubCategory.additionalFeatures.map((feature) => {
-          return (
-            <>
-              <Grid container mobile={12} className="border">
-                <Grid item container mobile={3}>
-                  {feature.title}
-                </Grid>
-                <Grid
-                  item
-                  container
-                  mobile={9}
-                  justifyContent="flex-end"
-                  alignItems="center"
-                >
-                  {feature.quantityBased && (
-                    <DropDownComp
-                      list={numebers}
-                      label="Select"
-                      value={standardPlan.deliveryTime}
-                      error={standardPlanError.deliveryTime}
-                      onChange={(e) => {
-                        setStandardPlan({
-                          ...standardPlan,
-                          deliveryTime: e.target.value,
-                        });
-                      }}
-                    />
-                  )}
-                  {feature.quantityBased === false && (
-                    <CheckBox
-                      label="Source File"
-                      checked={basicPlan.sourceFile}
-                      error={basicPlanError.sourceFile}
-                      onChange={(e) => {
-                        setBasicPlan({
-                          ...basicPlan,
-                          sourceFile: e.target.checked,
+                        const hold = [...additionalFeatures];
+                        hold[i].quantity = e.target.value;
+                        hold[i].active = true;
+                        setAdditionalFeatures({
+                          ...additionalFeatures,
+                          ...hold,
                         });
                       }}
                     />

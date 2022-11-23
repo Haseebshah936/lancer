@@ -13,6 +13,7 @@ export default function CreateGig() {
   const [errors, setErrors] = useState({});
 
   const [images, setImages] = useState([]);
+  const [additionalFeatures, setAdditionalFeatures] = useState([]);
   const [basicPlanError, setBasicPlanError] = useState({});
   const [standardPlanError, setStandardPlanError] = useState({});
   const [premiumPlanError, setPremiumPlanError] = useState({});
@@ -93,6 +94,8 @@ export default function CreateGig() {
             setBasicPlan={setBasicPlan}
             setStandardPlan={setStandardPlan}
             setPremiumPlan={setPremiumPlan}
+            additionalFeatures={additionalFeatures}
+            setAdditionalFeatures={setAdditionalFeatures}
           />
         );
         break;
