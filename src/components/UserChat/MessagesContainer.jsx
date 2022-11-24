@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useCallback } from "react";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
@@ -12,10 +13,12 @@ function MessagesContainer({
   handleScroll,
   scrollRef,
   active,
+  getNewMessage,
   setNewData,
   reRender,
 }) {
   const { user, currentUser } = useRealmContext();
+
   useEffect(() => {
     let breakAsyncIterator = false; // Later used to exit async iterator
     (async () => {
@@ -35,25 +38,13 @@ function MessagesContainer({
           return;
         } // Exit async iterator
         const { documentKey, fullDocument } = change;
+        getNewMessage(fullDocument?._id.toString());
         console.log(
           `new document: ${documentKey}`,
           fullDocument,
           fullDocument?._id.toString()
         );
-        const newMessage = fullDocument?._id.toString();
-        console.log("User", user._id);
-        const id = newData[newData.length - 1]?.userId._id;
-        console.log("New Message userId", newData[newData.length - 1]);
-        if (id !== user._id)
-          requestMethod
-            .get(`message/messageId/${newMessage}`)
-            .then((res) => {
-              console.log(res.data);
-              setNewData((prev) => [...prev, res.data]);
-            })
-            .catch((err) => {
-              handleError(err);
-            });
+
         // switch (change.operationType) {
         //   case "insert": {
         //     const { documentKey, fullDocument } = change;

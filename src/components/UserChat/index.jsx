@@ -26,6 +26,7 @@ import {
   handleMessageFormation,
 } from "./HelperFunctions";
 import MessagesContainer from "./MessagesContainer";
+import { useCallback } from "react";
 
 const ChatRoomsData = [
   {
@@ -178,6 +179,36 @@ function Chat(props) {
     }
   };
 
+  const getNewMessage = useCallback(
+    (messageId, realmMessageObject) => {
+      // const id = newData[newData.length - 1]?.userId._id;
+      // console.log("New Message userId", newData);
+      // if (id !== user._id)
+      requestMethod
+        .get(`message/messageId/${messageId}`)
+        .then((res) => {
+          console.log(res.data);
+          setNewData((prev) => {
+            const prevMessage = prev[prev.length - 1];
+            console.log("Previous state", prevMessage);
+            console.log("New message", res.data?.userId?._id);
+            if (
+              !prev.length ||
+              prevMessage?.userId?._id !== res.data?.userId?._id ||
+              (prevMessage?.userId?._id === res.data?.userId?._id &&
+                prevMessage?.server)
+            ) {
+              return [...prev, { ...res.data, server: true }];
+            } else return prev;
+          });
+        })
+        .catch((err) => {
+          handleError(err);
+        });
+    },
+    [newData]
+  );
+
   useEffect(() => {
     setReRender(true);
     if (active) getChatRoomMessages(active.id);
@@ -216,6 +247,7 @@ function Chat(props) {
             active={active}
             newData={newData}
             handleScroll={handleScroll}
+            getNewMessage={getNewMessage}
             setNewData={setNewData}
             reRender={reRender}
           />

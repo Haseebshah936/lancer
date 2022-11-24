@@ -81,7 +81,7 @@ const ChatRoomsContainer = styled.div`
     height: 10px;
     width: 10px;
   }
-  ${mobile({ margin: "2rem 0rem" })}
+  /* ${mobile({ margin: "2rem 0rem" })} */
 `;
 
 const SearchBox = styled.div`
