@@ -13,7 +13,9 @@ function Chat(props) {
   const navigate = useNavigate();
   return (
     <Wrapper>
-      <Header />
+      <HeaderContainer>
+        <Header />
+      </HeaderContainer>
       {/* <CustomIconButton
         style={{
           alignSelf: "flex-end",
@@ -46,6 +48,14 @@ const Wrapper = styled.div`
   overflow-y: hidden;
 `;
 
+const HeaderContainer = styled.div`
+  width: 100%;
+  display: auto;
+  ${mobile({
+    display: "none",
+  })};
+`;
+
 const Button = styled.div`
   /* border-bottom: 2px solid black; */
   align-self: flex-end;
@@ -66,6 +76,9 @@ const Button = styled.div`
   })}
   ${miniTablet({
     marginRight: "7%",
+  })}
+  ${mobile({
+    display: "none",
   })}
   cursor: pointer;
   @keyframes slide {

@@ -248,7 +248,7 @@ const Container = styled.div`
   })}
   ${mobile({
     marginInline: "0%",
-    height: "89vh",
+    height: "100vh",
     boxShadow: "none",
     overflowY: "hidden",
     marginTop: 0,

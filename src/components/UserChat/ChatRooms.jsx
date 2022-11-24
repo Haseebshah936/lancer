@@ -1,8 +1,9 @@
-import { Search } from "@mui/icons-material";
+import { ArrowBack, Search } from "@mui/icons-material";
 import { IconButton, InputBase } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { ChatItem, ChatList } from "react-chat-elements";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
@@ -15,6 +16,7 @@ function ChatRooms({
   onMuteClick = () => {},
   onFilter = () => {},
 }) {
+  const navigate = useNavigate();
   return (
     <ChatRoomsContainer>
       <Box
@@ -23,6 +25,9 @@ function ChatRooms({
         justifyContent={"center"}
         alignItems={"center"}
       >
+        <Button onClick={() => navigate(-1)}>
+          <ArrowBack style={{ fontSize: "1.6rem" }} />
+        </Button>
         <SearchBox>
           <InputBase
             sx={{ ml: 1, flex: 1, py: 0.5, fontSize: "1.2rem" }}
@@ -91,4 +96,23 @@ const SearchBox = styled.div`
   ${miniPc({
     minWidth: "22rem",
   })}
+`;
+const Button = styled.div`
+  /* border-bottom: 2px solid black; */
+  align-self: center;
+  font-size: 1.6rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1rem;
+  animation: slide 2s ease-in-out;
+  &:hover {
+    animation: slide 2s infinite;
+  }
+  font-weight: 700;
+  ${mobile({
+    display: "flex",
+  })}
+  cursor: pointer;
 `;
