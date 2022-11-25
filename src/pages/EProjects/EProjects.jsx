@@ -9,7 +9,7 @@ import CompletedProjects from "../../components/EProject/CompletedProjects";
 import OngoingProjects from "../../components/EProject/OngoingProjects";
 import PendingProjects from "../../components/EProject/PendingProjects";
 import CancelledProjects from "./../../components/EProject/CancelledProjects";
-import Sidebar from "../../components/DashboardComponents/Sidebar";
+import ESideBar from "../../pages/ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
 
 export default function EProjects() {
@@ -25,7 +25,7 @@ export default function EProjects() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <Sidebar></Sidebar>
+              <ESideBar></ESideBar>
             </Grid>
             <Grid
               item

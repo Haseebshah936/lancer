@@ -78,10 +78,10 @@ function App(props) {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/buyermain" element={<BuyerMain />} />
-            <Route path="/sellerdashboard" element={<SellerDashboard />}>
+            {/* <Route path="/sellerdashboard" element={<SellerDashboard />}>
               <Route path="favourites" element={<Favourites />} />
               <Route index element={<Dashboard />} />
-            </Route>
+            </Route> */}
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/gig/intro" element={<GigServiceIntroduction />} />
             <Route path="/gig/attachment" element={<GigMediaAttachment />} />
@@ -96,7 +96,7 @@ function App(props) {
             <Route path="/cprofile" element={<CompleteProfile />}></Route>
             <Route
               path="/pexperience"
-              element={<PInfoExperienceAndEducation />}
+              element={<PInfoExperienceAndEducation />} fa
             />
 
             <Route path="/postProject" element={<PostProject />} />

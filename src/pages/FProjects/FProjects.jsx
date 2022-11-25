@@ -14,7 +14,6 @@ import FSideBar from "../../pages/FSideBar/FSideBar";
 // import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 import Footer from "../../components/Footer/index";
-import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);

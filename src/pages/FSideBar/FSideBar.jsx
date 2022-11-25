@@ -216,21 +216,6 @@ const Sidebar = () => {
                   </CustomListItem>
                 </NavLink>
 
-                <Link to="/f/teams">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <GroupsOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText primary="Teams" disableTypography={true} />
-                  </CustomListItem>
-                </Link>
-
                 <Link to="/f/payments">
                   <CustomListItem disablePadding>
                     <ListItemIcon>

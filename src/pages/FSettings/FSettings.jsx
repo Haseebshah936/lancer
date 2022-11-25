@@ -67,7 +67,7 @@ export default function FSettings() {
             >
               <Grid container display={"flex"} justifyContent={"center"}>
                 <Grid item xs={11.5}>
-                  <TitleP className="text-left">Transection History</TitleP>
+                  <TitleP className="text-left">Setting</TitleP>
                 </Grid>
                 <Grid
                   item
@@ -189,7 +189,7 @@ export default function FSettings() {
                       });
                     }}
                     renderInput={(params) => (
-                      <TextField {...params} label="Curriencies" />
+                      <GreenBorderTextField {...params} label="Curriencies" />
                     )}
                   />
                 </Grid>
