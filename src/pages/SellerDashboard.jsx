@@ -19,23 +19,6 @@ const SellerDashboard = () => {
   return (
     <>
       <Header />
-      <Button
-        onClick={async () => {
-          const mongo = currentUser.mongoClient("mongodb-atlas");
-          const collection = mongo.db("test").collection("test");
-          const result = await collection.insertOne({
-            name: "lily of the valley",
-            sunlight: "full",
-            color: "white",
-            type: "perennial",
-            _partition: "Store 47",
-          });
-          // const result = await collection.find();
-          console.log(result);
-        }}
-      >
-        Hello
-      </Button>
       <Container>
         <Box sx={{ flexGrow: 1, pt: 1, pb: 1 }}>
           <ThemeProvider

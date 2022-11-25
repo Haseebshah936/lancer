@@ -76,8 +76,8 @@ const InputField = ({
 const CheckBox = ({ onChange, checked, label, error }) => {
   return (
     <Checkbox
-      disableRipple
       checked={checked}
+      disableRipple
       onChange={onChange}
       sx={{
         "& .MuiSvgIcon-root": {
@@ -89,27 +89,6 @@ const CheckBox = ({ onChange, checked, label, error }) => {
         },
       }}
     />
-  );
-};
-
-const DropDownComp = ({ list, label, value, onChange, error }) => {
-  return (
-    <FormControl fullWidth sx={{ height: "40px" }} size="small">
-      <InputLabel id="demo-simple-select-label">{label}</InputLabel>
-      <Select
-        fullWidth
-        labelId="demo-simple-select-label"
-        id="demo-simple-select"
-        value={value}
-        label={label}
-        onChange={onChange}
-        style={{ backgroundColor: error ? "#ffdadb" : "white" }}
-      >
-        {list.map((item) => (
-          <MenuItem value={item.value}>{item.value}</MenuItem>
-        ))}
-      </Select>
-    </FormControl>
   );
 };
 
@@ -132,57 +111,10 @@ export default function GigMyServicePricing({
   setAdditionalFeatures,
 }) {
   useEffect(() => {
-    const all = [...SubCategory.features, ...Category.features];
-    const allAdditional = [
-      ...SubCategory.additionalFeatures,
-      ...Category.additionalFeatures,
-    ];
-
-    const newfeatures = all.map((e) => {
-      return {
-        title: e.title,
-        active: false,
-        quantity: 0,
-      };
-    });
-
-    const newfeatures1 = all.map((e) => {
-      return {
-        title: e.title,
-        active: false,
-        quantity: 0,
-      };
-    });
-
-    const newfeatures2 = all.map((e) => {
-      return {
-        title: e.title,
-        active: false,
-        quantity: 0,
-      };
-    });
-
-    const newadditional = allAdditional.map((e) => {
-      return {
-        title: e.title,
-        active: false,
-        quantity: 0,
-        cost: 0,
-      };
-    });
-
-    console.log("additional", newadditional);
-    setAdditionalFeatures(newadditional);
-
-    setBasicPlan({ ...basicPlan, features: [...newfeatures] });
-    setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
-    setPremiumPlan({ ...premiumPlan, features: [...newfeatures2] });
-  }, []);
-
-  useEffect(() => {
     console.log("Basic", basicPlan);
     console.log("Premium", premiumPlan);
     console.log("Standard", standardPlan);
+    // console.log()
   }, [basicPlan, premiumPlan, standardPlan]);
 
   useEffect(() => {
@@ -271,12 +203,19 @@ export default function GigMyServicePricing({
             />
           </Box>
 
-          <Box sx={{ width: "100%", mt: 1 }}>
+          <Box
+            sx={{
+              width: "100%",
+              mt: 1,
+            }}
+          >
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: basicPlanError.delivery ? "#ffdadb" : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={basicPlanError.delivery}
               value={basicPlan.delivery}
               onChange={(e) => {
                 setBasicPlan({
@@ -346,10 +285,14 @@ export default function GigMyServicePricing({
 
           <Box sx={{ width: "100%", mt: 1 }}>
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: standardPlanError.delivery
+                  ? "#ffdadb"
+                  : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={standardPlanError.delivery}
               value={standardPlan.delivery}
               onChange={(e) => {
                 setStandardPlan({
@@ -416,10 +359,14 @@ export default function GigMyServicePricing({
 
           <Box sx={{ width: "100%", mt: 1 }}>
             <InputField
-              styles={{ width: "100%" }}
+              styles={{
+                width: "100%",
+                backgroundColor: premiumPlanError.delivery
+                  ? "#ffdadb"
+                  : "white",
+              }}
               placeholder="Delivery Days"
               type="number"
-              error={premiumPlanError.delivery}
               value={premiumPlan.delivery}
               onChange={(e) => {
                 setPremiumPlan({
@@ -460,6 +407,10 @@ export default function GigMyServicePricing({
                       name={feature.title}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
+                      value={
+                        basicPlan.features[i + SubCategory.features.length]
+                          .quantity
+                      }
                       type="number"
                       onChange={(e) => {
                         const hold = [...basicPlan.features];
@@ -475,8 +426,13 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={
+                        basicPlan.features[i + SubCategory.features.length]
+                          .active
+                      }
                       onChange={(e) => {
                         const hold = [...basicPlan.features];
+
                         hold[i + SubCategory.features.length].active =
                           e.target.checked;
                         setBasicPlan({
@@ -498,6 +454,10 @@ export default function GigMyServicePricing({
                   {feature.quantityBased && (
                     <InputField
                       styles={{ width: "100%" }}
+                      value={
+                        standardPlan.features[i + SubCategory.features.length]
+                          .quantity
+                      }
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       onChange={(e) => {
@@ -514,6 +474,10 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={
+                        standardPlan.features[i + SubCategory.features.length]
+                          .active
+                      }
                       onChange={(e) => {
                         const hold = [...standardPlan.features];
                         hold[i + SubCategory.features.length].active =
@@ -536,6 +500,10 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
+                      value={
+                        premiumPlan.features[i + SubCategory.features.length]
+                          .quantity
+                      }
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -553,6 +521,10 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={
+                        premiumPlan.features[i + SubCategory.features.length]
+                          .active
+                      }
                       onChange={(e) => {
                         const hold = [...premiumPlan.features];
                         hold[i + SubCategory.features.length].active =
@@ -602,6 +574,7 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
+                      value={basicPlan.features[i].quantity}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -618,6 +591,7 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={basicPlan.features[i].active}
                       onChange={(e) => {
                         const hold = [...basicPlan.features];
                         hold[i].active = e.target.checked;
@@ -639,6 +613,7 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
+                      value={standardPlan.features[i].quantity}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -655,6 +630,7 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={standardPlan.features[i].active}
                       onChange={(e) => {
                         const hold = [...standardPlan.features];
                         hold[i].active = e.target.checked;
@@ -676,6 +652,7 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
+                      value={premiumPlan.features[i].quantity}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -692,6 +669,7 @@ export default function GigMyServicePricing({
                   )}
                   {feature.quantityBased === false && (
                     <CheckBox
+                      checked={premiumPlan.features[i].active}
                       onChange={(e) => {
                         const hold = [...premiumPlan.features];
                         hold[i].active = e.target.checked;
@@ -731,10 +709,12 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
-                error={basicPlanError.cost}
                 value={basicPlan.cost}
                 onChange={(e) => {
                   setBasicPlan({
@@ -760,7 +740,10 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
                 error={standardPlanError.cost}
@@ -789,7 +772,10 @@ export default function GigMyServicePricing({
           >
             <Grid item container direction="row" alignItems="center">
               <InputField
-                styles={{ width: "90%" }}
+                styles={{
+                  width: "90%",
+                  backgroundColor: basicPlanError.cost ? "#ffdadb" : "white",
+                }}
                 placeholder="Enter Price"
                 type="number"
                 error={premiumPlanError.cost}
@@ -841,10 +827,15 @@ export default function GigMyServicePricing({
                   direction="row"
                 >
                   <CheckBox
+                    checked={additionalFeatures[i].active}
                     onChange={(e) => {
+                      console.log("Addition feature", additionalFeatures);
                       const hold = [...additionalFeatures];
+                      console.log("Addition Hold", hold);
                       hold[i].active = e.target.checked;
+
                       setAdditionalFeatures(hold);
+                      console.log("Additional features ", additionalFeatures);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>
@@ -852,6 +843,7 @@ export default function GigMyServicePricing({
                   </Typography>
                   {feature.quantityBased && (
                     <InputField
+                      value={additionalFeatures[i].quantity}
                       styles={{ marginLeft: "10px" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -863,6 +855,7 @@ export default function GigMyServicePricing({
                     />
                   )}
                   <InputField
+                    value={additionalFeatures[i].cost}
                     styles={{ marginLeft: "30px" }}
                     placeholder={`Enter Price`}
                     type="number"
@@ -895,6 +888,7 @@ export default function GigMyServicePricing({
                   className="border-End"
                 >
                   <CheckBox
+                    checked={additionalFeatures[i].active}
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
                       hold[i].active = e.target.checked;
@@ -906,6 +900,7 @@ export default function GigMyServicePricing({
                   </Typography>
                   {feature.quantityBased && (
                     <InputField
+                      value={additionalFeatures[i].quantity}
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -918,13 +913,13 @@ export default function GigMyServicePricing({
                     />
                   )}
                   <InputField
+                    value={additionalFeatures[i].cost}
                     styles={{ marginLeft: "30px" }}
                     placeholder={`Enter Price`}
                     type="number"
                     onChange={(e) => {
                       const hold = [...additionalFeatures];
-                      hold[i + SubCategory.additionalFeatures.length].cost =
-                        e.target.value;
+                      hold[i].cost = e.target.value;
                       setAdditionalFeatures(hold);
                     }}
                   />

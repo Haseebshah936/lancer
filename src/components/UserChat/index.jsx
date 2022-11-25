@@ -25,6 +25,8 @@ import {
   handleMessageCreation,
   handleMessageFormation,
 } from "./HelperFunctions";
+import MessagesContainer from "./MessagesContainer";
+import { useCallback } from "react";
 
 const ChatRoomsData = [
   {
@@ -57,9 +59,9 @@ function Chat(props) {
   const [active, setActive] = useState(false);
   const [chatRooms, setChatRooms] = useState([]);
   const [chatRoomsData, setChatRoomsData] = useState([]);
-  const { user } = useRealmContext();
-  const [loading, setLoading] = useState(false);
+  const { user, currentUser } = useRealmContext();
   const [loadingMore, setLoadingMore] = useState(false);
+  const [reRender, setReRender] = useState(true);
 
   const getChatRooms = () => {
     requestMethod
@@ -77,6 +79,7 @@ function Chat(props) {
       .then((res) => {
         setData(res.data);
         setNewData([]);
+        setReRender(false);
       })
       .catch((err) => {
         console.log(err);
@@ -176,7 +179,38 @@ function Chat(props) {
     }
   };
 
+  const getNewMessage = useCallback(
+    (messageId, realmMessageObject) => {
+      // const id = newData[newData.length - 1]?.userId._id;
+      // console.log("New Message userId", newData);
+      // if (id !== user._id)
+      requestMethod
+        .get(`message/messageId/${messageId}`)
+        .then((res) => {
+          console.log(res.data);
+          setNewData((prev) => {
+            const prevMessage = prev[prev.length - 1];
+            console.log("Previous state", prevMessage);
+            console.log("New message", res.data?.userId?._id);
+            if (
+              !prev.length ||
+              prevMessage?.userId?._id !== res.data?.userId?._id ||
+              (prevMessage?.userId?._id === res.data?.userId?._id &&
+                prevMessage?.server)
+            ) {
+              return [...prev, { ...res.data, server: true }];
+            } else return prev;
+          });
+        })
+        .catch((err) => {
+          handleError(err);
+        });
+    },
+    [newData]
+  );
+
   useEffect(() => {
+    setReRender(true);
     if (active) getChatRoomMessages(active.id);
   }, [active]);
 
@@ -206,43 +240,18 @@ function Chat(props) {
           onClickCall={handleCall}
           onClickVideoCall={handleVideoCall}
         />
-        <ChatContainer onScroll={handleScroll} ref={scrollRef}>
-          {newData.length > 0 ? (
-            <ChatContainer1>
-              {newData.map((message) => {
-                const newMessage = handleMessageFormation(message);
-                return (
-                  <CustomMessageBox
-                    inverted={false}
-                    position={
-                      user?._id === newMessage?.userId ? "right" : "left"
-                    }
-                    title={newMessage?.userName}
-                    type={message?.type}
-                    key={message?._id}
-                    avatar={message?.userId?.profilePic}
-                    {...newMessage}
-                  />
-                );
-              })}
-            </ChatContainer1>
-          ) : null}
-          <MessageListContainer>
-            {data.map((message) => {
-              const newMessage = handleMessageFormation(message);
-              return (
-                <CustomMessageBox
-                  position={user?._id === newMessage?.userId ? "right" : "left"}
-                  title={newMessage?.userName}
-                  type={message?.type}
-                  key={message?._id}
-                  avatar={message?.userId?.profilePic}
-                  {...newMessage}
-                />
-              );
-            })}
-          </MessageListContainer>
-        </ChatContainer>
+        {!reRender && (
+          <MessagesContainer
+            scrollRef={scrollRef}
+            data={data}
+            active={active}
+            newData={newData}
+            handleScroll={handleScroll}
+            getNewMessage={getNewMessage}
+            setNewData={setNewData}
+            reRender={reRender}
+          />
+        )}
         {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
         <ChatInput onSend={handleSend} />
       </MessageContainer>
@@ -271,7 +280,7 @@ const Container = styled.div`
   })}
   ${mobile({
     marginInline: "0%",
-    height: "89vh",
+    height: "100vh",
     boxShadow: "none",
     overflowY: "hidden",
     marginTop: 0,
