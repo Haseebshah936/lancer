@@ -193,10 +193,10 @@ function Chat(props) {
             console.log("Previous state", prevMessage);
             console.log("New message", res.data?.userId?._id);
             if (
-              !prev.length ||
-              prevMessage?.userId?._id !== res.data?.userId?._id ||
-              (prevMessage?.userId?._id === res.data?.userId?._id &&
-                prevMessage?.server)
+              !(
+                prevMessage?.userId?._id === res.data?.userId?._id &&
+                prevMessage?.server === undefined
+              )
             ) {
               return [...prev, { ...res.data, server: true }];
             } else return prev;

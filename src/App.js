@@ -59,6 +59,7 @@ import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
 import TempPage from "./pages/TempPage/TempPage";
 import CreateGig from "./pages/CreateGig";
+import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
