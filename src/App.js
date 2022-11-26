@@ -23,10 +23,6 @@ import SellerDashboard from "./pages/SellerDashboard";
 import PInfoExperienceAndEducation from "./pages/Pinfo/PInfoExperienceAndEducation";
 import PInfoPersonalDetailsAndSkills from "./pages/Pinfo/PInfoPersonalDetailsAndSkills";
 
-import GigServiceIntroduction from "./pages/GigCreation/GigServiceIntroduction";
-import GigMediaAttachment from "./pages/GigCreation/GigMediaAttachment";
-import GigMyServicePricing from "./pages/GigCreation/GigMyServicePricing";
-import GigQuestionAPage from "./pages/GigCreation/GigQuestionAPage";
 import PostProject from "./pages/PostProject/PostProject";
 import Chat from "./pages/Chat";
 
@@ -83,10 +79,6 @@ function App(props) {
               <Route index element={<Dashboard />} />
             </Route>
             <Route path="/chat/:id" element={<Chat />} />
-            <Route path="/gig/intro" element={<GigServiceIntroduction />} />
-            <Route path="/gig/attachment" element={<GigMediaAttachment />} />
-            <Route path="/gig/pricing" element={<GigMyServicePricing />} />
-            <Route path="/gig/questions" element={<GigQuestionAPage />} />
             <Route path="/gig/:name" element={<CreateGig />} />
 
             <Route

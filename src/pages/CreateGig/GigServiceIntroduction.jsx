@@ -1,24 +1,11 @@
 import React, { useState, useEffect } from "react";
-
 import axios from "axios";
-import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
-import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
-
-import {
-  // gigCategories,
-  languageList,
-  tagsList,
-} from "../../utils/GigDropDownValues";
-import { CountryNAME } from "../../utils/Countries";
+import { tagsList } from "../../utils/GigDropDownValues";
 import { Button, Chip, Paper, TextField, Typography } from "@mui/material";
 import colors from "../../utils//colors";
-import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
 import TextFieldComp from "./../../components/GigComponent/TextFieldComp";
 import DropDownInputComp from "./../../components/GigComponent/DropDownInputComp";
-
-import MultiLineInputComp from "./../../components/GigComponent/MultiLineInputComp";
-import MultiSlectInputComp from "./../../components/GigComponent/MultiSlectInputComp";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import AsyncAutoComplete from "../../components/GigComponent/AsyncAutoComplete";
@@ -127,7 +114,7 @@ export default function GigServiceIntroduction({
         </Grid>
 
         <Grid item container mobile={12} sx={{ mt: 2 }}>
-          <Grid item container mobile={5.5}>
+          <Grid item container laptop={5.5} mobile={12}>
             <DropDownInputComp
               list={gigCategories}
               label="Select Category"
@@ -144,8 +131,8 @@ export default function GigServiceIntroduction({
               }}
             />
           </Grid>
-          <Grid item mobile={1}></Grid>
-          <Grid item container mobile={5.5}>
+          <Grid item laptop={1} mobile={0}></Grid>
+          <Grid item container laptop={5.5} mobile={12} mt={{ mobile: 2 }}>
             <AsyncAutoComplete
               setBasicPlan={setBasicPlan}
               setStandardPlan={setStandardPlan}
@@ -180,7 +167,7 @@ export default function GigServiceIntroduction({
           />
         </Grid>
         <Grid item container sx={{ mt: 2 }} mobile={12}>
-          <Grid item container mobile={11}>
+          <Grid item container mobile={10}>
             <TextField
               sx={{
                 "& label.Mui-focused": {
@@ -205,9 +192,9 @@ export default function GigServiceIntroduction({
               <div className="alert alert-danger">{errors.tage}</div>
             )}
           </Grid>
-          <Grid item container mobile={1}>
+          <Grid item container mobile={2}>
             <Button
-              sx={{ ml: 1 }}
+              sx={{ my: 0, mr: 0, ml: 1, minWidth: "0px" }}
               fullWidth
               variant="contained"
               style={{ backgroundColor: colors.textGreen }}
@@ -222,54 +209,54 @@ export default function GigServiceIntroduction({
               Add
             </Button>
           </Grid>
-          <Grid
-            item
-            container
-            mobile={12}
-            sx={{ mt: gigIntroduction.tage.length === 0 ? 0 : 2 }}
-          >
-            {gigIntroduction.tage.length !== 0 && (
-              <Paper
-                elevation={1}
-                variant="outlined"
-                sx={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                  flexWrap: "wrap",
-                  listStyle: "none",
-                  backgroundColor: colors.white,
-                  borderColor: colors.white,
-                  p: 0.5,
-                  m: 0,
-                }}
-                component="ul"
-              >
-                {gigIntroduction.tage.map((tag) => (
-                  <>
-                    <Chip
-                      sx={{
+        </Grid>
+        <Grid
+          item
+          container
+          mobile={12}
+          sx={{ mt: gigIntroduction.tage.length === 0 ? 0 : 2 }}
+        >
+          {gigIntroduction.tage.length !== 0 && (
+            <Paper
+              elevation={1}
+              variant="outlined"
+              sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                flexWrap: "wrap",
+                listStyle: "none",
+                backgroundColor: colors.white,
+                borderColor: colors.white,
+                p: 0.5,
+                m: 0,
+              }}
+              component="ul"
+            >
+              {gigIntroduction.tage.map((tag) => (
+                <>
+                  <Chip
+                    sx={{
+                      color: colors.textGreen,
+                      borderColor: colors.textGreen,
+                      mr: 1,
+                      mb: 1,
+                      "&	.MuiChip-deleteIcon": {
                         color: colors.textGreen,
-                        borderColor: colors.textGreen,
-                        mr: 1,
-                        mb: 1,
-                        "&	.MuiChip-deleteIcon": {
-                          color: colors.textGreen,
-                        },
-                      }}
-                      label={tag}
-                      variant="outlined"
-                      onDelete={() => {
-                        setGigIntroduction({
-                          ...gigIntroduction,
-                          tage: gigIntroduction.tage.filter((t) => t !== tag),
-                        });
-                      }}
-                    />
-                  </>
-                ))}
-              </Paper>
-            )}
-          </Grid>
+                      },
+                    }}
+                    label={tag}
+                    variant="outlined"
+                    onDelete={() => {
+                      setGigIntroduction({
+                        ...gigIntroduction,
+                        tage: gigIntroduction.tage.filter((t) => t !== tag),
+                      });
+                    }}
+                  />
+                </>
+              ))}
+            </Paper>
+          )}
         </Grid>
       </Grid>
     </>

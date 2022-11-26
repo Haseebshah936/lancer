@@ -4,13 +4,13 @@ import Footer from "../../components/Footer";
 import NavigationBar from "../../components/GigCreationComponents/NavigationBar";
 import StepperForm from "../../components/GigCreationSteps/StepperForm";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
-import GigMediaAttachment from "../GigCreation/GigMediaAttachment";
-import GigMyServicePricing from "../GigCreation/GigMyServicePricing";
-import GigQuestionAPage from "../GigCreation/GigQuestionAPage";
-import GigServiceIntroduction from "../GigCreation/GigServiceIntroduction";
+import GigMediaAttachment from "./GigMediaAttachment";
+import GigMyServicePricing from "./GigMyServicePricing";
+import GigQuestionAPage from "./GigQuestionAPage";
+import GigServiceIntroduction from "./GigServiceIntroduction";
 import axios from "axios";
 import { useRealmContext } from "../../db/RealmContext";
-import GigLoading from "../GigCreation/GigLoading";
+import GigLoading from "./GigLoading";
 
 export default function CreateGig() {
   const { user } = useRealmContext();
@@ -160,15 +160,6 @@ export default function CreateGig() {
           };
 
           return <GigLoading Gig={Gig} />;
-
-          // axios
-          //   .post("http://localhost:3003/api/product/createProduct", Gig)
-          //   .then((response) => {
-          //     console.log(response);
-          //   })
-          //   .catch((response) => {
-          //     console.log(response);
-          //   });
         }
         break;
     }
@@ -203,8 +194,8 @@ export default function CreateGig() {
         })}
       >
         <Grid container mobile={12} sx={{ my: 5 }}>
-          <Grid item mobile={2}></Grid>
-          <Grid item mobile={8}>
+          <Grid item laptop={2} tablet={1}></Grid>
+          <Grid item laptop={8} tablet={10}>
             {" "}
             <StepperForm activeStep={activeStep} />
             <Grid container>
@@ -234,7 +225,7 @@ export default function CreateGig() {
               <Grid item mobile={1}></Grid>
             </Grid>
           </Grid>
-          <Grid item mobile={2}></Grid>
+          <Grid item laptop={2} tablet={1}></Grid>
         </Grid>
       </ThemeProvider>
 

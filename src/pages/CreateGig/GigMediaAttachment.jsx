@@ -10,13 +10,116 @@ import colors from "../../utils/colors";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import styled from "styled-components";
+import MediaAttachment from "../../components/GigComponent/MediaAttachment";
+import axios from "axios";
+import { useState } from "react";
 
 export default function GigMediaAttachment({ setImages, images, errors }) {
+  const [attachments, setAttachments] = useState([]);
+
+  const uploadAttachment = (file, index, controller) => {
+    const option = {
+      onUploadProgress: (progressEvent) => {
+        const { loaded, total } = progressEvent;
+        const percent = Math.floor((loaded * 100) / total);
+        if (percent < 100) {
+          setAttachments((prev) => {
+            const arr = [...prev];
+            arr[index].uploading = true;
+            arr[index].progress = percent;
+            return arr;
+          });
+        }
+      },
+      signal: controller.signal,
+    };
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "f8ci6zlz");
+    formData.append("cloud_name", "dhc9yqbjh");
+    formData.append(" return_delete_token", 1);
+    axios
+      .post(
+        "https://api.cloudinary.com/v1_1/dhc9yqbjh/auto/upload",
+        formData,
+        option
+      )
+      .then((res) => {
+        console.log("Response", res);
+        setAttachments((prev) => {
+          const arr = [...prev];
+          arr[index].uploading = false;
+          if (arr[index].type === "video") {
+            URL.revokeObjectURL(arr[index].data.videoURL);
+            arr[index].data.videoURL = res.data.secure_url;
+          } else if (arr[index].type === "audio") {
+            URL.revokeObjectURL(arr[index].data.audioURL);
+            arr[index].data.audioURL = res.data.secure_url;
+          } else {
+            URL.revokeObjectURL(arr[index].data.uri);
+            arr[index].data.uri = res.data.secure_url;
+          }
+          return arr;
+        });
+      })
+      .catch((err) => {
+        if (err.message !== "canceled") console.log(err);
+        console.log("canceled");
+      });
+  };
+
+  const removeAttachment = async (i) => {
+    // if (attachments[i].uploading) {
+    attachments[i].controller.abort();
+    // } else {
+    //   const url = attachments[i].data.uri;
+    //   const uri = url.split("/");
+    //   const publicId = uri[uri.length - 1].split(".")[0];
+    //   console.log(publicId);
+    //   const timestamp = new Date().getTime();
+    //   const string = `public_id=${publicId}&timestamp=${timestamp} mPwSeRqhs5pkymxJ93fsLFJUObo`;
+    //   const signature = await sha1(string);
+    //   const formData = new FormData();
+    //   console.log(signature);
+    //   formData.append("file", url);
+    //   formData.append("api_key", "118251153512448");
+    //   formData.append("public_id", publicId);
+    //   formData.append("timestamp", timestamp);
+    //   formData.append("signature", signature);
+    //   const res = await axios.post(
+    //     "https://api.cloudinary.com/v1_1/dhc9yqbjh/auto/destroy",
+    //     formData
+    //   );
+    //   console.log(res);
+    //   // try {
+    //   //   const resp = await cloudinary.v2.uploader.destroy(
+    //   //     publicId,
+    //   //     function (error, result) {
+    //   //       console.log(result, error);
+    //   //     }
+    //   //   );
+    //   //   console.log(resp);
+    //   // } catch (err) {
+    //   //   console.log("Something went wrong, please try again later.");
+    //   // }
+    // }
+    console.log("remove attachment", attachments[i]);
+    setAttachments((prev) => {
+      const arr = [...prev];
+      arr[i] = {
+        ...arr[i],
+        removed: true,
+      };
+      return arr;
+    });
+  };
+
   const maxNumber = 3;
   const onChange = (imageList, addUpdateIndex) => {
     // data for submit
     // console.log(imageList, addUpdateIndex);
-    setImages(imageList);
+    setAttachments(imageList);
   };
 
   return (
@@ -79,7 +182,16 @@ export default function GigMediaAttachment({ setImages, images, errors }) {
                   </Button>
                 </Grid>
                 <Grid item container direction="row" mobile={12}>
-                  {imageList.map((image, index) => (
+                  {attachments.map((image, index) => {
+                    <Grid item mobile={4} sx={{ my: 2, mr: 1 }}>
+                      <MediaAttachment
+                        attachment={image}
+                        i={index}
+                        removeAttachment={removeAttachment}
+                      />
+                    </Grid>;
+                  })}
+                  {/* {imageList.map((image, index) => (
                     <Grid
                       item
                       mobile={4}
@@ -122,7 +234,7 @@ export default function GigMediaAttachment({ setImages, images, errors }) {
                         </div>
                       </div>
                     </Grid>
-                  ))}
+                  ))} */}
                 </Grid>
               </Grid>
             )}

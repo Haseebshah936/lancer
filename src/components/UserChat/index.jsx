@@ -192,11 +192,18 @@ function Chat(props) {
             const prevMessage = prev[prev.length - 1];
             console.log("Previous state", prevMessage);
             console.log("New message", res.data?.userId?._id);
+            console.log(
+              "Condition",
+              !prev.length,
+              prevMessage?.userId?._id !== res.data?.userId?._id,
+              prevMessage?.userId?._id === res.data?.userId?._id &&
+                prevMessage?.server === true
+            );
             if (
               !prev.length ||
               prevMessage?.userId?._id !== res.data?.userId?._id ||
               (prevMessage?.userId?._id === res.data?.userId?._id &&
-                prevMessage?.server)
+                prevMessage?.server === true)
             ) {
               return [...prev, { ...res.data, server: true }];
             } else return prev;
