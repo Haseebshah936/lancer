@@ -155,7 +155,12 @@ export default function CompleteProfile() {
       </Grid>
       {/* Title */}
       <Grid container className="d-flex justify-content-center">
-        <Grid item xs={11.5} md={7} className="d-flex justify-content-center">
+        <Grid
+          item
+          xs={11.5}
+          md={7}
+          className="d-flex justify-content-center mt-3"
+        >
           <HeaderDiv>
             <div className="ps-2 d-flex flex-row align-items-center">
               <ActivePageMarker></ActivePageMarker>
@@ -165,7 +170,7 @@ export default function CompleteProfile() {
         </Grid>
       </Grid>
       {/* body */}
-      <Grid container className="d-flex justify-content-center mt-3">
+      <Grid container className="d-flex justify-content-center mt-4">
         <Grid item xs={11.5} md={7}>
           <Grid container className="d-flex justify-content-center">
             <Grid item xs={12} mx={1} my={{ xs: 0.5, md: 0 }}>
@@ -181,7 +186,11 @@ export default function CompleteProfile() {
                 }
               />
             </Grid>
-            <Grid container className="d-flex justify-content-between" my={1}>
+            <Grid
+              container
+              className="d-flex justify-content-between mt-4"
+              my={1}
+            >
               <Grid item xs={12} md={5} mx={1} my={{ xs: 0.5, md: 0 }}>
                 <Box width="100%">
                   <InputLabel id="demo-simple-select-label">Country</InputLabel>
@@ -226,7 +235,7 @@ export default function CompleteProfile() {
                   </Select>
                 </Box>
               </Grid>
-              <Grid item xs={12} mx={1}>
+              <Grid item xs={12} mx={1} my={2}>
                 <p
                   className="mt-2 mb-1"
                   style={{ fontSize: "1.8rem", fontWeight: "600" }}
@@ -234,7 +243,13 @@ export default function CompleteProfile() {
                   Upload Picture
                 </p>
               </Grid>
-              <Grid item xs={12} mx={1} my={1} className="overflow-hidden">
+              <Grid
+                item
+                xs={12}
+                mx={1}
+                my={1}
+                className="overflow-hidden d-flex justify-content-start"
+              >
                 <div ref={dropbox}>
                   {image ? (
                     <Box
@@ -268,7 +283,7 @@ export default function CompleteProfile() {
                     </Box>
                   ) : (
                     <DashedBox
-                      className="bg-gray-200 rounded d-flex justify-content-center align-items-center "
+                      className="bg-gray-200 rounded d-flex justify-content-center align-items-center pt-5 pb-5"
                       //   style={{ height: 400, width: 600 }}
                     >
                       <form className="d-flex justify-content-center align-items-center">
@@ -292,7 +307,10 @@ export default function CompleteProfile() {
                             </Button>
                           </div>
                         ) : (
-                          <div className="text-gray-700 text-center mt-5">
+                          <div
+                            className="text-gray-700 text-center mt-5 "
+                            style={{ minHeight: "20rem" }}
+                          >
                             <p style={{ fontSize: "1.4rem" }}>
                               Drag and Drop Profile Image here
                             </p>

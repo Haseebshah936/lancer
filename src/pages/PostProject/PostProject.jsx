@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Joi, { errors } from "joi-browser";
-import { Box, Button, Grid, TextField, Alert } from "@mui/material";
+import { Box, Button, Grid, TextField, Alert, Chip } from "@mui/material";
 import TextFeildComp from "../../components/PostProject/TextFeildComp";
 import DropDownInputComp from "../../components/PostProject/DropDownInputComp";
 import { gigCategories } from "../../utils/GigDropDownValues";
@@ -11,6 +11,7 @@ import Footer from "../../components/Footer";
 import axios from "axios";
 
 export default function PostProject() {
+  const [uploading, setUploading] = useState("false");
   const [postProjectData, setPostProjectData] = useState({
     title: "",
     category: "",
@@ -53,6 +54,7 @@ export default function PostProject() {
     return errors;
   };
   const processFile = async (e) => {
+    setUploading("true");
     const files = e.target.files;
     // upload_preset", "f8ci6zlz"
     // "cloud_name", "dhc9yqbjh"
@@ -134,6 +136,7 @@ export default function PostProject() {
         files: [...postProjectData.files, ...urls],
       });
     });
+    setUploading("false");
   };
 
   React.useEffect(() => {
@@ -292,16 +295,8 @@ export default function PostProject() {
             <Grid item xs={11.4} display="flex" justifyContent={"center"}>
               <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {postProjectData.experties.map((experties) => (
-                  <div
-                    className="ms-1 me-1 mt-1"
-                    style={{
-                      backgroundColor: colors.becomePartnerGreen,
-                      display: "flex",
-                      justifyContent: "center",
-                      borderRadius: "10px",
-                      flexDirection: "row",
-                      padding: "5px 10px 0px 10px",
-                    }}
+                  <Chip
+                    className="ms-3"
                     onClick={() => {
                       setPostProjectData({
                         ...postProjectData,
@@ -310,21 +305,12 @@ export default function PostProject() {
                         ),
                       });
                     }}
-                  >
-                    <p
-                      style={{
-                        fontSize: "14px",
-                        maxWidth: "33ch",
-
-                        overflow: "hidden",
-                      }}
-                    >
-                      {experties}
-                    </p>
-                    <p style={{ fontSize: "14px" }} className="ps-3">
-                      {"X"}
-                    </p>
-                  </div>
+                    label={experties + " " + "X"}
+                    style={{
+                      fontWeight: "bold",
+                      fontSize: "12px",
+                    }}
+                  ></Chip>
                 ))}
               </div>
             </Grid>
@@ -364,6 +350,16 @@ export default function PostProject() {
               <p style={{ fontWeight: "bold" }} className="pt-2">
                 {"Size of the Document should be Below 10MB"}
               </p>
+            </Grid>
+            <Grid item xs={11.4}>
+              {uploading === "true" ? (
+                <p
+                  style={{ fontWeight: "bold", color: "red" }}
+                  className="pt-2"
+                >
+                  Wait files are Uploading
+                </p>
+              ) : null}
             </Grid>
           </Grid>
           {/* Adding Links */}
