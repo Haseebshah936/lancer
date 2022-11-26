@@ -9,10 +9,13 @@ import { ButtonBase, IconButton, StepButton, Typography } from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import { Box } from "@mui/system";
 import React from "react";
+import { useEffect } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
+import displayTime from "../../utils/DateAndTime/displayTime";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -23,13 +26,38 @@ function MessageHeader({
   onClickCall = () => {},
   onClickVideoCall = () => {},
 }) {
+  const today = new Date().getTime();
+  const dateToday = new Date(today).getDate();
+  const monthToday = new Date(today).getMonth();
+  const yearToday = new Date(today).getFullYear();
+  const { activeChatroomStatus } = useCustomContext();
+  const isMatchToday = (date) => {
+    const roundDate = new Date(date).getDate();
+    const roundMonth = new Date(date).getMonth();
+    const roundYear = new Date(date).getFullYear();
+    if (
+      roundDate === dateToday &&
+      roundMonth === monthToday &&
+      roundYear === yearToday
+    )
+      return true;
+  };
+  const handleTimeDisplay = () => {
+    return isMatchToday(activeChatroomStatus?.isOnline)
+      ? displayTime(
+          new Date(activeChatroomStatus?.isOnline)
+            .toLocaleTimeString()
+            .slice(0, 5)
+        )
+      : new Date(activeChatroomStatus?.isOnline).toDateString();
+  };
   return (
     <Container>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <IconButtonCustom onClick={onBackClick}>
-          <ArrowBack sx={{ fontSize: "2rem" }} />
+          <ArrowBack fontSize="medium" />
         </IconButtonCustom>
-        <Avatar src={uri} alt="avatar" size="large" type="circle" />
+        <Avatar src={uri} alt="avatar" size="small" type="circle" />
         <Box
           display={"flex"}
           flexDirection={"column"}
@@ -53,25 +81,37 @@ function MessageHeader({
             <Typography
               ml={1.5}
               variant="h6"
-              sx={{ cursor: "pointer", display: "flex" }}
+              sx={{
+                cursor: "pointer",
+                display: "flex",
+                fontSize: "1rem",
+              }}
             >
-              <FiberManualRecord
-                sx={{
-                  color: status ? colors.lightGreen : colors.lightGrey,
-                  alignSelf: "center",
-                }}
-              />
-              online
+              {activeChatroomStatus?.status ? (
+                <>
+                  <FiberManualRecord
+                    sx={{
+                      color: activeChatroomStatus?.status
+                        ? colors.lightGreen
+                        : colors.lightGrey,
+                      alignSelf: "center",
+                    }}
+                  />
+                  online
+                </>
+              ) : (
+                "Last Seen at " + handleTimeDisplay()
+              )}
             </Typography>
           )}
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <IconButton onClick={onClickVideoCall}>
-          <Videocam sx={{ fontSize: "2rem" }} />
+          <Videocam fontSize="large" />
         </IconButton>
         <IconButton onClick={onClickCall}>
-          <Call sx={{ fontSize: "2rem" }} />
+          <Call fontSize="large" />
         </IconButton>
       </Box>
     </Container>
@@ -90,11 +130,12 @@ const Container = styled.div`
   img.rce-avatar {
     object-fit: cover;
   }
-  ${mobile({ paddingInline: "1rem" })}
+  ${mobile({ paddingInline: ".5rem" })}
 `;
 
 const IconButtonCustom = styled(IconButton)`
   margin-right: 1.5rem !important;
   display: none;
-  ${miniTablet({ display: "flex", marginRight: "1rem" })}
+  ${miniTablet({ display: "flex", marginRight: "1rem !important" })}
+  ${mobile({ display: "flex", marginRight: ".0rem !important" })}
 `;

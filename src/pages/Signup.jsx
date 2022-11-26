@@ -41,8 +41,8 @@ function Signup(props) {
     setOpen(false);
   }, []);
 
-  const handleSignup = (email, password) => {
-    signup(email, password)
+  const handleSignup = (email, password, rest) => {
+    signup(email, password, rest)
       .then(() => {
         setLoading(false);
         toast.success("Signup Successfull");
@@ -71,8 +71,8 @@ function Signup(props) {
             code,
           }
         );
-        const { email, password } = response.data;
-        handleSignup(email, password);
+        const { email, password, ...rest } = response.data;
+        handleSignup(email, password, rest);
       } catch (error) {
         handleAuthError(error);
       }
@@ -105,8 +105,8 @@ function Signup(props) {
         }
       );
       console.log("Response From facebook", response);
-      const { email, password } = response.data;
-      handleSignup(email, password);
+      const { email, password, rest } = response.data;
+      handleSignup(email, password, rest);
     } catch (error) {
       handleAuthError(error);
     }
@@ -141,8 +141,8 @@ function Signup(props) {
         );
         console.log(response.data);
 
-        const { email, password } = response.data;
-        handleSignup(email, password);
+        const { email, password, ...rest } = response.data;
+        handleSignup(email, password, rest);
       } catch (error) {
         setLoading(false);
         // console.log(error.data);

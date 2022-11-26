@@ -113,7 +113,7 @@ const Sidebar = () => {
           >
             <nav>
               <CustomList>
-                <Link to="/e/dashboard">
+                <Link to="/s/dashboard">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <DashboardOutlinedIcon
@@ -131,7 +131,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/e/projects">
+                <Link to="/s/projects">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <WorkOutlineOutlinedIcon
@@ -149,7 +149,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/e/favourites">
+                <Link to="/s/favourites">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <FavoriteBorderOutlinedIcon
@@ -167,7 +167,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/e/reviews">
+                <Link to="/s/reviews">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <StarOutlineOutlinedIcon
@@ -203,22 +203,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </NavLink>
 
-                <Link to="/e/teams">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <GroupsOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText primary="Teams" disableTypography={true} />
-                  </CustomListItem>
-                </Link>
-
-                <Link to="/e/payments">
+                <Link to="/s/payments">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <PaidOutlinedIcon
@@ -236,7 +221,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/e/settings">
+                <Link to="/s/settings">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <SettingsOutlinedIcon

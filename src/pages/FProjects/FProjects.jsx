@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Grid, Tab, Tabs } from "@mui/material";
 import Styled from "styled-components";
-import Header from "../../components/Header";
+import Header from "../../components/HeaderLoggedIn";
 import colors from "../../utils/colors";
 import { allProject } from "../../utils/EProjectsData";
 import AvalibleProjects from "../../components/FProject/AvalibleProjects";
@@ -14,7 +14,6 @@ import FSideBar from "../../pages/FSideBar/FSideBar";
 // import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 import Footer from "../../components/Footer/index";
-import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);

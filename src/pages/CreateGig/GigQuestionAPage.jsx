@@ -19,12 +19,12 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import { EditOutlined, RemoveCircleOutlineOutlined } from "@mui/icons-material";
 
-export default function GigQuestionAPage() {
-  const [questionArr, setQuestionArr] = useState([]);
-  const [question, setQuestion] = useState({
-    title: "",
-    discription: "",
-  });
+export default function GigQuestionAPage({
+  questionArr,
+  setQuestionArr,
+  question,
+  setQuestion,
+}) {
   const [errors, setErrors] = useState({});
   var schema = {
     title: Joi.string().required().label("Title is Required"),
