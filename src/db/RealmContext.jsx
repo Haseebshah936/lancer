@@ -54,11 +54,13 @@ export function RealmAppProvider({ appId, children }) {
   }, [realmApp, currentUser]);
 
   const signup = React.useCallback(
-    async (email, password) => {
+    async (email, password, rest) => {
       console.log("signup", email, password);
       const credentials = JSON.stringify({ email, password });
       try {
         await realmApp.emailPasswordAuth.registerUser(credentials);
+        // console.log("User", user);
+        await logIn(email, password, rest);
       } catch (error) {
         console.log("signup error", error);
       }

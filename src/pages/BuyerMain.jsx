@@ -10,48 +10,57 @@ import SearchResults from "./SearchResults";
 import { useRealmContext } from "../db/RealmContext";
 import { Button } from "@mui/material";
 import { useEffect } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const BuyerMain = () => {
-  const { currentUser } = useRealmContext();
+  const { currentUser, user } = useRealmContext();
   const [collection, setCollection] = React.useState(null);
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   let breakAsyncIterator = false; // Later used to exit async iterator
+  //   (async () => {
+  //     const mongo = currentUser.mongoClient("mongodb-atlas");
+  //     const collection = mongo.db("test").collection("test");
+  //     setCollection(collection);
+  //     for await (const change of collection.watch()) {
+  //       console.log(breakAsyncIterator);
+  //       if (breakAsyncIterator) return; // Exit async iterator
+  //       switch (change.operationType) {
+  //         case "insert": {
+  //           const { documentKey, fullDocument } = change;
+  //           console.log(`new document: ${documentKey}`, fullDocument);
+  //           break;
+  //         }
+  //         case "update": {
+  //           const { documentKey, fullDocument } = change;
+  //           console.log(`updated document: ${documentKey}`, fullDocument);
+  //           breakAsyncIterator = true;
+  //           break;
+  //         }
+  //         case "replace": {
+  //           const { documentKey, fullDocument } = change;
+  //           console.log(`replaced document: ${documentKey}`, fullDocument);
+  //           break;
+  //         }
+  //         case "delete": {
+  //           const { documentKey } = change;
+  //           console.log(`deleted document: ${documentKey}`);
+  //           break;
+  //         }
+  //       }
+  //     }
+  //   })();
+  //   return () => {
+  //     breakAsyncIterator = true; // Exit async iterator
+  //   };
+  // }, []);
   useEffect(() => {
-    let breakAsyncIterator = false; // Later used to exit async iterator
-    (async () => {
-      const mongo = currentUser.mongoClient("mongodb-atlas");
-      const collection = mongo.db("test").collection("test");
-      setCollection(collection);
-      for await (const change of collection.watch()) {
-        console.log(breakAsyncIterator);
-        if (breakAsyncIterator) return; // Exit async iterator
-        switch (change.operationType) {
-          case "insert": {
-            const { documentKey, fullDocument } = change;
-            console.log(`new document: ${documentKey}`, fullDocument);
-            break;
-          }
-          case "update": {
-            const { documentKey, fullDocument } = change;
-            console.log(`updated document: ${documentKey}`, fullDocument);
-            breakAsyncIterator = true;
-            break;
-          }
-          case "replace": {
-            const { documentKey, fullDocument } = change;
-            console.log(`replaced document: ${documentKey}`, fullDocument);
-            break;
-          }
-          case "delete": {
-            const { documentKey } = change;
-            console.log(`deleted document: ${documentKey}`);
-            break;
-          }
-        }
-      }
-    })();
-    return () => {
-      breakAsyncIterator = true; // Exit async iterator
-    };
-  }, []);
+    if (currentUser && user) {
+      console.log("User", user);
+      if (user.name === "test1" && user.profilePic === "")
+        navigate("/cprofile");
+    }
+  }, [currentUser]);
   return (
     <>
       <Header />

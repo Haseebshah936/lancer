@@ -5,6 +5,7 @@ import {
   Navigate,
   Route,
   Routes,
+  useNavigate,
 } from "react-router-dom";
 import * as Realm from "realm-web";
 
@@ -66,6 +67,7 @@ function App(props) {
   const [activeChatroom, setActiveChatroom] = useState(false);
   const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
   const { chatrooms, setChatrooms } = useState([]);
+  const { currentUser, user } = useRealmContext();
 
   return (
     <CustomContextProvider
