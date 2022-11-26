@@ -1,5 +1,7 @@
 export default (teeTime) => {
   const time = teeTime.split(":");
+  time[0] = parseInt(time[0]);
+  time[1] = parseInt(time[1]);
   if (time[1] < 10) {
     time[1] = "0" + time[1];
   }

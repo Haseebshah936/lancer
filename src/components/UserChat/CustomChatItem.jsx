@@ -6,6 +6,7 @@ import colors from "../../utils/colors";
 import mongoose from "mongoose";
 import { color } from "@mui/system";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import { useRef } from "react";
 
 function CustomChatItem({
   chatroom,
@@ -21,12 +22,13 @@ function CustomChatItem({
     new Date(chatroom.isOnline).getTime()
   );
   const [status, setStatus] = useState(
-    isOnline >= new Date().getTime() - 45000 && isOnline < new Date().getTime()
+    new Date(chatroom.isOnline).getTime() - 40000 &&
+      new Date(chatroom.isOnline).getTime() < new Date().getTime()
   );
-  let timeOut;
-  // useEffect(() => {
-  //   console.log("Chatroom", chatroom);
-  // }, []);
+  let interval;
+  useEffect(() => {
+    console.log("Chatroom", chatroom);
+  }, []);
 
   useEffect(() => {
     let breakAsyncIterator = false; // Later used to exit async iterator
@@ -59,16 +61,12 @@ function CustomChatItem({
               new Date().getTime() - 30000 &&
               new Date(fullDocument.isOnline).getTime() < new Date().getTime()
           );
-          clearTimeout(timeOut);
+
           setIsOnline(isOnline);
           setStatus(true);
           setActiveChatroomStatus((prev) => {
             if (prev.id === chatroom.id) {
-              return {
-                ...prev,
-                isOnline: fullDocument?.isOnline,
-                status: true,
-              };
+              return { ...prev, isOnline, status: true };
             } else {
               return prev;
             }
@@ -84,8 +82,19 @@ function CustomChatItem({
   }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (isOnline >= new Date().getTime() - 45000) {
+    clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    interval = setInterval(() => {
+      console.log("Called", isOnline);
+      const newIsOnline = new Date(isOnline);
+      console.log(
+        newIsOnline.toLocaleString(),
+        new Date(new Date().getTime() - 40000).toLocaleString()
+      );
+      if (
+        newIsOnline >= new Date().getTime() - 40000 &&
+        newIsOnline < new Date().getTime()
+      ) {
         setStatus(true);
         setActiveChatroomStatus((prev) => {
           if (prev.id === chatroom.id) {
@@ -104,12 +113,12 @@ function CustomChatItem({
           }
         });
       }
-    }, 1000);
+    }, 10000);
 
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, [status]);
 
   return (
     <Container>
