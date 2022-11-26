@@ -15,9 +15,13 @@ import defaultImage from "./../../utils/ProfilePicDemo.webp";
 import colors from "./../../utils/colors";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
+import { useNavigate } from "react-router-dom";
 export default function CompleteProfile() {
-  const { user } = useRealmContext();
+  const naviagate = useNavigate();
+
+  const { user, setUser } = useRealmContext();
   const [profileVar, setProfileVar] = useState({
     name: "",
     profilePic: "",
@@ -36,14 +40,13 @@ export default function CompleteProfile() {
     });
     console.log(profileVar);
     console.log(user?._id);
-    axios
-      .put(
-        `http://localhost:3003/api/user/updateProfile/${user._id}`,
-        profileVar
-      )
+    requestMethod
+      .put(`user/updateProfile/${user._id}`, profileVar)
       .then((response) => {
         console.log("success");
-        console.log(response.data);
+        console.log("response", response.data.profilePic);
+        setUser(response.data);
+        // naviagate("/");
       })
       .catch((error) => {
         console.log("error in complete profile");
@@ -129,9 +132,9 @@ export default function CompleteProfile() {
     dropbox.current.addEventListener("drop", drop, false);
 
     return () => {
-      dropbox.current.removeEventListener("dragenter", dragEnter);
-      dropbox.current.removeEventListener("dragover", dragOver);
-      dropbox.current.removeEventListener("drop", drop);
+      // dropbox.current.removeEventListener("dragenter", dragEnter);
+      // dropbox.current.removeEventListener("dragover", dragOver);
+      // dropbox.current.removeEventListener("drop", drop);
     };
   }, []);
 
@@ -355,6 +358,7 @@ export default function CompleteProfile() {
             sx={{ backgroundColor: colors.becomePartnerGreen, width: "200px" }}
             onClick={handelNext}
             className="mb-5"
+            disabled={profileVar.profilePic === ""}
           >
             Save&nbsp;and&nbsp;Continue
           </Button>

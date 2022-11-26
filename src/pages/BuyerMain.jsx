@@ -60,7 +60,7 @@ const BuyerMain = () => {
       if (user.name === "test1" && user.profilePic === "")
         navigate("/cprofile");
     }
-  }, [currentUser]);
+  }, [currentUser, user]);
   return (
     <>
       <Header />
