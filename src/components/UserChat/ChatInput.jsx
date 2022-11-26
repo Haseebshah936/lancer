@@ -442,7 +442,7 @@ function ChatInput({ onSend, profilePic }) {
           <Avatar
             src={user?.profilePic}
             alt={user?.name + " avatar"}
-            size="large"
+            size="medium"
             type="circle"
             className="avatar"
           />
@@ -474,7 +474,7 @@ function ChatInput({ onSend, profilePic }) {
               filePickerRef.current.click();
             }}
           >
-            <AttachFile sx={{ fontSize: "2rem" }} />
+            <AttachFile fontSize="large" />
           </IconButton>
           <IconButton
             sx={{
@@ -490,9 +490,9 @@ function ChatInput({ onSend, profilePic }) {
             {...longPress}
           >
             {!audioRecording ? (
-              <Send sx={{ color: colors.white, fontSize: "2rem" }} />
+              <Send sx={{ color: colors.white }} fontSize="large" />
             ) : (
-              <Mic sx={{ color: colors.white, fontSize: "2rem" }} />
+              <Mic sx={{ color: colors.white }} fontSize="large" />
             )}
           </IconButton>
         </TextInputContainer>
@@ -515,7 +515,7 @@ const TextInputContainer = styled.div`
   padding: 0.8rem 0.8rem;
   margin: 0rem 1rem 1rem;
   border-radius: 3rem;
-  align-items: flex-end;
+  align-items: center;
   .rce-container-input {
     min-width: auto;
     flex: 1;

@@ -21,13 +21,12 @@ function CustomChatItem({
     new Date(chatroom.isOnline).getTime()
   );
   const [status, setStatus] = useState(
-    new Date(chatroom.isOnline).getTime() - 30000 &&
-      new Date(chatroom.isOnline).getTime() < new Date().getTime()
+    isOnline >= new Date().getTime() - 45000 && isOnline < new Date().getTime()
   );
   let timeOut;
-  useEffect(() => {
-    console.log("Chatroom", chatroom);
-  }, []);
+  // useEffect(() => {
+  //   console.log("Chatroom", chatroom);
+  // }, []);
 
   useEffect(() => {
     let breakAsyncIterator = false; // Later used to exit async iterator
@@ -65,7 +64,11 @@ function CustomChatItem({
           setStatus(true);
           setActiveChatroomStatus((prev) => {
             if (prev.id === chatroom.id) {
-              return { ...prev, isOnline, status: true };
+              return {
+                ...prev,
+                isOnline: fullDocument?.isOnline,
+                status: true,
+              };
             } else {
               return prev;
             }
@@ -82,10 +85,7 @@ function CustomChatItem({
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (
-        isOnline >= new Date().getTime() - 40000 &&
-        isOnline < new Date().getTime()
-      ) {
+      if (isOnline >= new Date().getTime() - 45000) {
         setStatus(true);
         setActiveChatroomStatus((prev) => {
           if (prev.id === chatroom.id) {
@@ -95,18 +95,16 @@ function CustomChatItem({
           }
         });
       } else {
-        timeOut = setTimeout(() => {
-          setStatus(false);
-          setActiveChatroomStatus((prev) => {
-            if (prev.id === chatroom.id) {
-              return { ...prev, status: false };
-            } else {
-              return prev;
-            }
-          });
-        }, 5000);
+        setStatus(false);
+        setActiveChatroomStatus((prev) => {
+          if (prev.id === chatroom.id) {
+            return { ...prev, status: false };
+          } else {
+            return prev;
+          }
+        });
       }
-    }, 10000);
+    }, 1000);
 
     return () => {
       clearInterval(interval);

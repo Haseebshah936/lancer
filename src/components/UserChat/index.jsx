@@ -256,9 +256,9 @@ function Chat(props) {
     }
   }, [user]);
 
-  useEffect(() => {
-    console.log("Status changed", activeChatroomStatus);
-  }, [activeChatroomStatus]);
+  // useEffect(() => {
+  //   console.log("Status changed", activeChatroomStatus);
+  // }, [activeChatroomStatus]);
 
   return (
     <Container>
