@@ -10,7 +10,7 @@ import GigQuestionAPage from "./GigQuestionAPage";
 import GigServiceIntroduction from "./GigServiceIntroduction";
 import axios from "axios";
 import { useRealmContext } from "../../db/RealmContext";
-import GigLoading from "../GigCreation/GigLoading";
+import GigLoading from "./GigLoading";
 import styled from "styled-components";
 const attachmentData = [
   {
