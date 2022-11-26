@@ -4,19 +4,31 @@ import { Box, CircularProgress } from "@mui/material";
 import colors from "../../utils/colors";
 import Lottie from "react-lottie";
 import { tick } from "../../assets";
+import { handleError } from "../../utils/helperFunctions";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
-export default function GigLoading({ Gig }) {
+export default function GigLoading({ gig }) {
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
-    (async () => {
-      const response = await axios.post(
-        "http://localhost:3003/api/product/createProduct",
-        Gig
-      );
-      console.log("Response", response.data);
-      setLoading(false);
-    })();
+    if (gig) {
+      (async () => {
+        try {
+          const response = await axios.post(
+            "http://localhost:3003/api/product/createProduct",
+            gig
+          );
+          gig = {};
+          console.log("Response", response.data);
+          toast.success("Product Created Successfully");
+          setLoading(false);
+          navigate("/");
+        } catch (error) {
+          handleError(error);
+        }
+      })();
+    }
   }, []);
 
   const defaultOptions = {

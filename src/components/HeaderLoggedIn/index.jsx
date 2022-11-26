@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { Backdrop, Button, CircularProgress } from "@mui/material";
 import Head from "./Head";
 import ResponsiveDrawer from "./ResponsiveDrawer";
@@ -9,12 +9,15 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import MessageList from "./MessageList";
 import NotificationList from "./NotificationList";
 import UserOptions from "./UserOptions";
+import { useRealmContext } from "../../db/RealmContext";
+import axios from "axios";
 
 function Header(props) {
   const [state, setState] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [anchor2, setAnchor2] = useState(null);
   const [anchor3, setAnchor3] = useState(null);
+  const { user } = useRealmContext();
 
   const toggleMessage = (event) => {
     setAnchor(event.currentTarget);
@@ -53,6 +56,37 @@ function Header(props) {
   const handleClose = () => {
     setOpen(false);
   };
+
+  useEffect(() => {
+    let interval;
+    if (user?._id) {
+      (async () => {
+        try {
+          const res = await axios.put(
+            `http://localhost:3003/api/user/updateOnlineStatus/${user._id}`
+          );
+          // console.log("user after updating online", res.data);
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+      interval = setInterval(() => {
+        (async () => {
+          try {
+            const res = await axios.put(
+              `http://localhost:3003/api/user/updateOnlineStatus/${user._id}`
+            );
+            // console.log("user after updating online", res.data);
+          } catch (error) {
+            console.log(error);
+          }
+        })();
+      }, 10000);
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [user]);
 
   return (
     <>

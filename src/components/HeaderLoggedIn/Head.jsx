@@ -61,9 +61,9 @@ function Head({
     );
   };
 
-  useEffect(() => {
-    console.log("Header ", user);
-  });
+  // useEffect(() => {
+  //   console.log("Header ", user);
+  // });
 
   return (
     <>
@@ -126,7 +126,8 @@ function Head({
                 {" "}
                 <MailOutlineIcon
                   onClick={toggleMessage}
-                  sx={{ fontSize: "2.0rem", color: colors.textGreen }}
+                  sx={{ color: colors.textGreen }}
+                  fontSize="large"
                 />
               </Badge>
             </IconButton>
@@ -143,7 +144,8 @@ function Head({
               <Badge badgeContent={4} variant="dot" color="error">
                 <NotificationsOutlinedIcon
                   onClick={toggleNotification}
-                  sx={{ fontSize: "2.0rem", color: colors.textGreen }}
+                  sx={{ color: colors.textGreen }}
+                  fontSize="large"
                 />
               </Badge>
             </IconButton>
@@ -157,7 +159,10 @@ function Head({
               }}
             >
               <SearchOutlinedIcon
-                style={{ fontSize: "2rem", color: colors.textGreen }}
+                style={{
+                  color: colors.textGreen,
+                }}
+                fontSize="large"
               />
             </IconButton>
             <IconButton>

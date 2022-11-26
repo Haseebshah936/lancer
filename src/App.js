@@ -59,12 +59,27 @@ import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 
 import TempPage from "./pages/TempPage/TempPage";
 import CreateGig from "./pages/CreateGig";
+import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
+  const [activeChatroom, setActiveChatroom] = useState(false);
+  const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
+  const { chatrooms, setChatrooms } = useState([]);
 
   return (
-    <CustomContextProvider value={{ open, setOpen }}>
+    <CustomContextProvider
+      value={{
+        open,
+        setOpen,
+        activeChatroom,
+        setActiveChatroom,
+        chatrooms,
+        setChatrooms,
+        activeChatroomStatus,
+        setActiveChatroomStatus,
+      }}
+    >
       <Router>
         <Routes>
           <Route element={<AuthRoutes />}>

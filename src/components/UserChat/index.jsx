@@ -27,6 +27,8 @@ import {
 } from "./HelperFunctions";
 import MessagesContainer from "./MessagesContainer";
 import { useCallback } from "react";
+import mongoose from "mongoose";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 const ChatRoomsData = [
   {
@@ -56,14 +58,22 @@ function Chat(props) {
   const scrollRef = useRef();
   const [data, setData] = useState([]);
   const [newData, setNewData] = useState([]);
-  const [active, setActive] = useState(false);
+  // const [active, setActive] = useState(false);
   const [chatRooms, setChatRooms] = useState([]);
   const [chatRoomsData, setChatRoomsData] = useState([]);
   const { user, currentUser } = useRealmContext();
+  const {
+    activeChatroom: active,
+    setActiveChatroom: setActive,
+    setActiveChatroomStatus,
+    activeChatroomStatus,
+  } = useCustomContext();
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
 
-  const getChatRooms = () => {
+  const getChatRooms = async () => {
+    setChatRooms([]);
+    setChatRooms([]);
     requestMethod
       .get(`chatroom/getChatroomsById/${user._id}`)
       .then((res) => {
@@ -89,10 +99,18 @@ function Chat(props) {
 
   const handleChatRoomClick = (chatRoom) => {
     setActive(chatRoom);
+    setActiveChatroomStatus({
+      id: chatRoom.id,
+      status:
+        new Date(chatRoom.isOnline).getTime() >= new Date().getTime() - 30000 &&
+        new Date(chatRoom.isOnline).getTime() < new Date().getTime(),
+      isOnline: chatRoom.isOnline,
+    });
   };
 
   const handleBackClick = () => {
     setActive(false);
+    setActiveChatroomStatus(false);
   };
 
   const handleSend = (message) => {
@@ -144,6 +162,20 @@ function Chat(props) {
     }
   };
 
+  const handleChatroomsData = (i, id, isOnline) => {
+    let newChatRoomsData = [...chatRoomsData];
+    newChatRoomsData[i].isOnline = isOnline;
+    setChatRoomsData(newChatRoomsData);
+    // setChatRoomsData(newChatrooms);
+    setChatRooms((prev) => {
+      let newChatRooms = [...prev];
+      let index = newChatRooms.findIndex((chatRoom) => chatRoom.id === id);
+      console.log("Chatroom Index", index);
+      newChatRooms[index].isOnline = isOnline;
+      return newChatRooms;
+    });
+  };
+
   const handleCall = () => {};
 
   const handleVideoCall = () => {};
@@ -154,6 +186,10 @@ function Chat(props) {
   //     inline: "nearest",
   //   });
   // }, [data, active]);
+
+  useEffect(() => {
+    console.log("Chatrooms", chatRooms);
+  }, [chatRooms]);
 
   const handleScroll = () => {
     const target = scrollRef.current;
@@ -193,10 +229,10 @@ function Chat(props) {
             console.log("Previous state", prevMessage);
             console.log("New message", res.data?.userId?._id);
             if (
-              !prev.length ||
-              prevMessage?.userId?._id !== res.data?.userId?._id ||
-              (prevMessage?.userId?._id === res.data?.userId?._id &&
-                prevMessage?.server)
+              !(
+                prevMessage?.userId?._id === res.data?.userId?._id &&
+                prevMessage?.server === undefined
+              )
             ) {
               return [...prev, { ...res.data, server: true }];
             } else return prev;
@@ -220,15 +256,23 @@ function Chat(props) {
     }
   }, [user]);
 
+  // useEffect(() => {
+  //   console.log("Status changed", activeChatroomStatus);
+  // }, [activeChatroomStatus]);
+
   return (
     <Container>
       <ChatRoomsContainer active={active}>
-        <ChatRooms
-          chatrooms={chatRooms}
-          onRoomClick={handleChatRoomClick}
-          onMuteClick={handleMuteChatRoom}
-          onFilter={handleFilter}
-        />
+        {chatRooms.length > 0 && (
+          <ChatRooms
+            chatrooms={chatRooms}
+            onRoomClick={handleChatRoomClick}
+            onMuteClick={handleMuteChatRoom}
+            onFilter={handleFilter}
+            changeChatroomsData={handleChatroomsData}
+            setChatRooms={setChatRooms}
+          />
+        )}
       </ChatRoomsContainer>
       <MessageContainer active={active}>
         <MessageHeader
