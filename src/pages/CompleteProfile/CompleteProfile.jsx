@@ -143,8 +143,9 @@ export default function CompleteProfile() {
     <div
       style={{
         width: "100vw",
+        height: "100vh",
         display: "flex",
-        justifyContent: "center",
+        justifyContent: "space-between",
         flexDirection: "column",
       }}
     >
