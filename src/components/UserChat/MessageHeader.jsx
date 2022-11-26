@@ -9,8 +9,10 @@ import { ButtonBase, IconButton, StepButton, Typography } from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import { Box } from "@mui/system";
 import React from "react";
+import { useEffect } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
 
@@ -23,6 +25,8 @@ function MessageHeader({
   onClickCall = () => {},
   onClickVideoCall = () => {},
 }) {
+  const { activeChatroomStatus } = useCustomContext();
+
   return (
     <Container>
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -55,13 +59,21 @@ function MessageHeader({
               variant="h6"
               sx={{ cursor: "pointer", display: "flex" }}
             >
-              <FiberManualRecord
-                sx={{
-                  color: status ? colors.lightGreen : colors.lightGrey,
-                  alignSelf: "center",
-                }}
-              />
-              online
+              {activeChatroomStatus?.status ? (
+                <>
+                  <FiberManualRecord
+                    sx={{
+                      color: activeChatroomStatus?.status
+                        ? colors.lightGreen
+                        : colors.lightGrey,
+                      alignSelf: "center",
+                    }}
+                  />
+                  online
+                </>
+              ) : (
+                new Date(activeChatroomStatus?.isOnline).toUTCString()
+              )}
             </Typography>
           )}
         </Box>

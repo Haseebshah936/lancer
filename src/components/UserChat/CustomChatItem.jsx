@@ -3,64 +3,113 @@ import { ChatItem } from "react-chat-elements";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
 import colors from "../../utils/colors";
+import mongoose from "mongoose";
+import { color } from "@mui/system";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
-function CustomChatItem({ chatroom, onClick, onClickMute }) {
+function CustomChatItem({
+  chatroom,
+  onClick,
+  onClickMute,
+  changeChatroomsData,
+  index,
+}) {
   const { currentUser } = useRealmContext();
-  const [status, setStatus] = useState(false);
+  const { activeChatroom, setActiveChatroom, setActiveChatroomStatus } =
+    useCustomContext();
+  const [isOnline, setIsOnline] = useState(
+    new Date(chatroom.isOnline).getTime()
+  );
+  const [status, setStatus] = useState(
+    new Date(chatroom.isOnline).getTime() - 30000 &&
+      new Date(chatroom.isOnline).getTime() < new Date().getTime()
+  );
+  let timeOut;
   useEffect(() => {
     console.log("Chatroom", chatroom);
   }, []);
 
-  const listenForUpdates = async (breakAsyncIterator) => {
-    console.log("Calleed");
-    const mongo = currentUser.mongoClient("mongodb-atlas");
-    const collection = mongo.db("test").collection("users");
-    for await (const change of collection.watch({
-      ids: [chatroom?.participantId],
-    })) {
-      console.log(breakAsyncIterator);
-      if (breakAsyncIterator) {
-        console.log("Exiting async iterator");
-        return;
-      } // Exit async iterator
-      switch (change.operationType) {
-        case "insert": {
+  useEffect(() => {
+    let breakAsyncIterator = false; // Later used to exit async iterator
+    if (!chatroom?.isGroup) {
+      (async () => {
+        console.log("Calleed");
+        const mongo = currentUser.mongoClient("mongodb-atlas");
+        const collection = mongo.db("test").collection("users");
+        console.log(collection);
+        for await (const change of collection.watch({
+          filter: {
+            operationType: "update",
+            "fullDocument._id": mongoose.Types.ObjectId(chatroom.participantId),
+          },
+        })) {
+          console.log(breakAsyncIterator);
+          if (breakAsyncIterator) {
+            console.log("Exiting async iterator");
+            return;
+          } // Exit async iterator
           const { documentKey, fullDocument } = change;
           console.log(
             `new document: ${documentKey}`,
             fullDocument,
             fullDocument?._id.toString()
           );
-          break;
+          const isOnline = new Date(fullDocument?.isOnline).getTime();
+          console.log(
+            new Date(fullDocument.isOnline).getTime() >=
+              new Date().getTime() - 30000 &&
+              new Date(fullDocument.isOnline).getTime() < new Date().getTime()
+          );
+          clearTimeout(timeOut);
+          setIsOnline(isOnline);
+          setStatus(true);
+          setActiveChatroomStatus((prev) => {
+            if (prev.id === chatroom.id) {
+              return { ...prev, isOnline, status: true };
+            } else {
+              return prev;
+            }
+          });
+          changeChatroomsData(index, chatroom.id, isOnline);
         }
-        case "update": {
-          const { documentKey, fullDocument } = change;
-          console.log(`updated document: ${documentKey}`, fullDocument);
-          breakAsyncIterator = true;
-          break;
-        }
-        case "replace": {
-          const { documentKey, fullDocument } = change;
-          console.log(`replaced document: ${documentKey}`, fullDocument);
-          break;
-        }
-        case "delete": {
-          const { documentKey } = change;
-          console.log(`deleted document: ${documentKey}`);
-          break;
-        }
-      }
-    }
-  };
-
-  useEffect(() => {
-    let breakAsyncIterator = false; // Later used to exit async iterator
-    if (!chatroom?.isGroup) {
-      listenForUpdates(breakAsyncIterator);
+      })();
     }
 
     return () => {
       breakAsyncIterator = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (
+        isOnline >= new Date().getTime() - 40000 &&
+        isOnline < new Date().getTime()
+      ) {
+        setStatus(true);
+        setActiveChatroomStatus((prev) => {
+          if (prev.id === chatroom.id) {
+            return { ...prev, isOnline, status: true };
+          } else {
+            return prev;
+          }
+        });
+      } else {
+        timeOut = setTimeout(() => {
+          setStatus(false);
+          setActiveChatroomStatus((prev) => {
+            if (prev.id === chatroom.id) {
+              return { ...prev, status: false };
+            } else {
+              return prev;
+            }
+          });
+        }, 5000);
+      }
+    }, 10000);
+
+    return () => {
+      clearInterval(interval);
     };
   }, []);
 
@@ -72,7 +121,7 @@ function CustomChatItem({ chatroom, onClick, onClickMute }) {
         }}
         onClickMute={() => onClickMute(chatroom, chatroom.muted)}
         {...chatroom}
-        statusColor={status ? colors.lightGrey : colors.lightGreen}
+        statusColor={status ? colors.lightGreen : colors.gray}
         showMute={true}
       />
     </Container>

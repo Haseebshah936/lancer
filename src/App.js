@@ -63,9 +63,23 @@ import axios from "axios";
 
 function App(props) {
   const [open, setOpen] = useState(false);
+  const [activeChatroom, setActiveChatroom] = useState(false);
+  const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
+  const { chatrooms, setChatrooms } = useState([]);
 
   return (
-    <CustomContextProvider value={{ open, setOpen }}>
+    <CustomContextProvider
+      value={{
+        open,
+        setOpen,
+        activeChatroom,
+        setActiveChatroom,
+        chatrooms,
+        setChatrooms,
+        activeChatroomStatus,
+        setActiveChatroomStatus,
+      }}
+    >
       <Router>
         <Routes>
           <Route element={<AuthRoutes />}>
@@ -97,7 +111,8 @@ function App(props) {
             <Route path="/cprofile" element={<CompleteProfile />}></Route>
             <Route
               path="/pexperience"
-              element={<PInfoExperienceAndEducation />} fa
+              element={<PInfoExperienceAndEducation />}
+              fa
             />
 
             <Route path="/postProject" element={<PostProject />} />
