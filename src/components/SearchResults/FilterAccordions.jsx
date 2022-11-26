@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -18,6 +18,7 @@ import Typography from "@mui/material/Typography";
 import * as styled2 from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import {
+  CircularProgress,
   FormControl,
   FormLabel,
   Radio,
@@ -27,83 +28,9 @@ import {
 import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import CustomFilledButton from "../CustomFilledButton";
+import axios from "axios";
+import { PriceChange } from "@mui/icons-material";
 
-const RelatedCategories = [
-  { id: 1, title: "Wordpress Creation" },
-  { id: 2, title: "Web Application Development" },
-  { id: 3, title: "Web Programming" },
-  { id: 4, title: "CMS" },
-  { id: 5, title: "Mobile Apps" },
-  { id: 6, title: "Mobile Apps Creation" },
-  { id: 7, title: "Game Development" },
-  { id: 8, title: "Web Design" },
-];
-
-const ServiceOptions = [
-  {
-    id: 1,
-    service: "Specialization",
-    options: [
-      { id: 1, title: "Blog" },
-      { id: 2, title: "Business" },
-      { id: 3, title: "Education" },
-      { id: 4, title: "Portfolio" },
-    ],
-  },
-  {
-    id: 2,
-    service: "Supported Plugins",
-    options: [
-      { id: 1, title: "Social Media" },
-      { id: 2, title: "Marketing" },
-      { id: 3, title: "Payment" },
-      { id: 4, title: "Gallery" },
-    ],
-  },
-  {
-    id: 3,
-    service: "Service Includes",
-    options: [
-      { id: 1, title: "Functional Website" },
-      { id: 2, title: "Responsive Design" },
-      { id: 3, title: "Design Customization" },
-      { id: 4, title: "Content Upload" },
-    ],
-  },
-];
-
-const SellerDetails = [
-  {
-    id: 1,
-    detail: "Seller Level",
-    options: [
-      { id: 1, title: "Top Rated Seller" },
-      { id: 2, title: "Level Two" },
-      { id: 3, title: "Level One" },
-      { id: 4, title: "New Seller" },
-    ],
-  },
-  {
-    id: 2,
-    detail: "Seller Speaks",
-    options: [
-      { id: 1, title: "English" },
-      { id: 2, title: "Urdu" },
-      { id: 3, title: "Hindi" },
-      { id: 4, title: "French" },
-    ],
-  },
-  {
-    id: 3,
-    detail: "Seller Lives in",
-    options: [
-      { id: 1, title: "Pakistan" },
-      { id: 2, title: "India" },
-      { id: 3, title: "United States" },
-      { id: 4, title: "Canada" },
-    ],
-  },
-];
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
   height: 16,
@@ -157,9 +84,93 @@ const FilterAccordions = ({
   pro,
   avail,
 }) => {
+  const [Categories, setCategories] = useState([]);
+  const [SubCategories, setSubCategories] = useState([]);
+
+  const [expandSubCategory, setExpandSubCategory] = useState(false);
+
+  const [expandCategory, setExpandCategory] = useState(true);
+
+  const [Categoryloading, setCategoryloading] = useState(true);
+  const [SubCategoryloading, setSubCategoryloading] = useState(true);
+
+  const [SubCategoryID, setSubCategoryID] = useState("");
+
+  const [price, setPrice] = useState({
+    max: "",
+    min: "",
+  });
+
+  const [Badge, setBadge] = useState("");
+
+  const handleFilters = () => {
+    console.log("I am in Filters");
+    if (Badge.length !== 0 && price.max.length === 0) {
+      axios
+        .get(
+          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${Badge}`
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
+    } else if (Badge.length === 0 && price.max.length !== 0) {
+      axios
+        .get(
+          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${price.min}/${price.max}`
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
+    } else if (Badge.length !== 0 && price.max.length !== 0) {
+      axios
+        .get(
+          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${Badge}/${price.min}/${price.max}`
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
+    } else {
+      axios
+        .get(
+          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}`
+        )
+        .then((response) => {
+          console.log(response.data);
+        });
+    }
+  };
+
+  const handlePrice = (max, min) => {
+    setPrice({ max, min });
+    console.log("Max", max, "Min", min);
+  };
+
+  const handleSubCategory = (id) => {
+    setSubCategoryID(id);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const response = await axios.get(
+        "http://localhost:3003/api/category/categories"
+      );
+      setCategories(response.data);
+      setCategoryloading(false);
+    })();
+  }, []);
+
+  useEffect(() => {
+    console.log("Badge", Badge);
+  }, [Badge]);
+
   return (
     <>
-      <Accordion defaultExpanded={true}>
+      <Accordion
+        expanded={expandCategory}
+        onChange={() => {
+          setExpandCategory(!expandCategory);
+        }}
+      >
         <AccordionSummary
           expandIcon={
             <ExpandMoreIcon
@@ -181,26 +192,49 @@ const FilterAccordions = ({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          {RelatedCategories.map((c) => (
-            <FilterText>
-              <Link>{c.title}</Link>
-            </FilterText>
-          ))}
+          {Categoryloading ? (
+            <CircularProgress sx={{ color: colors.textGreen }} size={20} />
+          ) : (
+            Categories.map((c) => (
+              <FilterText
+                onClick={() => {
+                  setExpandSubCategory(true);
+
+                  axios
+                    .get(
+                      `http://localhost:3003/api/category/subCategories/${c._id}`
+                    )
+                    .then((response) => {
+                      setSubCategories(response.data);
+                      setSubCategoryloading(false);
+                    });
+                }}
+              >
+                {c.title}
+              </FilterText>
+            ))
+          )}
+
           <FilterText>
             {" "}
             <Link style={{ color: colors.textGreen }}>View All Categories</Link>
           </FilterText>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion
+        expanded={expandSubCategory}
+        onChange={() => {
+          setExpandSubCategory(!expandSubCategory);
+        }}
+      >
         <AccordionSummary
           expandIcon={
             <ExpandMoreIcon
               sx={{ color: colors.textGreen, fontSize: "2.0rem !important" }}
             />
           }
-          aria-controls="panel1a-content"
-          id="panel1a-header"
+          aria-controls="subcategorya-content"
+          id="subcategorya-header"
         >
           <TuneOutlinedIcon
             sx={{
@@ -210,132 +244,52 @@ const FilterAccordions = ({
             }}
           />
           <Typography sx={{ fontSize: "1.5rem", fontWeight: "300" }}>
-            Service&nbsp;Options
+            SubCategory
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <FormControl component="fieldset">
-            {ServiceOptions.map((sarray) => (
-              <>
-                <FormLabel
-                  component="legend"
-                  sx={{
-                    fontSize: "1.3rem",
-                    fontWeight: "500",
-                    color: colors.black,
-                  }}
-                >
-                  {sarray.service}
-                </FormLabel>
-                <FormGroup aria-label="position" sx={{ marginBottom: "5px" }}>
-                  {sarray.options.map((checkbox) => (
-                    <FormControlLabel
-                      sx={{ paddingTop: "0px" }}
-                      value="end"
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: colors.textGreen,
-                            "&.Mui-checked": {
-                              color: colors.textGreen,
-                            },
-                          }}
-                        />
-                      }
-                      label={checkbox.title}
-                      labelPlacement="End"
+          {SubCategoryloading ? (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <CircularProgress sx={{ color: colors.textGreen }} size={20} />
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                Please select Category
+              </Typography>
+            </div>
+          ) : (
+            <FormGroup aria-label="position" sx={{ marginBottom: "5px" }}>
+              {SubCategories.map((cat) => (
+                <FormControlLabel
+                  sx={{ paddingTop: "0px" }}
+                  value="end"
+                  control={
+                    <Checkbox
+                      checked={SubCategoryID === cat?._id}
+                      onChange={(e) => {
+                        e.currentTarget.value && handleSubCategory(cat._id);
+                      }}
+                      sx={{
+                        color: colors.textGreen,
+                        "&.Mui-checked": {
+                          color: colors.textGreen,
+                        },
+                      }}
                     />
-                  ))}
-                </FormGroup>
-              </>
-            ))}
-          </FormControl>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <CustomFilledButton
-              title={"Apply"}
-              style={{ margin: "5px 0px 0px 0px" }}
-            ></CustomFilledButton>
-          </div>
+                  }
+                  label={cat.title}
+                  labelPlacement="End"
+                />
+              ))}
+            </FormGroup>
+          )}
         </AccordionDetails>
       </Accordion>{" "}
-      <Accordion>
-        <AccordionSummary
-          expandIcon={
-            <ExpandMoreIcon
-              sx={{ color: colors.textGreen, fontSize: "2.0rem !important" }}
-            />
-          }
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <PersonSearchOutlinedIcon
-            sx={{
-              fontSize: "2.0rem",
-              color: colors.textGreen,
-              marginRight: "10px",
-            }}
-          />
-          <Typography sx={{ fontSize: "1.5rem", fontWeight: "300" }}>
-            Seller&nbsp;Details
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <FormControl component="fieldset">
-            {SellerDetails.map((sarray) => (
-              <>
-                <FormLabel
-                  component="legend"
-                  sx={{
-                    fontSize: "1.3rem",
-                    fontWeight: "500",
-                    color: colors.black,
-                  }}
-                >
-                  {sarray.detail}
-                </FormLabel>
-                <FormGroup aria-label="position" sx={{ marginBottom: "5px" }}>
-                  {sarray.options.map((checkbox) => (
-                    <FormControlLabel
-                      sx={{ paddingTop: "0px" }}
-                      value="end"
-                      control={
-                        <Checkbox
-                          sx={{
-                            color: colors.textGreen,
-                            "&.Mui-checked": {
-                              color: colors.textGreen,
-                            },
-                          }}
-                        />
-                      }
-                      label={checkbox.title}
-                      labelPlacement="End"
-                    />
-                  ))}
-                </FormGroup>
-              </>
-            ))}
-          </FormControl>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-            }}
-          >
-            <CustomFilledButton
-              title={"Apply"}
-              style={{ margin: "5px 0px 0px 0px" }}
-            ></CustomFilledButton>
-          </div>
-        </AccordionDetails>
-      </Accordion>
       <Accordion>
         <AccordionSummary
           expandIcon={
@@ -362,9 +316,16 @@ const FilterAccordions = ({
             <FormControl component="fieldset">
               <FormGroup aria-label="position" column>
                 <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  defaultValue="female"
-                  name="radio-buttons-group"
+                  aria-labelledby="Price-group"
+                  defaultValue="100"
+                  name="Price-group"
+                  value={price.max}
+                  onChange={(event) =>
+                    handlePrice(
+                      event.target.value,
+                      (+event.target.value - 100).toString()
+                    )
+                  }
                 >
                   <FormControlLabel
                     value="100"
@@ -412,6 +373,10 @@ const FilterAccordions = ({
                 <FilterText style={{ marginTop: "10px" }}> Custom </FilterText>
                 <NumberField>
                   <TextField
+                    onChange={(event) => {
+                      handlePrice(price.max, event.target.value);
+                    }}
+                    value={price.min}
                     sx={{
                       marginTop: "10px",
                       "& label.Mui-focused": {
@@ -433,6 +398,10 @@ const FilterAccordions = ({
                 </NumberField>
                 <NumberField>
                   <TextField
+                    onChange={(event) => {
+                      handlePrice(event.target.value, price.min);
+                    }}
+                    value={price.max}
                     sx={{
                       marginTop: "10px",
                       "& label.Mui-focused": {
@@ -454,11 +423,6 @@ const FilterAccordions = ({
                 </NumberField>
               </FormGroup>
             </FormControl>
-
-            <CustomFilledButton
-              title={"Apply"}
-              style={{ marginTop: "10px", margin: "5px 0px 0px 0px" }}
-            ></CustomFilledButton>
           </>
         </AccordionDetails>
       </Accordion>
@@ -472,7 +436,7 @@ const FilterAccordions = ({
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <TimerOutlinedIcon
+          <AttachMoneyIcon
             sx={{
               fontSize: "2.0rem",
               color: colors.textGreen,
@@ -480,79 +444,84 @@ const FilterAccordions = ({
             }}
           />
           <Typography sx={{ fontSize: "1.5rem", fontWeight: "300" }}>
-            Delivery&nbsp;Time
+            Seller Badge
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <>
             <FormControl component="fieldset">
-              <RadioGroup
-                aria-labelledby="demo-radio-buttons-group-label"
-                defaultValue="female"
-                name="radio-buttons-group"
-              >
-                <FormControlLabel
-                  value="24H"
-                  control={
-                    <Radio
-                      sx={{
-                        color: colors.textGreen,
-                        "&.Mui-checked": {
+              <FormGroup aria-label="position" column>
+                <RadioGroup
+                  aria-labelledby="Seller-group"
+                  defaultValue="Newbie"
+                  name="Seller-group"
+                  value={Badge}
+                  onChange={(event) => {
+                    setBadge(event.target.value);
+                  }}
+                >
+                  <FormControlLabel
+                    value="Newbie"
+                    control={
+                      <Radio
+                        sx={{
                           color: colors.textGreen,
-                        },
-                      }}
-                    />
-                  }
-                  label="Urgent: 24H"
-                />
-                <FormControlLabel
-                  value="3"
-                  control={
-                    <Radio
-                      sx={{
-                        color: colors.textGreen,
-                        "&.Mui-checked": {
+                          "&.Mui-checked": {
+                            color: colors.textGreen,
+                          },
+                        }}
+                      />
+                    }
+                    label="Newbie"
+                  />
+                  <FormControlLabel
+                    value="Pro"
+                    control={
+                      <Radio
+                        sx={{
                           color: colors.textGreen,
-                        },
-                      }}
-                    />
-                  }
-                  label="Quick: within 3 days"
-                />
-                <FormControlLabel
-                  value="7"
-                  control={
-                    <Radio
-                      sx={{
-                        color: colors.textGreen,
-                        "&.Mui-checked": {
+                          "&.Mui-checked": {
+                            color: colors.textGreen,
+                          },
+                        }}
+                      />
+                    }
+                    label="Pro"
+                  />
+                  <FormControlLabel
+                    value="Verified Pro"
+                    control={
+                      <Radio
+                        sx={{
                           color: colors.textGreen,
-                        },
-                      }}
-                    />
-                  }
-                  label="Standard: Within 7 days"
-                />
-                <FormControlLabel
-                  value="anytime"
-                  control={
-                    <Radio
-                      sx={{
-                        color: colors.textGreen,
-                        "&.Mui-checked": {
-                          color: colors.textGreen,
-                        },
-                      }}
-                    />
-                  }
-                  label="Anytime"
-                />
-              </RadioGroup>
+                          "&.Mui-checked": {
+                            color: colors.textGreen,
+                          },
+                        }}
+                      />
+                    }
+                    label="Verified Pro"
+                  />
+                </RadioGroup>
+              </FormGroup>
             </FormControl>
           </>
         </AccordionDetails>
       </Accordion>
-      <FormGroup style={{ marginLeft: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "flex-start",
+        }}
+      >
+        <CustomFilledButton
+          onClick={handleFilters}
+          title={"Apply Filters"}
+          style={{ margin: "15px 0px 0px 0px" }}
+        ></CustomFilledButton>
+      </div>
+      {/* <FormGroup style={{ marginLeft: 10 }}>
         <FormControlLabel
           style={{ marginTop: 10 }}
           control={
@@ -589,7 +558,7 @@ const FilterAccordions = ({
           }
           label="Availabe&nbsp;Now"
         />
-      </FormGroup>
+      </FormGroup> */}
     </>
   );
 };
@@ -599,17 +568,19 @@ export default FilterAccordions;
 const FilterText = styled2.default.div`
     font-size:1.2rem;
     margin-bottom:8px;
-    a:hover{
+    cursor:pointer;
+    text-decoration: none !important;
+    font-size: 1.2rem !important;  
+    :hover{
       color:${colors.textGreen} !important
     };
-    a{
-      text-decoration: none !important;
-      font-size: 1.2rem !important;
-    };
-    a:active{
+    :active{
       color:${colors.textGreen} !important;
       font-weight:300;
     };
+    a:{
+      text-decoration: none !important;
+    }
 `;
 
 const NumberField = styled2.default.div`
