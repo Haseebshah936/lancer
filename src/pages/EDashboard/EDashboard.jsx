@@ -3,7 +3,7 @@ import { Box, Grid, Tab, Tabs } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
 import Styled from "styled-components";
-import Header from "../../components/Header";
+import Header from "../../components/HeaderLoggedIn";
 import colors from "../../utils/colors";
 import Sidebar from "../ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";

@@ -9,7 +9,7 @@ import {
   Button,
 } from "@mui/material";
 import Styled from "styled-components";
-import Header from "../../components/Header";
+import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer/index";
 import colors from "../../utils/colors";
 import ESideBar from "../../pages/ESideBar/ESideBar";

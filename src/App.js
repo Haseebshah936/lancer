@@ -96,7 +96,7 @@ function App(props) {
             <Route path="/cprofile" element={<CompleteProfile />}></Route>
             <Route
               path="/pexperience"
-              element={<PInfoExperienceAndEducation />} fa
+              element={<PInfoExperienceAndEducation />}
             />
 
             <Route path="/postProject" element={<PostProject />} />
