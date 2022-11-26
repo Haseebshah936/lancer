@@ -20,6 +20,7 @@ import { useRealmContext } from "../../db/RealmContext";
 import { useNavigate } from "react-router-dom";
 import UploadAttachments from "../../components/UploadAttachments";
 import CustomFilledButton from "../../components/CustomFilledButton";
+import { toast } from "react-toastify";
 export default function CompleteProfile() {
   const naviagate = useNavigate();
 
@@ -365,8 +366,21 @@ export default function CompleteProfile() {
       <Grid container>
         <Grid item xs={12} mb={4} className="d-flex justify-content-center">
           <CustomFilledButton
+            type=""
             title={"Save and Continue"}
-            onClick={handelNext}
+            onClick={() => {
+              if (
+                profileVar.name &&
+                profileVar.country &&
+                profileVar.currency &&
+                !profilePic.uploading
+              )
+                handelNext();
+              else
+                toast.error(
+                  "Please fill all the fields and upload your profile picture"
+                );
+            }}
             style={{ marginTop: "1.5rem" }}
           />
           {/* <Button
