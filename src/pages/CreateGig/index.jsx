@@ -38,6 +38,11 @@ export default function CreateGig() {
   const [basicPlanError, setBasicPlanError] = useState({});
   const [standardPlanError, setStandardPlanError] = useState({});
   const [premiumPlanError, setPremiumPlanError] = useState({});
+  const [questionArr, setQuestionArr] = useState([]);
+  const [question, setQuestion] = useState({
+    title: "",
+    discription: "",
+  });
 
   const [basicPlan, setBasicPlan] = useState({
     name: "",
@@ -142,17 +147,28 @@ export default function CreateGig() {
         );
         break;
       case 3:
-        return <GigQuestionAPage />;
+        return (
+          <GigQuestionAPage
+            question={question}
+            questionArr={questionArr}
+            setQuestion={setQuestion}
+            setQuestionArr={setQuestionArr}
+          />
+        );
       case 4:
         {
-          const Gig = {
+          const imagesArray = images
+            .map((image) => image.uri)
+            .filter((uri) => uri !== "");
+          console.log("Questions", questionArr);
+          const gig = {
             title: gigIntroduction.gigTitle,
             category: gigIntroduction.gigSubCategory._id,
             ownerId: user._id,
             tags: gigIntroduction.tage,
             description: gigIntroduction.gigDescription,
-            images: ["1231234564613", "544554545"],
-            video: "asdasdasd",
+            images: imagesArray,
+            video: video.uri,
             packages: [
               {
                 name: basicPlan.name,
@@ -176,10 +192,11 @@ export default function CreateGig() {
                 features: premiumPlan.features,
               },
             ],
+            questions: questionArr,
             additionalFeatures: additionalFeatures,
           };
 
-          return <GigLoading Gig={Gig} />;
+          return <GigLoading gig={gig} />;
 
           // axios
           //   .post("http://localhost:3003/api/product/createProduct", Gig)
