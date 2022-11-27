@@ -121,34 +121,6 @@ function ChatRooms({
 
   return (
     <ChatRoomsContainer>
-      <Box
-        marginBottom={"2rem"}
-        display={"flex"}
-        justifyContent={"center"}
-        alignItems={"center"}
-      >
-        <Button onClick={() => navigate(-1)}>
-          <ArrowBack style={{ fontSize: "1.6rem" }} />
-        </Button>
-        <SearchBox>
-          <InputBase
-            sx={{ ml: 1, flex: 1, py: 0.5, fontSize: "1.2rem" }}
-            placeholder="Search"
-            inputProps={{ "aria-label": "search" }}
-            onChange={(e) => onFilter(e.target.value)}
-          />
-          {/* <IconButton type="button" sx={{ p: "0.rem" }} aria-label="search">
-            <Search sx={{ fontSize: "1.5rem" }} />
-          </IconButton> */}
-        </SearchBox>
-        <MorePoper />
-      </Box>
-      {/* <ChatList
-        onClick={onRoomClick}
-        onClickMute={onMuteClick}
-        className="chat-list"
-        dataSource={chatrooms}
-      /> */}
       {chatrooms.map((chatroom, i) => {
         return (
           <CustomChatItem
@@ -169,7 +141,7 @@ export default ChatRooms;
 
 const ChatRoomsContainer = styled.div`
   display: flex;
-  padding: 2rem 0rem;
+  padding-bottom: 1rem;
   flex-direction: column;
   height: 100%;
   flex-shrink: 1;

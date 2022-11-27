@@ -15,7 +15,7 @@ export default function SimplePopper() {
   const id = open ? "simple-popper" : undefined;
 
   return (
-    <Box alignSelf={"center"} ml={1}>
+    <Box alignSelf={"center"}>
       <IconButton
         type="button"
         onClick={handleClick}

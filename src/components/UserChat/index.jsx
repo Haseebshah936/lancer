@@ -1,4 +1,4 @@
-import { Divider } from "@mui/material";
+import { Divider, InputBase } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { MessageBox, MessageList } from "react-chat-elements";
@@ -29,7 +29,9 @@ import MessagesContainer from "./MessagesContainer";
 import { useCallback } from "react";
 import mongoose from "mongoose";
 import { useCustomContext } from "../../Hooks/useCustomContext";
-
+import { ArrowBack } from "@mui/icons-material";
+import MorePoper from "./MorePoper";
+import { useNavigate } from "react-router-dom";
 const ChatRoomsData = [
   {
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
@@ -70,7 +72,7 @@ function Chat(props) {
   } = useCustomContext();
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
-
+  const navigate = useNavigate();
   const getChatRooms = async () => {
     setChatRooms([]);
     setChatRooms([]);
@@ -270,6 +272,28 @@ function Chat(props) {
   return (
     <Container>
       <ChatRoomsContainer active={active}>
+        <Box
+          marginTop={"2rem"}
+          display={"flex"}
+          justifyContent={"space-evenly"}
+          alignItems={"center"}
+        >
+          <Button onClick={() => navigate(-1)}>
+            <ArrowBack style={{ fontSize: "1.6rem" }} />
+          </Button>
+          <SearchBox>
+            <InputBase
+              sx={{ ml: 1, flex: 1, py: 0.5, fontSize: "1.2rem" }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search" }}
+              onChange={(e) => handleFilter(e.target.value)}
+            />
+            {/* <IconButton type="button" sx={{ p: "0.rem" }} aria-label="search">
+            <Search sx={{ fontSize: "1.5rem" }} />
+          </IconButton> */}
+          </SearchBox>
+          <MorePoper />
+        </Box>
         {chatRooms.length > 0 && (
           <ChatRooms
             chatrooms={chatRooms}
@@ -432,4 +456,34 @@ const MessageListContainer = styled.div`
   overflow-y: scroll;
   overflow-x: hidden;
   flex: 1;
+`;
+
+const SearchBox = styled.div`
+  border: 1px solid ${colors.lightGrey};
+  border-radius: 10rem;
+  align-self: center;
+  padding: 0.5rem 1rem;
+  min-width: 28rem;
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  ${miniPc({
+    minWidth: "22rem",
+  })}
+`;
+const Button = styled.div`
+  /* border-bottom: 2px solid black; */
+  align-self: center;
+  font-size: 1.6rem;
+  padding: 0.5rem 0.5rem 0.5rem 1rem;
+  display: none;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1rem;
+
+  font-weight: 700;
+  ${mobile({
+    display: "flex",
+  })}
+  cursor: pointer;
 `;
