@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 import colors from "../../utils/colors";
+import { toast } from "react-toastify";
 
 export default function NavigationBar({
   handleStep,
@@ -26,9 +27,11 @@ export default function NavigationBar({
   basicPlan,
   standardPlan,
   premiumPlan,
+  video,
   basicPlanError,
   standardPlanError,
   premiumPlanError,
+  setErrorsImages,
 }) {
   const PackageSchema = {
     name: Joi.string().required().label("Name"),
@@ -43,11 +46,11 @@ export default function NavigationBar({
     gigCategory: Joi.required().label("Gig Category"),
     gigSubCategory: Joi.required().label("Gig Sub Category"),
     gigDescription: Joi.required().label("Gig Description"),
-    tage: Joi.array().items(Joi.string()).min(3).label("Tages"),
+    tage: Joi.array().items(Joi.string()).min(3).label("Tags"),
   };
 
   const Mediaschema = {
-    images: Joi.array().items().min(1).label("Images"),
+    images: Joi.array().items({ uri: Joi.string() }).min(1).label("Images"),
   };
 
   const validateGig = () => {
@@ -71,19 +74,25 @@ export default function NavigationBar({
   };
 
   const validateMedia = () => {
-    const result = Joi.validate({ images }, Mediaschema, { abortEarly: false });
-    if (!result.error) {
-      setErrors({});
-      console.log("MEDIA VALIDATED ", activeStep);
-      handleStep(activeStep + 1);
+    const imagesArray = images
+      .map((image) => image.uri)
+      .filter((uri) => uri !== "");
 
-      return null;
+    const image = images.filter((image) => image.uploading);
+
+    if (image.length !== 0 && !video.uploading) {
+      if (imagesArray.length !== 0) {
+        setErrorsImages(false);
+        console.log("MEDIA VALIDATED ", activeStep);
+        handleStep(activeStep + 1);
+
+        return null;
+      } else {
+        setErrorsImages(true);
+      }
+    } else {
+      toast.error("Upload in progress");
     }
-    const errors = {};
-    for (let item of result.error.details) errors[item.path[0]] = item.message;
-    setErrors(errors);
-    console.log("media Errors:", errors);
-    return errors;
   };
 
   const standardPlanValidation = () => {
