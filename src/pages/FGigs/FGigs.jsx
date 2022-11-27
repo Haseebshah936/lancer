@@ -1,32 +1,45 @@
 import React, { useEffect } from "react";
-import { Box, Grid, Tab, Tabs } from "@mui/material";
+import { Box, Grid, Tab, Tabs, Chip } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer/index";
 import colors from "../../utils/colors";
 import FSideBar from "../../pages/FSideBar/FSideBar";
 import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import axios from "axios";
+import CardHeader from "@mui/material/CardHeader";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import Collapse from "@mui/material/Collapse";
+import Avatar from "@mui/material/Avatar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import { red } from "@mui/material/colors";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import ShareIcon from "@mui/icons-material/Share";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { requestMethod } from "../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
+
 export default function FGigs() {
-  const [gigs, setGigs] = React.useState({});
+  const [gigs, setGigs] = React.useState([]);
+  const { user } = useRealmContext();
   useEffect(() => {
-    axios
-      .get(
-        "http://localhost:3003/api/gig/getAllGigsByEmail/umer192rb@gmail.com"
-      )
-      .then((response) => {
-        console.log(response.data);
-        setGigs(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, []);
+    if (user) {
+      requestMethod
+        .get(`product/byUserId/${user?._id}`)
+        .then((response) => {
+          console.log(response.data);
+          setGigs(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [user]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -47,37 +60,70 @@ export default function FGigs() {
             >
               <TitleP>Active Gigs</TitleP>
               <div>
-                <Grid container>
+                <Grid container className="d-flex justify-content-between">
                   {gigs?.map((gig) => (
-                    <Grid item xs={12} md={4}>
-                      <Card sx={{ maxWidth: 250 }}>
+                    <Grid
+                      item
+                      xs={12}
+                      md={3.7}
+                      style={{ maxHeight: "400px" }}
+                      className="mt-3"
+                    >
+                      <Card>
+                        <CardHeader
+                          avatar={
+                            <Avatar
+                              sx={{ bgcolor: red[500] }}
+                              aria-label="recipe"
+                              src={gig.owner._id.profilePic}
+                            ></Avatar>
+                          }
+                          action={
+                            <IconButton aria-label="settings">
+                              <MoreVertIcon />
+                            </IconButton>
+                          }
+                          title={gig.owner._id.name}
+                          subheader="September 14, 2021"
+                        />
                         <CardMedia
                           component="img"
-                          height="140"
-                          image="/static/images/cards/contemplative-reptile.jpg"
-                          alt="green iguana"
+                          height="194"
+                          image={gig.images[0]}
+                          alt="Paella dish"
                         />
-                        <CardContent>
-                          <Typography gutterBottom variant="h5" component="div">
-                            Title
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            Lizards are a widespread group of squamate reptiles,
-                            with over 6,000 species, ranging across all
-                            continents except Antarctica
-                          </Typography>
-                        </CardContent>
-                        <CardActions>
-                          <Button size="small">Edit</Button>
-                          <Button size="small">Delete</Button>
-                          <Button size="small">Disable</Button>
+
+                        <Box padding={1} paddingStart={4} paddingEnd={2}>
+                          <h3
+                            variant="h5"
+                            className="bold mb-"
+                            color="text.secondary"
+                            style={{
+                              overflow: "hidden",
+                              whiteSpace: "nowrap",
+                              textOverflow: "ellipsis",
+                            }}
+                          >
+                            {gig.title}
+                          </h3>
+                          <Box className="d-flex to-row align-items-center pb-0">
+                            <SmallP>Starts at &nbsp;</SmallP>
+                            <TitleP>&nbsp;{gig.packages[0].cost}$</TitleP>
+                          </Box>
+                        </Box>
+                        <CardActions disableSpacing>
+                          {/* <IconButton aria-label="add to favorites">
+                            <FavoriteIcon />
+                          </IconButton> */}
+                          <IconButton aria-label="share">
+                            <ShareIcon />
+                          </IconButton>
                         </CardActions>
                       </Card>
                     </Grid>
                   ))}
                 </Grid>
               </div>
-              <TitleP>Paused Gigs</TitleP>
             </Grid>
             <Grid xs={11} sm={9}></Grid>
           </Grid>
@@ -92,4 +138,10 @@ const TitleP = Styled.p`
     font-size: 2rem;
     font-weight: 600;
     color: ${colors.black};
+    `;
+const SmallP = Styled.p`
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0px;
+    color: #8B8B8B;
     `;

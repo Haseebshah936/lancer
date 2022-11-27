@@ -358,7 +358,7 @@ export default function CompleteProfile() {
             sx={{ backgroundColor: colors.becomePartnerGreen, width: "200px" }}
             onClick={handelNext}
             className="mb-5"
-            disabled={profileVar.profilePic === ""}
+            // disabled={profileVar.profilePic === ""}
           >
             Save&nbsp;and&nbsp;Continue
           </Button>
