@@ -127,6 +127,7 @@ function ChatRooms({
             key={chatroom.id}
             onClick={onRoomClick}
             onClickMute={onMuteClick}
+            subtitle={chatroom.subtitle}
             chatroom={chatroom}
             index={i}
             changeChatroomsData={changeChatroomsData}

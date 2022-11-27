@@ -57,7 +57,7 @@ const BuyerMain = () => {
   useEffect(() => {
     if (currentUser && user) {
       console.log("User", user);
-      if (user.name === "test1" && user.profilePic === "")
+      if (user.name === "test1" || user.profilePic === "")
         navigate("/cprofile");
     }
   }, [currentUser, user]);
