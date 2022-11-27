@@ -81,7 +81,7 @@ function Header(props) {
             console.log(error);
           }
         })();
-      }, 10000);
+      }, 30000);
     }
     return () => {
       clearInterval(interval);
