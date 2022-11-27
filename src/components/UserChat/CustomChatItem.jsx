@@ -9,6 +9,7 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import { useRef } from "react";
 import { InsertDriveFile } from "@mui/icons-material";
 import { watchCollection } from "../../db/helperFunction";
+import { requestMethod } from "../../requestMethod";
 
 function CustomChatItem({
   chatroom,
@@ -18,7 +19,7 @@ function CustomChatItem({
   changeChatroomsData,
   index,
 }) {
-  const { currentUser } = useRealmContext();
+  const { currentUser, user } = useRealmContext();
   const { activeChatroom, setActiveChatroom, setActiveChatroomStatus } =
     useCustomContext();
   const [isOnline, setIsOnline] = useState(
@@ -41,7 +42,24 @@ function CustomChatItem({
         return prev;
       }
     });
-    changeChatroomsData(index, chatroom.id, isOnline);
+    changeChatroomsData(index, chatroom.id, { isOnline });
+  };
+
+  const handleNewMessage = (change) => {
+    const { documentKey, fullDocument } = change;
+    console.log("new message", fullDocument);
+    requestMethod
+      .get(`/chatroom/${chatroom.id}/${user._id}`)
+      .then((res) => {
+        console.log("res", res.data);
+        changeChatroomsData(index, chatroom.id, res.data);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+    // if (sender !== currentUser.id) {
+    //   changeChatroomsData(index, chatroom.id, { message });
+    // }
   };
 
   useEffect(() => {
@@ -66,6 +84,19 @@ function CustomChatItem({
         handleOnlineStatus
       );
     }
+    const filter = {
+      filter: {
+        operationType: "update",
+        "fullDocument._id": mongoose.Types.ObjectId(chatroom.id),
+      },
+    };
+    watchCollection(
+      currentUser,
+      "chatrooms",
+      filter,
+      breakAsyncIterator_chatroom,
+      handleNewMessage
+    );
 
     return () => {
       breakAsyncIterator_status = true;
@@ -76,12 +107,12 @@ function CustomChatItem({
     clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     interval = setInterval(() => {
-      console.log("Called", isOnline);
+      // console.log("Called", isOnline);
       const newIsOnline = new Date(isOnline);
-      console.log(
-        newIsOnline.toLocaleString(),
-        new Date(new Date().getTime() - 60000).toLocaleString()
-      );
+      // console.log(
+      //   newIsOnline.toLocaleString(),
+      //   new Date(new Date().getTime() - 60000).toLocaleString()
+      // );
       if (
         newIsOnline >= new Date().getTime() - 60000 &&
         newIsOnline < new Date().getTime()
