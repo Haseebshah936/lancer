@@ -22,9 +22,7 @@ import UploadAttachments from "../../components/UploadAttachments";
 import CustomFilledButton from "../../components/CustomFilledButton";
 import { toast } from "react-toastify";
 export default function CompleteProfile() {
-  const naviagate = useNavigate();
-
-  const { user, setUser } = useRealmContext();
+  const { user, setUser, currentUser } = useRealmContext();
   const [profileVar, setProfileVar] = useState({
     name: "",
     country: "",
@@ -33,6 +31,7 @@ export default function CompleteProfile() {
   const [profilePic, setProfilePic] = useState({
     uri: "",
   });
+  const navigate = useNavigate();
   const dropbox = useRef(null);
   const fileSelect = useRef(null);
   const [image, setImage] = useState();
@@ -54,7 +53,7 @@ export default function CompleteProfile() {
         console.log("success");
         console.log("response", response.data.profilePic);
         setUser(response.data);
-        naviagate("/");
+        navigate("/");
       })
       .catch((error) => {
         console.log("error in complete profile");
@@ -149,7 +148,12 @@ export default function CompleteProfile() {
   useEffect(() => {
     console.log(profileVar);
   }, [profileVar]);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (currentUser && user) {
+      console.log("User", user);
+      if (user.name !== "test1" && user.profilePic !== "") navigate("/");
+    }
+  }, [currentUser, user]);
   return (
     <div
       style={{

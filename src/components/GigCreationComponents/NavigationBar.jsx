@@ -79,19 +79,20 @@ export default function NavigationBar({
       .filter((uri) => uri !== "");
 
     const image = images.filter((image) => image.uploading);
-
-    if (image.length !== 0 && !video.uploading) {
-      if (imagesArray.length !== 0) {
+    console.log("image", image);
+    console.log(video ? !video.uploading : true);
+    if (imagesArray.length !== 0) {
+      if (image.length === 0 && (video ? !video.uploading : true)) {
         setErrorsImages(false);
         console.log("MEDIA VALIDATED ", activeStep);
         handleStep(activeStep + 1);
 
         return null;
       } else {
-        setErrorsImages(true);
+        toast.error("Upload in progress");
       }
     } else {
-      toast.error("Upload in progress");
+      setErrorsImages(true);
     }
   };
 

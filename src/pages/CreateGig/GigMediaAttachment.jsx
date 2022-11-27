@@ -214,8 +214,11 @@ export default function GigMediaAttachment({
   };
 
   useEffect(() => {
-    console.log("Attachments", videoAttachment);
+    console.log("Video Attachment", videoAttachment);
   }, [videoAttachment]);
+  useEffect(() => {
+    console.log("Attachments", attachments);
+  }, [attachments]);
 
   return (
     <Grid container>
