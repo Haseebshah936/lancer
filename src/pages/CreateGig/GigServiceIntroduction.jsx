@@ -26,17 +26,7 @@ export default function GigServiceIntroduction({
   standardPlan,
   premiumPlan,
 }) {
-  const [QuillValue, setQuillValue] = useState("");
 
-  const handleQuill = (e) => {
-    console.log(e);
-    setQuillValue(e);
-    console.log(QuillValue);
-    setGigIntroduction({
-      ...gigIntroduction,
-      gigDescription: QuillValue,
-    });
-  };
 
   const handleCategories = (CategoryArray) => {
     const Array = CategoryArray.map((c, index) => {
@@ -157,7 +147,13 @@ export default function GigServiceIntroduction({
           <ReactQuill
             theme="snow"
             value={gigIntroduction.gigDescription}
-            onChange={handleQuill}
+            onChange={(e) => {
+              setGigIntroduction({
+                ...gigIntroduction,
+                gigDescription: e,
+              });
+              console.log("Gig Description", gigIntroduction.gigDescription);
+            }}
             style={{
               width: "100%",
               display: "flex",

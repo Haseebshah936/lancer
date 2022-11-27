@@ -32,6 +32,7 @@ const attachmentData = [
 export default function CreateGig() {
   const { user } = useRealmContext();
   const [errors, setErrors] = useState({});
+  const [errorImages, setErrorsImages] = useState(false);
 
   const [images, setImages] = useState(attachmentData);
   const [additionalFeatures, setAdditionalFeatures] = useState([]);
@@ -120,6 +121,7 @@ export default function CreateGig() {
             attachments={images}
             setAttachments={setImages}
             errors={errors}
+            errorImages={errorImages}
             videoAttachment={video}
             setVideoAttachment={setVideo}
           />
@@ -265,6 +267,8 @@ export default function CreateGig() {
                   basicPlanError={basicPlanError}
                   standardPlanError={standardPlanError}
                   premiumPlanError={premiumPlanError}
+                  setErrorsImages={setErrorsImages}
+                  video={video}
                 />
                 {handleActiveStep(activeStep)}
               </Grid>

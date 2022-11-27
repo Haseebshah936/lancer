@@ -1,42 +1,10 @@
-import {
-  Grid,
-  Box,
-  TextField,
-  Switch,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControl,
-  Typography,
-  Checkbox,
-} from "@mui/material";
-import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Joi from "joi-browser";
+import { Grid, Box, Typography, Checkbox } from "@mui/material";
+import { useEffect } from "react";
 import React from "react";
-import Footer from "../../components/Footer";
-import GigNavigationBar from "../../components/GigComponent/GigNavigationBar";
-import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
-import Header from "../../components/Header";
-
-import { numebers } from "../../utils/GigDropDownValues";
-import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import { AttachMoneyOutlined } from "@mui/icons-material";
-const TitleBox = ({ heading }) => {
-  return (
-    <Box
-      height="53px"
-      className="border-bottom"
-      display={"flex"}
-      alignItems="center"
-      paddingLeft={{ xs: "10px", sm: "20px" }}
-    >
-      <h4>{heading}</h4>
-    </Box>
-  );
-};
+
 const GigDiscription = ({ value, onChange, styles }) => {
   return (
     <CustomTextArea
@@ -410,6 +378,9 @@ export default function GigMyServicePricing({
                       value={
                         basicPlan.features[i + SubCategory.features.length]
                           .quantity
+                          ? basicPlan.features[i + SubCategory.features.length]
+                              .quantity
+                          : ""
                       }
                       type="number"
                       onChange={(e) => {
@@ -457,6 +428,10 @@ export default function GigMyServicePricing({
                       value={
                         standardPlan.features[i + SubCategory.features.length]
                           .quantity
+                          ? standardPlan.features[
+                              i + SubCategory.features.length
+                            ].quantity
+                          : ""
                       }
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -503,6 +478,10 @@ export default function GigMyServicePricing({
                       value={
                         premiumPlan.features[i + SubCategory.features.length]
                           .quantity
+                          ? premiumPlan.features[
+                              i + SubCategory.features.length
+                            ].quantity
+                          : ""
                       }
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
@@ -574,7 +553,11 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
-                      value={basicPlan.features[i].quantity}
+                      value={
+                        basicPlan.features[i].quantity === 0
+                          ? ""
+                          : basicPlan.features[i].quantity
+                      }
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -613,7 +596,11 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
-                      value={standardPlan.features[i].quantity}
+                      value={
+                        standardPlan.features[i].quantity
+                          ? standardPlan.features[i].quantity
+                          : ""
+                      }
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -652,7 +639,11 @@ export default function GigMyServicePricing({
                 >
                   {feature.quantityBased && (
                     <InputField
-                      value={premiumPlan.features[i].quantity}
+                      value={
+                        premiumPlan.features[i].quantity
+                          ? premiumPlan.features[i].quantity
+                          : ""
+                      }
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
@@ -814,18 +805,12 @@ export default function GigMyServicePricing({
               <Grid
                 container
                 mobile={12}
+                alignItems="center"
+                justifyContent="space-between"
                 className="border"
                 sx={{ height: "50px" }}
               >
-                <Grid
-                  item
-                  container
-                  mobile={9}
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  className="border-End"
-                  direction="row"
-                >
+                <div style={{ display: "flex", alignItems: "center" }}>
                   <CheckBox
                     checked={additionalFeatures[i].active}
                     onChange={(e) => {
@@ -833,7 +818,6 @@ export default function GigMyServicePricing({
                       const hold = [...additionalFeatures];
                       console.log("Addition Hold", hold);
                       hold[i].active = e.target.checked;
-
                       setAdditionalFeatures(hold);
                       console.log("Additional features ", additionalFeatures);
                     }}
@@ -841,10 +825,11 @@ export default function GigMyServicePricing({
                   <Typography variant="h6" sx={{ ml: 1 }}>
                     {feature.title}
                   </Typography>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   {feature.quantityBased && (
                     <InputField
                       value={additionalFeatures[i].quantity}
-                      styles={{ marginLeft: "10px" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       onChange={(e) => {
@@ -855,8 +840,11 @@ export default function GigMyServicePricing({
                     />
                   )}
                   <InputField
-                    value={additionalFeatures[i].cost}
-                    styles={{ marginLeft: "30px" }}
+                    value={
+                      additionalFeatures[i].cost
+                        ? additionalFeatures[i].cost
+                        : ""
+                    }
                     placeholder={`Enter Price`}
                     type="number"
                     onChange={(e) => {
@@ -865,7 +853,12 @@ export default function GigMyServicePricing({
                       setAdditionalFeatures(hold);
                     }}
                   />
-                </Grid>
+                  <AttachMoneyOutlined
+                    sx={{
+                      color: colors.textGreen,
+                    }}
+                  />
+                </div>
               </Grid>
             </>
           );
@@ -875,18 +868,13 @@ export default function GigMyServicePricing({
             <>
               <Grid
                 container
+                alignItems="center"
+                justifyContent="space-between"
                 mobile={12}
                 className="border"
                 sx={{ height: "50px" }}
               >
-                <Grid
-                  item
-                  container
-                  mobile={9}
-                  justifyContent="flex-start"
-                  alignItems="center"
-                  className="border-End"
-                >
+                <div style={{ display: "flex", alignItems: "center" }}>
                   <CheckBox
                     checked={additionalFeatures[i].active}
                     onChange={(e) => {
@@ -898,10 +886,11 @@ export default function GigMyServicePricing({
                   <Typography variant="h6" sx={{ ml: 1 }}>
                     {feature.title}
                   </Typography>
+                </div>
+                <div style={{ display: "flex", alignItems: "center" }}>
                   {feature.quantityBased && (
                     <InputField
                       value={additionalFeatures[i].quantity}
-                      styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       onChange={(e) => {
@@ -913,8 +902,11 @@ export default function GigMyServicePricing({
                     />
                   )}
                   <InputField
-                    value={additionalFeatures[i].cost}
-                    styles={{ marginLeft: "30px" }}
+                    value={
+                      additionalFeatures[i].cost
+                        ? additionalFeatures[i].cost
+                        : ""
+                    }
                     placeholder={`Enter Price`}
                     type="number"
                     onChange={(e) => {
@@ -923,7 +915,12 @@ export default function GigMyServicePricing({
                       setAdditionalFeatures(hold);
                     }}
                   />
-                </Grid>
+                  <AttachMoneyOutlined
+                    sx={{
+                      color: colors.textGreen,
+                    }}
+                  />
+                </div>
               </Grid>
             </>
           );

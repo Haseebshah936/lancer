@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import ImageUploading from "react-images-uploading";
 import {
   Box,
   CircularProgress,
@@ -7,22 +6,11 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import GigNavigationHaeder2 from "../../components/GigComponent/GigNavigationHaeder2";
-import GigNavigationBar from "./../../components/GigComponent/GigNavigationBar";
 
-import { Button } from "@mui/material";
-import GigMuiHeader from "./../../components/GigComponent/GigMuiHeader";
 import colors from "../../utils/colors";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+
 import styled from "styled-components";
-import {
-  Cancel,
-  InsertDriveFile,
-  Upload,
-  UploadFile,
-  UploadFileOutlined,
-} from "@mui/icons-material";
+import { Cancel, InsertDriveFile, Upload } from "@mui/icons-material";
 import axios from "axios";
 const attachmentData = [
   {
@@ -43,6 +31,7 @@ const attachmentData = [
 ];
 export default function GigMediaAttachment({
   setAttachments,
+  errorImages,
   attachments = attachmentData,
   videoAttachment = {
     uri: "",
@@ -265,7 +254,7 @@ export default function GigMediaAttachment({
         >
           Image size can not be more than 10MB
         </Typography>
-        {errors.images && (
+        {errorImages && (
           <div className="alert alert-danger">
             {"Kindly select atleast 1 Images"}
           </div>
@@ -371,11 +360,6 @@ export default function GigMediaAttachment({
         >
           Video size can not be more than 100MB
         </Typography>
-        {errors.images && (
-          <div className="alert alert-danger">
-            {"Kindly select atleast 1 Images"}
-          </div>
-        )}
       </Grid>
       <AttachmentsContainer>
         <AttachmentContainer
