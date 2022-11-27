@@ -200,7 +200,7 @@ export default function GigMediaAttachment({
       uploading: true,
       progress: 0,
     });
-    uploadVideoAttachment(e.target.files[0], selectedIndex, controller);
+    uploadVideoAttachment(e.target.files[0], controller);
   };
 
   const removeVideoAttachment = async (i) => {
@@ -208,12 +208,14 @@ export default function GigMediaAttachment({
     console.log("remove attachment", attachments[i]);
     setVideoAttachment({
       uri: "",
+      uploading: true,
+      progress: 0,
     });
   };
 
   useEffect(() => {
-    console.log("Attachments", attachments);
-  }, [attachments]);
+    console.log("Attachments", videoAttachment);
+  }, [videoAttachment]);
 
   return (
     <Grid container>
