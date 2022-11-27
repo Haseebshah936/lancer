@@ -51,7 +51,7 @@ const CustomListItem = styled(ListItem)({
 });
 
 const Sidebar = () => {
-  const { logOut } = useRealmContext();
+  const { logOut, user } = useRealmContext();
   return (
     <>
       <Sticky>
@@ -76,7 +76,7 @@ const Sidebar = () => {
           <Avatar
             sx={{ width: 56, height: 56 }}
             aria-label="recipe"
-            src="https://firebasestorage.googleapis.com/v0/b/web-mini-proj.appspot.com/o/unnamed.jpg?alt=media&token=ad1da1e1-7ba3-426e-9b29-4c1a263c3012"
+            src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
           ></Avatar>
           <InfoWrapper>
             <p

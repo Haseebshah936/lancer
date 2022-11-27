@@ -1,4 +1,5 @@
 import React from "react";
+import joi from "joi";
 import { useNavigate } from "react-router-dom";
 import { mobile, tablet, miniTablet } from "../../responsive";
 import ImageUploading from "react-images-uploading";
@@ -29,11 +30,13 @@ import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import { useRealmContext } from "../../db/RealmContext";
 
 export default function PInfoPersonalDetailsAndSkills() {
-  const { user } = useRealmContext();
+  const { user, setUser } = useRealmContext();
   const [gender, setGender] = React.useState("");
   const [mySkills, setMySkill] = React.useState([]);
   const [mySkillName, setMySkillName] = React.useState("");
   const [mySkillPercentage, setMySkillPercentage] = React.useState("");
+  // const [navigationChecker]
+  const navigate = useNavigate();
 
   const handleChange = (event) => {
     setGender(event.target.value);
@@ -71,7 +74,9 @@ export default function PInfoPersonalDetailsAndSkills() {
       .put(`http://localhost:3003/api/user/makeSeller/${user._id}`, sData)
       .then((res) => {
         console.log(res);
+        setUser(res.data);
         console.log("success seller created");
+        navigate(-1);
       })
       .catch((err) => {
         console.log("unable to make seller");
@@ -92,8 +97,6 @@ export default function PInfoPersonalDetailsAndSkills() {
     setMySkill(temp);
     console.log(name);
   };
-
-  const navigate = useNavigate();
 
   const [jobExpArr, setJobExpArr] = React.useState([]);
   const [educationArr, setEducationArr] = React.useState([]);
@@ -117,6 +120,12 @@ export default function PInfoPersonalDetailsAndSkills() {
     startingDate: "",
     endingDate: "",
     description: "",
+  });
+  const eduVarSchema = joi.object({
+    instituteTitle: joi.string().required(),
+    startingDate: joi.string().required(),
+    endingDate: joi.string().required(),
+    educationTitle: joi.string().required(),
   });
 
   React.useEffect(() => {

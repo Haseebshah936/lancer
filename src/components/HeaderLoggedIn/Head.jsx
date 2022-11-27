@@ -1,6 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import {
+  Link,
+  NavLink,
+  useNavigate,
+  matchRoutes,
+  useLocation,
+} from "react-router-dom";
 import { Avatar, Badge, Button, IconButton, Box } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import colors from "../../utils/colors";
@@ -30,6 +36,7 @@ function Head({
   toggleNotification,
   toggleUserOptions,
 }) {
+  // const currentPathDashboard = useCurrentPath([{ path: "/f/dashboard" }]);
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
   const { user } = useRealmContext();
@@ -60,10 +67,27 @@ function Head({
       </>
     );
   };
-
-  // useEffect(() => {
-  //   console.log("Header ", user);
-  // });
+  const location = useLocation();
+  const currentPath = location.pathname;
+  function matchRoutesinf() {
+    if (
+      currentPath === "/f/dashboard" ||
+      currentPath == "/f/Gigs" ||
+      currentPath == "/f/projects" ||
+      currentPath == "/f/favourites" ||
+      currentPath == "/f/reviews" ||
+      currentPath == "/f/messages" ||
+      currentPath == "/f/payments" ||
+      currentPath == "/f/settings"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  useEffect(() => {
+    console.log(currentPath);
+  }, []);
 
   return (
     <>
@@ -98,9 +122,22 @@ function Head({
         </Menucontainer>
         <Wrapper>
           <SubContainer>
-            <Link to={user?.seller ? "/seller" : "/becomeSeller"}>
+            <Link
+              to={
+                user?.seller
+                  ? matchRoutesinf()
+                    ? "/"
+                    : "/f/dashboard"
+                  : "/becomeSeller"
+              }
+            >
               {user?.seller ? (
-                "SellerMode"
+                //
+                matchRoutesinf() ? (
+                  "BuyerMode"
+                ) : (
+                  "SellerMode"
+                )
               ) : (
                 <p style={{ alignSelf: "center", marginBottom: 0 }}>
                   Become&nbsp;a&nbsp;Seller
@@ -108,7 +145,16 @@ function Head({
               )}
             </Link>
             <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
-            <NavLink to="/sellerdashboard">Dashboard</NavLink>
+            {currentPath === "/f/dashboard" ||
+            currentPath == "/f/Gigs" ||
+            currentPath == "/f/projects" ||
+            currentPath == "/f/favourites" ||
+            currentPath == "/f/reviews" ||
+            currentPath == "/f/messages" ||
+            currentPath == "/f/payments" ||
+            currentPath == "/f/settings" ? null : (
+              <NavLink to="/f/dashboard">Dashboard</NavLink>
+            )}
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
           </SubContainer>
           <ButtonContainer>
@@ -265,7 +311,8 @@ const SubContainer = styled.div`
   color: black;
   a {
     font-size: 1.2rem !important;
-    text-decoration: none;
+    text-decoration: noimport useCurrentPath from './../../Hooks/useCurrentPath';
+ne;
     color: black;
     margin-inline: 0.5rem;
     padding-bottom: 0.4rem;

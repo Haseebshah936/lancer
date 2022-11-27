@@ -23,7 +23,7 @@ export default function GigLoading({ gig }) {
           console.log("Response", response.data);
           toast.success("Product Created Successfully");
           setLoading(false);
-          navigate("/");
+          navigate(-1);
         } catch (error) {
           handleError(error);
         }
