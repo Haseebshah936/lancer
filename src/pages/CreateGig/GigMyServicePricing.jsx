@@ -184,11 +184,16 @@ export default function GigMyServicePricing({
               }}
               placeholder="Delivery Days"
               type="number"
+              min="0"
+              step="1"
               value={basicPlan.delivery}
               onChange={(e) => {
+                let val = parseInt(e.target.value, 10);
+
+                val = val >= 0 ? val : 0;
                 setBasicPlan({
                   ...basicPlan,
-                  delivery: e.target.value,
+                  delivery: val,
                 });
               }}
             />
@@ -262,10 +267,16 @@ export default function GigMyServicePricing({
               placeholder="Delivery Days"
               type="number"
               value={standardPlan.delivery}
+              min="0"
+              step="1"
               onChange={(e) => {
+                let val = parseInt(e.target.value, 10);
+
+                val = val >= 0 ? val : 0;
+
                 setStandardPlan({
                   ...standardPlan,
-                  delivery: e.target.value,
+                  delivery: val,
                 });
               }}
             />
@@ -335,11 +346,17 @@ export default function GigMyServicePricing({
               }}
               placeholder="Delivery Days"
               type="number"
+              min="0"
+              step="1"
               value={premiumPlan.delivery}
               onChange={(e) => {
+                let val = parseInt(e.target.value, 10);
+
+                val = val >= 0 ? val : 0;
+
                 setPremiumPlan({
                   ...premiumPlan,
-                  delivery: e.target.value,
+                  delivery: val,
                 });
               }}
             />
@@ -383,10 +400,14 @@ export default function GigMyServicePricing({
                           : ""
                       }
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
                         const hold = [...basicPlan.features];
-                        hold[i + SubCategory.features.length].quantity =
-                          e.target.value;
+                        hold[i + SubCategory.features.length].quantity = val;
                         hold[i + SubCategory.features.length].active = true;
                         setBasicPlan({
                           ...basicPlan,
@@ -435,10 +456,15 @@ export default function GigMyServicePricing({
                       }
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...standardPlan.features];
-                        hold[i + SubCategory.features.length].quantity =
-                          e.target.value;
+                        hold[i + SubCategory.features.length].quantity = val;
                         hold[i + SubCategory.features.length].active = true;
                         setStandardPlan({
                           ...standardPlan,
@@ -486,10 +512,15 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...premiumPlan.features];
-                        hold[i + SubCategory.features.length].quantity =
-                          e.target.value;
+                        hold[i + SubCategory.features.length].quantity = val;
                         hold[i + SubCategory.features.length].active = true;
                         setPremiumPlan({
                           ...premiumPlan,
@@ -561,9 +592,15 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...basicPlan.features];
-                        hold[i].quantity = e.target.value;
+                        hold[i].quantity = val;
                         hold[i].active = true;
                         setBasicPlan({
                           ...basicPlan,
@@ -604,9 +641,15 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...standardPlan.features];
-                        hold[i].quantity = e.target.value;
+                        hold[i].quantity = val;
                         hold[i].active = true;
                         setStandardPlan({
                           ...standardPlan,
@@ -647,9 +690,15 @@ export default function GigMyServicePricing({
                       styles={{ width: "100%" }}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...premiumPlan.features];
-                        hold[i].quantity = e.target.value;
+                        hold[i].quantity = val;
                         hold[i].active = true;
                         setPremiumPlan({
                           ...premiumPlan,
@@ -706,11 +755,17 @@ export default function GigMyServicePricing({
                 }}
                 placeholder="Enter Price"
                 type="number"
+                min="0"
+                step="1"
                 value={basicPlan.cost}
                 onChange={(e) => {
+                  let val = parseInt(e.target.value, 10);
+
+                  val = val >= 0 ? val : 0;
+
                   setBasicPlan({
                     ...basicPlan,
-                    cost: e.target.value,
+                    cost: val,
                   });
                 }}
               />
@@ -737,12 +792,18 @@ export default function GigMyServicePricing({
                 }}
                 placeholder="Enter Price"
                 type="number"
+                min="0"
+                step="1"
                 error={standardPlanError.cost}
                 value={standardPlan.cost}
                 onChange={(e) => {
+                  let val = parseInt(e.target.value, 10);
+
+                  val = val >= 0 ? val : 0;
+
                   setStandardPlan({
                     ...standardPlan,
-                    cost: e.target.value,
+                    cost: val,
                   });
                 }}
               />
@@ -769,12 +830,18 @@ export default function GigMyServicePricing({
                 }}
                 placeholder="Enter Price"
                 type="number"
+                min="0"
+                step="1"
                 error={premiumPlanError.cost}
                 value={premiumPlan.cost}
                 onChange={(e) => {
+                  let val = parseInt(e.target.value, 10);
+
+                  val = val >= 0 ? val : 0;
+
                   setPremiumPlan({
                     ...premiumPlan,
-                    cost: e.target.value,
+                    cost: val,
                   });
                 }}
               />
@@ -832,9 +899,15 @@ export default function GigMyServicePricing({
                       value={additionalFeatures[i].quantity}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
                         const hold = [...additionalFeatures];
-                        hold[i].quantity = e.target.value;
+                        hold[i].quantity = val;
                         setAdditionalFeatures(hold);
                       }}
                     />
@@ -847,9 +920,14 @@ export default function GigMyServicePricing({
                     }
                     placeholder={`Enter Price`}
                     type="number"
+                    min="0"
+                    step="1"
                     onChange={(e) => {
+                      let val = parseInt(e.target.value, 10);
+
+                      val = val >= 0 ? val : 0;
                       const hold = [...additionalFeatures];
-                      hold[i].cost = e.target.value;
+                      hold[i].cost = val;
                       setAdditionalFeatures(hold);
                     }}
                   />
@@ -893,9 +971,14 @@ export default function GigMyServicePricing({
                       value={additionalFeatures[i].quantity}
                       placeholder={`Enter ${feature.title}`}
                       type="number"
+                      min="0"
+                      step="1"
                       onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
                         const hold = [...additionalFeatures];
-                        hold[i].quantity = e.target.value;
+                        hold[i].quantity = val;
                         hold[i].active = true;
                         setAdditionalFeatures(hold);
                       }}
@@ -909,9 +992,14 @@ export default function GigMyServicePricing({
                     }
                     placeholder={`Enter Price`}
                     type="number"
+                    min="0"
+                    step="1"
                     onChange={(e) => {
+                      let val = parseInt(e.target.value, 10);
+
+                      val = val >= 0 ? val : 0;
                       const hold = [...additionalFeatures];
-                      hold[i].cost = e.target.value;
+                      hold[i].cost = val;
                       setAdditionalFeatures(hold);
                     }}
                   />

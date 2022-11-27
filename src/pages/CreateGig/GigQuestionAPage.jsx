@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -24,6 +24,7 @@ export default function GigQuestionAPage({
   setQuestionArr,
   question,
   setQuestion,
+  errorQArray,
 }) {
   const [errors, setErrors] = useState({});
   var schema = {
@@ -47,6 +48,10 @@ export default function GigQuestionAPage({
     console.log(errors);
   };
 
+  useEffect(() => {
+    console.log("Length:", questionArr.length);
+  }, [questionArr]);
+
   return (
     <>
       <Grid container sx={{ py: 2 }}>
@@ -63,6 +68,11 @@ export default function GigQuestionAPage({
             Enter All the question thet you want a buyer to answer before they
             can place a order.
           </Typography>
+          {errorQArray && (
+            <div className="alert alert-danger">
+              "Please Enter Atleast 1 Question"
+            </div>
+          )}
         </Grid>
 
         <Grid item container sx={{ mt: 2 }}>
@@ -90,8 +100,18 @@ export default function GigQuestionAPage({
                       borderColor: colors.textGreen,
                     },
                   },
+
+                  "& 	.MuiFormHelperText-root": {
+                    fontSize: "1rem",
+                  },
                 }}
                 fullWidth
+                error={errors.title === undefined ? false : true}
+                helperText={
+                  errors.title === undefined
+                    ? ""
+                    : "Please Enter Question Title"
+                }
                 className="bg-white"
                 id="outlined-basic"
                 label="Enter Title here"
@@ -101,9 +121,6 @@ export default function GigQuestionAPage({
                   setQuestion({ ...question, title: e.target.value });
                 }}
               />
-              {errors.title && (
-                <div className="alert alert-danger">{errors.title}</div>
-              )}
               <TextField
                 sx={{
                   "& label.Mui-focused": {
@@ -114,8 +131,18 @@ export default function GigQuestionAPage({
                       borderColor: colors.textGreen,
                     },
                   },
+
+                  "& 	.MuiFormHelperText-root": {
+                    fontSize: "1rem",
+                  },
                 }}
                 fullWidth
+                error={errors.discription === undefined ? false : true}
+                helperText={
+                  errors.discription === undefined
+                    ? ""
+                    : "Please Enter Question Title"
+                }
                 id="outlined-multiline-static"
                 label="Enter Description here"
                 className="bg-white"
@@ -126,9 +153,6 @@ export default function GigQuestionAPage({
                   setQuestion({ ...question, discription: e.target.value });
                 }}
               />
-              {errors.discription && (
-                <div className="alert alert-danger">{errors.discription}</div>
-              )}
 
               <Button
                 sx={{ mt: 2 }}

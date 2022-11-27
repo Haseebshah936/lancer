@@ -12,6 +12,7 @@ export default function AsyncAutoComplete({
   setGigSubCategory,
 
   additionalFeatures,
+  error,
   setAdditionalFeatures,
   setBasicPlan,
   setStandardPlan,
@@ -137,6 +138,13 @@ export default function AsyncAutoComplete({
       renderInput={(params) => (
         <TextField
           {...params}
+          sx={{
+            "& 	.MuiFormHelperText-root": {
+              fontSize: "1rem",
+            },
+          }}
+          error={error === undefined ? false : true}
+          helperText={error === undefined ? "" : "Please Select a Sub Category"}
           label="Select Sub Category"
           InputProps={{
             ...params.InputProps,

@@ -15,16 +15,20 @@ export default function TextFieldComp({ label, value, onChange, name, error }) {
               borderColor: colors.textGreen,
             },
           },
+          "& 	.MuiFormHelperText-root": {
+            fontSize: "1rem",
+          },
         }}
         fullWidth={true}
         id="fullWidth"
         variant="outlined"
+        error={error === undefined ? false : true}
+        helperText={error === undefined ? "" : "Please Enter Gig Title"}
         name={name}
         label={label}
         value={value}
         onChange={onChange}
       />
-      {error && <div className="alert alert-danger">{error}</div>}
     </>
   );
 }

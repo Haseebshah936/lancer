@@ -10,42 +10,24 @@ import SearchGrid from "../components/SearchResults/SearchGrid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { tablet } from "../responsive";
 import { Pagination } from "@mui/material";
-import { handleAuthRedirect } from "realm-web";
+import axios from "axios";
 
 const SearchResults = () => {
-  const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
-
-  const [serviceOptions, setServiceOptions] = useState([]);
-
-  const [sellerDetails, setSellerDetails] = useState([]);
-
-  const [budget, setBudget] = useState([]);
-
-  const [delivery, setDelivery] = useState("");
-
-  const [local, setLocal] = useState(false);
-
-  const [proServices, setProServices] = useState(false);
-
-  const [availableNow, setAvailableNow] = useState(false);
-
-  const handleAvail = (event) => {
-    setAvailableNow(event.target.checked);
-    console.log("Available");
-  };
-
-  const handlePro = (event) => {
-    setProServices(event.target.checked);
-    console.log("Pro");
-  };
-
-  const handleLocal = (event) => {
-    setLocal(event.target.checked);
-    console.log("Local");
-  };
-
+  const [data, setData] = useState([]);
   const [pagination, setPagination] = useState(1);
   const [count, setCount] = useState(1);
+
+  const handleData = (d) => {
+    setData(d);
+  };
+
+  useEffect(() => {
+    axios.get("http://localhost:3003/api/product/").then((response) => {
+      handleData(response.data);
+      console.log("Gig Data", data);
+      setCount(Math.ceil(data.length / 12));
+    });
+  }, []);
 
   useEffect(() => {
     setCount(Math.ceil(data.length / 12));
@@ -71,14 +53,7 @@ const SearchResults = () => {
           >
             <Grid container spacing={2}>
               <Grid item mobile={12} tablet={3}>
-                <Filters
-                  handleAvail={handleAvail}
-                  handlePro={handlePro}
-                  handleLocal={handleLocal}
-                  local={local}
-                  pro={proServices}
-                  avail={availableNow}
-                ></Filters>
+                <Filters data={data} setData={setData} />
               </Grid>
               <Grid
                 item

@@ -32,9 +32,20 @@ export default function GigDropDownInput({
         name={name}
         value={value}
         onChange={onChange}
-        renderInput={(params) => <TextField {...params} label={label} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label={label}
+            sx={{
+              "& 	.MuiFormHelperText-root": {
+                fontSize: "1rem",
+              },
+            }}
+            error={error === undefined ? false : true}
+            helperText={error === undefined ? "" : "Please Select a Category"}
+          />
+        )}
       />
-      {error && <div className="alert alert-danger">{error}</div>}
     </>
   );
 }

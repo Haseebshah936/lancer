@@ -12,6 +12,7 @@ import {
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 
 export default function NavigationBar({
   handleStep,
@@ -29,10 +30,25 @@ export default function NavigationBar({
   premiumPlan,
   video,
   basicPlanError,
+  questionArr,
   standardPlanError,
   premiumPlanError,
   setErrorsImages,
+  setErrorQArray,
+  errorQArray,
 }) {
+  const [gigTemplate, setGigtemplate] = useState({});
+  // useEffect(() => {
+  //   const regex = /(<([^>]+)>)/gi;
+  //   const newString =
+  //     gigIntroduction.gigDescription === null
+  //       ? ""
+  //       : gigIntroduction.gigDescription.replace(regex, "");
+  //   console.log("newString", newString);
+
+  //   setGigtemplate({ ...gigIntroduction, gigDescription: newString });
+  // }, [gigIntroduction.gigDescription]);
+
   const PackageSchema = {
     name: Joi.string().required().label("Name"),
     description: Joi.string().required().label("Description"),
@@ -43,21 +59,46 @@ export default function NavigationBar({
 
   var Gigschema = {
     gigTitle: Joi.string().required().label("Gig Title"),
-    gigCategory: Joi.required().label("Gig Category"),
-    gigSubCategory: Joi.required().label("Gig Sub Category"),
-    gigDescription: Joi.required().label("Gig Description"),
+    gigCategory: Joi.object().required().label("Gig Category"),
+    gigSubCategory: Joi.object().required().label("Gig Sub Category"),
+    gigDescription: Joi.string().required().label("Gig Description"),
     tage: Joi.array().items(Joi.string()).min(3).label("Tags"),
   };
 
-  const Mediaschema = {
-    images: Joi.array().items({ uri: Joi.string() }).min(1).label("Images"),
+  // var QuestionArraySchema = {
+  //   questionArr: Joi.array()
+  //     .items(Joi.object().required())
+  //     .label("At least one question required"),
+  // };
+
+  const validateQuestionsArray = () => {
+    // const result = Joi.validate(questionArr, QuestionArraySchema, {
+    //   abortEarly: false,
+    // });
+
+    if (questionArr.length !== 0) {
+      setErrorQArray(false);
+      handleStep(activeStep + 1);
+      return null;
+    } else {
+      setErrorQArray(true);
+    }
   };
 
   const validateGig = () => {
+    // const regex = /(<([^>]+)>)/gi;
+    // const newString =
+    //   gigIntroduction.gigDescription === null
+    //     ? ""
+    //     : gigIntroduction.gigDescription.replace(regex, "");
+    // console.log("newString", newString);
+
+    // setGigtemplate({ ...gigIntroduction, gigDescription: newString });
     const result = Joi.validate(gigIntroduction, Gigschema, {
       abortEarly: false,
     });
     if (!result.error) {
+      console.log("JOI Erors", errors);
       setErrors({});
       console.log("GIG VALIDATED ", activeStep);
       handleStep(activeStep + 1);
@@ -170,10 +211,9 @@ export default function NavigationBar({
         break;
       case 2:
         Packagevalidate();
-
         break;
       case 3:
-        handleStep(activeStep + 1);
+        validateQuestionsArray();
         break;
     }
   };

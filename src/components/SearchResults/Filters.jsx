@@ -11,14 +11,7 @@ import PortfolioCardMobile from "../PortfolioCardMobile";
 import { teamImg } from "../../assets";
 import { SortOutlined } from "@mui/icons-material";
 
-const Filters = ({
-  handleAvail,
-  handlePro,
-  handleLocal,
-  local,
-  pro,
-  avail,
-}) => {
+const Filters = ({}) => {
   const [filterdraw, setFilterdraw] = useState(false);
   const toggleFilters = (open) => (event) => {
     console.log("asdsad");
@@ -83,14 +76,7 @@ const Filters = ({
       </FilterButton>
 
       <Accordions>
-        <FilterAccordions
-          handleAvail={handleAvail}
-          handlePro={handlePro}
-          handleLocal={handleLocal}
-          local={local}
-          pro={pro}
-          avail={avail}
-        />
+        <FilterAccordions />
       </Accordions>
     </Container>
   );

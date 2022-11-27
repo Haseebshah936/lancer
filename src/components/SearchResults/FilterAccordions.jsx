@@ -76,14 +76,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-const FilterAccordions = ({
-  handleAvail,
-  handlePro,
-  handleLocal,
-  local,
-  pro,
-  avail,
-}) => {
+const FilterAccordions = ({}) => {
   const [Categories, setCategories] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
 

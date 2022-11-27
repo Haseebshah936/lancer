@@ -33,7 +33,7 @@ export default function CreateGig() {
   const { user } = useRealmContext();
   const [errors, setErrors] = useState({});
   const [errorImages, setErrorsImages] = useState(false);
-
+  const [errorQArray, setErrorQArray] = useState(false);
   const [images, setImages] = useState(attachmentData);
   const [additionalFeatures, setAdditionalFeatures] = useState([]);
   const [basicPlanError, setBasicPlanError] = useState({});
@@ -155,6 +155,7 @@ export default function CreateGig() {
             questionArr={questionArr}
             setQuestion={setQuestion}
             setQuestionArr={setQuestionArr}
+            errorQArray={errorQArray}
           />
         );
       case 4:
@@ -269,6 +270,9 @@ export default function CreateGig() {
                   premiumPlanError={premiumPlanError}
                   setErrorsImages={setErrorsImages}
                   video={video}
+                  questionArr={questionArr}
+                  setQuestion={setQuestion}
+                  setErrorQArray={setErrorQArray}
                 />
                 {handleActiveStep(activeStep)}
               </Grid>

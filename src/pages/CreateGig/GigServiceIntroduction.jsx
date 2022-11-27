@@ -26,8 +26,6 @@ export default function GigServiceIntroduction({
   standardPlan,
   premiumPlan,
 }) {
-
-
   const handleCategories = (CategoryArray) => {
     const Array = CategoryArray.map((c, index) => {
       return {
@@ -122,8 +120,15 @@ export default function GigServiceIntroduction({
             />
           </Grid>
           <Grid item laptop={1} mobile={0}></Grid>
-          <Grid item container laptop={5.5} mobile={12} mt={{ mobile: 2 }}>
+          <Grid
+            item
+            container
+            laptop={5.5}
+            mobile={12}
+            sx={{ mt: { mobile: 2, laptop: 0 } }}
+          >
             <AsyncAutoComplete
+              error={errors.gigSubCategory}
               setBasicPlan={setBasicPlan}
               setStandardPlan={setStandardPlan}
               setPremiumPlan={setPremiumPlan}
@@ -161,6 +166,11 @@ export default function GigServiceIntroduction({
               height: "150px",
             }}
           />
+          {errors.gigDescription && (
+            <div className="alert alert-danger">
+              {"Please Enter Gig Description"}
+            </div>
+          )}
         </Grid>
         <Grid item container sx={{ mt: 2 }} mobile={12}>
           <Grid item container mobile={10}>
@@ -174,8 +184,15 @@ export default function GigServiceIntroduction({
                     borderColor: colors.textGreen,
                   },
                 },
+                "& 	.MuiFormHelperText-root": {
+                  fontSize: "1rem",
+                },
               }}
               value={ctag}
+              error={errors.tage === undefined ? false : true}
+              helperText={
+                errors.tage === undefined ? "" : "Please Add at least 3 tags"
+              }
               onChange={(e) => {
                 setCTag(e.target.value);
               }}
@@ -184,9 +201,6 @@ export default function GigServiceIntroduction({
               label="Enter Custom Tag"
               variant="outlined"
             />
-            {errors.tage && (
-              <div className="alert alert-danger">{errors.tage}</div>
-            )}
           </Grid>
           <Grid item container mobile={2}>
             <Button
