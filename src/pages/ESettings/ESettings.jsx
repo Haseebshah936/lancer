@@ -8,26 +8,55 @@ import {
   Autocomplete,
   Button,
 } from "@mui/material";
+import Joi from "joi";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer/index";
 import colors from "../../utils/colors";
-import ESideBar from "../../pages/ESideBar/ESideBar";
+import FSideBar from "../../pages/FSideBar/FSideBar";
 import { CountryNAME } from "../../utils/Countries";
 import { genderOptions } from "../../utils/GigDropDownValues";
 import { humanLanguages } from "../../utils/GigDropDownValues";
 import { currenciesList } from "../../utils/currencies";
+import axios from "axios";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
 
 export default function ESettings() {
+  const { user } = useRealmContext();
   const [valuesObj, setValuesObj] = useState({
     name: "",
-    profilePic: "",
+    profilePic: user?.profilePic || "",
     country: "",
     currency: "",
     DOB: "",
     gender: "",
     language: "",
   });
+  const valueObjSchema = Joi.object({
+    name: Joi.string().required(),
+    profilePic: Joi.string().required(),
+    country: Joi.string().required(),
+    currency: Joi.string().required(),
+    DOB: Joi.string().required(),
+    gender: Joi.string().required(),
+    language: Joi.string().required(),
+  });
+  const [errorsValuesObj, setErrorsValuesObj] = useState({});
+  const valueObjValidate = () => {
+    const result = valueObjSchema.validate(valuesObj, { abortEarly: false });
+    if (!result.error) {
+      setErrorsValuesObj({});
+      return null;
+    } else {
+      const errors = {};
+      for (let item of result.error.details) {
+        errors[item.path[0]] = item.message;
+      }
+      setErrorsValuesObj(errors);
+      return errors;
+    }
+  };
   const [socialLinks, setSocialLinks] = useState({
     facebook: "",
     twitter: "",
@@ -45,7 +74,20 @@ export default function ESettings() {
   useEffect(() => {
     console.log("socialLinks", socialLinks);
   }, [socialLinks]);
+  useEffect(() => {}, [user]);
+  useEffect(() => {
+    console.log("user", user);
 
+    setValuesObj({
+      name: user?.name,
+      profilePic: user?.profilePic,
+      country: "",
+      currency: "",
+      DOB: "",
+      gender: "",
+      language: "",
+    });
+  }, []);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -53,7 +95,7 @@ export default function ESettings() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <ESideBar></ESideBar>
+              <FSideBar></FSideBar>
             </Grid>
 
             <Grid
@@ -90,10 +132,22 @@ export default function ESettings() {
                     src={
                       valuesObj.profilePic
                         ? valuesObj.profilePic
-                        : "https://cdn.dribbble.com/users/1577045/screenshots/4914645/media/028d394ffb00cb7a4b2ef9915a384fd9.png?compress=1&resize=800x600&vertical=top"
+                        : user?.profilePic
+                        ? user?.profilePic
+                        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
                     }
                   ></Box>
-
+                  <Box
+                    style={{
+                      maxWidth: { xs: 200, md: 200 },
+                    }}
+                  >
+                    {errorsValuesObj.profilePic && (
+                      <div className="alert alert-danger">
+                        {errorsValuesObj.profilePic}
+                      </div>
+                    )}
+                  </Box>
                   <Button
                     variant="contained"
                     component="label"
@@ -161,6 +215,11 @@ export default function ESettings() {
                       });
                     }}
                   />
+                  {errorsValuesObj.name && (
+                    <div className="alert alert-danger">
+                      {errorsValuesObj.name}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={11.5} mt={2}>
                   <GreenBorderTextField
@@ -192,6 +251,11 @@ export default function ESettings() {
                       <GreenBorderTextField {...params} label="Curriencies" />
                     )}
                   />
+                  {errorsValuesObj.currency && (
+                    <div className="alert alert-danger">
+                      {errorsValuesObj.currency}
+                    </div>
+                  )}
                 </Grid>
                 <Grid item xs={11.5} mt={2}>
                   <Grid
@@ -216,6 +280,11 @@ export default function ESettings() {
                           <TextField {...params} label="Gender" />
                         )}
                       />
+                      {errorsValuesObj.gender && (
+                        <div className="alert alert-danger">
+                          {errorsValuesObj.gender}
+                        </div>
+                      )}
                     </Grid>
                     <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
                       <label>DOB</label>
@@ -231,6 +300,11 @@ export default function ESettings() {
                         }}
                         style={{ width: "100%", height: "36px" }}
                       />
+                      {errorsValuesObj.DOB && (
+                        <div className="alert alert-danger">
+                          {errorsValuesObj.DOB}
+                        </div>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -257,6 +331,11 @@ export default function ESettings() {
                           <TextField {...params} label="Langauge" />
                         )}
                       />
+                      {errorsValuesObj.language && (
+                        <div className="alert alert-danger">
+                          {errorsValuesObj.language}
+                        </div>
+                      )}
                     </Grid>
                     <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
                       <Autocomplete
@@ -276,6 +355,11 @@ export default function ESettings() {
                           <TextField {...params} label="Country" />
                         )}
                       />
+                      {errorsValuesObj.country && (
+                        <div className="alert alert-danger">
+                          {errorsValuesObj.country}
+                        </div>
+                      )}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -294,7 +378,24 @@ export default function ESettings() {
                       height: "35px",
                     }}
                     onClick={() => {
-                      console.log(valuesObj);
+                      const errors = valueObjValidate();
+                      if (errors) {
+                        console.log(errors);
+                      } else {
+                        console.log(valuesObj);
+                        requestMethod
+                          .put(`user/updateProfile/${user?._id}`, {
+                            profilePic: valuesObj.profilePic,
+                            name: valuesObj.name,
+                            country: valuesObj.country,
+                            currency: valuesObj.currency,
+                            DOB: valuesObj.DOB,
+                            gender: valuesObj.gender,
+                          })
+                          .then((res) => {
+                            console.log("Profile Updated");
+                          });
+                      }
                     }}
                   >
                     Update setting

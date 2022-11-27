@@ -87,7 +87,7 @@ function Chat(props) {
 
   const getChatRoomMessages = (chatRoomId) => {
     requestMethod
-      .get(`message/${chatRoomId}`)
+      .get(`message/${chatRoomId}/${user._id}`)
       .then((res) => {
         setData(res.data);
         setNewData([]);
@@ -164,16 +164,22 @@ function Chat(props) {
     }
   };
 
-  const handleChatroomsData = (i, id, isOnline) => {
+  const handleChatroomsData = (i, id, state) => {
     let newChatRoomsData = [...chatRoomsData];
-    newChatRoomsData[i].isOnline = isOnline;
+    newChatRoomsData[i] = {
+      ...newChatRoomsData[i],
+      ...state,
+    };
     setChatRoomsData(newChatRoomsData);
     // setChatRoomsData(newChatrooms);
     setChatRooms((prev) => {
       let newChatRooms = [...prev];
       let index = newChatRooms.findIndex((chatRoom) => chatRoom.id === id);
       console.log("Chatroom Index", index);
-      newChatRooms[index].isOnline = isOnline;
+      newChatRooms[index] = {
+        ...newChatRooms[index],
+        ...state,
+      };
       return newChatRooms;
     });
   };
@@ -203,7 +209,11 @@ function Chat(props) {
       // console.log("I am in");
       setLoadingMore(true);
       requestMethod
-        .get(`message/${active.id}?skip=${data.length + newData.length}`)
+        .get(
+          `message/${active.id}/${user._id}?skip=${
+            data.length + newData.length
+          }`
+        )
         .then((res) => {
           // console.log("Load more", res.data);
           setLoadingMore(false);
@@ -223,7 +233,7 @@ function Chat(props) {
       // console.log("New Message userId", newData);
       // if (id !== user._id)
       requestMethod
-        .get(`message/messageId/${messageId}`)
+        .get(`message/${active.id}/${messageId}/${user._id}`)
         .then((res) => {
           console.log(res.data);
           setNewData((prev) => {

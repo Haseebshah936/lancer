@@ -8,12 +8,12 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import colors from "../../utils/colors";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AttachMoneyOutlined, LanguageOutlined } from "@mui/icons-material";
 import { useRealmContext } from "../../db/RealmContext";
 const UserOptions = ({ anchor, CloseList }) => {
   const open = Boolean(anchor);
-  const { logOut } = useRealmContext();
+  const { user, logOut } = useRealmContext();
   return (
     <>
       <Popover
@@ -55,7 +55,7 @@ const UserOptions = ({ anchor, CloseList }) => {
               }}
             >
               <Link
-                to="/chat/1"
+                to={`/profile/${user?._id}`}
                 style={{
                   textDecoration: "none",
                   color: colors.black,
@@ -72,7 +72,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                 </Typography>
               </Link>
               <Link
-                to="/chat/1"
+                to="/postProject"
                 style={{
                   textDecoration: "none",
                   color: colors.black,
@@ -92,7 +92,7 @@ const UserOptions = ({ anchor, CloseList }) => {
               <Divider flexItem sx={{ mb: 1 }} />
 
               <Link
-                to="/chat/1"
+                to={user?.seller ? "/f/settings" : "/e/settings"}
                 style={{
                   textDecoration: "none",
                   color: colors.black,
@@ -110,7 +110,7 @@ const UserOptions = ({ anchor, CloseList }) => {
               </Link>
 
               <Link
-                to="/chat/1"
+                to={user?.seller ? "/f/payments" : "/e/payments"}
                 style={{
                   textDecoration: "none",
                   color: colors.black,
@@ -128,7 +128,7 @@ const UserOptions = ({ anchor, CloseList }) => {
               </Link>
 
               <Divider flexItem sx={{ mb: 1 }} />
-
+              {/*
               <Link
                 to="/chat/1"
                 style={{
@@ -191,7 +191,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                     <Typography variant="h6">USD</Typography>
                   </div>
                 </ButtonBase>
-              </Link>
+              </Link>*/}
               <Link
                 to="/chat/1"
                 style={{

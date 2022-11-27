@@ -113,7 +113,7 @@ const Sidebar = () => {
           >
             <nav>
               <CustomList>
-                <Link to="/s/dashboard">
+                <Link to="/e/dashboard">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <DashboardOutlinedIcon
@@ -131,7 +131,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/s/projects">
+                <Link to="/e/projects">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <WorkOutlineOutlinedIcon
@@ -149,7 +149,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/s/favourites">
+                <Link to="/e/favourites">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <FavoriteBorderOutlinedIcon
@@ -167,7 +167,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/s/reviews">
+                <Link to="/e/reviews">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <StarOutlineOutlinedIcon
@@ -203,7 +203,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </NavLink>
 
-                <Link to="/s/payments">
+                <Link to="/e/payments">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <PaidOutlinedIcon
@@ -221,7 +221,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <Link to="/s/settings">
+                <Link to="/e/settings">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <SettingsOutlinedIcon

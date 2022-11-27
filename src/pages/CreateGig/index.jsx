@@ -196,6 +196,7 @@ export default function CreateGig() {
               },
             ],
             questions: questionArr,
+            state: "live",
             additionalFeatures: additionalFeatures,
           };
 

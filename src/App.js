@@ -96,7 +96,7 @@ function App(props) {
               <Route index element={<Dashboard />} />
             </Route> */}
             <Route path="/chat/:id" element={<Chat />} />
-            <Route path="/gig/:name" element={<CreateGig />} />
+            <Route path="/createGig" element={<CreateGig />} />
 
             <Route
               path="/becomeSeller"
@@ -109,14 +109,14 @@ function App(props) {
             />
 
             <Route path="/postProject" element={<PostProject />} />
-            <Route path="/s/dashboard" element={<EDashborad />} />
-            <Route path="/s/projects" element={<EProjects />} />
-            <Route path="/s/favourites" element={<EFavourites />} />
-            <Route path="/s/reviews" element={<EReviews />} />
-            <Route path="/s/messages" element={<EMessages />} />
-            <Route path="/s/teams" element={<ETeams />} />
-            <Route path="/s/payments" element={<EPayments />} />
-            <Route path="/s/settings" element={<ESettings />} />
+            <Route path="/e/dashboard" element={<EDashborad />} />
+            <Route path="/e/projects" element={<EProjects />} />
+            <Route path="/e/favourites" element={<EFavourites />} />
+            <Route path="/e/reviews" element={<EReviews />} />
+            <Route path="/e/messages" element={<EMessages />} />
+            <Route path="/e/teams" element={<ETeams />} />
+            <Route path="/e/payments" element={<EPayments />} />
+            <Route path="/e/settings" element={<ESettings />} />
 
             <Route path="/f/dashboard" element={<FDashboard />} />
             <Route path="/f/gigs" element={<FGigs />} />
