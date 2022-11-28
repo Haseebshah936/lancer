@@ -49,6 +49,7 @@ export function RealmAppProvider({ appId, children }) {
   // Wrap the current user's logOut function to remove the logged out user from state
   const logOut = React.useCallback(async () => {
     setCurrentUser(null);
+    localStorage.removeItem("activeProfile");
     await currentUser?.logOut();
     await realmApp.removeUser(currentUser);
   }, [realmApp, currentUser]);

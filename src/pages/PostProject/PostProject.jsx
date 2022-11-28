@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Joi, { errors } from "joi-browser";
+import Joi from "joi-browser";
 import { Box, Button, Grid, TextField, Alert, Chip } from "@mui/material";
 import TextFeildComp from "../../components/PostProject/TextFeildComp";
 import DropDownInputComp from "../../components/PostProject/DropDownInputComp";
@@ -9,8 +9,10 @@ import colors from "../../utils/colors";
 import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function PostProject() {
+  const navigate = useNavigate();
   const [uploading, setUploading] = useState("false");
   const [postProjectData, setPostProjectData] = useState({
     title: "",
@@ -39,7 +41,19 @@ export default function PostProject() {
     days: Joi.number().required().label("Days"),
   };
   const validate = () => {
-    const result = Joi.validate(postProjectData, schema, { abortEarly: false });
+    const result = Joi.validate(
+      {
+        title: postProjectData.title,
+        category: postProjectData.category,
+        pricingType: postProjectData.pricingType,
+        budget: postProjectData.budget,
+        experties: postProjectData.experties,
+        description: postProjectData.description,
+        days: postProjectData.days,
+      },
+      schema,
+      { abortEarly: false }
+    );
     if (!result.error) {
       setError({});
       return null;
@@ -350,6 +364,24 @@ export default function PostProject() {
               <p style={{ fontWeight: "bold" }} className="pt-2">
                 {"Size of the Document should be Below 10MB"}
               </p>
+              {postProjectData.files.length > 0
+                ? postProjectData.files.map((file, index) => (
+                    <p
+                      style={{ fontWeight: "bold", color: "#3498db" }}
+                      className="pt-2"
+                      onClick={() => {
+                        setPostProjectData({
+                          ...postProjectData,
+                          files: postProjectData.files.filter(
+                            (file, i) => i !== index
+                          ),
+                        });
+                      }}
+                    >
+                      {file} X
+                    </p>
+                  ))
+                : null}
             </Grid>
             <Grid item xs={11.4}>
               {uploading === "true" ? (
@@ -493,10 +525,11 @@ export default function PostProject() {
                 onClick={() => {
                   const v = validate();
                   if (v) {
+                    console.log("error");
+                  } else {
                     console.log("no error");
                     console.log(postProjectData);
-                  } else {
-                    console.log("error");
+                    navigate(-1);
                   }
                 }}
               >

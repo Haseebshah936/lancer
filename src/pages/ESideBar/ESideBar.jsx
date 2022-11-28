@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useEffect } from "react";
 import Paper from "@mui/material/Paper";
 
 import colors from "../../utils/colors";
@@ -51,7 +51,8 @@ const CustomListItem = styled(ListItem)({
 });
 
 const Sidebar = () => {
-  const { logOut } = useRealmContext();
+  const { logOut, user } = useRealmContext();
+
   return (
     <>
       <Sticky>
@@ -76,7 +77,11 @@ const Sidebar = () => {
           <Avatar
             sx={{ width: 56, height: 56 }}
             aria-label="recipe"
-            src="https://firebasestorage.googleapis.com/v0/b/web-mini-proj.appspot.com/o/unnamed.jpg?alt=media&token=ad1da1e1-7ba3-426e-9b29-4c1a263c3012"
+            src={
+              user?.profilePic
+                ? user?.profilePic
+                : "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+            }
           ></Avatar>
           <InfoWrapper>
             <p
@@ -94,7 +99,7 @@ const Sidebar = () => {
                 marginBottom: "-2px",
               }}
             >
-              Muhammad Umer,{" "}
+              {user?.name},{" "}
             </p>
             <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p>
           </InfoWrapper>

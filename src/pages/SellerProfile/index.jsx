@@ -3,6 +3,7 @@ import React from "react";
 import styled from "styled-components";
 import Footer from "../../components/Footer";
 import Header from "../../components/Header";
+import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import SellerProfileInfo from "../../components/SellerProfileInfo";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
@@ -11,7 +12,7 @@ import SellerProfileTabs from "./SellerProfileTabs";
 function index(props) {
   return (
     <Wrapper>
-      <Header />
+      <HeaderLoggedIn />
       <Container>
         <SellerProfileInfo
           style={{ minWidth: "25rem", flex: 0.2 }}

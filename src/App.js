@@ -64,6 +64,11 @@ function App(props) {
   const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
   const { chatrooms, setChatrooms } = useState([]);
   const { currentUser, user } = useRealmContext();
+  const [activeProfile, setActiveProfile] = useState(false);
+
+  useEffect(() => {
+    setActiveProfile(localStorage.getItem("activeProfile"));
+  }, [currentUser])
 
   return (
     <CustomContextProvider
@@ -76,6 +81,9 @@ function App(props) {
         setChatrooms,
         activeChatroomStatus,
         setActiveChatroomStatus,
+        activeProfile,
+        setActiveProfile,
+
       }}
     >
       <Router>
