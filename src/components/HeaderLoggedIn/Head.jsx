@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import {
   Link,
@@ -17,19 +17,36 @@ import { ReactSearchAutocomplete } from "react-search-autocomplete";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useRealmContext } from "../../db/RealmContext";
 import { useEffect } from "react";
+import { SearchOutlined } from "@mui/icons-material";
 
-const Suggest = [
-  { title: "Web Dev" },
-  { title: "App Dev" },
-  { title: "App Dev" },
-  { title: "App Dev" },
-  { title: "App Dev" },
-  { title: "App Dev" },
-  { title: "UI/UX Dev" },
-  { title: "SEO" },
-];
+const InputField = ({
+  label,
+  onChange,
+  value,
+  styles,
+  type,
+  placeholder,
+  id,
+  name,
+}) => {
+  return (
+    <CustomInput
+      id={id}
+      type={type}
+      fullWidth
+      placeholder={placeholder}
+      name={name}
+      label={label}
+      onChange={onChange}
+      value={value}
+      style={{ ...styles }}
+    />
+  );
+};
 
 function Head({
+  data,
+  setData,
   toggleDrawer,
   toggleLogin,
   toggleMessage,
@@ -40,9 +57,22 @@ function Head({
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
   const { user } = useRealmContext();
+  const [Suggest, setSuggest] = useState([]);
 
-  const handleOnSearch = (string, results) => {
-    console.log(string, results);
+  // const Suggest = [
+  //   { title: "Web Dev" },
+  //   { title: "App Dev" },
+  //   { title: "App Dev" },
+  //   { title: "App Dev" },
+  //   { title: "App Dev" },
+  //   { title: "App Dev" },
+  //   { title: "UI/UX Dev" },
+  //   { title: "SEO" },
+  // ];
+
+  const handleOnSearch = (terms, results) => {
+    setSuggest([...Suggest, { title: `Search for ${terms}` }]);
+    console.log("suggestions", Suggest);
   };
 
   const handleOnHover = (result) => {
@@ -105,19 +135,17 @@ function Head({
           </Link>
 
           <SearchContainer>
-            <ReactSearchAutocomplete
-              fuseOptions={{ keys: ["title"] }}
-              placeholder="What Services do you want?"
-              resultStringKeyName="title"
-              items={Suggest}
-              styling={{ height: "40px", fontSize: "1.5rem" }}
-              onSearch={handleOnSearch}
-              onHover={handleOnHover}
-              onSelect={handleOnSelect}
-              onFocus={handleOnFocus}
-              autoFocus
-              formatResult={formatResult}
-            />
+            <div style={{ width: "10%" }}>
+              <SearchOutlined />
+            </div>
+            <div style={{ width: "90%" }}>
+              {" "}
+              <InputField
+                styles={{ width: "100%", backgroundColor: "transparent" }}
+                placeholder={"What Services do you want?"}
+                type="text"
+              />
+            </div>
           </SearchContainer>
         </Menucontainer>
         <Wrapper>
@@ -244,12 +272,11 @@ function Head({
             },
           }}
         >
-          <SearchMobile>
+          {/* <SearchMobile>
             <ReactSearchAutocomplete
               fuseOptions={{ keys: ["title"] }}
               placeholder="What Services do you want?"
               resultStringKeyName="title"
-              items={Suggest}
               styling={{ height: "40px", fontSize: "1.5rem" }}
               onSearch={handleOnSearch}
               onHover={handleOnHover}
@@ -258,6 +285,19 @@ function Head({
               autoFocus
               formatResult={formatResult}
             />
+          </SearchMobile> */}
+          <SearchMobile>
+            <div style={{ width: "10%" }}>
+              <SearchOutlined />
+            </div>
+            <div style={{ width: "90%" }}>
+              {" "}
+              <InputField
+                styles={{ width: "100%", backgroundColor: "transparent" }}
+                placeholder={"What Services do you want?"}
+                type="text"
+              />
+            </div>
           </SearchMobile>
         </Box>
       )}
@@ -311,8 +351,8 @@ const SubContainer = styled.div`
   color: black;
   a {
     font-size: 1.2rem !important;
-    text-decoration: noimport useCurrentPath from './../../Hooks/useCurrentPath';
-ne;
+    text-decoration: none;
+
     color: black;
     margin-inline: 0.5rem;
     padding-bottom: 0.4rem;
@@ -340,8 +380,22 @@ const ButtonContainer = styled.div`
 `;
 
 const SearchContainer = styled.div`
+  box-shadow: rgba(32, 33, 36, 0.28) 0px 1px 6px 0px;
+  :hover {
+    background-color: #eee;
+  }
+  border: 1px solid #dfe1e5;
+  height: 44px;
+  border-radius: 24px;
+  color: #212121;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
   margin-left: 30px;
-  width: 55ch;
+  padding-inline: 10px;
+  width: 35ch;
   z-index: 10;
   @media (max-width: 700px) {
     display: none;
@@ -349,6 +403,26 @@ const SearchContainer = styled.div`
 `;
 
 const SearchMobile = styled.div`
-  width: 95%;
+  box-shadow: rgba(32, 33, 36, 0.28) 0px 1px 6px 0px;
+  :hover {
+    background-color: #eee;
+  }
+  border: 1px solid #dfe1e5;
+  height: 44px;
+  border-radius: 24px;
+  color: #212121;
+  font-size: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-inline: 5%;
+  justify-content: space-between;
+  padding-inline: 10px;
+  width: 100%;
   z-index: 10;
+`;
+
+const CustomInput = styled.input`
+  outline: none;
+  border: 0px;
 `;
