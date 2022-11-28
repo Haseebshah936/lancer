@@ -19,6 +19,7 @@ import { useRealmContext } from "../../db/RealmContext";
 import { useEffect } from "react";
 import { SearchOutlined } from "@mui/icons-material";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import axios from "axios";
 
 const InputField = ({
   label,
@@ -29,6 +30,7 @@ const InputField = ({
   placeholder,
   id,
   name,
+  ...props
 }) => {
   return (
     <CustomInput
@@ -41,64 +43,51 @@ const InputField = ({
       onChange={onChange}
       value={value}
       style={{ ...styles }}
+      {...props}
     />
   );
 };
 
 function Head({
-  data,
-  setData,
   toggleDrawer,
   toggleLogin,
+  setloader,
   toggleMessage,
   toggleNotification,
   toggleUserOptions,
 }) {
   // const currentPathDashboard = useCurrentPath([{ path: "/f/dashboard" }]);
+
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
   const { user, currentUser } = useRealmContext();
-  const [Suggest, setSuggest] = useState([]);
-  const { activeProfile, setActiveProfile } = useCustomContext();
+  const { activeProfile, setActiveProfile, setSearchData, terms, setTerms } =
+    useCustomContext();
 
-  // const Suggest = [
-  //   { title: "Web Dev" },
-  //   { title: "App Dev" },
-  //   { title: "App Dev" },
-  //   { title: "App Dev" },
-  //   { title: "App Dev" },
-  //   { title: "App Dev" },
-  //   { title: "UI/UX Dev" },
-  //   { title: "SEO" },
-  // ];
+  const handleSubmit = (search) => {
+    if (search) {
+      (async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3003/api/product/getProductBySearch/${search}`
+          );
 
-  const handleOnSearch = (terms, results) => {
-    setSuggest([...Suggest, { title: `Search for ${terms}` }]);
-    console.log("suggestions", Suggest);
+          console.log("Search Response", response.data);
+          setSearchData(response.data);
+          navigate("/search");
+        } catch (error) {
+          console.log(error);
+        }
+      })();
+    } else {
+      navigate("/search");
+    }
   };
 
-  const handleOnHover = (result) => {
-    console.log(result);
+  const handleChange = (e) => {
+    setTerms(e);
   };
 
-  const handleOnSelect = (item) => {
-    console.log(item);
-    navigate("/search");
-  };
-
-  const handleOnFocus = () => {
-    console.log("Focused");
-  };
-
-  const formatResult = (item) => {
-    return (
-      <>
-        <span style={{ display: "block", textAlign: "left" }}>
-          {item.title}
-        </span>
-      </>
-    );
-  };
   const location = useLocation();
   const currentPath = location.pathname;
   function matchRoutesinf() {
@@ -143,16 +132,31 @@ function Head({
 
           <SearchContainer>
             <div style={{ width: "10%" }}>
-              <SearchOutlined />
+              <IconButton onClick={() => handleSubmit(terms)}>
+                <SearchOutlined sx={{ fontSize: "2rem" }} />
+              </IconButton>
             </div>
-            <div style={{ width: "90%" }}>
+            <form
+              style={{ width: "90%" }}
+              onSubmit={(e) => {
+                handleSubmit(terms);
+                e.preventDefault();
+              }}
+            >
               {" "}
               <InputField
-                styles={{ width: "100%", backgroundColor: "transparent" }}
+                styles={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  paddingLeft: "10px",
+                }}
                 placeholder={"What Services do you want?"}
                 type="text"
+                onChange={(e) => {
+                  handleChange(e.target.value);
+                }}
               />
-            </div>
+            </form>
           </SearchContainer>
         </Menucontainer>
         <Wrapper>
@@ -302,7 +306,7 @@ function Head({
           </SearchMobile> */}
           <SearchMobile>
             <div style={{ width: "10%" }}>
-              <SearchOutlined />
+              <SearchOutlined sx={{ fontSize: "2.5rem" }} />
             </div>
             <div style={{ width: "90%" }}>
               {" "}
@@ -430,7 +434,7 @@ const SearchMobile = styled.div`
   flex-direction: row;
   align-items: center;
   margin-inline: 5%;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-inline: 10px;
   width: 100%;
   z-index: 10;

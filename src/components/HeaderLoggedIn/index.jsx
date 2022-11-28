@@ -12,8 +12,7 @@ import UserOptions from "./UserOptions";
 import { useRealmContext } from "../../db/RealmContext";
 import axios from "axios";
 
-function Header(props) {
-  const [data, setData] = useState([]);
+function Header({ setloader }) {
   const [state, setState] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [anchor2, setAnchor2] = useState(null);
@@ -98,15 +97,12 @@ function Header(props) {
         toggleMessage={toggleMessage}
         toggleNotification={toggleNotification}
         toggleUserOptions={toggleUserOptions}
-        data={data}
-        setdata={setData}
+        setloader={setloader}
       />
       <ResponsiveDrawer
         state={state}
         toggleLogin={handleToggle}
         toggleDrawer={toggleDrawer}
-        data={data}
-        setdata={setData}
       />
       <MessageList anchor={anchor} CloseList={CloseList} />
       <NotificationList anchor={anchor2} CloseList={CloseList2} />

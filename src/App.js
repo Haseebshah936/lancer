@@ -65,6 +65,8 @@ function App(props) {
   const { chatrooms, setChatrooms } = useState([]);
   const { currentUser, user } = useRealmContext();
   const [activeProfile, setActiveProfile] = useState(false);
+  const [searchData, setSearchData] = useState([]);
+  const [terms, setTerms] = useState("");
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -73,6 +75,10 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        terms,
+        setTerms,
+        searchData,
+        setSearchData,
         open,
         setOpen,
         activeChatroom,

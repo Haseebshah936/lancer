@@ -30,6 +30,8 @@ import { Link } from "react-router-dom";
 import CustomFilledButton from "../CustomFilledButton";
 import axios from "axios";
 import { PriceChange } from "@mui/icons-material";
+import helperFunction from "./helperFunction";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 const AntSwitch = styled(Switch)(({ theme }) => ({
   width: 28,
@@ -77,6 +79,7 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const FilterAccordions = ({}) => {
+  const { searchData, setSearchData, terms } = useCustomContext();
   const [Categories, setCategories] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
 
@@ -98,39 +101,7 @@ const FilterAccordions = ({}) => {
 
   const handleFilters = () => {
     console.log("I am in Filters");
-    if (Badge.length !== 0 && price.max.length === 0) {
-      axios
-        .get(
-          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${Badge}`
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
-    } else if (Badge.length === 0 && price.max.length !== 0) {
-      axios
-        .get(
-          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${price.min}/${price.max}`
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
-    } else if (Badge.length !== 0 && price.max.length !== 0) {
-      axios
-        .get(
-          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}/${Badge}/${price.min}/${price.max}`
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
-    } else {
-      axios
-        .get(
-          `http://localhost:3003/api/product/getProductBySubCategory/${SubCategoryID}`
-        )
-        .then((response) => {
-          console.log(response.data);
-        });
-    }
+    helperFunction(Badge, price, SubCategoryID, terms, setSearchData);
   };
 
   const handlePrice = (max, min) => {
