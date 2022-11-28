@@ -18,6 +18,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { useRealmContext } from "../../db/RealmContext";
 import { useEffect } from "react";
 import { SearchOutlined } from "@mui/icons-material";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 const InputField = ({
   label,
@@ -56,8 +57,9 @@ function Head({
   // const currentPathDashboard = useCurrentPath([{ path: "/f/dashboard" }]);
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
-  const { user } = useRealmContext();
+  const { user, currentUser } = useRealmContext();
   const [Suggest, setSuggest] = useState([]);
+  const { activeProfile, setActiveProfile } = useCustomContext();
 
   // const Suggest = [
   //   { title: "Web Dev" },
@@ -108,7 +110,8 @@ function Head({
       currentPath == "/f/reviews" ||
       currentPath == "/f/messages" ||
       currentPath == "/f/payments" ||
-      currentPath == "/f/settings"
+      currentPath == "/f/settings" ||
+      currentPath.includes("/profile/")
     ) {
       return true;
     } else {
@@ -117,7 +120,11 @@ function Head({
   }
   useEffect(() => {
     console.log(currentPath);
-  }, []);
+    if (activeProfile === "seller" && !matchRoutesinf()) {
+      console.log("Active Profile", activeProfile);
+      navigate("/f/dashboard");
+    }
+  }, [activeProfile, user, currentUser]);
 
   return (
     <>
@@ -153,15 +160,29 @@ function Head({
             <Link
               to={
                 user?.seller
-                  ? matchRoutesinf()
+                  ? activeProfile === "seller"
                     ? "/"
                     : "/f/dashboard"
                   : "/becomeSeller"
               }
+              onClick={() => {
+                if (user?.seller) {
+                  activeProfile !== "seller"
+                    ? localStorage.setItem(
+                        "activeProfile",
+                        JSON.stringify("seller")
+                      )
+                    : localStorage.removeItem(
+                        "activeProfile",
+                        JSON.stringify("buyerMode")
+                      );
+                  setActiveProfile(activeProfile === "seller" ? "" : "seller");
+                }
+              }}
             >
               {user?.seller ? (
                 //
-                matchRoutesinf() ? (
+                activeProfile === "seller" ? (
                   "BuyerMode"
                 ) : (
                   "SellerMode"
@@ -173,14 +194,7 @@ function Head({
               )}
             </Link>
             <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
-            {currentPath === "/f/dashboard" ||
-            currentPath == "/f/Gigs" ||
-            currentPath == "/f/projects" ||
-            currentPath == "/f/favourites" ||
-            currentPath == "/f/reviews" ||
-            currentPath == "/f/messages" ||
-            currentPath == "/f/payments" ||
-            currentPath == "/f/settings" ? null : (
+            {activeProfile === "seller" ? null : (
               <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}

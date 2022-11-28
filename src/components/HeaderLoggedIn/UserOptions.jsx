@@ -11,9 +11,11 @@ import colors from "../../utils/colors";
 import React, { useState, useEffect } from "react";
 import { AttachMoneyOutlined, LanguageOutlined } from "@mui/icons-material";
 import { useRealmContext } from "../../db/RealmContext";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 const UserOptions = ({ anchor, CloseList }) => {
   const open = Boolean(anchor);
   const { user, logOut } = useRealmContext();
+  const { activeProfile } = useCustomContext();
   return (
     <>
       <Popover
@@ -71,28 +73,30 @@ const UserOptions = ({ anchor, CloseList }) => {
                   Profile
                 </Typography>
               </Link>
-              <Link
-                to="/postProject"
-                style={{
-                  textDecoration: "none",
-                  color: colors.black,
-                }}
-              >
-                <Typography
-                  variant="h6"
-                  sx={{
-                    ":hover": { color: `${colors.textGreen} !important` },
-                    pb: 1,
+              {activeProfile !== "seller" && (
+                <Link
+                  to="/postProject"
+                  style={{
+                    textDecoration: "none",
+                    color: colors.black,
                   }}
                 >
-                  Post a Request
-                </Typography>
-              </Link>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      ":hover": { color: `${colors.textGreen} !important` },
+                      pb: 1,
+                    }}
+                  >
+                    Post a Request
+                  </Typography>
+                </Link>
+              )}
 
               <Divider flexItem sx={{ mb: 1 }} />
 
               <Link
-                to={user?.seller ? "/f/settings" : "/e/settings"}
+                to={activeProfile === "seller" ? "/f/settings" : "/e/settings"}
                 style={{
                   textDecoration: "none",
                   color: colors.black,
@@ -110,7 +114,7 @@ const UserOptions = ({ anchor, CloseList }) => {
               </Link>
 
               <Link
-                to={user?.seller ? "/f/payments" : "/e/payments"}
+                to={activeProfile === "seller" ? "/f/payments" : "/e/payments"}
                 style={{
                   textDecoration: "none",
                   color: colors.black,

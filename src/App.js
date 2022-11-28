@@ -67,8 +67,8 @@ function App(props) {
   const [activeProfile, setActiveProfile] = useState(false);
 
   useEffect(() => {
-    setActiveProfile(localStorage.getItem("activeProfile"));
-  }, [currentUser])
+    setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
+  }, [currentUser]);
 
   return (
     <CustomContextProvider
@@ -83,7 +83,6 @@ function App(props) {
         setActiveChatroomStatus,
         activeProfile,
         setActiveProfile,
-
       }}
     >
       <Router>
@@ -141,7 +140,7 @@ function App(props) {
           <Route path="/temp" element={<TempPage />} />
 
           <Route path="/" element={<Navigate to="/home" replace />} />
-          {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
+          <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>
       <ToastContainer

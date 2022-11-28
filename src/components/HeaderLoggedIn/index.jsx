@@ -19,6 +19,7 @@ function Header(props) {
   const [anchor2, setAnchor2] = useState(null);
   const [anchor3, setAnchor3] = useState(null);
   const { user } = useRealmContext();
+  console.log("User", user);
 
   const toggleMessage = (event) => {
     setAnchor(event.currentTarget);
