@@ -1,22 +1,27 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import CustomFilledButton from "../CustomFilledButton";
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { social } from "../../assets";
+import { useRealmContext } from "../../db/RealmContext";
 
 const TopSlider = () => {
+  const { user } = useRealmContext();
   return (
     <Container>
       <FirstSection>
-        <h2>Hi Noob</h2>
+        <h2>Hi {user?.name ? user?.name : ""}</h2>
         <p style={{ marginTop: "5px" }}>
           Get matched with sellers <br /> for your project
         </p>
-        <CustomFilledButton
-          title={"Post a Request"}
-          style={{ margin: "5px 0px 0px 0px" }}
-        ></CustomFilledButton>
+        <Link to="/postProject">
+          <CustomFilledButton
+            title={"Post a Request"}
+            style={{ margin: "5px 0px 0px 0px" }}
+          ></CustomFilledButton>
+        </Link>
       </FirstSection>
       <SecondSection>
         <Carousel style={{ height: "200px" }}>

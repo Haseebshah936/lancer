@@ -13,7 +13,7 @@ import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer/index";
 import colors from "../../utils/colors";
-import FSideBar from "../../pages/FSideBar/FSideBar";
+import ESideBar from "../../pages/ESideBar/ESideBar";
 import { CountryNAME } from "../../utils/Countries";
 import { genderOptions } from "../../utils/GigDropDownValues";
 import { humanLanguages } from "../../utils/GigDropDownValues";
@@ -95,7 +95,7 @@ export default function ESettings() {
         <Grid item xs={12} md={11}>
           <Grid container display={"flex"} justifyContent={"center"}>
             <Grid item xs={11} sm={2.7}>
-              <FSideBar></FSideBar>
+              <ESideBar></ESideBar>
             </Grid>
 
             <Grid

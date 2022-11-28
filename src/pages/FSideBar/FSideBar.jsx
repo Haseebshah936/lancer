@@ -76,7 +76,11 @@ const Sidebar = () => {
           <Avatar
             sx={{ width: 56, height: 56 }}
             aria-label="recipe"
-            src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+            src={
+              user?.profilePic
+                ? user?.profilePic
+                : "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+            }
           ></Avatar>
           <InfoWrapper>
             <p
@@ -94,7 +98,7 @@ const Sidebar = () => {
                 marginBottom: "-2px",
               }}
             >
-              Muhammad Umer,{" "}
+              {user?.name},{" "}
             </p>
             <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p>
           </InfoWrapper>

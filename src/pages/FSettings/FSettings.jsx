@@ -394,6 +394,7 @@ export default function FSettings() {
                           })
                           .then((res) => {
                             console.log("Profile Updated");
+                            window.location.reload(false);
                           });
                       }
                     }}

@@ -153,7 +153,7 @@ function Head({
             currentPath == "/f/messages" ||
             currentPath == "/f/payments" ||
             currentPath == "/f/settings" ? null : (
-              <NavLink to="/f/dashboard">Dashboard</NavLink>
+              <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
           </SubContainer>
