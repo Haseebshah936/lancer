@@ -31,6 +31,9 @@ function SellerProfile(props) {
   const [productsData, setProductsData] = useState([]);
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
+  const [loadMore, setLoadMore] = useState(true);
+  const [isSame, setIsSame] = useState(false);
+  const [showProductsTab, setShowProductsTab] = useState(false);
   // eslint-disable-next-line no-restricted-globals
   console.log("Query Params", queryParams);
   const getUserData = async () => {
@@ -40,24 +43,70 @@ function SellerProfile(props) {
 
   const getProducts = async () => {
     const response = await requestMethod.get(
-      `/product/getProductsBySellerId/${queryParams.id}`
+      `/product/byUserId/${queryParams.id}`
     );
     return response.data;
   };
-  const getReviews = async () => {
+  const getSellerReviews = async (skip) => {
     const response = await requestMethod.get(
-      `review/sellerReviews/${queryParams.id}`
+      `review/sellerReviews/${queryParams.id}?skip=${skip}`
+    );
+    return response.data;
+  };
+  const getBuyerReviews = async (skip) => {
+    console.log("Buyer Reviews", skip);
+    const response = await requestMethod.get(
+      `review/buyerReviews/${queryParams.id}?skip=${skip}`
     );
     return response.data;
   };
 
+  const handleLoadMoreReviews = async (skip) => {
+    if (
+      (userData.seller && activeProfile === "seller") ||
+      (activeProfile === "seller" && queryParams.id === user?._id)
+    ) {
+      console.log("Seller Reviews", skip);
+      setLoadingReviews(true);
+      getSellerReviews(skip)
+        .then((data) => {
+          if (data.length === 0) setLoadMore(false);
+          setReviews((prev) => [...prev, ...data]);
+          setLoadingReviews(false);
+        })
+        .catch((err) => {
+          handleError(err);
+          setLoadingReviews(false);
+        });
+    } else {
+      setLoadingReviews(true);
+      getBuyerReviews(skip)
+        .then((data) => {
+          if (data.length === 0) setLoadMore(false);
+          setReviews((prev) => [...prev, ...data]);
+          setLoadingReviews(false);
+        })
+        .catch((err) => {
+          handleError(err);
+          setLoadingReviews(false);
+        });
+    }
+  };
+
   useEffect(() => {
     setUserData([]);
+    setIsSame(false);
+    setLoadMore(true);
+    setReviews([]);
+    setProductsData([]);
+    setLoadingReviews(true);
+    setLoadingProductsData(true);
   }, []);
 
   useEffect(() => {
     if (user && queryParams.id === user?._id) {
       setUserData(user);
+      setIsSame(true);
       if (user.seller) {
         setAboutSeller({
           educationalBackground: user.seller.education,
@@ -93,7 +142,7 @@ function SellerProfile(props) {
     console.log("User Data", userData);
     if (!userData) return;
     if (
-      user.seller &&
+      user?.seller &&
       queryParams.id === user?._id &&
       activeProfile === "seller"
     ) {
@@ -110,8 +159,9 @@ function SellerProfile(props) {
           handleError(err);
         });
       setLoadingReviews(true);
-      getReviews()
+      getSellerReviews()
         .then((data) => {
+          if (data.length === 0) setLoadMore(false);
           console.log("Reviews", data);
           setReviews(data);
           setLoadingReviews(false);
@@ -132,7 +182,43 @@ function SellerProfile(props) {
           console.log("Error", err);
           handleError(err);
         });
+      setLoadingReviews(true);
+      getSellerReviews()
+        .then((data) => {
+          if (data.length === 0) setLoadMore(false);
+          console.log("Reviews", data);
+          setReviews(data);
+          setLoadingReviews(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
+    } else {
+      setLoadingReviews(true);
+      getBuyerReviews()
+        .then((data) => {
+          if (data.length === 0) setLoadMore(false);
+          console.log("Reviews", data);
+          setReviews(data);
+          setLoadingReviews(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
     }
+    setShowProductsTab(
+      user?._id === queryParams.id
+        ? activeProfile === "seller"
+          ? true
+          : false
+        : userData.seller
+        ? activeProfile === "seller"
+          ? false
+          : true
+        : false
+    );
   }, [userData]);
 
   return (
@@ -142,17 +228,7 @@ function SellerProfile(props) {
         {userData && (
           <SellerProfileInfo
             style={{ minWidth: "25rem", flex: 0.2 }}
-            showExtraInfo={
-              user?._id === queryParams.id
-                ? activeProfile === "seller"
-                  ? true
-                  : false
-                : userData.seller
-                ? activeProfile === "seller"
-                  ? false
-                  : true
-                : false
-            }
+            isSame={isSame}
             languages={[""]}
             city=""
             country="Paksitan"
@@ -177,19 +253,13 @@ function SellerProfile(props) {
         <SellerProfileTabsWrapper>
           {userData && (
             <SellerProfileTabs
-              showProductsTab={
-                user?._id === queryParams.id
-                  ? activeProfile === "seller"
-                    ? true
-                    : false
-                  : userData?.seller
-                  ? true
-                  : false
-              }
+              showProductsTab={showProductsTab}
               products={productsData}
               loadingProductsData={loadingProductsData}
               reviews={reviews}
               loadingReviews={loadingReviews}
+              getMoreReviews={handleLoadMoreReviews}
+              loadMore={loadMore}
               {...aboutSeller}
             />
           )}
