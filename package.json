@@ -55,7 +55,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "cleanBuild": "rimraf ./build/*",
-    "start": "PORT=3000 && react-app-rewired start",
+    "start": "react-scripts start",
     "build": "GENERATE_SOURCEMAP=false && react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject"

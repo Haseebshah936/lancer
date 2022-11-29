@@ -29,6 +29,9 @@ import { Years } from "../../utils/Years";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
+import { humanLanguages } from "../../utils/GigDropDownValues";
+import { languageProficiency } from "../../utils/GigDropDownValues";
+import { Chip } from "@mui/material";
 
 export default function PInfoPersonalDetailsAndSkills() {
   const { user, setUser } = useRealmContext();
@@ -38,20 +41,32 @@ export default function PInfoPersonalDetailsAndSkills() {
   const [mySkillPercentage, setMySkillPercentage] = React.useState("");
   // const [navigationChecker]
   const navigate = useNavigate();
+  const [languageVar, setLanguageVar] = React.useState({
+    language: "",
+    proficiency: "",
+  });
+  const [languageArray, setLanguageArray] = React.useState([]);
+  const [languageError, setLanguageError] = React.useState({});
+  const languageSchema = joi.object({
+    language: joi.string().required(),
+    proficiency: joi.string().required(),
+  });
+  const validateLanguage = () => {
+    const result = languageSchema.validate(languageVar, { abortEarly: false });
+    if (!result.error) {
+      setLanguageError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setLanguageError(errors);
+    return errors;
+  };
+
   const [aboutError, setAboutError] = React.useState({});
   const ValidateAbout = () => {
-    // const result = valueObjSchema.validate(valuesObj, { abortEarly: false });
-    // if (!result.error) {
-    //   setErrorsValuesObj({});
-    //   return null;
-    // } else {
-    //   const errors = {};
-    //   for (let item of result.error.details) {
-    //     errors[item.path[0]] = item.message;
-    //   }
-    //   setErrorsValuesObj(errors);
-    //   return errors;
-    // }
     const result = aboutSchema.validate(
       {
         about: about,
@@ -418,6 +433,123 @@ export default function PInfoPersonalDetailsAndSkills() {
                   </Grid>
                 </>
               </div>
+              {/* Add Lanuaage */}
+              <Grid container mt={2} disply={"flex"} justifyContent={"center"}>
+                {/* Title */}
+                <Grid item xs={12}>
+                  <Grid container display={"flex"} justifyContent={"center"}>
+                    <Grid item xs={11} sm={10.5}>
+                      <div
+                        className="ms-2 me-1 mt-2 mb-2 rounded"
+                        style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                      >
+                        <HeaderP className="pt-3 ps-3 pb-3">Language</HeaderP>
+                      </div>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <Grid item xs={11} sm={10.5}>
+                    <Grid
+                      conatiner
+                      display={"flex"}
+                      justifyContent={{ xs: "center", sm: "space-between" }}
+                      flexDirection={{ xs: "column", sm: "row" }}
+                    >
+                      <Grid item xs={12} sm={5.5} mt={2}>
+                        <Autocomplete
+                          fullWidth
+                          disablePortal
+                          id="combo-box-demo"
+                          options={humanLanguages}
+                          getOptionLabel={(option) => option.name}
+                          onChange={(event, newValue) => {
+                            setLanguageVar({
+                              ...languageVar,
+                              language: newValue.name,
+                            });
+                            console.log(languageVar);
+                          }}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Langauge" />
+                          )}
+                        />
+                        {languageError.language ? (
+                          <div className="alert alert-danger mt-2">
+                            {languageError?.language}
+                          </div>
+                        ) : null}
+                      </Grid>
+                      <Grid item xs={12} sm={5.5} mt={2}>
+                        <Autocomplete
+                          fullWidth
+                          disablePortal
+                          id="combo-box-demo"
+                          options={languageProficiency}
+                          getOptionLabel={(option) => option.name}
+                          onChange={(event, newValue) => {
+                            setLanguageVar({
+                              ...languageVar,
+                              proficiency: newValue.name,
+                            });
+                            console.log(languageVar);
+                          }}
+                          renderInput={(params) => (
+                            <TextField {...params} label="Proficiency" />
+                          )}
+                        />
+                        {languageError.proficiency ? (
+                          <div className="alert alert-danger mt-2">
+                            {languageError?.proficiency}
+                          </div>
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={11}
+                    sm={10.5}
+                    display={"flex"}
+                    justifyContent={"center"}
+                  >
+                    {languageArray.map((item, index) => (
+                      <Chip
+                        label={item.language}
+                        onDelete={() => {}}
+                        className="m-2"
+                        mt={2}
+                      ></Chip>
+                    ))}
+                  </Grid>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  display={"flex"}
+                  justifyContent={"center"}
+                  mt={2}
+                >
+                  <Button
+                    variant="contained"
+                    style={{
+                      backgroundColor: colors.becomePartnerGreen,
+                      color: "white",
+                    }}
+                    onClick={() => {
+                      const res = validateLanguage();
+                      if (res) {
+                        console.log("Errorrs", res);
+                      } else {
+                        console.log(languageVar);
+                        setLanguageArray([...languageArray, languageVar]);
+                      }
+                    }}
+                  >
+                    Add Language
+                  </Button>
+                </Grid>
+              </Grid>
 
               {/* Enter Skills Box Starts */}
               <div className="mt-4">
