@@ -28,6 +28,7 @@ import Footer from "./../../components/Footer/index";
 import { Years } from "../../utils/Years";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
 
 export default function PInfoPersonalDetailsAndSkills() {
   const { user, setUser } = useRealmContext();
@@ -37,7 +38,38 @@ export default function PInfoPersonalDetailsAndSkills() {
   const [mySkillPercentage, setMySkillPercentage] = React.useState("");
   // const [navigationChecker]
   const navigate = useNavigate();
-
+  const [aboutError, setAboutError] = React.useState({});
+  const ValidateAbout = () => {
+    // const result = valueObjSchema.validate(valuesObj, { abortEarly: false });
+    // if (!result.error) {
+    //   setErrorsValuesObj({});
+    //   return null;
+    // } else {
+    //   const errors = {};
+    //   for (let item of result.error.details) {
+    //     errors[item.path[0]] = item.message;
+    //   }
+    //   setErrorsValuesObj(errors);
+    //   return errors;
+    // }
+    const result = aboutSchema.validate(
+      {
+        about: about,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setAboutError({});
+      return null;
+    } else {
+      const errors = {};
+      for (let item of result.error.details) {
+        errors[item.path[0]] = item.message;
+      }
+      setAboutError(errors);
+      return errors;
+    }
+  };
   const handleChange = (event) => {
     setGender(event.target.value);
   };
@@ -70,27 +102,66 @@ export default function PInfoPersonalDetailsAndSkills() {
     };
     console.log(sData);
     console.log(user);
-    axios
-      .put(`http://localhost:3003/api/user/makeSeller/${user._id}`, sData)
-      .then((res) => {
-        console.log(res);
-        setUser(res.data);
-        console.log("success seller created");
-        navigate(-1);
-      })
-      .catch((err) => {
-        console.log("unable to make seller");
-      });
+
+    ValidateAbout();
+    if (aboutError) {
+      console.log("About Error", aboutError);
+    } else {
+      // requestMethod
+      //   .post("users/about", sData)
+      //   .then((res) => {
+      //     console.log(res.data);
+      //     // navigate("/pinfo/education");
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      console.log("No error");
+    }
+  };
+  const [skillError, setSkillError] = React.useState({});
+  const skillSchema = joi.object({
+    skillName: joi.string().required(),
+    skillPercentage: joi.number().min(1).max(100).required(),
+  });
+  const ValidateSkill = () => {
+    const result = skillSchema.validate(
+      {
+        skillName: mySkillName,
+        skillPercentage: mySkillPercentage,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setSkillError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setSkillError(errors);
+    return errors;
   };
 
   const addMySkillHandeler = () => {
-    let temp = [...mySkills];
-    temp.push({ name: mySkillName, percentage: mySkillPercentage });
-    setMySkill(temp);
-    setMySkillName("");
-    setMySkillPercentage("");
-    console.log(temp);
+    const res = ValidateSkill();
+    if (res) {
+      console.log(skillError);
+    } else {
+      setMySkill([
+        ...mySkills,
+        {
+          name: mySkillName,
+          percentage: mySkillPercentage,
+        },
+      ]);
+      setMySkillName("");
+      setMySkillPercentage("");
+      console.log("No error");
+    }
   };
+
   const removeMySkillHandeler = (name) => {
     let temp = [...mySkills];
     temp = temp.filter((item) => item.name !== name);
@@ -137,6 +208,35 @@ export default function PInfoPersonalDetailsAndSkills() {
   const [eduStartingDate, setEduStartingDate] = React.useState(null);
   const [eduEndingDate, setEduEndingDate] = React.useState(null);
 
+  const [jobExpError, setJobExpError] = React.useState({});
+  const jonExpSchema = joi.object({
+    instituteTitle: joi.string().required(),
+    startingDate: joi.string().required(),
+    endingDate: joi.string().required(),
+    jobTitle: joi.string().required(),
+  });
+  const ValidateJobExp = () => {
+    const result = jonExpSchema.validate(
+      {
+        instituteTitle: jobExperienceVar.instituteTitle,
+        startingDate: jobExperienceVar.startingDate,
+        endingDate: jobExperienceVar.endingDate,
+        jobTitle: jobExperienceVar.jobTitle,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setJobExpError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setJobExpError(errors);
+    return errors;
+  };
+
   React.useEffect(() => {
     console.log(jobExperienceVar);
   }, [jobExperienceVar]);
@@ -181,6 +281,68 @@ export default function PInfoPersonalDetailsAndSkills() {
       educationArr.filter((item) => item.educationTitle !== title)
     );
   };
+  const aboutSchema = joi.object({
+    about: joi.string().required(),
+  });
+  const [educationError, setEducationError] = React.useState({});
+  const educationSchema = joi.object({
+    instituteTitle: joi.string().required(),
+    startingDate: joi.string().required(),
+    endingDate: joi.string().required(),
+    educationTitle: joi.string().required(),
+  });
+  const ValidateEducation = () => {
+    const result = educationSchema.validate(
+      {
+        instituteTitle: eduVar.instituteTitle,
+        startingDate: eduVar.startingDate,
+        endingDate: eduVar.endingDate,
+        educationTitle: eduVar.educationTitle,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setEducationError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setEducationError(errors);
+    return errors;
+  };
+  const [achivementError, setAchivementError] = React.useState({});
+  const achivementSchema = joi.object({
+    achivementTitle: joi.string().required(),
+    startingDate: joi.string().required(),
+    endingDate: joi.string().required(),
+    description: joi.string().required(),
+  });
+  const ValidateAchivement = () => {
+    const result = achivementSchema.validate(
+      {
+        achivementTitle: achivementVar.achivementTitle,
+        startingDate: achivementVar.startingDate,
+        endingDate: achivementVar.endingDate,
+        description: achivementVar.achivementDiscription,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setAchivementError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setAchivementError(errors);
+    return errors;
+  };
+  React.useEffect(() => {
+    setAboutError(aboutError);
+  }, [aboutError]);
 
   return (
     <div style={{ width: "100vw", display: "flex", justifyContent: "center" }}>
@@ -199,7 +361,17 @@ export default function PInfoPersonalDetailsAndSkills() {
           <MainDiv className="pt-3 rounded">
             {/* Header Start */}
             <div className=" pb-3 rounded">
-              <Grid constainer display={"flex"} justifyContent={"center"}>
+              <Grid container display={"flex"} justifyContent={"center"}>
+                <Grid item xs={11} sm={10.5}>
+                  <div
+                    className="ms-2 me-1 mt-2 mb-2 rounded"
+                    style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                  >
+                    <HeaderP className="pt-3 ps-3 pb-3">About You</HeaderP>
+                  </div>
+                </Grid>
+              </Grid>
+              {/* <Grid constainer display={"flex"} justifyContent={"center"}>
                 <Grid item xs={12} sm={10.65}>
                   <div className="mt-2 border p-2 rounded d-block">
                     <HeaderDiv>
@@ -210,7 +382,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                     </HeaderDiv>
                   </div>
                 </Grid>
-              </Grid>
+              </Grid> */}
               {/* Header End */}
               {/* Personal Details Start */}
               <div className="d-flex justify-content-center">
@@ -231,6 +403,16 @@ export default function PInfoPersonalDetailsAndSkills() {
                           }}
                           // defaultValue="Description"
                         />
+                        {/* {about.length == 0 ? (
+                          <div className="alert alert-danger mt-2">
+                            {"About is required it is necessary"}
+                          </div>
+                        ) : null} */}
+                        {aboutError.about ? (
+                          <div className="alert alert-danger mt-2">
+                            {aboutError?.about}
+                          </div>
+                        ) : null}
                       </div>
                     </Grid>
                   </Grid>
@@ -240,15 +422,17 @@ export default function PInfoPersonalDetailsAndSkills() {
               {/* Enter Skills Box Starts */}
               <div className="mt-4">
                 <div className="block"></div>
-                <Grid container display={"flex"} justifyContent={"Center"}>
-                  <Grid item xs={12} sm={10.65}>
-                    <HeaderDiv>
-                      <div className="ps-2 d-flex flex-row align-items-center">
-                        <ActivePageMarker></ActivePageMarker>
-                        <HeaderP className="pt-1">My Skills</HeaderP>
-                      </div>
-                    </HeaderDiv>
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <Grid item xs={11} sm={10.5}>
+                    <div
+                      className="ms-2 me-1 mt-2 mb-2 rounded"
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                    >
+                      <HeaderP className="pt-3 ps-3 pb-3">My Skills</HeaderP>
+                    </div>
                   </Grid>
+                </Grid>
+                <Grid container display={"flex"} justifyContent={"Center"}>
                   {/* Adding the SKills */}
                   <Grid item xs={12} sm={10.65}>
                     <Grid container>
@@ -305,6 +489,23 @@ export default function PInfoPersonalDetailsAndSkills() {
                           add skill
                         </Button>
                       </Grid>
+                      <Box
+                        display={"flex"}
+                        justifyContent={"center"}
+                        flexDirection={{ xs: "column", sm: "row" }}
+                        className="ms-5 ms-sm-0"
+                      >
+                        {skillError.skillName ? (
+                          <div className="alert alert-danger mt-2 ms-5 ms-sm-2 me-sm-5 ">
+                            {skillError?.skillName}
+                          </div>
+                        ) : null}
+                        {skillError.skillName ? (
+                          <div className="alert alert-danger ms-5 mt-2 ms-sm-2 ms-sm-5">
+                            {skillError?.skillPercentage}
+                          </div>
+                        ) : null}
+                      </Box>
                     </Grid>
                   </Grid>
                   {/* SHOWING THE ADDED sKILLS */}
@@ -375,12 +576,6 @@ export default function PInfoPersonalDetailsAndSkills() {
               in similique tempore illum su
             </p>
             {/* Header Start */}
-            <div
-              style={{ width: "100%", height: "1px", overflow: "hidden" }}
-              className="d-flex justify-content-center "
-            ></div>
-            <Grid container display={"flex"} justifyContent={"center"}></Grid>
-
             {/* Header End */}
             <Box
               sx={{ width: "90%", marginLeft: "5vw" }}
@@ -390,106 +585,132 @@ export default function PInfoPersonalDetailsAndSkills() {
                 container
                 columnSpacing={{ xs: 1, sm: 2, md: 3 }}
                 display={"flex"}
-                justifyContent={"space-around"}
+                justifyContent={"center"}
               >
-                <Grid item xs={11}>
-                  <HeaderDiv>
-                    <div className="ps-2 d-flex flex-row align-items-center">
-                      <ActivePageMarker></ActivePageMarker>
-                      <HeaderP className="pt-1">Add Your Experience</HeaderP>
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <Grid item xs={11.4} sm={9.65}>
+                    <div
+                      className="me-3 mt-2 mb-2 rounded"
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                    >
+                      <HeaderP className="pt-3 ps-3 pb-3">
+                        Add your Experience
+                      </HeaderP>
                     </div>
-                  </HeaderDiv>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  className="d-flex justify-content-center mt-2"
-                >
-                  <TextField
-                    id="outlined-basic"
-                    label="Company Title"
-                    variant="outlined"
-                    sx={{ width: 270 }}
-                    className="mt-3"
-                    value={jobExperienceVar.companyTitle}
-                    onChange={(e) => {
-                      setJobExperienceVar({
-                        ...jobExperienceVar,
-                        companyTitle: e.target.value,
-                      });
-                      console.log(jobExperienceVar.companyTitle);
-                    }}
-                  />
+                <Grid container className="d-flex justify-content-center">
+                  <Grid item xs={11} sm={9.7}>
+                    <Grid
+                      conatiner
+                      display={"flex"}
+                      flexDirection={{ xs: "column", sm: "row" }}
+                      justifyContent={"space-between"}
+                    >
+                      <Grid item xs={12} sm={5} className="mt-2">
+                        <TextField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Company Title"
+                          variant="outlined"
+                          className="mt-3"
+                          value={jobExperienceVar.instituteTitle}
+                          onChange={(e) => {
+                            setJobExperienceVar({
+                              ...jobExperienceVar,
+                              instituteTitle: e.target.value,
+                            });
+                            console.log(jobExperienceVar.instituteTitle);
+                          }}
+                        />
+                        {jobExpError.instituteTitle ? (
+                          <div className="alert alert-danger mt-2">
+                            {jobExpError?.instituteTitle}
+                          </div>
+                        ) : null}
+                      </Grid>
+                      <Grid item xs={12} sm={5} className="mt-2">
+                        <Autocomplete
+                          fullWidth
+                          disablePortal
+                          id="combo-box-demo"
+                          options={Years}
+                          value={jobExperienceVar.startingDate}
+                          onChange={(event, newvalue) =>
+                            setJobStartingDate(newvalue)
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Starting Year"
+                              className="mt-3"
+                            />
+                          )}
+                        />
+                        {jobExpError.startingDate ? (
+                          <div className="alert alert-danger mt-2">
+                            {jobExpError?.startingDate}
+                          </div>
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  className="d-flex justify-content-center mt-2"
-                >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={jobExperienceVar.startingDate}
-                    onChange={(event, newvalue) => setJobStartingDate(newvalue)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Starting Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  className="d-flex justify-content-center mt-2"
-                >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={jobExperienceVar.endingDate}
-                    onChange={(event, newvalue) => setJobEndingDate(newvalue)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Ending Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={6}
-                  className="d-flex justify-content-center mt-2"
-                >
-                  <TextField
-                    id="outlined-basic"
-                    label="Your Job Title"
-                    variant="outlined"
-                    sx={{ width: 270 }}
-                    className="mt-3"
-                    value={jobExperienceVar.jobTitle}
-                    onChange={(e) => {
-                      setJobExperienceVar({
-                        ...jobExperienceVar,
-                        jobTitle: e.target.value,
-                      });
-                    }}
-                  />
+                <Grid container className="d-flex justify-content-center">
+                  <Grid item xs={11} sm={9.7}>
+                    <Grid
+                      conatiner
+                      display={"flex"}
+                      flexDirection={{ xs: "column", sm: "row" }}
+                      justifyContent={"space-between"}
+                    >
+                      <Grid item xs={12} sm={5} className="mt-2">
+                        <Autocomplete
+                          fullWidth
+                          disablePortal
+                          id="combo-box-demo"
+                          options={Years}
+                          value={jobExperienceVar.endingDate}
+                          onChange={(event, newvalue) =>
+                            setJobEndingDate(newvalue)
+                          }
+                          renderInput={(params) => (
+                            <TextField
+                              {...params}
+                              label="Ending Year"
+                              className="mt-3"
+                            />
+                          )}
+                        />
+                        {jobExpError.endingDate ? (
+                          <div className="alert alert-danger mt-2">
+                            {jobExpError?.endingDate}
+                          </div>
+                        ) : null}
+                      </Grid>
+                      <Grid item xs={12} sm={5} className="mt-2">
+                        <TextField
+                          fullWidth
+                          id="outlined-basic"
+                          label="Your Job Title"
+                          variant="outlined"
+                          className="mt-3"
+                          value={jobExperienceVar.jobTitle}
+                          onChange={(e) => {
+                            setJobExperienceVar({
+                              ...jobExperienceVar,
+                              jobTitle: e.target.value,
+                            });
+                          }}
+                        />
+                        {jobExpError.jobTitle ? (
+                          <div className="alert alert-danger mt-2">
+                            {jobExpError?.jobTitle}
+                          </div>
+                        ) : null}
+                      </Grid>
+                    </Grid>
+                  </Grid>
                 </Grid>
                 <Grid
                   item
@@ -504,7 +725,19 @@ export default function PInfoPersonalDetailsAndSkills() {
                       width: { xs: "90%", sm: "25%", md: "25%", lg: "25%" },
                     }}
                     onClick={() => {
-                      setJobExpArr([...jobExpArr, jobExperienceVar]);
+                      const res = ValidateJobExp();
+                      if (res) {
+                        console.log("error");
+                        console.log(jobExpError);
+                      } else {
+                        setJobExpArr([...jobExpArr, jobExperienceVar]);
+                        setJobExperienceVar({
+                          instituteTitle: "",
+                          startingDate: "",
+                          endingDate: "",
+                          jobTitle: "",
+                        });
+                      }
                     }}
                   >
                     Add Experience
@@ -518,9 +751,8 @@ export default function PInfoPersonalDetailsAndSkills() {
                     >
                       <img src={menu} alt="" width={20} />
                       <h4 className="d-flex align-items-center">
-                        {jobExperienceVar.companyTitle} ({" "}
-                        {jobExperienceVar.startingDate} -{" "}
-                        {jobExperienceVar.endingDate})
+                        {jb.instituteTitle} ( {jb.startingDate} -{" "}
+                        {jb.endingDate})
                       </h4>
                       <Button
                         variant="contained"
@@ -558,13 +790,22 @@ export default function PInfoPersonalDetailsAndSkills() {
                 display={"flex"}
                 justifyContent={"center"}
               >
-                <Grid item xs={11} my={1}>
-                  <HeaderDiv>
-                    <div className="ps-2 d-flex flex-row align-items-center">
-                      <ActivePageMarker></ActivePageMarker>
-                      <HeaderP className="pt-1">Add Your Education</HeaderP>
+                <Grid
+                  container
+                  display={"flex"}
+                  justifyContent={"center"}
+                  mt={1}
+                >
+                  <Grid item xs={11.4} sm={9.65}>
+                    <div
+                      className="me-3 mt-2 mb-2 rounded"
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                    >
+                      <HeaderP className="pt-3 ps-3 pb-3">
+                        Add your Education
+                      </HeaderP>
                     </div>
-                  </HeaderDiv>
+                  </Grid>
                 </Grid>
                 <Grid
                   item
@@ -573,21 +814,28 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <TextField
-                    id="outlined-basic"
-                    label="Institute Title"
-                    variant="outlined"
-                    sx={{ width: 270 }}
-                    className="mt-3"
-                    value={eduVar.instituteTitle}
-                    onChange={(e) => {
-                      setEduVar({
-                        ...eduVar,
-                        instituteTitle: e.target.value,
-                      });
-                      console.log(eduVar.instituteTitle);
-                    }}
-                  />
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Institute Title"
+                      variant="outlined"
+                      sx={{ width: 270 }}
+                      className="mt-3"
+                      value={eduVar.instituteTitle}
+                      onChange={(e) => {
+                        setEduVar({
+                          ...eduVar,
+                          instituteTitle: e.target.value,
+                        });
+                        console.log(eduVar.instituteTitle);
+                      }}
+                    />
+                    {educationError.instituteTitle ? (
+                      <div className="alert alert-danger mt-2">
+                        {educationError?.instituteTitle}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -596,21 +844,30 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={eduVar.startingDate}
-                    onChange={(event, newvalue) => setEduStartingDate(newvalue)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Starting Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={Years}
+                      sx={{ width: 270 }}
+                      value={eduVar.startingDate}
+                      onChange={(event, newvalue) =>
+                        setEduStartingDate(newvalue)
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Starting Year"
+                          className="mt-3"
+                        />
+                      )}
+                    />
+                    {educationError.startingDate ? (
+                      <div className="alert alert-danger mt-2">
+                        {educationError?.startingDate}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -619,21 +876,28 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={eduVar.endingDate}
-                    onChange={(event, newvalue) => setEduEndingDate(newvalue)}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Ending Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={Years}
+                      sx={{ width: 270 }}
+                      value={eduVar.endingDate}
+                      onChange={(event, newvalue) => setEduEndingDate(newvalue)}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Ending Year"
+                          className="mt-3"
+                        />
+                      )}
+                    />
+                    {educationError.endingDate ? (
+                      <div className="alert alert-danger mt-2">
+                        {educationError?.endingDate}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -642,21 +906,28 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <TextField
-                    id="outlined-basic"
-                    label="Education Title"
-                    variant="outlined"
-                    sx={{ width: 270 }}
-                    className="mt-3"
-                    value={eduVar.educationTitle}
-                    onChange={(e) => {
-                      setEduVar({
-                        ...eduVar,
-                        educationTitle: e.target.value,
-                      });
-                      console.log(eduVar.educationTitle);
-                    }}
-                  />
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <TextField
+                      id="outlined-basic"
+                      label="Education Title"
+                      variant="outlined"
+                      sx={{ width: 270 }}
+                      className="mt-3"
+                      value={eduVar.educationTitle}
+                      onChange={(e) => {
+                        setEduVar({
+                          ...eduVar,
+                          educationTitle: e.target.value,
+                        });
+                        console.log(eduVar.educationTitle);
+                      }}
+                    />
+                    {educationError.educationTitle ? (
+                      <div className="alert alert-danger mt-2">
+                        {educationError?.educationTitle}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -671,7 +942,19 @@ export default function PInfoPersonalDetailsAndSkills() {
                     }}
                     style={{ backgroundColor: colors.becomePartnerGreen }}
                     onClick={() => {
-                      setEducationArr([...educationArr, eduVar]);
+                      const res = ValidateEducation();
+                      if (res) {
+                        console.log("error");
+                        console.log(educationError);
+                      } else {
+                        setEducationArr([...educationArr, eduVar]);
+                        setEduVar({
+                          instituteTitle: "",
+                          startingDate: "",
+                          endingDate: "",
+                          educationTitle: "",
+                        });
+                      }
                     }}
                   >
                     Add Education
@@ -716,25 +999,33 @@ export default function PInfoPersonalDetailsAndSkills() {
                 display={"flex"}
                 justifyContent={"center"}
               >
-                <Grid item xs={11}>
-                  <HeaderDiv>
-                    <div className="ps-2 d-flex flex-row align-items-center">
-                      <ActivePageMarker></ActivePageMarker>
-                      <HeaderP className="pt-1">Add Your Achivments</HeaderP>
+                <Grid container display={"flex"} justifyContent={"center"}>
+                  <Grid item xs={11.4} sm={10} ms={{ sm: 4 }}>
+                    <div
+                      className="mt-2 mb-2 rounded"
+                      style={{ boxShadow: "rgba(0, 0, 0, 0.24) 0px 3px 8px" }}
+                    >
+                      <HeaderP className="pt-3 ps-3 pb-3">
+                        Add your Achivment
+                      </HeaderP>
                     </div>
-                  </HeaderDiv>
+                  </Grid>
                 </Grid>
                 <Grid
                   item
                   xs={12}
-                  className="d-flex justify-content-center mt-2"
+                  className="mt-2 ms-3 ms-sm-5"
+                  display={"flex"}
+                  justifyContent={"center"}
+                  flexDirection={"column"}
                 >
                   <TextField
                     id="outlined-basic"
                     label="Achivement Title"
+                    className=" ms-sm-5 mt-3"
                     variant="outlined"
                     sx={{ width: { xs: 270, sm: "88%", md: "85%" } }}
-                    className="mt-3"
+                    // fullWidth
                     value={achivementVar.achivementTitle}
                     onChange={(e) => {
                       setAchivementVar({
@@ -744,6 +1035,16 @@ export default function PInfoPersonalDetailsAndSkills() {
                       console.log(achivementVar.achivementTitle);
                     }}
                   />
+                  <Box
+                    sx={{ width: { xs: 270, sm: "88%", md: "85%" } }}
+                    className=""
+                  >
+                    {achivementError.achivementTitle ? (
+                      <div className="alert alert-danger mt-2 ms-2 ms-sm-5 ">
+                        {achivementError?.achivementTitle}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -751,22 +1052,29 @@ export default function PInfoPersonalDetailsAndSkills() {
                   className="mt-3 mb-3 d-flex justify-content-center"
                 >
                   <Box width={{ xs: 270, sm: "88%", md: "85%" }}>
-                    <TextField
-                      id="outlined-multiline-static"
-                      label="Discription"
-                      placeholder="Enter discription"
-                      multiline
-                      fullWidth
-                      rows={10}
-                      value={achivementVar.achivementDiscription}
-                      onChange={(e) => {
-                        setAchivementVar({
-                          ...achivementVar,
-                          description: e.target.value,
-                        });
-                        console.log(achivementVar.achivementDiscription);
-                      }}
-                    />
+                    <Box display={"flex"} flexDirection={"column"}>
+                      <TextField
+                        id="outlined-multiline-static"
+                        label="Discription"
+                        placeholder="Enter discription"
+                        multiline
+                        fullWidth
+                        rows={10}
+                        value={achivementVar.achivementDiscription}
+                        onChange={(e) => {
+                          setAchivementVar({
+                            ...achivementVar,
+                            achivementDiscription: e.target.value,
+                          });
+                          console.log(achivementVar.achivementDiscription);
+                        }}
+                      />
+                      {achivementError.description ? (
+                        <div className="alert alert-danger mt-2">
+                          {achivementError?.description}
+                        </div>
+                      ) : null}
+                    </Box>
                   </Box>
                 </Grid>
                 <Grid
@@ -776,26 +1084,33 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={achivementVar.startingDate}
-                    onChange={(event, newvalue) =>
-                      setAchivementVar({
-                        ...achivementVar,
-                        startingDate: newvalue.year,
-                      })
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Starting Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={Years}
+                      sx={{ width: 270 }}
+                      value={achivementVar.startingDate}
+                      onChange={(event, newvalue) =>
+                        setAchivementVar({
+                          ...achivementVar,
+                          startingDate: newvalue.year.toString(),
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Starting Year"
+                          className="mt-3"
+                        />
+                      )}
+                    />
+                    {achivementError.startingDate ? (
+                      <div className="alert alert-danger mt-2">
+                        {achivementError?.startingDate}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
                 <Grid
                   item
@@ -804,26 +1119,33 @@ export default function PInfoPersonalDetailsAndSkills() {
                   md={6}
                   className="d-flex justify-content-center mt-2"
                 >
-                  <Autocomplete
-                    disablePortal
-                    id="combo-box-demo"
-                    options={Years}
-                    sx={{ width: 270 }}
-                    value={achivementVar.endingDate}
-                    onChange={(event, newvalue) =>
-                      setAchivementVar({
-                        ...achivementVar,
-                        endingDate: newvalue.year,
-                      })
-                    }
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Ending Year"
-                        className="mt-3"
-                      />
-                    )}
-                  />
+                  <Box disply={"flex"} flexDirection={"column"}>
+                    <Autocomplete
+                      disablePortal
+                      id="combo-box-demo"
+                      options={Years}
+                      sx={{ width: 270 }}
+                      value={achivementVar.endingDate}
+                      onChange={(event, newvalue) =>
+                        setAchivementVar({
+                          ...achivementVar,
+                          endingDate: newvalue.year.toString(),
+                        })
+                      }
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          label="Ending Year"
+                          className="mt-3"
+                        />
+                      )}
+                    />
+                    {achivementError.endingDate ? (
+                      <div className="alert alert-danger mt-2">
+                        {achivementError?.endingDate}
+                      </div>
+                    ) : null}
+                  </Box>
                 </Grid>
 
                 <Grid
@@ -839,7 +1161,19 @@ export default function PInfoPersonalDetailsAndSkills() {
                     }}
                     style={{ backgroundColor: colors.becomePartnerGreen }}
                     onClick={() => {
-                      setAchivementsArr([...achivementsArr, achivementVar]);
+                      const res = ValidateAchivement();
+                      if (res) {
+                        console.log("error");
+                        console.log(achivementError);
+                      } else {
+                        setAchivementsArr([...achivementsArr, achivementVar]);
+                        setAchivementVar({
+                          achivementTitle: "",
+                          achivementDiscription: "",
+                          startingDate: "",
+                          endingDate: "",
+                        });
+                      }
                     }}
                   >
                     Add Achivemnets
@@ -952,6 +1286,7 @@ const BoxOuterDiv = styled.div`
 const HeaderP = styled.p`
   font-size: 2rem;
   // font-weight: 500;
+  // padding: 10px;
   ${mobile({
     fontSize: "2.5rem",
   })}

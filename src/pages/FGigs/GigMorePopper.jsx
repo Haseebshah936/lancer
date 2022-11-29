@@ -10,9 +10,14 @@ import MenuList from "@mui/material/MenuList";
 import Stack from "@mui/material/Stack";
 import axios from "axios";
 import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
+import { useCustomContext } from "./../../Hooks/useCustomContext";
+import { useNavigate } from "react-router-dom";
 
 export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
+  const navigate = useNavigate();
   const { user } = useRealmContext();
+  const { setEditGigStatus, setGigToBeEditedData } = useCustomContext();
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
@@ -20,10 +25,16 @@ export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
   const handelEdit = () => {
-    console.log("edit: ", gig._id);
+    console.log("edit: ", gig?._id);
+    requestMethod.get(`product/${gig?._id}`).then((res) => {
+      console.log(res.data);
+      setEditGigStatus(true);
+      setGigToBeEditedData(res.data);
+      navigate("/editGig");
+    });
   };
   const handelDelete = () => {
-    axios.delete("http://localhost:3003/api/product/" + gig._id).then((res) => {
+    requestMethod.delete("product/" + gig?._id).then((res) => {
       console.log(res);
       setStateChanged(stateChanged + 1);
       console.log("deleteed");
@@ -32,13 +43,13 @@ export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
   const handelPauseOrActivate = () => {
     setStateChanged(stateChanged + 1);
     if (gig.state === "live") {
-      axios.put(`http://localhost:3003/api/product/updateState/${gig._id}`, {
+      requestMethod.put(`product/updateState/${gig?._id}`, {
         state: "paused",
       });
       console.log("pausing");
     } else {
       // http://localhost:3003/api/product/updateState/637900bf8f1fa87a3ef8ad6d
-      axios.put(`http://localhost:3003/api/product/updateState/${gig._id}`, {
+      requestMethod.put(`product/updateState/${gig?._id}`, {
         state: "live",
       });
       console.log("making live");

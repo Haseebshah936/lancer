@@ -12,6 +12,9 @@ import axios from "axios";
 import { useRealmContext } from "../../db/RealmContext";
 import GigLoading from "./GigLoading";
 import styled from "styled-components";
+import { useCustomContext } from "../../Hooks/useCustomContext";
+import { requestMethod } from "./../../requestMethod";
+import { handleError } from "./../../utils/helperFunctions";
 const attachmentData = [
   {
     uri: "",
@@ -31,6 +34,12 @@ const attachmentData = [
 ];
 export default function CreateGig() {
   const { user } = useRealmContext();
+  const {
+    editGigStatus,
+    setEditGigStatus,
+    gigToBeEditedData,
+    setGigToBeEditedData,
+  } = useCustomContext();
   const [errors, setErrors] = useState({});
   const [errorImages, setErrorsImages] = useState(false);
   const [errorQArray, setErrorQArray] = useState(false);
@@ -91,6 +100,40 @@ export default function CreateGig() {
     gigDescription: null,
     tage: [],
   });
+
+  const getSubCategory = async (value) => {
+    try {
+      const response = await requestMethod.get(
+        `category/subCategory/${gigToBeEditedData.category}`
+      );
+      console.log("response", response.data);
+      setGigIntroduction({
+        gigTitle: gigToBeEditedData.title,
+        gigCategory: { label: response.data.category.title },
+        gigSubCategory: { title: response.data.title },
+        gigDescription: gigToBeEditedData.description,
+        tage: gigToBeEditedData.tags,
+      });
+      let imagesArray = attachmentData;
+      gigToBeEditedData.images.map((image, i) => {
+        imagesArray[i] = { uri: image, uploading: false };
+      });
+      setQuestionArr(gigToBeEditedData.questions);
+      setAdditionalFeatures(gigToBeEditedData.additionalFeatures);
+      setVideo({ uri: gigToBeEditedData.video });
+      setImages(imagesArray);
+    } catch (error) {
+      console.log(error);
+      handleError(error);
+    }
+  };
+
+  useEffect(() => {
+    if (editGigStatus) {
+      console.log("gigToBeEditedData", gigToBeEditedData);
+      getSubCategory();
+    }
+  }, []);
 
   const handleActiveStep = (activeStep) => {
     switch (activeStep) {

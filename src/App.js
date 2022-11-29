@@ -65,6 +65,9 @@ function App(props) {
   const { chatrooms, setChatrooms } = useState([]);
   const { currentUser, user } = useRealmContext();
   const [activeProfile, setActiveProfile] = useState(false);
+  const [editGigStatus, setEditGigStatus] = useState(false);
+  const [gigToBeEditedData, setGigToBeEditedData] = useState({});
+
 
   useEffect(() => {
     setActiveProfile(localStorage.getItem("activeProfile"));
@@ -83,6 +86,8 @@ function App(props) {
         setActiveChatroomStatus,
         activeProfile,
         setActiveProfile,
+        editGigStatus, setEditGigStatus,
+        gigToBeEditedData, setGigToBeEditedData
 
       }}
     >
@@ -105,6 +110,7 @@ function App(props) {
             </Route> */}
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/createGig" element={<CreateGig />} />
+            <Route path="/editGig" element={<CreateGig />} />
 
             <Route
               path="/becomeSeller"
