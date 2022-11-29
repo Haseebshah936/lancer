@@ -208,8 +208,6 @@ export default function GigMediaAttachment({
     console.log("remove attachment", attachments[i]);
     setVideoAttachment({
       uri: "",
-      uploading: true,
-      progress: 0,
     });
   };
 

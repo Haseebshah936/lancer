@@ -11,31 +11,29 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { tablet } from "../responsive";
 import { Pagination } from "@mui/material";
 import axios from "axios";
+import { useCustomContext } from "../Hooks/useCustomContext";
 
 const SearchResults = () => {
-  const [data, setData] = useState([]);
+  const [loader, setloader] = useState(true);
   const [pagination, setPagination] = useState(1);
   const [count, setCount] = useState(1);
+  const { searchData, setSearchData } = useCustomContext();
 
-  const handleData = (d) => {
-    setData(d);
-  };
-
-  useEffect(() => {
-    axios.get("http://localhost:3003/api/product/").then((response) => {
-      handleData(response.data);
-      console.log("Gig Data", data);
-      setCount(Math.ceil(data.length / 12));
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("http://localhost:3003/api/product/").then((response) => {
+  //     handleData(response.data);
+  //     console.log("Gig Data", searchData);
+  //     setCount(Math.ceil(searchData.length / 12));
+  //   });
+  // }, []);
 
   useEffect(() => {
-    setCount(Math.ceil(data.length / 12));
+    setCount(Math.ceil(searchData.length / 12));
   }, [pagination]);
 
   return (
     <>
-      <Header />
+      <Header setloader={setloader} />
 
       <Container>
         <Box sx={{ flexGrow: 1 }}>
@@ -53,7 +51,7 @@ const SearchResults = () => {
           >
             <Grid container spacing={2}>
               <Grid item mobile={12} tablet={3}>
-                <Filters data={data} setData={setData} />
+                <Filters />
               </Grid>
               <Grid
                 item
@@ -63,7 +61,11 @@ const SearchResults = () => {
                 columnSpacing={2}
               >
                 <SearchGrid
-                  data={data.slice((pagination - 1) * 12, pagination * 12)}
+                  loader={loader}
+                  data={searchData.slice(
+                    (pagination - 1) * 12,
+                    pagination * 12
+                  )}
                 ></SearchGrid>
                 <Box
                   mt={"4rem"}

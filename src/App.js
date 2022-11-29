@@ -68,14 +68,20 @@ function App(props) {
   const [editGigStatus, setEditGigStatus] = useState(false);
   const [gigToBeEditedData, setGigToBeEditedData] = useState({});
 
+  const [searchData, setSearchData] = useState([]);
+  const [terms, setTerms] = useState("");
 
   useEffect(() => {
-    setActiveProfile(localStorage.getItem("activeProfile"));
-  }, [currentUser])
+    setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
+  }, [currentUser]);
 
   return (
     <CustomContextProvider
       value={{
+        terms,
+        setTerms,
+        searchData,
+        setSearchData,
         open,
         setOpen,
         activeChatroom,
@@ -147,7 +153,7 @@ function App(props) {
           <Route path="/temp" element={<TempPage />} />
 
           <Route path="/" element={<Navigate to="/home" replace />} />
-          {/* <Route path="*" element={<Navigate to="/home" replace />} /> */}
+          <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>
       <ToastContainer

@@ -25,7 +25,7 @@ function SellerProfileInfo({
   showExtraInfo = false,
   skills = [],
   educationalBackground = [],
-  experence = [],
+  experience = [],
   achivements = [],
 }) {
   return (
@@ -54,7 +54,7 @@ function SellerProfileInfo({
         />
         <SubHeading>Location:</SubHeading>
         <Text>
-          {city}, {country}
+          {city} {country}
         </Text>
         <SubHeading>Languages:</SubHeading>
         <Text>{languages.join(", ")}</Text>
@@ -65,7 +65,16 @@ function SellerProfileInfo({
           &nbsp;&nbsp;Contact to this seller
         </CustomIconButton>
       </Wrapper>
-      <AboutContainer>{showExtraInfo && <AboutSeller />}</AboutContainer>
+      <AboutContainer>
+        {showExtraInfo && (
+          <AboutSeller
+            skills={skills}
+            experience={experience}
+            educationalBackground={educationalBackground}
+            achievements={achivements}
+          />
+        )}
+      </AboutContainer>
     </Container>
   );
 }
