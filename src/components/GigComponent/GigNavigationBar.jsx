@@ -7,7 +7,7 @@ export default function GigNavigationBar({ title, pathName, validate, gData }) {
   const [gData1, setGData1] = React.useState({});
   React.useEffect(() => {
     setGData1(gData);
-    console.log("Bar Data", gData);
+    // console.log("Bar Data", gData);
   }, [gData]);
 
   const navigate = useNavigate();
@@ -73,7 +73,7 @@ export default function GigNavigationBar({ title, pathName, validate, gData }) {
               onClick={() => {
                 const v = validate();
                 if (v) {
-                  console.log("v", v);
+                  // console.log("v", v);
                 } else {
                   navigate(pathName, { state: { gData: gData1 } });
                 }

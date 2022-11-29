@@ -48,7 +48,7 @@ export default function FGigs() {
       requestMethod
         .get(`product/byUserId/${user?._id}`)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setGigs(response.data);
         })
         .catch((error) => {
@@ -61,7 +61,7 @@ export default function FGigs() {
     requestMethod
       .get(`product/byUserId/${user?._id}`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setGigs(response.data);
       })
       .catch((error) => {

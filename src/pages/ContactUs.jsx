@@ -39,7 +39,7 @@ function ContactUs(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(formData);
+    // console.log(formData);
   }
 
 

@@ -9,11 +9,11 @@ export const watchCollection = async (
 ) => {
   const mongo = currentUser.mongoClient("mongodb-atlas");
   const collection = mongo.db("test").collection(collectionName);
-  console.log(collection);
+  // console.log(collection);
   for await (const change of collection.watch(filter)) {
-    console.log(breakAsyncIterator);
+    // console.log(breakAsyncIterator);
     if (breakAsyncIterator) {
-      console.log("Exiting async iterator");
+      // console.log("Exiting async iterator");
       return;
     } // Exit async iterator
     callBack(change);

@@ -32,18 +32,18 @@ function MessagesContainer({
           "fullDocument.chatroomId": active.id,
         },
       })) {
-        console.log(breakAsyncIterator);
+        // console.log(breakAsyncIterator);
         if (breakAsyncIterator) {
-          console.log("Exiting async iterator");
+          // console.log("Exiting async iterator");
           return;
         } // Exit async iterator
         const { documentKey, fullDocument } = change;
         getNewMessage(fullDocument?._id.toString());
-        console.log(
-          `new document: ${documentKey}`,
-          fullDocument,
-          fullDocument?._id.toString()
-        );
+        // console.log(
+        //   `new document: ${documentKey}`,
+        //   fullDocument,
+        //   fullDocument?._id.toString()
+        // );
 
         // switch (change.operationType) {
         //   case "insert": {

@@ -101,7 +101,7 @@ export default function GigMediaAttachment({
         option
       )
       .then((res) => {
-        console.log("Response", res);
+        // console.log("Response", res);
         setAttachments((prev) => {
           const arr = [...prev];
           arr[index].uploading = false;
@@ -112,7 +112,7 @@ export default function GigMediaAttachment({
       })
       .catch((err) => {
         if (err.message !== "canceled") console.log(err);
-        console.log("canceled");
+        // console.log("canceled");
       });
   };
 
@@ -171,7 +171,7 @@ export default function GigMediaAttachment({
         option
       )
       .then((res) => {
-        console.log("Response", res);
+        // console.log("Response", res);
         URL.revokeObjectURL(videoAttachment.uri);
         setVideoAttachment((prev) => {
           return {
@@ -183,7 +183,7 @@ export default function GigMediaAttachment({
       })
       .catch((err) => {
         if (err.message !== "canceled") console.log(err);
-        console.log("canceled");
+        // console.log("canceled");
       });
   };
 
@@ -205,18 +205,18 @@ export default function GigMediaAttachment({
 
   const removeVideoAttachment = async (i) => {
     videoAttachment?.controller?.abort();
-    console.log("remove attachment", attachments[i]);
+    // console.log("remove attachment", attachments[i]);
     setVideoAttachment({
       uri: "",
     });
   };
 
-  useEffect(() => {
-    console.log("Video Attachment", videoAttachment);
-  }, [videoAttachment]);
-  useEffect(() => {
-    console.log("Attachments", attachments);
-  }, [attachments]);
+  // useEffect(() => {
+  //   console.log("Video Attachment", videoAttachment);
+  // }, [videoAttachment]);
+  // useEffect(() => {
+  //   // console.log("Attachments", attachments);
+  // }, [attachments]);
 
   return (
     <Grid container>

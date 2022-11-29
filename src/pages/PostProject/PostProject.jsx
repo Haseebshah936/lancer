@@ -25,9 +25,9 @@ export default function PostProject() {
     description: "",
     files: [],
   });
-  useEffect(() => {
-    console.log(postProjectData);
-  }, [postProjectData]);
+  // useEffect(() => {
+  //   console.log(postProjectData);
+  // }, [postProjectData]);
   const [expertiesVar, setExpertiesVar] = React.useState("");
   const [linkVar, setLinkVar] = React.useState("");
   const [error, setError] = React.useState({});
@@ -76,9 +76,9 @@ export default function PostProject() {
     let promise = [];
     for (let i = 0; i < files.length; i++) {
       const name = files[i].name;
-      console.log(name);
+      // console.log(name);
       const type = files[i].type;
-      console.log("type: " + type);
+      // console.log("type: " + type);
       // const filetype = type.split("/")[0];
       // console.log(filetype);
       var filetype = "";
@@ -142,9 +142,9 @@ export default function PostProject() {
       }
     }
     Promise.all(promise).then((res) => {
-      console.log(res);
+      // console.log(res);
       const urls = res.map((item) => item.data.url);
-      console.log(urls);
+      // console.log(urls);
       setPostProjectData({
         ...postProjectData,
         files: [...postProjectData.files, ...urls],
@@ -153,9 +153,9 @@ export default function PostProject() {
     setUploading("false");
   };
 
-  React.useEffect(() => {
-    console.log(postProjectData);
-  }, [postProjectData]);
+  // React.useEffect(() => {
+  //   console.log(postProjectData);
+  // }, [postProjectData]);
   return (
     <div width="100vw">
       <Header></Header>
@@ -525,10 +525,10 @@ export default function PostProject() {
                 onClick={() => {
                   const v = validate();
                   if (v) {
-                    console.log("error");
+                    // console.log("error");
                   } else {
-                    console.log("no error");
-                    console.log(postProjectData);
+                    // console.log("no error");
+                    // console.log(postProjectData);
                     navigate(-1);
                   }
                 }}

@@ -94,7 +94,7 @@ function Signup(props) {
   // // }
 
   const responseFacebook = async (res) => {
-    console.log(res);
+    // console.log(res);
     const { accessToken, id } = res;
     try {
       const response = await axios.post(
@@ -104,7 +104,7 @@ function Signup(props) {
           accessToken,
         }
       );
-      console.log("Response From facebook", response);
+      // console.log("Response From facebook", response);
       const { email, password, rest } = response.data;
       handleSignup(email, password, rest);
     } catch (error) {
@@ -139,7 +139,7 @@ function Signup(props) {
             ...user,
           }
         );
-        console.log(response.data);
+        // console.log(response.data);
 
         const { email, password, ...rest } = response.data;
         handleSignup(email, password, rest);

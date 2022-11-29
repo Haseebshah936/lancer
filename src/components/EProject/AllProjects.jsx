@@ -16,7 +16,7 @@ export default function AllProjects({ data }) {
     _DATA.jump(p);
   };
   useEffect(() => {
-    console.log("All data", data);
+    // console.log("All data", data);
     setProjects(data);
   }, []);
   return (

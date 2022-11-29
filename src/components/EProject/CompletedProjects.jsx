@@ -18,7 +18,7 @@ export default function CompletedProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((item) => item.completeStatus === true);
-    console.log("Complete Project data", temp);
+    // console.log("Complete Project data", temp);
     setProjects(temp);
   }, []);
   return (

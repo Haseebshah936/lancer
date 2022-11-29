@@ -98,9 +98,9 @@ export default function NavigationBar({
       abortEarly: false,
     });
     if (!result.error) {
-      console.log("JOI Erors", errors);
+      // console.log("JOI Erors", errors);
       setErrors({});
-      console.log("GIG VALIDATED ", activeStep);
+      // console.log("GIG VALIDATED ", activeStep);
       handleStep(activeStep + 1);
       return null;
     } else {
@@ -109,7 +109,7 @@ export default function NavigationBar({
         errors[item.path[0]] = item.message;
       }
       setErrors(errors);
-      console.log(errors);
+      // console.log(errors);
       return errors;
     }
   };
@@ -120,12 +120,12 @@ export default function NavigationBar({
       .filter((uri) => uri !== "");
 
     const image = images.filter((image) => image.uploading);
-    console.log("image", image);
-    console.log(video ? !video.uploading : true);
+    // console.log("image", image);
+    // console.log(video ? !video.uploading : true);
     if (imagesArray.length !== 0) {
       if (image.length === 0 && (video ? !video.uploading : true)) {
         setErrorsImages(false);
-        console.log("MEDIA VALIDATED ", activeStep);
+        // console.log("MEDIA VALIDATED ", activeStep);
         handleStep(activeStep + 1);
 
         return null;
@@ -154,13 +154,13 @@ export default function NavigationBar({
   };
 
   const basicPlanValidation = () => {
-    console.log("basicPlanValidation", basicPlan);
+    // console.log("basicPlanValidation", basicPlan);
     const result = Joi.validate(basicPlan, PackageSchema, {
       abortEarly: false,
     });
     if (!result.error) {
       setBasicPlanError({});
-      console.log("basicPlan", basicPlanError);
+      // console.log("basicPlan", basicPlanError);
       return null;
     }
     const error = {};
@@ -168,7 +168,7 @@ export default function NavigationBar({
       error[item.path[0]] = item.message;
     }
     setBasicPlanError(error);
-    console.log("basicPlan1", basicPlanError);
+    // console.log("basicPlan1", basicPlanError);
     return error;
   };
 
@@ -195,7 +195,7 @@ export default function NavigationBar({
     if (basicPlanError || standardPlanError || premiumPlanError) {
       return "error";
     }
-    console.log("PACKAGE VALIDATED ", activeStep);
+    // console.log("PACKAGE VALIDATED ", activeStep);
     handleStep(activeStep + 1);
 
     return null;

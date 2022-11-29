@@ -78,16 +78,16 @@ export default function GigMyServicePricing({
   additionalFeatures,
   setAdditionalFeatures,
 }) {
-  useEffect(() => {
-    console.log("Basic", basicPlan);
-    console.log("Premium", premiumPlan);
-    console.log("Standard", standardPlan);
-    // console.log()
-  }, [basicPlan, premiumPlan, standardPlan]);
+  // useEffect(() => {
+  //   // console.log("Basic", basicPlan);
+  //   // console.log("Premium", premiumPlan);
+  //   // console.log("Standard", standardPlan);
+  //   // console.log()
+  // }, [basicPlan, premiumPlan, standardPlan]);
 
-  useEffect(() => {
-    console.log("additionalFeatures", additionalFeatures);
-  }, [additionalFeatures]);
+  // useEffect(() => {
+  //   console.log("additionalFeatures", additionalFeatures);
+  // }, [additionalFeatures]);
 
   return (
     <>
@@ -150,7 +150,7 @@ export default function GigMyServicePricing({
                 value={basicPlan.name}
                 onChange={(e) => {
                   setBasicPlan({ ...basicPlan, name: e.target.value });
-                  console.log("Basic Plan log");
+                  // console.log("Basic Plan log");
                 }}
               />
             </Box>
@@ -166,7 +166,7 @@ export default function GigMyServicePricing({
               error={basicPlanError.description}
               onChange={(e) => {
                 setBasicPlan({ ...basicPlan, description: e.target.value });
-                console.log("Basic Plan log");
+                // console.log("Basic Plan log");
               }}
             />
           </Box>
@@ -881,12 +881,12 @@ export default function GigMyServicePricing({
                   <CheckBox
                     checked={additionalFeatures[i].active}
                     onChange={(e) => {
-                      console.log("Addition feature", additionalFeatures);
+                      //console.log("Addition feature", additionalFeatures);
                       const hold = [...additionalFeatures];
-                      console.log("Addition Hold", hold);
+                      //console.log("Addition Hold", hold);
                       hold[i].active = e.target.checked;
                       setAdditionalFeatures(hold);
-                      console.log("Additional features ", additionalFeatures);
+                      //console.log("Additional features ", additionalFeatures);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>

@@ -115,12 +115,12 @@ export default function PInfoPersonalDetailsAndSkills() {
         };
       }),
     };
-    console.log(sData);
-    console.log(user);
+    // console.log(sData);
+    // console.log(user);
 
     ValidateAbout();
     if (aboutError) {
-      console.log("About Error", aboutError);
+      // console.log("About Error", aboutError);
     } else {
       // requestMethod
       //   .post("users/about", sData)
@@ -162,7 +162,7 @@ export default function PInfoPersonalDetailsAndSkills() {
   const addMySkillHandeler = () => {
     const res = ValidateSkill();
     if (res) {
-      console.log(skillError);
+      // console.log(skillError);
     } else {
       setMySkill([
         ...mySkills,
@@ -173,7 +173,7 @@ export default function PInfoPersonalDetailsAndSkills() {
       ]);
       setMySkillName("");
       setMySkillPercentage("");
-      console.log("No error");
+      // console.log("No error");
     }
   };
 
@@ -181,7 +181,7 @@ export default function PInfoPersonalDetailsAndSkills() {
     let temp = [...mySkills];
     temp = temp.filter((item) => item.name !== name);
     setMySkill(temp);
-    console.log(name);
+    // console.log(name);
   };
 
   const [jobExpArr, setJobExpArr] = React.useState([]);
@@ -214,9 +214,9 @@ export default function PInfoPersonalDetailsAndSkills() {
     educationTitle: joi.string().required(),
   });
 
-  React.useEffect(() => {
-    console.log("Ach vae", achivementVar);
-  }, [achivementVar]);
+  // React.useEffect(() => {
+  //   console.log("Ach vae", achivementVar);
+  // }, [achivementVar]);
 
   const [jobStartingDate, setJobStartingDate] = React.useState(null);
   const [jobEndingDate, setJobEndingDate] = React.useState(null);
@@ -252,9 +252,9 @@ export default function PInfoPersonalDetailsAndSkills() {
     return errors;
   };
 
-  React.useEffect(() => {
-    console.log(jobExperienceVar);
-  }, [jobExperienceVar]);
+  // React.useEffect(() => {
+  //   console.log(jobExperienceVar);
+  // }, [jobExperienceVar]);
 
   React.useEffect(() => {
     setJobExperienceVar({
@@ -262,7 +262,7 @@ export default function PInfoPersonalDetailsAndSkills() {
       startingDate: jobStartingDate?.label,
     });
 
-    console.log(jobExperienceVar);
+    // console.log(jobExperienceVar);
   }, [jobStartingDate]);
   React.useEffect(() => {
     setJobExperienceVar({
@@ -270,7 +270,7 @@ export default function PInfoPersonalDetailsAndSkills() {
       endingDate: jobEndingDate?.label,
     });
 
-    console.log(jobExperienceVar);
+    // console.log(jobExperienceVar);
   }, [jobEndingDate]);
 
   React.useEffect(() => {
@@ -278,20 +278,20 @@ export default function PInfoPersonalDetailsAndSkills() {
       ...eduVar,
       endingDate: eduEndingDate?.label,
     });
-    console.log(educationArr);
+    // console.log(educationArr);
   }, [eduEndingDate]);
   React.useEffect(() => {
     setEduVar({
       ...eduVar,
       startingDate: eduStartingDate?.label,
     });
-    console.log(educationArr);
+    // console.log(educationArr);
   }, [eduStartingDate]);
   const removeJobExpHandeler = (title) => {
     setJobExpArr(jobExpArr.filter((item) => item.companyTitle !== title));
   };
   const removeEduExpHandeler = (title) => {
-    console.log(title);
+    // console.log(title);
     setEducationArr(
       educationArr.filter((item) => item.educationTitle !== title)
     );
@@ -414,7 +414,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                           value={about}
                           onChange={(e) => {
                             setAbout(e.target.value);
-                            console.log(about);
+                            // console.log(about);
                           }}
                           // defaultValue="Description"
                         />
@@ -468,7 +468,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                               ...languageVar,
                               language: newValue.name,
                             });
-                            console.log(languageVar);
+                            // console.log(languageVar);
                           }}
                           renderInput={(params) => (
                             <TextField {...params} label="Langauge" />
@@ -492,7 +492,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                               ...languageVar,
                               proficiency: newValue.name,
                             });
-                            console.log(languageVar);
+                            // console.log(languageVar);
                           }}
                           renderInput={(params) => (
                             <TextField {...params} label="Proficiency" />
@@ -539,9 +539,9 @@ export default function PInfoPersonalDetailsAndSkills() {
                     onClick={() => {
                       const res = validateLanguage();
                       if (res) {
-                        console.log("Errorrs", res);
+                        // console.log("Errorrs", res);
                       } else {
-                        console.log(languageVar);
+                        // console.log(languageVar);
                         setLanguageArray([...languageArray, languageVar]);
                       }
                     }}
@@ -583,7 +583,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                           value={mySkillName}
                           onChange={(e) => {
                             setMySkillName(e.target.value);
-                            console.log(mySkillName);
+                            // console.log(mySkillName);
                           }}
                         />
                       </Grid>
@@ -601,7 +601,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                           value={mySkillPercentage}
                           onChange={(e) => {
                             setMySkillPercentage(e.target.value);
-                            console.log(mySkillPercentage);
+                            // console.log(mySkillPercentage);
                           }}
                         />
                       </Grid>
@@ -752,7 +752,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                               ...jobExperienceVar,
                               instituteTitle: e.target.value,
                             });
-                            console.log(jobExperienceVar.instituteTitle);
+                            // console.log(jobExperienceVar.instituteTitle);
                           }}
                         />
                         {jobExpError.instituteTitle ? (
@@ -859,8 +859,8 @@ export default function PInfoPersonalDetailsAndSkills() {
                     onClick={() => {
                       const res = ValidateJobExp();
                       if (res) {
-                        console.log("error");
-                        console.log(jobExpError);
+                        // console.log("error");
+                        // console.log(jobExpError);
                       } else {
                         setJobExpArr([...jobExpArr, jobExperienceVar]);
                         setJobExperienceVar({
@@ -959,7 +959,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                           ...eduVar,
                           instituteTitle: e.target.value,
                         });
-                        console.log(eduVar.instituteTitle);
+                        // console.log(eduVar.instituteTitle);
                       }}
                     />
                     {educationError.instituteTitle ? (
@@ -1051,7 +1051,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                           ...eduVar,
                           educationTitle: e.target.value,
                         });
-                        console.log(eduVar.educationTitle);
+                        // console.log(eduVar.educationTitle);
                       }}
                     />
                     {educationError.educationTitle ? (
@@ -1076,8 +1076,8 @@ export default function PInfoPersonalDetailsAndSkills() {
                     onClick={() => {
                       const res = ValidateEducation();
                       if (res) {
-                        console.log("error");
-                        console.log(educationError);
+                        // console.log("error");
+                        // console.log(educationError);
                       } else {
                         setEducationArr([...educationArr, eduVar]);
                         setEduVar({
@@ -1164,7 +1164,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                         ...achivementVar,
                         achivementTitle: e.target.value,
                       });
-                      console.log(achivementVar.achivementTitle);
+                      // console.log(achivementVar.achivementTitle);
                     }}
                   />
                   <Box
@@ -1198,7 +1198,7 @@ export default function PInfoPersonalDetailsAndSkills() {
                             ...achivementVar,
                             achivementDiscription: e.target.value,
                           });
-                          console.log(achivementVar.achivementDiscription);
+                          // console.log(achivementVar.achivementDiscription);
                         }}
                       />
                       {achivementError.description ? (
@@ -1295,8 +1295,8 @@ export default function PInfoPersonalDetailsAndSkills() {
                     onClick={() => {
                       const res = ValidateAchivement();
                       if (res) {
-                        console.log("error");
-                        console.log(achivementError);
+                        // console.log("error");
+                        // console.log(achivementError);
                       } else {
                         setAchivementsArr([...achivementsArr, achivementVar]);
                         setAchivementVar({

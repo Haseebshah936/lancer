@@ -175,7 +175,7 @@ function Chat(props) {
     setChatRooms((prev) => {
       let newChatRooms = [...prev];
       let index = newChatRooms.findIndex((chatRoom) => chatRoom.id === id);
-      console.log("Chatroom Index", index);
+      // console.log("Chatroom Index", index);
       newChatRooms[index] = {
         ...newChatRooms[index],
         ...state,
@@ -195,9 +195,9 @@ function Chat(props) {
   //   });
   // }, [data, active]);
 
-  useEffect(() => {
-    console.log("Chatrooms", chatRooms);
-  }, [chatRooms]);
+  // useEffect(() => {
+  //   // console.log("Chatrooms", chatRooms);
+  // }, [chatRooms]);
 
   const handleScroll = () => {
     const target = scrollRef.current;
@@ -235,18 +235,18 @@ function Chat(props) {
       requestMethod
         .get(`message/${active.id}/${messageId}/${user._id}`)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           setNewData((prev) => {
             const prevMessage = prev[prev.length - 1];
-            console.log("Previous state", prevMessage);
-            console.log("New message", res.data?.userId?._id);
-            console.log(
-              "Condition",
-              !prev.length,
-              prevMessage?.userId?._id !== res.data?.userId?._id,
-              prevMessage?.userId?._id === res.data?.userId?._id &&
-                prevMessage?.server === true
-            );
+            // console.log("Previous state", prevMessage);
+            // console.log("New message", res.data?.userId?._id);
+            // console.log(
+            //   "Condition",
+            //   !prev.length,
+            //   prevMessage?.userId?._id !== res.data?.userId?._id,
+            //   prevMessage?.userId?._id === res.data?.userId?._id &&
+            //     prevMessage?.server === true
+            // );
             if (
               !(
                 prevMessage?.userId?._id === res.data?.userId?._id &&
@@ -271,7 +271,7 @@ function Chat(props) {
 
   useEffect(() => {
     if (user?._id) {
-      console.log("User", user._id);
+      //console.log("User", user._id);
       getChatRooms();
     }
   }, [user]);

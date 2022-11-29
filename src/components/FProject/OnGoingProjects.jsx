@@ -18,7 +18,7 @@ export default function OnGoingProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((p) => p.perposalAcceptanceDate !== "");
-    console.log("Ongoing Projects data", temp);
+    // console.log("Ongoing Projects data", temp);
     setProjects(temp);
   }, []);
   return (

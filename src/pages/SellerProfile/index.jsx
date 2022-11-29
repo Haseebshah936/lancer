@@ -35,7 +35,7 @@ function SellerProfile(props) {
   const [isSame, setIsSame] = useState(false);
   const [showProductsTab, setShowProductsTab] = useState(false);
   // eslint-disable-next-line no-restricted-globals
-  console.log("Query Params", queryParams);
+  //console.log("Query Params", queryParams);
   const getUserData = async () => {
     const response = await requestMethod.get(`/user/getUser/${queryParams.id}`);
     return response.data;
@@ -54,7 +54,7 @@ function SellerProfile(props) {
     return response.data;
   };
   const getBuyerReviews = async (skip) => {
-    console.log("Buyer Reviews", skip);
+    //console.log("Buyer Reviews", skip);
     const response = await requestMethod.get(
       `review/buyerReviews/${queryParams.id}?skip=${skip}`
     );
@@ -66,7 +66,7 @@ function SellerProfile(props) {
       (userData.seller && activeProfile === "seller") ||
       (activeProfile === "seller" && queryParams.id === user?._id)
     ) {
-      console.log("Seller Reviews", skip);
+      //console.log("Seller Reviews", skip);
       setLoadingReviews(true);
       getSellerReviews(skip)
         .then((data) => {
@@ -117,10 +117,10 @@ function SellerProfile(props) {
       }
     }
     if (user && queryParams.id !== user?._id) {
-      console.log("user id here");
+      //console.log("user id here");
       getUserData()
         .then((data) => {
-          console.log("Data", data);
+          //console.log("Data", data);
           setUserData(data);
           if (data.seller) {
             setAboutSeller({
@@ -139,7 +139,7 @@ function SellerProfile(props) {
   }, [user, currentUser, queryParams.id]);
 
   useEffect(() => {
-    console.log("User Data", userData);
+    //console.log("User Data", userData);
     if (!userData) return;
     if (
       user?.seller &&
@@ -150,7 +150,7 @@ function SellerProfile(props) {
 
       getProducts()
         .then((data) => {
-          console.log("Products", data);
+          //  console.log("Products", data);
           setProductsData(data);
           setLoadingProductsData(false);
         })
@@ -162,7 +162,7 @@ function SellerProfile(props) {
       getSellerReviews()
         .then((data) => {
           if (data.length === 0) setLoadMore(false);
-          console.log("Reviews", data);
+          //console.log("Reviews", data);
           setReviews(data);
           setLoadingReviews(false);
         })
@@ -174,7 +174,7 @@ function SellerProfile(props) {
       setLoadingProductsData(true);
       getProducts()
         .then((data) => {
-          console.log("Products", data);
+          //console.log("Products", data);
           setProductsData(data);
           setLoadingProductsData(false);
         })
@@ -186,7 +186,7 @@ function SellerProfile(props) {
       getSellerReviews()
         .then((data) => {
           if (data.length === 0) setLoadMore(false);
-          console.log("Reviews", data);
+          //console.log("Reviews", data);
           setReviews(data);
           setLoadingReviews(false);
         })
@@ -199,7 +199,7 @@ function SellerProfile(props) {
       getBuyerReviews()
         .then((data) => {
           if (data.length === 0) setLoadMore(false);
-          console.log("Reviews", data);
+          //console.log("Reviews", data);
           setReviews(data);
           setLoadingReviews(false);
         })

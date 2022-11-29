@@ -68,15 +68,15 @@ export default function ESettings() {
 
   const [tagLineVar, setTagLineVar] = useState("");
   useEffect(() => {
-    console.log("valuesObj", valuesObj);
-    console.log("tagLineVar", tagLineVar);
+    // console.log("valuesObj", valuesObj);
+    // console.log("tagLineVar", tagLineVar);
   }, [valuesObj, tagLineVar]);
   useEffect(() => {
-    console.log("socialLinks", socialLinks);
+    // console.log("socialLinks", socialLinks);
   }, [socialLinks]);
   useEffect(() => {}, [user]);
   useEffect(() => {
-    console.log("user", user);
+    // console.log("user", user);
 
     setValuesObj({
       name: user?.name,
@@ -176,7 +176,7 @@ export default function ESettings() {
                         // Update progress (can be used to show progress indicator)
                         xhr.upload.addEventListener("progress", (e) => {
                           // setProgress(Math.round((e.loaded * 100.0) / e.total));
-                          console.log(Math.round((e.loaded * 100.0) / e.total));
+                          // console.log(Math.round((e.loaded * 100.0) / e.total));
                         });
 
                         xhr.onreadystatechange = (e) => {
@@ -184,7 +184,7 @@ export default function ESettings() {
                             const response = JSON.parse(xhr.responseText);
 
                             // setImage(response.secure_url);
-                            console.log(response.secure_url);
+                            // console.log(response.secure_url);
                             setValuesObj({
                               ...valuesObj,
                               profilePic: response.secure_url,
@@ -345,7 +345,7 @@ export default function ESettings() {
                         options={CountryNAME}
                         getOptionLabel={(option) => option.label}
                         onChange={(e, value) => {
-                          console.log(value.label);
+                          // console.log(value.label);
                           setValuesObj({
                             ...valuesObj,
                             country: value.label,
@@ -382,7 +382,7 @@ export default function ESettings() {
                       if (errors) {
                         console.log(errors);
                       } else {
-                        console.log(valuesObj);
+                        // console.log(valuesObj);
                         requestMethod
                           .put(`user/updateProfile/${user?._id}`, {
                             profilePic: valuesObj.profilePic,

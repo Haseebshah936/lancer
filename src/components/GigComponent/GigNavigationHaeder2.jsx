@@ -8,7 +8,7 @@ export default function GigNavigationHaeder2() {
   const [pathName, setPathName] = useState(location.pathname);
   useEffect(() => {
     setPathName(location.pathname);
-    console.log("pathname", `${location.pathname}`);
+    // console.log("pathname", `${location.pathname}`);
   }, [location.pathname]);
   return (
     <Grid

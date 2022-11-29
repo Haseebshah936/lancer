@@ -48,9 +48,9 @@ export default function GigQuestionAPage({
     console.log(errors);
   };
 
-  useEffect(() => {
-    console.log("Length:", questionArr.length);
-  }, [questionArr]);
+  // useEffect(() => {
+  //   console.log("Length:", questionArr.length);
+  // }, [questionArr]);
 
   return (
     <>
@@ -162,9 +162,9 @@ export default function GigQuestionAPage({
                 onClick={() => {
                   const v = validate();
                   if (v) {
-                    console.log("error is there");
+                    // console.log("error is there");
                   } else {
-                    console.log("Adding");
+                    // console.log("Adding");
                     setQuestionArr([...questionArr, question]);
                     setQuestion({ title: "", discription: "" });
                   }

@@ -42,21 +42,21 @@ export default function CompleteProfile() {
       ...profileVar,
       profilePic: profilePic.uri,
     });
-    console.log({ ...profileVar, profilePic: profilePic.uri });
-    console.log(user?._id);
+    // console.log({ ...profileVar, profilePic: profilePic.uri });
+    // console.log(user?._id);
     requestMethod
       .put(`user/updateProfile/${user._id}`, {
         ...profileVar,
         profilePic: profilePic.uri,
       })
       .then((response) => {
-        console.log("success");
-        console.log("response", response.data.profilePic);
+        // console.log("success");
+        // console.log("response", response.data.profilePic);
         setUser(response.data);
         navigate("/");
       })
       .catch((error) => {
-        console.log("error in complete profile");
+        // console.log("error in complete profile");
         console.log(error);
       });
   };
@@ -145,12 +145,12 @@ export default function CompleteProfile() {
   //   };
   // }, []);
 
-  useEffect(() => {
-    console.log(profileVar);
-  }, [profileVar]);
+  // useEffect(() => {
+  //   // console.log(profileVar);
+  // }, [profileVar]);
   useEffect(() => {
     if (currentUser && user) {
-      console.log("User", user);
+      // console.log("User", user);
       if (user.name !== "test1" && user.profilePic !== "") navigate("/");
     }
   }, [currentUser, user]);

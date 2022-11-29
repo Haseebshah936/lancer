@@ -48,7 +48,7 @@ export default function GigServiceIntroduction({
       .get("http://localhost:3003/api/category/categories")
       .then((response) => {
         handleCategories(response.data);
-        console.log(gigCategories);
+        // console.log(gigCategories);
       });
   }, []);
 
@@ -60,7 +60,7 @@ export default function GigServiceIntroduction({
         setTagArr(tagslist[dat][name]);
       }
     }
-    console.log(gigIntroduction);
+    // console.log(gigIntroduction);
   }, [gigIntroduction]);
   useEffect(() => {
     const name = Object.keys(tagsList[18])[0];
@@ -157,7 +157,7 @@ export default function GigServiceIntroduction({
                 ...gigIntroduction,
                 gigDescription: e,
               });
-              console.log("Gig Description", gigIntroduction.gigDescription);
+              // console.log("Gig Description", gigIntroduction.gigDescription);
             }}
             style={{
               width: "100%",

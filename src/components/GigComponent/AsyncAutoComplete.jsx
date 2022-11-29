@@ -31,12 +31,12 @@ export default function AsyncAutoComplete({
     if (!loading) {
       return undefined;
     }
-    console.log(gigCategory);
+    // console.log(gigCategory);
     (async () => {
       const response = await axios.get(
         `http://localhost:3003/api/category/subCategories/${gigCategory?.id}`
       );
-      console.log("Response", response.data);
+      // console.log("Response", response.data);
       if (active) {
         setOptions(response.data);
       }
@@ -93,15 +93,15 @@ export default function AsyncAutoComplete({
       };
     });
 
-    console.log("additional", newadditional);
+    // console.log("additional", newadditional);
     setAdditionalFeatures(newadditional);
     setBasicPlan({ ...basicPlan, features: [...newfeatures] });
     setStandardPlan({ ...standardPlan, features: [...newfeatures1] });
     setPremiumPlan({ ...premiumPlan, features: [...newfeatures2] });
 
-    console.log("basic", basicPlan);
-    console.log("standard", standardPlan);
-    console.log("premium", premiumPlan);
+    // console.log("basic", basicPlan);
+    // console.log("standard", standardPlan);
+    // console.log("premium", premiumPlan);
   };
 
   return (
@@ -132,7 +132,7 @@ export default function AsyncAutoComplete({
       loading={loading}
       onChange={(e, v) => {
         setGigSubCategory(v);
-        console.log("I am in auto", v);
+        // console.log("I am in auto", v);
         setFeatures(v, gigCategory);
       }}
       renderInput={(params) => (

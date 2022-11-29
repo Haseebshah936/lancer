@@ -21,13 +21,13 @@ export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleClick = (event) => {
-    console.log(gig._id);
+    // console.log(gig._id);
     setAnchorEl(anchorEl ? null : event.currentTarget);
   };
   const handelEdit = () => {
-    console.log("edit: ", gig?._id);
+    // console.log("edit: ", gig?._id);
     requestMethod.get(`product/${gig?._id}`).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setEditGigStatus(true);
       setGigToBeEditedData(res.data);
       navigate("/editGig");
@@ -35,9 +35,9 @@ export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
   };
   const handelDelete = () => {
     requestMethod.delete("product/" + gig?._id).then((res) => {
-      console.log(res);
+      // console.log(res);
       setStateChanged(stateChanged + 1);
-      console.log("deleteed");
+      // console.log("deleteed");
     });
   };
   const handelPauseOrActivate = () => {
@@ -46,18 +46,18 @@ export default function GigMorePopper({ gig, setStateChanged, stateChanged }) {
       requestMethod.put(`product/updateState/${gig?._id}`, {
         state: "paused",
       });
-      console.log("pausing");
+      // console.log("pausing");
     } else {
       // http://localhost:3003/api/product/updateState/637900bf8f1fa87a3ef8ad6d
       requestMethod.put(`product/updateState/${gig?._id}`, {
         state: "live",
       });
-      console.log("making live");
+      // console.log("making live");
     }
   };
-  const handelResume = () => {
-    console.log("resume");
-  };
+  // const handelResume = () => {
+  //   console.log("resume");
+  // };
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popper" : undefined;
