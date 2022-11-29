@@ -7,12 +7,15 @@ import { tick } from "../../assets";
 import { handleError } from "../../utils/helperFunctions";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function GigLoading({ gig }) {
   const [loading, setLoading] = useState(true);
+  const { editGigStatus, gigToBeEditedData, setEditGigStatus } =
+    useCustomContext();
   const navigate = useNavigate();
   useEffect(() => {
-    if (gig) {
+    if (gig && !editGigStatus) {
       (async () => {
         try {
           const response = await axios.post(
@@ -21,7 +24,25 @@ export default function GigLoading({ gig }) {
           );
           gig = {};
           console.log("Response", response.data);
+          setEditGigStatus(false);
           toast.success("Product Created Successfully");
+          setLoading(false);
+          navigate(-1);
+        } catch (error) {
+          handleError(error);
+        }
+      })();
+    } else if (gig && editGigStatus) {
+      (async () => {
+        try {
+          const response = await axios.put(
+            `http://localhost:3003/api/product/updateProduct/${gigToBeEditedData._id}`,
+            gig
+          );
+          gig = {};
+          console.log("Response", response.data);
+          setEditGigStatus(false);
+          toast.success("Product Updated Successfully");
           setLoading(false);
           navigate(-1);
         } catch (error) {

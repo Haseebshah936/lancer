@@ -95,9 +95,10 @@ function App(props) {
         setActiveChatroomStatus,
         activeProfile,
         setActiveProfile,
-        editGigStatus, setEditGigStatus,
-        gigToBeEditedData, setGigToBeEditedData
-
+        editGigStatus,
+        setEditGigStatus,
+        gigToBeEditedData,
+        setGigToBeEditedData,
       }}
     >
       <Router>
@@ -113,10 +114,11 @@ function App(props) {
 
           <Route element={<PrivateRoutes />}>
             <Route path="/buyermain" element={<BuyerMain />} />
-            {/* <Route path="/sellerdashboard" element={<SellerDashboard />}>
+            <Route path="/sellerdashboard" element={<SellerDashboard />}>
               <Route path="favourites" element={<Favourites />} />
               <Route index element={<Dashboard />} />
-            </Route> */}
+            </Route>
+
             <Route path="/chat/:id" element={<Chat />} />
             <Route path="/createGig" element={<CreateGig />} />
             <Route path="/editGig" element={<CreateGig />} />

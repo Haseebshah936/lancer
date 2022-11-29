@@ -137,7 +137,7 @@ export default function GigServiceIntroduction({
               basicPlan={basicPlan}
               standardPlan={standardPlan}
               premiumPlan={premiumPlan}
-              gigCategory={CatObject}
+              gigCategory={gigIntroduction.gigCategory}
               gigSubCategory={gigIntroduction.gigSubCategory}
               setGigSubCategory={(subCat) => {
                 // console.log("Subcategory", CatObject);

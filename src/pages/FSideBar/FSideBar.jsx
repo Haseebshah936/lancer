@@ -100,7 +100,7 @@ const Sidebar = () => {
             >
               {user?.name},{" "}
             </p>
-            <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p>
+            {/* <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p> */}
           </InfoWrapper>
         </Paper>
         <Paper

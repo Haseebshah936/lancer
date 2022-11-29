@@ -109,8 +109,11 @@ export default function CreateGig() {
       console.log("response", response.data);
       setGigIntroduction({
         gigTitle: gigToBeEditedData.title,
-        gigCategory: { label: response.data.category.title },
-        gigSubCategory: { title: response.data.title },
+        gigCategory: {
+          ...response.data.category,
+          label: response.data.category.title,
+        },
+        gigSubCategory: { ...response.data, title: response.data.title },
         gigDescription: gigToBeEditedData.description,
         tage: gigToBeEditedData.tags,
       });
@@ -122,6 +125,12 @@ export default function CreateGig() {
       setAdditionalFeatures(gigToBeEditedData.additionalFeatures);
       setVideo({ uri: gigToBeEditedData.video });
       setImages(imagesArray);
+      const { _id: id1, ...package1 } = gigToBeEditedData.packages[0];
+      const { _id: id2, ...package2 } = gigToBeEditedData.packages[1];
+      const { _id: id3, ...package3 } = gigToBeEditedData.packages[2];
+      setBasicPlan(package1);
+      setStandardPlan(package2);
+      setPremiumPlan(package3);
     } catch (error) {
       console.log(error);
       handleError(error);
