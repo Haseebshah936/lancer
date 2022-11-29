@@ -3,24 +3,34 @@ import React, { memo } from "react";
 import styled from "styled-components";
 import Review from "../ReviewComponent";
 import colors from "../../utils/colors";
-import { reviews } from "../../utils/dummyData";
+// import { reviews } from "../../utils/dummyData";
 
-function Reviews({ showReplies = true }) {
+function Reviews({
+  loadMore = false,
+  showReplies = true,
+  reviews = [],
+  getMoreReviews,
+}) {
   return (
     <ReviewContainer>
       {reviews.map((e, i) => (
         <Review
           key={i}
           reply={showReplies ? e?.reply : null}
-          img={e.img}
+          img={e.buyerId?.profilePic}
           rating={e.rating}
-          text={e.text}
-          userImg={e.userImg}
+          text={e.comment}
+          userImg={e.sellerId?.profilePic}
         />
       ))}
-      <CustomButton variant="contained">
-        &nbsp;&nbsp;Load More Reviews
-      </CustomButton>
+      {reviews.length > 9 && loadMore && (
+        <CustomButton
+          variant="contained"
+          onClick={() => getMoreReviews(reviews.length)}
+        >
+          &nbsp;&nbsp;Load More Reviews
+        </CustomButton>
+      )}
     </ReviewContainer>
   );
 }

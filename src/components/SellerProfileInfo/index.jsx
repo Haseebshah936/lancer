@@ -27,6 +27,7 @@ function SellerProfileInfo({
   educationalBackground = [],
   experience = [],
   achivements = [],
+  isSame = false,
 }) {
   return (
     <Container style={{ ...style, maxHeight: showExtraInfo ? "100%" : "30vh" }}>
@@ -60,10 +61,12 @@ function SellerProfileInfo({
         <Text>{languages.join(", ")}</Text>
         <SubHeading>English level:</SubHeading>
         <Text>{englishLevel}</Text>
-        <CustomIconButton variant="contained">
-          <ChatBubbleOutline />
-          &nbsp;&nbsp;Contact to this seller
-        </CustomIconButton>
+        {!isSame && (
+          <CustomIconButton variant="contained">
+            <ChatBubbleOutline />
+            &nbsp;&nbsp;Contact to this seller
+          </CustomIconButton>
+        )}
       </Wrapper>
       <AboutContainer>
         {showExtraInfo && (

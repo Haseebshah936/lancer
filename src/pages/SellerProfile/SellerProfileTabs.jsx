@@ -56,17 +56,19 @@ export default function SellerProfileTabs({
   achivements = [],
   products = [],
   loadingProductsData,
-  reveiws = [],
+  reviews = [],
   loadingReviewsData,
+  getMoreReviews,
+  loadMore,
 }) {
   const [value, setValue] = useState(0);
   const [pagination, setPagination] = useState(1);
   const [count, setCount] = useState(1);
   const [hideAbout, setHideAbout] = useState(false);
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-
+  console.log("Products tab", showProductsTab);
   useEffect(() => {
-    setCount(Math.ceil(a.length / 6));
+    setCount(Math.ceil(products.length / 6));
   }, [pagination]);
 
   const handleChange = (event, newValue) => {
@@ -110,9 +112,7 @@ export default function SellerProfileTabs({
               {...a11yProps(0)}
             />
           )}
-          {showProductsTab && (
-            <CustomTab label="Portfolios" {...a11yProps(1)} />
-          )}
+          {showProductsTab && <CustomTab label="Products" {...a11yProps(1)} />}
           <CustomTab label="Reviews" {...a11yProps(2)} />
         </CustomTabContainer>
       </Box>
@@ -142,20 +142,24 @@ export default function SellerProfileTabs({
             px={{ lg: "4rem", md: "2rem", xs: "0rem" }}
             mb={"2rem"}
           >
-            <Portfolios data={a.slice((pagination - 1) * 6, pagination * 6)} />
-            <Box
-              mt={"4rem"}
-              display="flex"
-              justifyContent="center"
-              alignContent={"center"}
-              width="100%"
-            >
-              <Pagination
-                count={count}
-                page={pagination}
-                onChange={(e, page) => setPagination(page)}
-              />
-            </Box>
+            <Portfolios
+              data={products.slice((pagination - 1) * 6, pagination * 6)}
+            />
+            {products.length > 6 && (
+              <Box
+                mt={"4rem"}
+                display="flex"
+                justifyContent="center"
+                alignContent={"center"}
+                width="100%"
+              >
+                <Pagination
+                  count={count}
+                  page={pagination}
+                  onChange={(e, page) => setPagination(page)}
+                />
+              </Box>
+            )}
           </Box>
         </TabPanel>
       )}
@@ -166,7 +170,11 @@ export default function SellerProfileTabs({
           px={{ md: "2rem", xs: "0rem" }}
           id="reviews"
         >
-          <Reviews />
+          <Reviews
+            loadMore={loadMore}
+            reviews={reviews}
+            getMoreReviews={getMoreReviews}
+          />
         </Box>
       </TabPanel>
     </Box>
