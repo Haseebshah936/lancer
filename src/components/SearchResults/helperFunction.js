@@ -5,7 +5,8 @@ export default function helperFunction(
   price,
   SubCategoryID,
   terms,
-  setSearchData
+  setSearchData,
+  setSearchDataLoader
 ) {
   if (Badge.length !== 0 && price.max.length === 0) {
     axios
@@ -15,6 +16,7 @@ export default function helperFunction(
       .then((response) => {
         console.log(response.data);
         setSearchData(response.data);
+        setSearchDataLoader(false);
       });
   } else if (Badge.length === 0 && price.max.length !== 0) {
     axios
@@ -24,6 +26,7 @@ export default function helperFunction(
       .then((response) => {
         console.log(response.data);
         setSearchData(response.data);
+        setSearchDataLoader(false);
       });
   } else if (Badge.length !== 0 && price.max.length !== 0) {
     axios
@@ -33,6 +36,7 @@ export default function helperFunction(
       .then((response) => {
         console.log(response.data);
         setSearchData(response.data);
+        setSearchDataLoader(false);
       });
   } else {
     axios
@@ -42,6 +46,8 @@ export default function helperFunction(
       .then((response) => {
         console.log(response.data);
         setSearchData(response.data);
+        setSearchDataLoader(false);
       });
   }
+  return;
 }
