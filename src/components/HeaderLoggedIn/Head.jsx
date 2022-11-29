@@ -108,7 +108,8 @@ function Head({
       currentPath == "/f/payments" ||
       currentPath == "/f/settings" ||
       currentPath == "/gig/gig" ||
-      currentPath == "/createGig"
+      currentPath == "/createGig" ||
+      currentPath == "/editGig"
     ) {
       return true;
     } else {
