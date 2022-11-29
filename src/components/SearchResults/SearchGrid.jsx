@@ -7,9 +7,11 @@ import styled from "styled-components";
 import { mobile } from "../../responsive";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { useEffect } from "react";
+import { Backdrop, CircularProgress, Typography } from "@mui/material";
+import colors from "../../utils/colors";
 
-const SearchGrid = ({ data }) => {
-  const { searchData } = useCustomContext();
+const SearchGrid = () => {
+  const { searchData, searchDataLoader } = useCustomContext();
 
   useEffect(() => {
     console.log("Search Data", searchData);
@@ -18,46 +20,55 @@ const SearchGrid = ({ data }) => {
   return (
     <>
       <Grid container justifyContent="center" alignItems="center" spacing={2}>
-        {searchData.map((c) => (
-          <Grid
-            item
-            xs={3}
-            lg={3}
-            md={4}
-            sm={4}
-            rowspacing={2}
-            columnSpacing={2}
-          >
-            <Laptop>
-              <PortfolioCard
-                count={c}
-                GigImage={searchData?.images}
-                Avatar={searchData?.owner?._id?.profilePic}
-                SellerName={searchData?.owner?._id?.name}
-                SellerLevel={searchData?.owner?._id?.badge}
-                GigTitle={searchData?.title}
-                SellerRating={searchData?.rating}
-                GigReviewsTotal={searchData?.reviews}
-                GigStartPrice={searchData?.cost}
-              />
-            </Laptop>
+        {searchDataLoader ? (
+          // <Backdrop
+          //   sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          //   open={searchDataLoader}
+          // >
+          // <CircularProgress color={colors.textGreen} />
+          <Typography>Hello</Typography>
+        ) : (
+          // </Backdrop>
+          searchData.map((c) => (
+            <Grid
+              item
+              xs={3}
+              lg={3}
+              md={4}
+              sm={4}
+              rowspacing={2}
+              columnSpacing={2}
+            >
+              <Laptop>
+                <PortfolioCard
+                  count={c}
+                  GigImage={c?.images[0]}
+                  Avatar={c?.owner?._id?.profilePic}
+                  SellerName={c?.owner?._id?.name}
+                  SellerLevel={c?.owner?._id?.badge}
+                  GigTitle={c?.title}
+                  SellerRating={c?.rating}
+                  GigReviewsTotal={c?.reviews}
+                  GigStartPrice={c?.cost}
+                />
+              </Laptop>
 
-            <Mobile>
-              <PortfolioCardMobile
-                GigTitle={"I will assassinate Talha and Umer with pressure"}
-                SellerRating={"5.0"}
-                GigReviewsTotal={"33"}
-                GigImage={teamImg}
-                Avatar={
-                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-                }
-                SellerName={"Muhammad Haseeb"}
-                SellerLevel={"Level Rana Seller"}
-                GigStartPrice={"$50"}
-              />
-            </Mobile>
-          </Grid>
-        ))}
+              <Mobile>
+                <PortfolioCardMobile
+                  count={c}
+                  GigImage={c?.images[0]}
+                  Avatar={c?.owner?._id?.profilePic}
+                  SellerName={c?.owner?._id?.name}
+                  SellerLevel={c?.owner?._id?.badge}
+                  GigTitle={c?.title}
+                  SellerRating={c?.rating}
+                  GigReviewsTotal={c?.reviews}
+                  GigStartPrice={c?.cost}
+                />
+              </Mobile>
+            </Grid>
+          ))
+        )}
       </Grid>
     </>
   );

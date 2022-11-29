@@ -61,8 +61,14 @@ function Head({
   const navigate = useNavigate();
   const [searchVisible, setSearchVisible] = React.useState(false);
   const { user, currentUser } = useRealmContext();
-  const { activeProfile, setActiveProfile, setSearchData, terms, setTerms } =
-    useCustomContext();
+  const {
+    activeProfile,
+    setActiveProfile,
+    setSearchData,
+    terms,
+    setTerms,
+    setSearchDataLoader,
+  } = useCustomContext();
 
   const handleSubmit = (search) => {
     if (search) {
@@ -74,6 +80,7 @@ function Head({
 
           console.log("Search Response", response.data);
           setSearchData(response.data);
+          setSearchDataLoader(false);
           navigate("/search");
         } catch (error) {
           console.log(error);

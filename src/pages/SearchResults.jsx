@@ -14,10 +14,9 @@ import axios from "axios";
 import { useCustomContext } from "../Hooks/useCustomContext";
 
 const SearchResults = () => {
-  const [loader, setloader] = useState(true);
   const [pagination, setPagination] = useState(1);
   const [count, setCount] = useState(1);
-  const { searchData, setSearchData } = useCustomContext();
+  const { searchData } = useCustomContext();
 
   // useEffect(() => {
   //   axios.get("http://localhost:3003/api/product/").then((response) => {
@@ -33,7 +32,7 @@ const SearchResults = () => {
 
   return (
     <>
-      <Header setloader={setloader} />
+      <Header />
 
       <Container>
         <Box sx={{ flexGrow: 1 }}>
@@ -61,7 +60,6 @@ const SearchResults = () => {
                 columnSpacing={2}
               >
                 <SearchGrid
-                  loader={loader}
                   data={searchData.slice(
                     (pagination - 1) * 12,
                     pagination * 12

@@ -79,7 +79,8 @@ const AntSwitch = styled(Switch)(({ theme }) => ({
 }));
 
 const FilterAccordions = ({}) => {
-  const { searchData, setSearchData, terms } = useCustomContext();
+  const { searchData, setSearchData, terms, setSearchDataLoader } =
+    useCustomContext();
   const [Categories, setCategories] = useState([]);
   const [SubCategories, setSubCategories] = useState([]);
 
@@ -101,7 +102,14 @@ const FilterAccordions = ({}) => {
 
   const handleFilters = () => {
     console.log("I am in Filters");
-    helperFunction(Badge, price, SubCategoryID, terms, setSearchData);
+    helperFunction(
+      Badge,
+      price,
+      SubCategoryID,
+      terms,
+      setSearchData,
+      setSearchDataLoader
+    );
   };
 
   const handlePrice = (max, min) => {

@@ -67,6 +67,7 @@ function App(props) {
   const [activeProfile, setActiveProfile] = useState(false);
   const [searchData, setSearchData] = useState([]);
   const [terms, setTerms] = useState("");
+  const [searchDataLoader, setSearchDataLoader] = useState(true);
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -75,6 +76,8 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        searchDataLoader,
+        setSearchDataLoader,
         terms,
         setTerms,
         searchData,
