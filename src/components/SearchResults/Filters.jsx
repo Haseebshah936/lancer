@@ -1,6 +1,6 @@
 import { useState } from "react";
 import colors from "../../utils/colors";
-import { Box, Drawer, Typography } from "@mui/material";
+import { Box, Drawer, IconButton, Typography } from "@mui/material";
 import * as styled2 from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import Modal from "@mui/material/Modal";
@@ -9,18 +9,12 @@ import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import FilterAccordions from "./FilterAccordions";
 import PortfolioCardMobile from "../PortfolioCardMobile";
 import { teamImg } from "../../assets";
-import { SortOutlined } from "@mui/icons-material";
+import { CancelOutlined, SortOutlined } from "@mui/icons-material";
 
 const Filters = ({}) => {
   const [filterdraw, setFilterdraw] = useState(false);
-  const toggleFilters = (open) => (event) => {
+  const toggleFiltersDraw = (open) => (event) => {
     console.log("asdsad");
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
 
     setFilterdraw(open);
   };
@@ -29,7 +23,7 @@ const Filters = ({}) => {
     <Container>
       <FilterButton>
         <Button
-          onClick={toggleFilters(true)}
+          onClick={toggleFiltersDraw(true)}
           variant="outlined"
           startIcon={<FilterAltOutlinedIcon />}
           sx={{
@@ -38,7 +32,8 @@ const Filters = ({}) => {
               borderColor: colors.textGreen,
             },
 
-            width: "50%",
+            width: "100%",
+            mb: 1,
           }}
         >
           Filters
@@ -46,20 +41,39 @@ const Filters = ({}) => {
         <Drawer
           anchor="bottom"
           open={filterdraw}
-          onClose={toggleFilters(false)}
+          onClose={toggleFiltersDraw(false)}
         >
           <Box
             sx={{
               height: "100vh",
               width: "auto",
-              backgroundColor: "red",
+              backgroundColor: "white",
+              p: 2,
             }}
             role="presentation"
-            onClick={toggleFilters(false)}
-            onKeyDown={toggleFilters(false)}
-          ></Box>
+          >
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "flex-end",
+              }}
+            >
+              <IconButton
+                onClick={toggleFiltersDraw(false)}
+                sx={{ m: 0, p: 0 }}
+              >
+                <CancelOutlined
+                  fontSize="large"
+                  sx={{ color: colors.textGreen, m: 0, p: 0 }}
+                />
+              </IconButton>
+            </div>
+            <FilterAccordions toggleFiltersDraw={toggleFiltersDraw} />
+          </Box>
         </Drawer>
-        <Button
+        {/* <Button
           variant="outlined"
           startIcon={<SortOutlined />}
           sx={{
@@ -72,7 +86,7 @@ const Filters = ({}) => {
           }}
         >
           Sort
-        </Button>
+        </Button> */}
       </FilterButton>
 
       <Accordions>

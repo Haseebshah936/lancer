@@ -9,13 +9,13 @@ import PersonSearchOutlinedIcon from "@mui/icons-material/PersonSearchOutlined";
 import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
 import TimerOutlinedIcon from "@mui/icons-material/TimerOutlined";
 import colors from "../../utils/colors";
-import { styled } from "@mui/material/styles";
+
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
 import NumberFormat, { InputAttributes } from "react-number-format";
 import Typography from "@mui/material/Typography";
-import * as styled2 from "styled-components";
+import styled from "styled-components";
 import { miniPc, mobile, tablet } from "../../responsive";
 import {
   CircularProgress,
@@ -29,56 +29,11 @@ import Checkbox from "@mui/material/Checkbox";
 import { Link } from "react-router-dom";
 import CustomFilledButton from "../CustomFilledButton";
 import axios from "axios";
-import { PriceChange } from "@mui/icons-material";
+import { MilitaryTechOutlined, PriceChange } from "@mui/icons-material";
 import helperFunction from "./helperFunction";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 
-const AntSwitch = styled(Switch)(({ theme }) => ({
-  width: 28,
-  height: 16,
-  padding: 0,
-
-  display: "flex",
-  "&:active": {
-    "& .MuiSwitch-thumb": {
-      width: 15,
-    },
-    "& .MuiSwitch-switchBase.Mui-checked": {
-      transform: "translateX(9px)",
-    },
-  },
-  "& .MuiSwitch-switchBase": {
-    padding: 2,
-    "&.Mui-checked": {
-      transform: "translateX(12px)",
-      color: "#fff",
-      "& + .MuiSwitch-track": {
-        opacity: 1,
-        backgroundColor: colors.textGreen,
-      },
-    },
-  },
-  "& .MuiSwitch-thumb": {
-    boxShadow: "0 2px 4px 0 rgb(0 35 11 / 20%)",
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    transition: theme.transitions.create(["width"], {
-      duration: 200,
-    }),
-  },
-  "& .MuiSwitch-track": {
-    borderRadius: 16 / 2,
-    opacity: 1,
-    backgroundColor:
-      theme.palette.mode === "dark"
-        ? "rgba(255,255,255,.35)"
-        : "rgba(0,0,0,.25)",
-    boxSizing: "border-box",
-  },
-}));
-
-const FilterAccordions = ({}) => {
+const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
   const { searchData, setSearchData, terms, setSearchDataLoader } =
     useCustomContext();
   const [Categories, setCategories] = useState([]);
@@ -110,6 +65,13 @@ const FilterAccordions = ({}) => {
       setSearchData,
       setSearchDataLoader
     );
+  };
+
+  const clearFilters = () => {
+    console.log("I am in Filters");
+    setPrice({ max: "", min: "" });
+    setSubCategoryID("");
+    setBadge("");
   };
 
   const handlePrice = (max, min) => {
@@ -408,7 +370,7 @@ const FilterAccordions = ({}) => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <AttachMoneyIcon
+          <MilitaryTechOutlined
             sx={{
               fontSize: "2.0rem",
               color: colors.textGreen,
@@ -480,7 +442,47 @@ const FilterAccordions = ({}) => {
           </>
         </AccordionDetails>
       </Accordion>
-      <div
+      <FilterButtons>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+          }}
+        >
+          <CustomFilledButton
+            onClick={handleFilters}
+            title={"Apply Filters"}
+            style={{ margin: "15px 0px 0px 0px" }}
+          ></CustomFilledButton>
+        </div>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-start",
+          }}
+        >
+          <CustomFilledButton
+            onClick={clearFilters}
+            title={"Clear Filters"}
+            style={{ margin: "15px 0px 0px 0px" }}
+          ></CustomFilledButton>
+        </div>
+      </FilterButtons>
+      <DrawerButtons>
+        <CustomFilledButton
+          onClick={handleFilters}
+          title={"Apply Filters"}
+          style={{ margin: "15px 0px 0px 0px", width: "100%" }}
+        ></CustomFilledButton>
+        <CustomFilledButton
+          onClick={clearFilters}
+          title={"Clear Filters"}
+          style={{ margin: "15px 0px 0px 0px", width: "100%" }}
+        ></CustomFilledButton>
+      </DrawerButtons>
+      {/* <div
         style={{
           display: "flex",
           flexDirection: "row",
@@ -488,11 +490,11 @@ const FilterAccordions = ({}) => {
         }}
       >
         <CustomFilledButton
-          onClick={handleFilters}
-          title={"Apply Filters"}
-          style={{ margin: "15px 0px 0px 0px" }}
+          onClick={toggleFiltersDraw(false)}
+          title={"Close Filter Draw"}
+          style={{ margin: "10px 0px 0px 0px" }}
         ></CustomFilledButton>
-      </div>
+      </div> */}
       {/* <FormGroup style={{ marginLeft: 10 }}>
         <FormControlLabel
           style={{ marginTop: 10 }}
@@ -537,28 +539,43 @@ const FilterAccordions = ({}) => {
 
 export default FilterAccordions;
 
-const FilterText = styled2.default.div`
-    font-size:1.2rem;
-    margin-bottom:8px;
-    cursor:pointer;
+const FilterText = styled.div`
+  font-size: 1.2rem;
+  margin-bottom: 8px;
+  cursor: pointer;
+  text-decoration: none !important;
+  font-size: 1.2rem !important;
+  :hover {
+    color: ${colors.textGreen} !important;
+  }
+  :active {
+    color: ${colors.textGreen} !important;
+    font-weight: 300;
+  }
+  a: {
     text-decoration: none !important;
-    font-size: 1.2rem !important;  
-    :hover{
-      color:${colors.textGreen} !important
-    };
-    :active{
-      color:${colors.textGreen} !important;
-      font-weight:300;
-    };
-    a:{
-      text-decoration: none !important;
-    }
+  }
 `;
 
-const NumberField = styled2.default.div`
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
+const NumberField = styled.div`
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+`;
+
+const DrawerButtons = styled.div`
+  display: none;
+
+  ${mobile({
+    display: "flex",
+    flexDirection: "column",
+  })}
+`;
+
+const FilterButtons = styled.div`
+  ${mobile({
+    display: "none",
+  })}
 `;

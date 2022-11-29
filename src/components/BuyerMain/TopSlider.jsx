@@ -19,7 +19,9 @@ const TopSlider = () => {
         <Link to="/postProject">
           <CustomFilledButton
             title={"Post a Request"}
-            style={{ margin: "5px 0px 0px 0px" }}
+            style={{
+              margin: "5px 0px 0px 0px",
+            }}
           ></CustomFilledButton>
         </Link>
       </FirstSection>
