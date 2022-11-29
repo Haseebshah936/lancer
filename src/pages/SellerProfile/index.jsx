@@ -27,11 +27,27 @@ function SellerProfile(props) {
     skills: [],
     achivements: [],
   });
-
+  const [loadingProductsData, setLoadingProductsData] = useState(true);
+  const [productsData, setProductsData] = useState([]);
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
   // eslint-disable-next-line no-restricted-globals
   console.log("Query Params", queryParams);
   const getUserData = async () => {
     const response = await requestMethod.get(`/user/getUser/${queryParams.id}`);
+    return response.data;
+  };
+
+  const getProducts = async () => {
+    const response = await requestMethod.get(
+      `/product/getProductsBySellerId/${queryParams.id}`
+    );
+    return response.data;
+  };
+  const getReviews = async () => {
+    const response = await requestMethod.get(
+      `review/sellerReviews/${queryParams.id}`
+    );
     return response.data;
   };
 
@@ -75,6 +91,48 @@ function SellerProfile(props) {
 
   useEffect(() => {
     console.log("User Data", userData);
+    if (!userData) return;
+    if (
+      user.seller &&
+      queryParams.id === user?._id &&
+      activeProfile === "seller"
+    ) {
+      setLoadingProductsData(true);
+
+      getProducts()
+        .then((data) => {
+          console.log("Products", data);
+          setProductsData(data);
+          setLoadingProductsData(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
+      setLoadingReviews(true);
+      getReviews()
+        .then((data) => {
+          console.log("Reviews", data);
+          setReviews(data);
+          setLoadingReviews(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
+    } else if (userData.seller && activeProfile === "seller") {
+      setLoadingProductsData(true);
+      getProducts()
+        .then((data) => {
+          console.log("Products", data);
+          setProductsData(data);
+          setLoadingProductsData(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
+    }
   }, [userData]);
 
   return (
@@ -128,6 +186,10 @@ function SellerProfile(props) {
                   ? true
                   : false
               }
+              products={productsData}
+              loadingProductsData={loadingProductsData}
+              reviews={reviews}
+              loadingReviews={loadingReviews}
               {...aboutSeller}
             />
           )}

@@ -622,6 +622,13 @@ const humanLanguage = [
     { code: 'za', name: 'Zhuang, Chuang' },
     { code: 'zu', name: 'Zulu' }
 ];
+const lanuageProficiencyList = [
+    { code: 'native', name: 'Native' },
+    { code: 'intermediate', name: 'intermediate' },
+    { code: 'fluent', name: 'Fluent' },
+];
+
+export const languageProficiency = lanuageProficiencyList;
 export const humanLanguages = humanLanguage;
 export const genderOptions = genderOption;
 export const numebers = numbers;

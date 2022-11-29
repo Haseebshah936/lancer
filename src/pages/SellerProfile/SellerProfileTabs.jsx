@@ -12,6 +12,7 @@ import Reviews from "../../components/ReviewsComponent";
 import AboutSeller from "../../components/AboutSeller/AboutSeller";
 import { miniTablet } from "../../responsive";
 import { useEffect } from "react";
+import { useState } from "react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -53,13 +54,18 @@ export default function SellerProfileTabs({
   educationalBackground = [],
   experience = [],
   achivements = [],
+  products = [],
+  loadingProductsData,
+  reveiws = [],
+  loadingReviewsData,
 }) {
-  const [value, setValue] = React.useState(0);
-  const [pagination, setPagination] = React.useState(1);
-  const [count, setCount] = React.useState(1);
-  const [hideAbout, setHideAbout] = React.useState(false);
+  const [value, setValue] = useState(0);
+  const [pagination, setPagination] = useState(1);
+  const [count, setCount] = useState(1);
+  const [hideAbout, setHideAbout] = useState(false);
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
-  React.useEffect(() => {
+
+  useEffect(() => {
     setCount(Math.ceil(a.length / 6));
   }, [pagination]);
 
