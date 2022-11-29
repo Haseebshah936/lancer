@@ -159,7 +159,7 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
                 cursor: "pointer",
               }}
             >
-              {props.GigStartPrice}
+              ${props.GigStartPrice}
             </p>
           </MiniWrapper2>
         </CardActions>

@@ -113,7 +113,7 @@ const PortfolioCardMobile = ({ ...props }) => {
                   cursor: "pointer",
                 }}
               >
-                {props.GigStartPrice}
+                ${props.GigStartPrice}
               </p>
             </MiniWrapper2>
           </Grid>

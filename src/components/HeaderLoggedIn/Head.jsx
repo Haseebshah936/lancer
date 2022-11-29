@@ -87,6 +87,20 @@ function Head({
         }
       })();
     } else {
+      (async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3003/api/product/`
+          );
+
+          console.log("Search Response", response.data);
+          setSearchData(response.data);
+          setSearchDataLoader(false);
+          navigate("/search");
+        } catch (error) {
+          console.log(error);
+        }
+      })();
       navigate("/search");
     }
   };
@@ -161,6 +175,7 @@ function Head({
             >
               {" "}
               <InputField
+                value={terms}
                 styles={{
                   width: "100%",
                   backgroundColor: "transparent",
@@ -322,16 +337,32 @@ function Head({
           </SearchMobile> */}
           <SearchMobile>
             <div style={{ width: "10%" }}>
-              <SearchOutlined sx={{ fontSize: "2.5rem" }} />
+              <IconButton onClick={() => handleSubmit(terms)}>
+                <SearchOutlined sx={{ fontSize: "2.5rem" }} />
+              </IconButton>
             </div>
-            <div style={{ width: "90%" }}>
+            <form
+              style={{ width: "90%" }}
+              onSubmit={(e) => {
+                handleSubmit(terms);
+                e.preventDefault();
+              }}
+            >
               {" "}
               <InputField
-                styles={{ width: "100%", backgroundColor: "transparent" }}
+                value={terms}
+                styles={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  paddingLeft: "10px",
+                }}
                 placeholder={"What Services do you want?"}
                 type="text"
+                onChange={(e) => {
+                  handleChange(e.target.value);
+                }}
               />
-            </div>
+            </form>
           </SearchMobile>
         </Box>
       )}

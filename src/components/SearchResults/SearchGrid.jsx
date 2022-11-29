@@ -19,7 +19,12 @@ const SearchGrid = () => {
 
   return (
     <>
-      <Grid container justifyContent="center" alignItems="center" spacing={2}>
+      <Grid
+        container
+        justifyContent="flex-start"
+        alignItems="center"
+        spacing={2}
+      >
         {searchDataLoader ? (
           // <Backdrop
           //   sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
