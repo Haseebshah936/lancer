@@ -107,18 +107,27 @@ function Head({
       currentPath == "/f/messages" ||
       currentPath == "/f/payments" ||
       currentPath == "/f/settings" ||
-      currentPath.includes("/profile/")
+      currentPath == "/gig/gig" ||
+      currentPath == "/createGig"
     ) {
       return true;
     } else {
       return false;
     }
   }
+
+  const allPurposeRoutes = () => {
+    return currentPath.includes("/profile/");
+  };
+
   useEffect(() => {
-    console.log(currentPath);
+    // console.log(currentPath);
+    if (allPurposeRoutes()) return;
     if (activeProfile === "seller" && !matchRoutesinf()) {
       console.log("Active Profile", activeProfile);
       navigate("/f/dashboard");
+    } else if (activeProfile !== "seller" && matchRoutesinf()) {
+      navigate("/");
     }
   }, [activeProfile, user, currentUser]);
 

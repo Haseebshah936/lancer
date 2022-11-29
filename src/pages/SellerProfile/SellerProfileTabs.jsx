@@ -11,6 +11,7 @@ import { Pagination } from "@mui/material";
 import Reviews from "../../components/ReviewsComponent";
 import AboutSeller from "../../components/AboutSeller/AboutSeller";
 import { miniTablet } from "../../responsive";
+import { useEffect } from "react";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -45,10 +46,18 @@ function a11yProps(index) {
   };
 }
 
-export default function SellerProfileTabs({ style }) {
+export default function SellerProfileTabs({
+  style,
+  showProductsTab = false,
+  skills = [],
+  educationalBackground = [],
+  experience = [],
+  achivements = [],
+}) {
   const [value, setValue] = React.useState(0);
   const [pagination, setPagination] = React.useState(1);
   const [count, setCount] = React.useState(1);
+  const [hideAbout, setHideAbout] = React.useState(false);
   const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
   React.useEffect(() => {
     setCount(Math.ceil(a.length / 6));
@@ -57,6 +66,21 @@ export default function SellerProfileTabs({ style }) {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const hideAboutSeller = () => {
+    if (window.screen.width <= 700) {
+      setHideAbout(true);
+    } else {
+      setHideAbout(false);
+    }
+  };
+
+  window.onresize = () => {
+    hideAboutSeller();
+  };
+
+  useEffect(() => {
+    hideAboutSeller();
+  }, []);
 
   return (
     <Box
@@ -73,36 +97,63 @@ export default function SellerProfileTabs({ style }) {
           onChange={handleChange}
           aria-label="basic tabs example"
         >
-          <CustomTab label="Portfolios" {...a11yProps(1)} />
+          {showProductsTab && hideAbout && (
+            <CustomTab
+              label="About"
+              sx={{ display: "none" }}
+              {...a11yProps(0)}
+            />
+          )}
+          {showProductsTab && (
+            <CustomTab label="Portfolios" {...a11yProps(1)} />
+          )}
           <CustomTab label="Reviews" {...a11yProps(2)} />
-          <CustomTab label="About" sx={{ display: "none" }} {...a11yProps(0)} />
         </CustomTabContainer>
       </Box>
-
-      <TabPanel value={value} index={0}>
-        <Box
-          id="portfolio"
-          mt={{ md: "2rem", xs: 0 }}
-          px={{ lg: "4rem", md: "2rem", xs: "0rem" }}
-          mb={"2rem"}
-        >
-          <Portfolios data={a.slice((pagination - 1) * 6, pagination * 6)} />
+      {hideAbout && showProductsTab && (
+        <CustomTabPanel value={value} index={0}>
           <Box
-            mt={"4rem"}
-            display="flex"
-            justifyContent="center"
-            alignContent={"center"}
-            width="100%"
+            mt={{ md: "2rem", xs: "0rem" }}
+            mb={"2rem"}
+            px={{ md: "2rem", xs: "0rem" }}
+            id="about"
+            display={{ md: "none", xs: "flex" }}
           >
-            <Pagination
-              count={count}
-              page={pagination}
-              onChange={(e, page) => setPagination(page)}
+            <AboutSeller
+              skills={skills}
+              experience={experience}
+              educationalBackground={educationalBackground}
+              achievements={achivements}
             />
           </Box>
-        </Box>
-      </TabPanel>
-      <TabPanel value={value} index={1}>
+        </CustomTabPanel>
+      )}
+      {showProductsTab && (
+        <TabPanel value={value} index={hideAbout ? 1 : 0}>
+          <Box
+            id="portfolio"
+            mt={{ md: "2rem", xs: 0 }}
+            px={{ lg: "4rem", md: "2rem", xs: "0rem" }}
+            mb={"2rem"}
+          >
+            <Portfolios data={a.slice((pagination - 1) * 6, pagination * 6)} />
+            <Box
+              mt={"4rem"}
+              display="flex"
+              justifyContent="center"
+              alignContent={"center"}
+              width="100%"
+            >
+              <Pagination
+                count={count}
+                page={pagination}
+                onChange={(e, page) => setPagination(page)}
+              />
+            </Box>
+          </Box>
+        </TabPanel>
+      )}
+      <TabPanel value={value} index={showProductsTab ? (hideAbout ? 2 : 1) : 0}>
         <Box
           mt={{ md: "2rem", xs: "0rem" }}
           mb={"2rem"}
@@ -112,17 +163,6 @@ export default function SellerProfileTabs({ style }) {
           <Reviews />
         </Box>
       </TabPanel>
-      <CustomTabPanel value={value} index={2}>
-        <Box
-          mt={{ md: "2rem", xs: "0rem" }}
-          mb={"2rem"}
-          px={{ md: "2rem", xs: "0rem" }}
-          id="about"
-          display={{ md: "none", xs: "flex" }}
-        >
-          <AboutSeller />
-        </Box>
-      </CustomTabPanel>
     </Box>
   );
 }

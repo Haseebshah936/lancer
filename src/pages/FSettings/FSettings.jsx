@@ -97,7 +97,6 @@ export default function FSettings() {
             <Grid item xs={11} sm={2.7}>
               <FSideBar></FSideBar>
             </Grid>
-
             <Grid
               item
               xs={11}
