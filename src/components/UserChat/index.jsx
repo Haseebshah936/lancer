@@ -270,7 +270,8 @@ function Chat(props) {
   }, [active]);
 
   useEffect(() => {
-    if (user) {
+    if (user?._id) {
+      console.log("User", user._id);
       getChatRooms();
     }
   }, [user]);

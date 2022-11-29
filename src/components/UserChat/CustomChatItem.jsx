@@ -49,7 +49,7 @@ function CustomChatItem({
     const { documentKey, fullDocument } = change;
     console.log("new message", fullDocument);
     requestMethod
-      .get(`/chatroom/${chatroom.id}/${user._id}`)
+      .get(`/chatroom/getChatroom/${chatroom.id}/${user._id}`)
       .then((res) => {
         console.log("res", res.data);
         changeChatroomsData(index, chatroom.id, res.data);
