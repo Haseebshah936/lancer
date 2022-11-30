@@ -139,6 +139,7 @@ export default function ResponsiveDrawer({
                 {activeProfile === "seller" ? (
                   <Box display={"flex"} flexDirection={"column"}>
                     <NavLink to={`/profile/${user?._id}`}>Profile</NavLink>
+                    <NavLink to={`/f/gigs/${user?._id}`}>Gigs</NavLink>
                     <NavLink to={`/f/settings/${user?._id}`}>Settings</NavLink>
                     <NavLink to={`/f/payments/${user?._id}`}>Payments</NavLink>
                     <NavLink onClick={logOut}>Log out</NavLink>
