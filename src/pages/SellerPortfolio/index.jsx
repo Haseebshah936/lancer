@@ -16,6 +16,7 @@ import { handleError } from "../../utils/helperFunctions";
 import { useRealmContext } from "../../db/RealmContext";
 import { Box } from "@mui/system";
 import colors from "../../utils/colors";
+import { CircularProgress, Grid } from "@mui/material";
 
 function SellerPortfolio(props) {
   const title =
@@ -121,7 +122,7 @@ function SellerPortfolio(props) {
   return (
     <>
       <HeaderLoggedIn />
-      {productData && (
+      {productData ? (
         <Container>
           <Wrapper>
             <SubContainer1>
@@ -195,6 +196,22 @@ function SellerPortfolio(props) {
             ))}
           </Box>
         </Container>
+      ) : (
+        <Grid
+          item
+          container
+          justifyContent="center"
+          alignItems="center"
+          sx={{ height: "100vh" }}
+        >
+          <CircularProgress
+            sx={{
+              "&.MuiCircularProgress-root": {
+                color: colors.textGreen,
+              },
+            }}
+          />
+        </Grid>
       )}
 
       <Footer />

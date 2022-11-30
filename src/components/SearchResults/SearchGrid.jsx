@@ -13,10 +13,6 @@ import colors from "../../utils/colors";
 const SearchGrid = () => {
   const { searchData, searchDataLoader } = useCustomContext();
 
-  useEffect(() => {
-    // console.log("Search Data", searchData);
-  }, [searchData]);
-
   return (
     <>
       <Grid
@@ -26,14 +22,22 @@ const SearchGrid = () => {
         spacing={2}
       >
         {searchDataLoader ? (
-          // <Backdrop
-          //   sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
-          //   open={searchDataLoader}
-          // >
-          // <CircularProgress color={colors.textGreen} />
-          <Typography></Typography>
+          <Grid
+            item
+            container
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: "80vh" }}
+          >
+            <CircularProgress
+              sx={{
+                "&.MuiCircularProgress-root": {
+                  color: colors.textGreen,
+                },
+              }}
+            />
+          </Grid>
         ) : (
-          // </Backdrop>
           searchData.map((c) => (
             <Grid
               item

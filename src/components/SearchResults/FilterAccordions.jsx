@@ -56,6 +56,7 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
   const [Badge, setBadge] = useState("");
 
   const handleFilters = () => {
+    setSearchDataLoader(true);
     // console.log("I am in Filters");
     helperFunction(
       Badge,
