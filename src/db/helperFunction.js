@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export const watchCollection = async (
   currentUser,
   collectionName,
-  filter,
+  filter = {},
   breakAsyncIterator,
   callBack
 ) => {
