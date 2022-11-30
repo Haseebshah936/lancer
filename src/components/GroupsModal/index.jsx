@@ -47,7 +47,7 @@ const schema = Joi.object({
   description: Joi.string().required(),
 });
 
-function GroupsModal({ toggleClose }) {
+function GroupsModal({ toggleClose, handleAddToGroup }) {
   const { user } = useRealmContext();
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(false);

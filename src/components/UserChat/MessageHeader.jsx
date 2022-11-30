@@ -22,9 +22,11 @@ import { useEffect } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import { requestMethod } from "../../requestMethod";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
 import displayTime from "../../utils/DateAndTime/displayTime";
+import { handleError } from "../../utils/helperFunctions";
 import GroupsModal from "../GroupsModal";
 
 function MessageHeader({
@@ -33,6 +35,7 @@ function MessageHeader({
   name = "Haseeb",
   status = true,
   isGroup = false,
+  userId = "",
   onClickCall = () => {},
   onClickVideoCall = () => {},
   temp = true,
@@ -50,6 +53,21 @@ function MessageHeader({
 
   const handleClose = () => {
     setToggle(false);
+  };
+
+  const handleAddToGroup = (chatroom) => {
+    console.log(chatroom);
+    requestMethod
+      .put(`chatroom/addParticipant/${chatroom.id}`, {
+        userId,
+      })
+      .then((res) => {
+        console.log("Response", res);
+      })
+      .catch((err) => {
+        console.log(err);
+        handleError(err);
+      });
   };
 
   const isMatchToday = (date) => {
@@ -152,7 +170,10 @@ function MessageHeader({
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <GroupsModal toggleClose={handleClose} />
+        <GroupsModal
+          toggleClose={handleClose}
+          handleAddToGroup={handleAddToGroup}
+        />
       </Modal>
     </Container>
   );
