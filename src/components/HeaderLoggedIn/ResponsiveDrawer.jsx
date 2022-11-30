@@ -44,20 +44,22 @@ export default function ResponsiveDrawer({
 
   const allPurposeRoutes = () => {
     return (
-      currentPath.includes("/profile/") || currentPath.includes("/portfolio/")
+      currentPath.includes("/profile/") ||
+      currentPath.includes("/portfolio/") ||
+      currentPath == "/chat"
     );
   };
 
-  React.useEffect(() => {
-    // console.log(currentPath);
-    if (allPurposeRoutes()) return;
-    if (activeProfile === "seller" && !matchRoutesinf()) {
-      // console.log("Active Profile", activeProfile);
-      navigate("/f/dashboard");
-    } else if (activeProfile !== "seller" && matchRoutesinf()) {
-      navigate("/");
-    }
-  }, [activeProfile, user, currentUser]);
+  // React.useEffect(() => {
+  //   // console.log(currentPath);
+  //   if (allPurposeRoutes()) return;
+  //   if (activeProfile === "seller" && !matchRoutesinf()) {
+  //     // console.log("Active Profile", activeProfile);
+  //     navigate("/f/dashboard");
+  //   } else if (activeProfile !== "seller" && matchRoutesinf()) {
+  //     navigate("/");
+  //   }
+  // }, [activeProfile, user, currentUser]);
 
   return (
     <Container>
