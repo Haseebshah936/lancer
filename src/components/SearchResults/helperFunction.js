@@ -25,6 +25,16 @@ export default function helperFunction(
       });
   }
 
+  //Empty Search
+  else if (!terms && !price.max && !Badge && !SubCategoryID) {
+    axios.get(` http://localhost:3003/api/product/`).then((response) => {
+      console.log("Empty Search");
+      console.log(response.data);
+      setSearchData(response.data);
+      setSearchDataLoader(false);
+    });
+  }
+
   //Search with Badge
   else if (terms && !price.max && Badge && !SubCategoryID) {
     axios

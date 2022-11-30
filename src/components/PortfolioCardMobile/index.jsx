@@ -16,7 +16,7 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
   return (
     <>
       <Paper elevation={2} sx={{ pr: 1 }}>
-        <Grid sx={{ width: "90vw" }}>
+        <Grid sx={{ width: "100%" }}>
           <Grid container direction="row" columnSpacing={1}>
             <Grid item mobile={5}>
               <CardMedia
