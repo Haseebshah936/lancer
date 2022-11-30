@@ -16,7 +16,7 @@ export default function WithdrawFunds() {
           <Box padding={2}>
             <TitleP className="text-left">Add Wallet</TitleP>
             <Grid container>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ mb: 1.6 }}>
                 <GreenBorderTextField
                   fullWidth
                   id="outlined-basic"
@@ -24,7 +24,7 @@ export default function WithdrawFunds() {
                   variant="outlined"
                 />
               </Grid>
-              <Grid item xs={12} my={1}>
+              {/* <Grid item xs={12} my={1}>
                 <Grid conatiner display={"flex"} flexDirection={"row"}>
                   <Grid item xs={1.9} mx={1} sm={0.7}>
                     <PayentAmountDiv>50$</PayentAmountDiv>
@@ -36,7 +36,7 @@ export default function WithdrawFunds() {
                     <PayentAmountDiv>150$</PayentAmountDiv>
                   </Grid>
                 </Grid>
-              </Grid>
+              </Grid> */}
               <Grid item xs={12}>
                 <GreenBorderTextField
                   fullWidth
