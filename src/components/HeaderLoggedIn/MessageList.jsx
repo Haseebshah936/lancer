@@ -69,7 +69,7 @@ const MessageList = ({ anchor, CloseList }) => {
             <ChatList className="chat-list" dataSource={chats} />
             <LinkWrapper>
               <Link
-                to="/chat/1"
+                to="/chat"
                 style={{
                   textDecoration: "none",
                   color: colors.textGreen,

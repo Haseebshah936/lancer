@@ -80,7 +80,7 @@ export default function AvalibleProjects({ data }) {
                         fontWeight: "700",
                       }}
                     >
-                      Send&nbsp;Perposal
+                      Send Perposal
                     </Button>
                     <SmallP
                       className="mt-1 text-center"
