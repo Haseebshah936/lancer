@@ -31,7 +31,7 @@ const CustomCardHeader = styled(CardHeader)({
   "a:hover": { color: colors.black },
 });
 
-const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
+const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -48,11 +48,11 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
   return (
     <>
       <Card
-        style={style}
         sx={{
-          maxWidth: "20rem",
-          minWidth: "20rem",
-          marginRight: "2rem",
+          ...styles,
+          maxWidth: "22rem",
+          minWidth: "22rem",
+          marginRight: "1rem",
           border: "none",
           boxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
           WebkitBoxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
@@ -66,6 +66,7 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
             alt="Gig Image"
             sizes="contain"
             border-radius="15px"
+            height="120rem"
             style={{ cursor: "pointer" }}
           />
         </Link>
@@ -98,7 +99,14 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
             <Link to="/portfolio/2">
               <Typography
                 variant="h5"
-                sx={{ color: "black", fontWeight: 400 }}
+                sx={{
+                  color: "black",
+                  fontWeight: 400,
+                  // width: "65ch",
+                  // whiteSpace: "nowrap",
+                  // overflow: "hidden",
+                  // textOverflow: "ellipsis",
+                }}
                 style={{ cursor: "pointer" }}
               >
                 {props.GigTitle}

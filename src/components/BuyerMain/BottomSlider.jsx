@@ -44,4 +44,7 @@ const Container = styled.div`
   box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
   -webkit-box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
   -moz-box-shadow: 0px -1px 13px -1px rgba(161, 161, 161, 0.75);
+  @media (max-width: 768px) {
+    margin-bottom: 2.5rem;
+  }
 `;

@@ -6,16 +6,16 @@ import PortfolioCard from "../PortfolioCard";
 import { teamImg } from "../../assets";
 
 const GigsYML = () => {
-  const a = [1, 2, 3, 4, 5, 6, 7, 8];
+  const a = [1, 2, 3, 4, 5, 6];
   return (
     <Container>
       <HeadingContainer>
         <Heading>Gigs You may like</Heading>
       </HeadingContainer>
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container spacing={2}>
+        <Grid container rowSpacing={3}>
           {a.map((c) => (
-            <Grid item lg={2} md={3} sm={4}>
+            <Grid item lg={2} md={3} sm={4} sx={{ mr: { lg: 5 } }}>
               <PortfolioCard
                 count={c}
                 GigImage={teamImg}
