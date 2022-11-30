@@ -49,8 +49,6 @@ export default function FDashboard() {
         </Box>
       </Container>
 
-      {/* </ThemeProvider> */}
-
       <Footer></Footer>
     </div>
   );
