@@ -48,10 +48,11 @@ function CustomChatItem({
   const handleNewMessage = (change) => {
     const { documentKey, fullDocument } = change;
     // console.log("new message", fullDocument);
+    // console.log("UserId", user._id);
     requestMethod
       .get(`/chatroom/getChatroom/${chatroom.id}/${user._id}`)
       .then((res) => {
-        // console.log("res", res.data);
+        // console.log("res New message", res.data);
         changeChatroomsData(index, chatroom.id, res.data);
       })
       .catch((e) => {
@@ -68,40 +69,42 @@ function CustomChatItem({
 
   useEffect(() => {
     let breakAsyncIterator_status = false;
-    let breakAsyncIterator_chatroom = false;
-    if (!chatroom?.isGroup) {
+    if (user) {
+      let breakAsyncIterator_chatroom = false;
+      if (!chatroom?.isGroup) {
+        const filter = {
+          filter: {
+            operationType: "update",
+            "fullDocument._id": mongoose.Types.ObjectId(chatroom.participantId),
+          },
+        };
+        watchCollection(
+          currentUser,
+          "users",
+          filter,
+          breakAsyncIterator_status,
+          handleOnlineStatus
+        );
+      }
       const filter = {
         filter: {
           operationType: "update",
-          "fullDocument._id": mongoose.Types.ObjectId(chatroom.participantId),
+          "fullDocument._id": mongoose.Types.ObjectId(chatroom.id),
         },
       };
       watchCollection(
         currentUser,
-        "users",
+        "chatrooms",
         filter,
-        breakAsyncIterator_status,
-        handleOnlineStatus
+        breakAsyncIterator_chatroom,
+        handleNewMessage
       );
     }
-    const filter = {
-      filter: {
-        operationType: "update",
-        "fullDocument._id": mongoose.Types.ObjectId(chatroom.id),
-      },
-    };
-    watchCollection(
-      currentUser,
-      "chatrooms",
-      filter,
-      breakAsyncIterator_chatroom,
-      handleNewMessage
-    );
 
     return () => {
       breakAsyncIterator_status = true;
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     clearInterval(interval);
@@ -141,6 +144,10 @@ function CustomChatItem({
       clearInterval(interval);
     };
   }, [status]);
+
+  useEffect(() => {
+    console.log("Chatroom", chatroom);
+  }, [chatroom]);
 
   return (
     <Container>

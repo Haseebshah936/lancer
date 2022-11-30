@@ -123,6 +123,7 @@ function Head({
       currentPath == "/f/settings" ||
       currentPath == "/gig/gig" ||
       currentPath == "/createGig" ||
+      currentPath == "/chat" ||
       currentPath == "/editGig"
     ) {
       return true;
@@ -135,7 +136,7 @@ function Head({
     return (
       currentPath.includes("/profile/") ||
       currentPath.includes("/portfolio/") ||
-      currentPath === "/chat"
+      currentPath == "/chat"
     );
   };
 
@@ -143,9 +144,9 @@ function Head({
     // console.log(currentPath);
     if (allPurposeRoutes()) return;
     if (activeProfile === "seller" && !matchRoutesinf()) {
-      // console.log("Active Profile", activeProfile);
       navigate("/f/dashboard");
     } else if (activeProfile !== "seller" && matchRoutesinf()) {
+      // console.log("Active Profile", activeProfile);
       navigate("/");
     }
   }, [activeProfile, user, currentUser]);
@@ -165,37 +166,35 @@ function Head({
             <Image src={logo} />
           </Link>
 
-          {activeProfile !== "seller" && (
-            <SearchContainer>
-              <div style={{ width: "10%" }}>
-                <IconButton onClick={() => handleSubmit(terms)}>
-                  <SearchOutlined sx={{ fontSize: "2rem" }} />
-                </IconButton>
-              </div>
-              <form
-                style={{ width: "90%" }}
-                onSubmit={(e) => {
-                  handleSubmit(terms);
-                  e.preventDefault();
+          <SearchContainer>
+            <div style={{ width: "10%" }}>
+              <IconButton onClick={() => handleSubmit(terms)}>
+                <SearchOutlined sx={{ fontSize: "2rem" }} />
+              </IconButton>
+            </div>
+            <form
+              style={{ width: "90%" }}
+              onSubmit={(e) => {
+                handleSubmit(terms);
+                e.preventDefault();
+              }}
+            >
+              {" "}
+              <InputField
+                value={terms}
+                styles={{
+                  width: "100%",
+                  backgroundColor: "transparent",
+                  paddingLeft: "10px",
                 }}
-              >
-                {" "}
-                <InputField
-                  value={terms}
-                  styles={{
-                    width: "100%",
-                    backgroundColor: "transparent",
-                    paddingLeft: "10px",
-                  }}
-                  placeholder={"What Services do you want?"}
-                  type="text"
-                  onChange={(e) => {
-                    handleChange(e.target.value);
-                  }}
-                />
-              </form>
-            </SearchContainer>
-          )}
+                placeholder={"What Services do you want?"}
+                type="text"
+                onChange={(e) => {
+                  handleChange(e.target.value);
+                }}
+              />
+            </form>
+          </SearchContainer>
         </Menucontainer>
         <Wrapper>
           <SubContainer>
@@ -235,7 +234,7 @@ function Head({
                 </p>
               )}
             </Link>
-            {/* <NavLink to="/contactus">Your&nbsp;Orders</NavLink> */}
+            <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
             {activeProfile === "seller" ? null : (
               <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}
@@ -279,24 +278,22 @@ function Head({
                 />
               </Badge>
             </IconButton>
-            {activeProfile !== "seller" && (
-              <IconButton
-                onClick={() => setSearchVisible((prev) => !prev)}
-                sx={{
-                  display: "none",
-                  " @media (max-width: 700px)": {
-                    display: "flex",
-                  },
+            <IconButton
+              onClick={() => setSearchVisible((prev) => !prev)}
+              sx={{
+                display: "none",
+                " @media (max-width: 700px)": {
+                  display: "flex",
+                },
+              }}
+            >
+              <SearchOutlinedIcon
+                style={{
+                  color: colors.textGreen,
                 }}
-              >
-                <SearchOutlinedIcon
-                  style={{
-                    color: colors.textGreen,
-                  }}
-                  fontSize="large"
-                />
-              </IconButton>
-            )}
+                fontSize="large"
+              />
+            </IconButton>
             <IconButton>
               <Avatar
                 onClick={toggleUserOptions}
