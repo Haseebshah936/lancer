@@ -29,6 +29,8 @@ import CustomFilledButton from "./../../components/CustomFilledButton/index";
 
 import { useNavigate } from "react-router-dom";
 import GigMorePopper from "./GigMorePopper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function FGigs() {
   const [gigs, setGigs] = React.useState([]);
@@ -165,10 +167,22 @@ export default function FGigs() {
                               <TitleP>&nbsp;{gig.cost}$</TitleP>
                             </Box>
                           </Box>
-                          <CardActions disableSpacing>
-                            {/* <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                          </IconButton> */}
+                          <IconButton
+                            onClick={() => {
+                              console.log("i am clicked");
+                              navigator.clipboard.writeText(
+                                "http://localhost:3000/profile/" + user?._id
+                              );
+                              const notify = () =>
+                                toast("URL is Copied to Clipoard");
+                              notify();
+                            }}
+                          >
+                            <ShareIcon />
+                          </IconButton>
+                          {/* <CardActions disableSpacing>
+                           
+                          
                             <IconButton
                               id="basic-button"
                               aria-controls={open ? "basic-menu" : undefined}
@@ -197,7 +211,7 @@ export default function FGigs() {
                                 </MenuItem>
                               </Menu>
                             </IconButton>
-                          </CardActions>
+                          </CardActions> */}
                         </Card>
                       </Grid>
                     ) : null
