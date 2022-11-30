@@ -487,13 +487,14 @@ function ChatInput({ onSend, profilePic }) {
               },
               marginLeft: "1rem",
             }}
-            {...longPress}
+            onClick={onClickSend}
+            // {...longPress}
           >
-            {!audioRecording ? (
-              <Send sx={{ color: colors.white }} fontSize="large" />
+            <Send sx={{ color: colors.white }} fontSize="large" />
+            {/* {!audioRecording ? (
             ) : (
               <Mic sx={{ color: colors.white }} fontSize="large" />
-            )}
+            )} */}
           </IconButton>
         </TextInputContainer>
       </Container>

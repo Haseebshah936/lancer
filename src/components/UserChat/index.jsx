@@ -1,4 +1,4 @@
-import { Divider, InputBase } from "@mui/material";
+import { Divider, IconButton, InputBase, Modal, Tooltip } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { useEffect, useRef, useState } from "react";
 import { MessageBox, MessageList } from "react-chat-elements";
@@ -29,10 +29,11 @@ import MessagesContainer from "./MessagesContainer";
 import { useCallback } from "react";
 import mongoose from "mongoose";
 import { useCustomContext } from "../../Hooks/useCustomContext";
-import { ArrowBack } from "@mui/icons-material";
+import { Add, ArrowBack } from "@mui/icons-material";
 import MorePoper from "./MorePoper";
 import { useLocation, useNavigate } from "react-router-dom";
 import { watchCollection } from "../../db/helperFunction";
+import CreateGroup from "../CreateGroup";
 const ChatRoomsData = [
   {
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
@@ -75,6 +76,17 @@ function Chat(props) {
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
   const navigate = useNavigate();
+
+  const [toggle, setToggle] = useState(false);
+
+  const handleToggle = () => {
+    setToggle(true);
+  };
+
+  const handleClose = () => {
+    setToggle(false);
+  };
+
   const getChatRooms = async () => {
     setChatRooms([]);
     setChatRooms([]);
@@ -391,8 +403,25 @@ function Chat(props) {
             <Search sx={{ fontSize: "1.5rem" }} />
           </IconButton> */}
           </SearchBox>
-          <MorePoper />
+          {/* <MorePoper /> */}
+          <Tooltip title="Create Group">
+            <IconButton
+              onClick={handleToggle}
+              color="inherit"
+              ari-label="add to shopping cart"
+            >
+              <Add />
+            </IconButton>
+          </Tooltip>
         </Box>
+        <Modal
+          open={toggle}
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <CreateGroup toggleClose={handleClose} />
+        </Modal>
         {chatRooms.length > 0 && (
           <ChatRooms
             chatrooms={chatRooms}

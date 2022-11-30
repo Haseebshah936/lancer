@@ -262,6 +262,7 @@ function SellerProfile(props) {
             description={
               userData.seller ? userData.seller.about : userData.about
             }
+            userId={userData._id}
             {...aboutSeller}
           />
         )}
