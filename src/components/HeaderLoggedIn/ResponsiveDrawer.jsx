@@ -4,7 +4,7 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { Avatar, IconButton, Typography } from "@mui/material";
@@ -87,21 +87,58 @@ export default function ResponsiveDrawer({
                       width: "3rem",
                     }}
                     aria-label="avatar"
-                    src="https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
+                    src={user?.profilePic}
                   ></Avatar>
                   <Typography
                     variant="subtitle1"
-                    sx={{ pl: "3px", fontWeight: "bold" }}
+                    sx={{ pl: "5px", fontWeight: "bold", lineHeight: "normal" }}
                   >
-                    Haseeb1122
+                    {user?.name}
                   </Typography>
                 </ProfileHeader>
 
-                <NavLink to="/chat/1">Messages</NavLink>
-                <NavLink to="/sellerdashboard">Dashboard</NavLink>
-                <NavLink to="/contactus">Seller&nbsp;Mode</NavLink>
-                <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
-                {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
+                <Link
+                  style={{ marginTop: "20px" }}
+                  to={
+                    user?.seller
+                      ? activeProfile === "seller"
+                        ? "/"
+                        : "/f/dashboard"
+                      : "/becomeSeller"
+                  }
+                  onClick={() => {
+                    if (user?.seller) {
+                      activeProfile !== "seller"
+                        ? localStorage.setItem(
+                            "activeProfile",
+                            JSON.stringify("seller")
+                          )
+                        : localStorage.removeItem(
+                            "activeProfile",
+                            JSON.stringify("buyerMode")
+                          );
+                      setActiveProfile(
+                        activeProfile === "seller" ? "" : "seller"
+                      );
+                    }
+                  }}
+                >
+                  {user?.seller ? (
+                    //
+                    activeProfile === "seller" ? (
+                      "BuyerMode"
+                    ) : (
+                      "SellerMode"
+                    )
+                  ) : (
+                    <p style={{ alignSelf: "center", marginBottom: 0 }}>
+                      Become&nbsp;a&nbsp;Seller
+                    </p>
+                  )}
+                </Link>
+                {activeProfile === "seller" ? null : (
+                  <NavLink to="/e/dashboard">Dashboard</NavLink>
+                )}
               </SubContainer>
             </ListItem>
           </List>

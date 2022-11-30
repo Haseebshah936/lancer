@@ -163,35 +163,37 @@ function Head({
             <Image src={logo} />
           </Link>
 
-          <SearchContainer>
-            <div style={{ width: "10%" }}>
-              <IconButton onClick={() => handleSubmit(terms)}>
-                <SearchOutlined sx={{ fontSize: "2rem" }} />
-              </IconButton>
-            </div>
-            <form
-              style={{ width: "90%" }}
-              onSubmit={(e) => {
-                handleSubmit(terms);
-                e.preventDefault();
-              }}
-            >
-              {" "}
-              <InputField
-                value={terms}
-                styles={{
-                  width: "100%",
-                  backgroundColor: "transparent",
-                  paddingLeft: "10px",
+          {activeProfile !== "seller" && (
+            <SearchContainer>
+              <div style={{ width: "10%" }}>
+                <IconButton onClick={() => handleSubmit(terms)}>
+                  <SearchOutlined sx={{ fontSize: "2rem" }} />
+                </IconButton>
+              </div>
+              <form
+                style={{ width: "90%" }}
+                onSubmit={(e) => {
+                  handleSubmit(terms);
+                  e.preventDefault();
                 }}
-                placeholder={"What Services do you want?"}
-                type="text"
-                onChange={(e) => {
-                  handleChange(e.target.value);
-                }}
-              />
-            </form>
-          </SearchContainer>
+              >
+                {" "}
+                <InputField
+                  value={terms}
+                  styles={{
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    paddingLeft: "10px",
+                  }}
+                  placeholder={"What Services do you want?"}
+                  type="text"
+                  onChange={(e) => {
+                    handleChange(e.target.value);
+                  }}
+                />
+              </form>
+            </SearchContainer>
+          )}
         </Menucontainer>
         <Wrapper>
           <SubContainer>
@@ -275,22 +277,24 @@ function Head({
                 />
               </Badge>
             </IconButton>
-            <IconButton
-              onClick={() => setSearchVisible((prev) => !prev)}
-              sx={{
-                display: "none",
-                " @media (max-width: 700px)": {
-                  display: "flex",
-                },
-              }}
-            >
-              <SearchOutlinedIcon
-                style={{
-                  color: colors.textGreen,
+            {activeProfile !== "seller" && (
+              <IconButton
+                onClick={() => setSearchVisible((prev) => !prev)}
+                sx={{
+                  display: "none",
+                  " @media (max-width: 700px)": {
+                    display: "flex",
+                  },
                 }}
-                fontSize="large"
-              />
-            </IconButton>
+              >
+                <SearchOutlinedIcon
+                  style={{
+                    color: colors.textGreen,
+                  }}
+                  fontSize="large"
+                />
+              </IconButton>
+            )}
             <IconButton>
               <Avatar
                 onClick={toggleUserOptions}
