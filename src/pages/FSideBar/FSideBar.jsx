@@ -40,6 +40,7 @@ const CustomList = styled(List)({
 });
 
 const CustomListText = styled(ListItemText)({
+  color: colors.textGreen,
   ":hover": {
     color: colors.textGreen,
     cursor: "pointer",

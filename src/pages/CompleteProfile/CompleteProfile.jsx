@@ -10,7 +10,7 @@ import { mobile, tablet, miniTablet } from "../../responsive";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import ActivePageMarker from "./../../components/ActivePageMarker/ActivePageMarker";
 import { CountryNAME } from "./../../utils/Countries";
-import { currencies } from "./../../utils/currencies";
+import { currencies, currenciesList } from "./../../utils/currencies";
 import defaultImage from "./../../utils/ProfilePicDemo.webp";
 import colors from "./../../utils/colors";
 import Footer from "../../components/Footer";
@@ -250,13 +250,17 @@ export default function CompleteProfile() {
                     id="demo-simple-select"
                     value={profileVar.currency}
                     label="Country"
-                    onChange={(e) =>
-                      setProfileVar({ ...profileVar, currency: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setProfileVar({
+                        ...profileVar,
+                        currency: e.target.value,
+                      });
+                      console.log(e.target.value);
+                    }}
                   >
-                    {currencies.map((currency) => (
-                      <MenuItem key={currency.code} value={currency.code}>
-                        {currency.code}
+                    {currenciesList.map((currency) => (
+                      <MenuItem key={currency.name} value={currency.name}>
+                        {currency.name}
                       </MenuItem>
                     ))}
                   </Select>

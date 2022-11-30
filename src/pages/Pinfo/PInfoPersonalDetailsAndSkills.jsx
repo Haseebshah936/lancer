@@ -118,19 +118,20 @@ export default function PInfoPersonalDetailsAndSkills() {
     console.log(sData);
     console.log(user);
 
-    ValidateAbout();
-    if (aboutError) {
+    const abRes = ValidateAbout();
+    if (abRes) {
       console.log("About Error", aboutError);
     } else {
-      // requestMethod
-      //   .post("users/about", sData)
-      //   .then((res) => {
-      //     console.log(res.data);
-      //     // navigate("/pinfo/education");
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      requestMethod
+        .put(`user/makeSeller/${user?._id}`, sData)
+        .then((res) => {
+          console.log("res from user", res.data);
+          setUser(res.data);
+          navigate("/f/gigs");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       console.log("No error");
     }
   };

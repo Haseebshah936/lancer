@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Box,
   Grid,
@@ -14,6 +14,7 @@ import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer/index";
 import colors from "../../utils/colors";
 import FSideBar from "../../pages/FSideBar/FSideBar";
+import UploadAttachments from "../../components/UploadAttachments";
 import { CountryNAME } from "../../utils/Countries";
 import { genderOptions } from "../../utils/GigDropDownValues";
 import { humanLanguages } from "../../utils/GigDropDownValues";
@@ -23,15 +24,21 @@ import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
 
 export default function FSettings() {
-  const { user } = useRealmContext();
+  const { user, setUser } = useRealmContext();
+  const [updateFalg, setUpdateFlag] = useState(1);
+  const [profilePic, setProfilePic] = useState({
+    uri: user?.profilePic
+      ? user?.profilePic
+      : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
+  });
   const [valuesObj, setValuesObj] = useState({
-    name: "",
+    name: user?.name || "",
     profilePic: user?.profilePic || "",
-    country: "",
-    currency: "",
-    DOB: "",
-    gender: "",
-    language: "",
+    country: user?.country || "",
+    currency: user?.currency || "",
+    DOB: user?.DOB?.substring(0, 10) || "",
+    gender: user?.gender || "Male",
+    language: user?.language || "English",
   });
   const valueObjSchema = Joi.object({
     name: Joi.string().required(),
@@ -44,6 +51,7 @@ export default function FSettings() {
   });
   const [errorsValuesObj, setErrorsValuesObj] = useState({});
   const valueObjValidate = () => {
+    setUpdateFlag(updateFalg + 1);
     const result = valueObjSchema.validate(valuesObj, { abortEarly: false });
     if (!result.error) {
       setErrorsValuesObj({});
@@ -88,6 +96,48 @@ export default function FSettings() {
       language: "",
     });
   }, []);
+  useEffect(() => {
+    setValuesObj({
+      ...valuesObj,
+      profilePic: profilePic.uri,
+    });
+    console.log("profilePic", profilePic.uri);
+  }, [profilePic]);
+  // useEffect(() => {
+  //   setUser(user);
+  // }, [user]);
+  // useEffect(() => {
+  //   if (user?.name) {
+  //     setValuesObj({
+  //       ...valuesObj,
+  //       name: user?.name,
+  //     });
+  //   }
+  //   if (user?.profilePic) {
+  //     setValuesObj({
+  //       ...valuesObj,
+  //       profilePic: user?.profilePic,
+  //     });
+  //   }
+  //   if (user?.country) {
+  //     setValuesObj({
+  //       ...valuesObj,
+  //       country: user?.country,
+  //     });
+  //   }
+  //   if (user?.currency) {
+  //     setValuesObj({
+  //       ...valuesObj,
+  //       currency: user?.currency,
+  //     });
+  //   }
+  //   if (user?.DOB) {
+  //     setValuesObj({
+  //       ...valuesObj,
+  //       DOB: user?.DOB,
+  //     });
+  //   }
+  // }, [updateFalg]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -110,7 +160,7 @@ export default function FSettings() {
                 <Grid item xs={11.5}>
                   <TitleP className="text-left">Setting</TitleP>
                 </Grid>
-                <Grid
+                {/* <Grid
                   item
                   xs={11.5}
                   display={"flex"}
@@ -198,6 +248,13 @@ export default function FSettings() {
                       }}
                     />
                   </Button>
+                </Grid> */}
+                <Grid item xs={11.5}>
+                  <UploadAttachments
+                    attachment={profilePic}
+                    setAttachment={setProfilePic}
+                    type="img"
+                  />
                 </Grid>
                 <Grid item xs={11.5} mt={1}>
                   <GreenBorderTextField
@@ -206,7 +263,7 @@ export default function FSettings() {
                     variant="outlined"
                     fullWidth
                     style={{ color: colors.becomePartnerGreen }}
-                    value={valuesObj.name}
+                    value={valuesObj.name ? valuesObj.name : user?.name}
                     onChange={(e) => {
                       setValuesObj({
                         ...valuesObj,
@@ -227,7 +284,7 @@ export default function FSettings() {
                     variant="outlined"
                     fullWidth
                     style={{ color: colors.becomePartnerGreen }}
-                    value={tagLineVar}
+                    value={tagLineVar ? tagLineVar : user?.tagLine}
                     onChange={(e) => {
                       setTagLineVar(e.target.value);
                     }}
@@ -238,12 +295,17 @@ export default function FSettings() {
                     fullWidth
                     disablePortal
                     id="combo-box-demo"
+                    value={
+                      valuesObj.currency
+                        ? { name: valuesObj.currency }
+                        : { name: user?.currency }
+                    }
                     options={currenciesList}
                     getOptionLabel={(option) => option.name}
                     onChange={(e, value) => {
                       setValuesObj({
                         ...valuesObj,
-                        currency: value.symbol,
+                        currency: value.name,
                       });
                     }}
                     renderInput={(params) => (
@@ -267,6 +329,11 @@ export default function FSettings() {
                         fullWidth
                         disablePortal
                         id="combo-box-demo"
+                        value={
+                          valuesObj.gender
+                            ? { label: valuesObj.gender }
+                            : { label: user?.gender }
+                        }
                         options={genderOptions}
                         getOptionLabel={(option) => option.label}
                         onChange={(e, value) => {
@@ -290,12 +357,14 @@ export default function FSettings() {
                       <input
                         id="startDate"
                         className="form-control"
+                        value={valuesObj.DOB ? valuesObj.DOB : user?.DOB}
                         type="date"
                         onChange={(e) => {
                           setValuesObj({
                             ...valuesObj,
                             DOB: e.target.value,
                           });
+                          console.log("DOB", e.target.value);
                         }}
                         style={{ width: "100%", height: "36px" }}
                       />
@@ -319,6 +388,11 @@ export default function FSettings() {
                         disablePortal
                         id="combo-box-demo"
                         options={humanLanguages}
+                        value={
+                          valuesObj.language
+                            ? { name: valuesObj.language }
+                            : { name: user?.language }
+                        }
                         getOptionLabel={(option) => option.name}
                         onChange={(e, value) => {
                           setValuesObj({
@@ -342,6 +416,11 @@ export default function FSettings() {
                         disablePortal
                         id="combo-box-demo"
                         options={CountryNAME}
+                        value={
+                          valuesObj.country
+                            ? { label: valuesObj.country }
+                            : { label: user?.country }
+                        }
                         getOptionLabel={(option) => option.label}
                         onChange={(e, value) => {
                           console.log(value.label);
@@ -377,6 +456,7 @@ export default function FSettings() {
                       height: "35px",
                     }}
                     onClick={() => {
+                      setUpdateFlag(updateFalg + 1);
                       const errors = valueObjValidate();
                       if (errors) {
                         console.log(errors);
@@ -393,7 +473,7 @@ export default function FSettings() {
                           })
                           .then((res) => {
                             console.log("Profile Updated");
-                            window.location.reload(false);
+                            setUser(res.data);
                           });
                       }
                     }}

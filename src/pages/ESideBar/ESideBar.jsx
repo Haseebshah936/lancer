@@ -40,6 +40,7 @@ const CustomList = styled(List)({
 });
 
 const CustomListText = styled(ListItemText)({
+  color: colors.textGreen,
   ":hover": {
     color: colors.textGreen,
     cursor: "pointer",
@@ -101,7 +102,7 @@ const Sidebar = () => {
             >
               {user?.name},{" "}
             </p>
-            <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p>
+            {/* <p style={{ fontWeight: 400, fontSize: "1.3rem" }}>@umer192 </p> */}
           </InfoWrapper>
         </Paper>
         <Paper
