@@ -39,7 +39,7 @@ const schema = Joi.object({
   description: Joi.string().required(),
 });
 
-function GroupsModal({ toggleClose }) {
+function GroupsModal({ toggleClose, handleAddToGroup }) {
   const { user } = useRealmContext();
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -72,7 +72,7 @@ function GroupsModal({ toggleClose }) {
   return (
     <Wrap>
       <ClickAwayListener onClickAway={toggleClose}>
-        <p>Hello</p>
+        <Form></Form>
       </ClickAwayListener>
     </Wrap>
   );
@@ -91,7 +91,7 @@ const Wrap = styled.div`
   justify-content: center;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   margin: 2rem;
   padding: 4rem 3rem;
   border-radius: 0.5rem;

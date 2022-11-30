@@ -444,6 +444,7 @@ function Chat(props) {
             onClickCall={handleCall}
             onClickVideoCall={handleVideoCall}
             temp={active.id === location.state?.id}
+            userId={active.userParticipantId}
           />
           {!reRender && (
             <MessagesContainer
