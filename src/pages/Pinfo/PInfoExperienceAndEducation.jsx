@@ -46,9 +46,9 @@ export default function PInfoExperienceAndEducation() {
     description: "",
   });
 
-  React.useEffect(() => {
-    console.log("Ach vae", achivementVar);
-  }, [achivementVar]);
+  // React.useEffect(() => {
+  //   console.log("Ach vae", achivementVar);
+  // }, [achivementVar]);
 
   const [jobStartingDate, setJobStartingDate] = React.useState(null);
   const [jobEndingDate, setJobEndingDate] = React.useState(null);
@@ -66,11 +66,11 @@ export default function PInfoExperienceAndEducation() {
       ...eduVar,
       [e.target.name]: e.target.value,
     });
-    console.log(eduVar);
+    // console.log(eduVar);
   };
 
   React.useEffect(() => {
-    console.log(jobExperienceVar);
+    // console.log(jobExperienceVar);
   }, [jobExperienceVar]);
 
   React.useEffect(() => {
@@ -79,7 +79,7 @@ export default function PInfoExperienceAndEducation() {
       startingDate: jobStartingDate?.label,
     });
 
-    console.log(jobExperienceVar);
+    // console.log(jobExperienceVar);
   }, [jobStartingDate]);
   React.useEffect(() => {
     setJobExperienceVar({
@@ -87,7 +87,7 @@ export default function PInfoExperienceAndEducation() {
       endingDate: jobEndingDate?.label,
     });
 
-    console.log(jobExperienceVar);
+    // console.log(jobExperienceVar);
   }, [jobEndingDate]);
 
   React.useEffect(() => {
@@ -95,20 +95,20 @@ export default function PInfoExperienceAndEducation() {
       ...eduVar,
       endingDate: eduEndingDate?.label,
     });
-    console.log(educationArr);
+    // console.log(educationArr);
   }, [eduEndingDate]);
   React.useEffect(() => {
     setEduVar({
       ...eduVar,
       startingDate: eduStartingDate?.label,
     });
-    console.log(educationArr);
+    // console.log(educationArr);
   }, [eduStartingDate]);
   const removeJobExpHandeler = (title) => {
     setJobExpArr(jobExpArr.filter((item) => item.companyTitle !== title));
   };
   const removeEduExpHandeler = (title) => {
-    console.log(title);
+    // console.log(title);
     setEducationArr(
       educationArr.filter((item) => item.educationTitle !== title)
     );
@@ -187,7 +187,7 @@ export default function PInfoExperienceAndEducation() {
                         ...jobExperienceVar,
                         companyTitle: e.target.value,
                       });
-                      console.log(jobExperienceVar.companyTitle);
+                      // console.log(jobExperienceVar.companyTitle);
                     }}
                   />
                 </Grid>
@@ -353,7 +353,7 @@ export default function PInfoExperienceAndEducation() {
                         ...eduVar,
                         instituteTitle: e.target.value,
                       });
-                      console.log(eduVar.instituteTitle);
+                      // console.log(eduVar.instituteTitle);
                     }}
                   />
                 </Grid>
@@ -422,7 +422,7 @@ export default function PInfoExperienceAndEducation() {
                         ...eduVar,
                         educationTitle: e.target.value,
                       });
-                      console.log(eduVar.educationTitle);
+                      // console.log(eduVar.educationTitle);
                     }}
                   />
                 </Grid>
@@ -509,7 +509,7 @@ export default function PInfoExperienceAndEducation() {
                         ...achivementVar,
                         achivementTitle: e.target.value,
                       });
-                      console.log(achivementVar.achivementTitle);
+                      // console.log(achivementVar.achivementTitle);
                     }}
                   />
                 </Grid>
@@ -532,7 +532,7 @@ export default function PInfoExperienceAndEducation() {
                           ...achivementVar,
                           description: e.target.value,
                         });
-                        console.log(achivementVar.achivementDiscription);
+                        // console.log(achivementVar.achivementDiscription);
                       }}
                     />
                   </Box>

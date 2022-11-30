@@ -17,7 +17,7 @@ export default function CancelledProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((item) => item.cancelledStatus === true);
-    console.log("Complete Project data", temp);
+    // console.log("Complete Project data", temp);
     setProjects(temp);
   }, []);
   return (

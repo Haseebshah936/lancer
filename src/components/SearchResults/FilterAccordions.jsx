@@ -56,7 +56,7 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
   const [Badge, setBadge] = useState("");
 
   const handleFilters = () => {
-    console.log("I am in Filters");
+    // console.log("I am in Filters");
     helperFunction(
       Badge,
       price,
@@ -76,7 +76,7 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
 
   const handlePrice = (max, min) => {
     setPrice({ max, min });
-    console.log("Max", max, "Min", min);
+    // console.log("Max", max, "Min", min);
   };
 
   const handleSubCategory = (id) => {
@@ -94,7 +94,7 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
   }, []);
 
   useEffect(() => {
-    console.log("Badge", Badge);
+    // console.log("Badge", Badge);
   }, [Badge]);
 
   return (

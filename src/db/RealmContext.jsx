@@ -56,7 +56,7 @@ export function RealmAppProvider({ appId, children }) {
 
   const signup = React.useCallback(
     async (email, password, rest) => {
-      console.log("signup", email, password);
+      // console.log("signup", email, password);
       const credentials = JSON.stringify({ email, password });
       try {
         await realmApp.emailPasswordAuth.registerUser(credentials);
@@ -72,7 +72,7 @@ export function RealmAppProvider({ appId, children }) {
   const googleAuth = React.useCallback(
     async (code) => {
       const credentials = Realm.Credentials.google(code);
-      console.log(credentials);
+      // console.log(credentials);
       try {
         // Authenticate the user
         const user = await realmApp.logIn(credentials);

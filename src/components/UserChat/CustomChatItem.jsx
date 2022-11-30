@@ -47,11 +47,11 @@ function CustomChatItem({
 
   const handleNewMessage = (change) => {
     const { documentKey, fullDocument } = change;
-    console.log("new message", fullDocument);
+    // console.log("new message", fullDocument);
     requestMethod
       .get(`/chatroom/getChatroom/${chatroom.id}/${user._id}`)
       .then((res) => {
-        console.log("res", res.data);
+        // console.log("res", res.data);
         changeChatroomsData(index, chatroom.id, res.data);
       })
       .catch((e) => {
@@ -63,7 +63,7 @@ function CustomChatItem({
   };
 
   useEffect(() => {
-    console.log("Chatroom", chatroom);
+    // console.log("Chatroom", chatroom);
   }, []);
 
   useEffect(() => {

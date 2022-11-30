@@ -14,7 +14,7 @@ const SearchGrid = () => {
   const { searchData, searchDataLoader } = useCustomContext();
 
   useEffect(() => {
-    console.log("Search Data", searchData);
+    // console.log("Search Data", searchData);
   }, [searchData]);
 
   return (

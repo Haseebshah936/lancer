@@ -48,7 +48,7 @@ export default function FGigs() {
       requestMethod
         .get(`product/byUserId/${user?._id}`)
         .then((response) => {
-          console.log(response.data);
+          // console.log(response.data);
           setGigs(response.data);
         })
         .catch((error) => {
@@ -61,7 +61,7 @@ export default function FGigs() {
     requestMethod
       .get(`product/byUserId/${user?._id}`)
       .then((response) => {
-        console.log(response.data);
+        // console.log(response.data);
         setGigs(response.data);
       })
       .catch((error) => {
@@ -160,7 +160,7 @@ export default function FGigs() {
                             </h3>
                             <Box className="d-flex to-row align-items-center pb-0">
                               <SmallP>Starts at &nbsp;</SmallP>
-                              <TitleP>&nbsp;{gig.packages[0].cost}$</TitleP>
+                              <TitleP>&nbsp;{gig.cost}$</TitleP>
                             </Box>
                           </Box>
                           <CardActions disableSpacing>
@@ -219,96 +219,97 @@ export default function FGigs() {
 
               <div>
                 <Grid container columnGap={2}>
-                  {gigs?.map((gig, index) =>
-                    gig.state !== "live" ? (
-                      <Grid
-                        item
-                        xs={12}
-                        md={3.7}
-                        style={{ maxHeight: "400px" }}
-                        className="mt-3 ms-3"
-                      >
-                        <Card>
-                          <CardHeader
-                            avatar={
-                              <Avatar
-                                sx={{ bgcolor: red[500] }}
-                                aria-label="recipe"
-                                src={gig.owner._id.profilePic}
-                              ></Avatar>
-                            }
-                            action={
-                              <GigMorePopper
-                                gig={gig}
-                                setStateChanged={setStateChanged}
-                                stateChanged={stateChanged}
-                              ></GigMorePopper>
-                            }
-                            title={gig.owner._id.name}
-                            subheader="September 14, 2021"
-                          />
-                          <CardMedia
-                            component="img"
-                            height="194"
-                            image={gig.images[0]}
-                            alt=""
-                          />
+                  {gigs.length > 0 &&
+                    gigs?.map((gig, index) =>
+                      gig.state !== "live" ? (
+                        <Grid
+                          item
+                          xs={12}
+                          md={3.7}
+                          style={{ maxHeight: "400px" }}
+                          className="mt-3 ms-3"
+                        >
+                          <Card>
+                            <CardHeader
+                              avatar={
+                                <Avatar
+                                  sx={{ bgcolor: red[500] }}
+                                  aria-label="recipe"
+                                  src={gig.owner._id.profilePic}
+                                ></Avatar>
+                              }
+                              action={
+                                <GigMorePopper
+                                  gig={gig}
+                                  setStateChanged={setStateChanged}
+                                  stateChanged={stateChanged}
+                                ></GigMorePopper>
+                              }
+                              title={gig.owner._id.name}
+                              subheader="September 14, 2021"
+                            />
+                            <CardMedia
+                              component="img"
+                              height="194"
+                              image={gig.images[0]}
+                              alt=""
+                            />
 
-                          <Box padding={1} paddingStart={4} paddingEnd={2}>
-                            <h3
-                              variant="h5"
-                              className="bold mb-"
-                              color="text.secondary"
-                              style={{
-                                overflow: "hidden",
-                                whiteSpace: "nowrap",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {gig.title}
-                            </h3>
-                            <Box className="d-flex to-row align-items-center pb-0">
-                              <SmallP>Starts at &nbsp;</SmallP>
-                              <TitleP>&nbsp;{gig.packages[0].cost}$</TitleP>
-                            </Box>
-                          </Box>
-                          <CardActions disableSpacing>
-                            {/* <IconButton aria-label="add to favorites">
-                            <FavoriteIcon />
-                          </IconButton> */}
-                            <IconButton
-                              id="basic-button"
-                              aria-controls={open ? "basic-menu" : undefined}
-                              aria-haspopup="true"
-                              aria-expanded={open ? "true" : undefined}
-                              onClick={handleClick}
-                            >
-                              <ShareIcon />
-                              <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                  "aria-labelledby": "basic-button",
+                            <Box padding={1} paddingStart={4} paddingEnd={2}>
+                              <h3
+                                variant="h5"
+                                className="bold mb-"
+                                color="text.secondary"
+                                style={{
+                                  overflow: "hidden",
+                                  whiteSpace: "nowrap",
+                                  textOverflow: "ellipsis",
                                 }}
                               >
-                                <MenuItem onClick={handleClose}>
-                                  Profile
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                  My account
-                                </MenuItem>
-                                <MenuItem onClick={handleClose}>
-                                  Logout
-                                </MenuItem>
-                              </Menu>
-                            </IconButton>
-                          </CardActions>
-                        </Card>
-                      </Grid>
-                    ) : null
-                  )}
+                                {gig.title}
+                              </h3>
+                              <Box className="d-flex to-row align-items-center pb-0">
+                                <SmallP>Starts at &nbsp;</SmallP>
+                                <TitleP>&nbsp;{gig?.cost}$</TitleP>
+                              </Box>
+                            </Box>
+                            <CardActions disableSpacing>
+                              {/* <IconButton aria-label="add to favorites">
+                            <FavoriteIcon />
+                          </IconButton> */}
+                              <IconButton
+                                id="basic-button"
+                                aria-controls={open ? "basic-menu" : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? "true" : undefined}
+                                onClick={handleClick}
+                              >
+                                <ShareIcon />
+                                <Menu
+                                  id="basic-menu"
+                                  anchorEl={anchorEl}
+                                  open={open}
+                                  onClose={handleClose}
+                                  MenuListProps={{
+                                    "aria-labelledby": "basic-button",
+                                  }}
+                                >
+                                  <MenuItem onClick={handleClose}>
+                                    Profile
+                                  </MenuItem>
+                                  <MenuItem onClick={handleClose}>
+                                    My account
+                                  </MenuItem>
+                                  <MenuItem onClick={handleClose}>
+                                    Logout
+                                  </MenuItem>
+                                </Menu>
+                              </IconButton>
+                            </CardActions>
+                          </Card>
+                        </Grid>
+                      ) : null
+                    )}
                 </Grid>
               </div>
             </Grid>

@@ -18,7 +18,7 @@ export default function CancelledProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((p) => p.cancelledStatus === true);
-    console.log("Ongoing Projects data", temp);
+    // console.log("Ongoing Projects data", temp);
     setProjects(temp);
   }, []);
   return (

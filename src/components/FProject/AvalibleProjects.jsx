@@ -18,7 +18,7 @@ export default function AvalibleProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((p) => p.projectStatus === "open");
-    console.log("All data", temp);
+    // console.log("All data", temp);
     setProjects(temp);
   }, []);
   return (

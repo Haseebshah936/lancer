@@ -14,7 +14,7 @@ function CustomMessageBox({
   ...props
 }) {
   const handleDownload = (e) => {
-    console.log("Download", e);
+    // console.log("Download", e);
     window.open(e);
   };
   return (

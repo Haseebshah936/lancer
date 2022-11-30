@@ -23,7 +23,7 @@ export default function GigLoading({ gig }) {
             gig
           );
           gig = {};
-          console.log("Response", response.data);
+          // console.log("Response", response.data);
           setEditGigStatus(false);
           toast.success("Product Created Successfully");
           setLoading(false);
@@ -40,7 +40,7 @@ export default function GigLoading({ gig }) {
             gig
           );
           gig = {};
-          console.log("Response", response.data);
+          // console.log("Response", response.data);
           setEditGigStatus(false);
           toast.success("Product Updated Successfully");
           setLoading(false);

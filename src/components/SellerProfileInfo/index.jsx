@@ -8,19 +8,19 @@ import colors from "../../utils/colors";
 import ProfileReviewInfo from "../ProfileReviewsInfo";
 
 function SellerProfileInfo({
-  languages = ["Urdu", "English", "Chinese"],
-  city = "Lahore",
-  country = "Paksitan",
-  englishLevel = "Intermediate",
+  languages = [],
+  city = "",
+  country = "",
+  englishLevel = "",
   profilePic = "https://api.lorem.space/image/face?w=100&h=100&hash=w7ejlc5z",
-  rating = 5.0,
-  reviews = 20,
-  views = 10000,
+  rating = "N/A",
+  reviews = "N/A",
+  views = "N/A",
   saved = false,
   handleSave,
   name = "Haseeb",
   approved = false,
-  description = "I will be your MERN developer and will develope anything you want.",
+  description = "N/A",
   style,
   showExtraInfo = false,
   skills = [],
@@ -57,11 +57,19 @@ function SellerProfileInfo({
         <Text>
           {city} {country}
         </Text>
-        <SubHeading>Languages:</SubHeading>
-        <Text>{languages.join(", ")}</Text>
-        <SubHeading>English level:</SubHeading>
-        <Text>{englishLevel}</Text>
-        {!isSame && (
+        {languages.length > 0 && (
+          <>
+            <SubHeading>Languages:</SubHeading>
+            <Text>{languages.join(", ")}</Text>
+          </>
+        )}
+        {englishLevel && (
+          <>
+            <SubHeading>English level:</SubHeading>
+            <Text>{englishLevel}</Text>
+          </>
+        )}
+        {!isSame && showExtraInfo && (
           <CustomIconButton variant="contained">
             <ChatBubbleOutline />
             &nbsp;&nbsp;Contact to this seller

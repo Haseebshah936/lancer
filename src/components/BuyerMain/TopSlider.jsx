@@ -16,14 +16,17 @@ const TopSlider = () => {
         <p style={{ marginTop: "5px" }}>
           Get matched with sellers <br /> for your project
         </p>
-        <Link to="/postProject">
-          <CustomFilledButton
-            title={"Post a Request"}
-            style={{
-              margin: "5px 0px 0px 0px",
-            }}
-          ></CustomFilledButton>
-        </Link>
+        <CustomLink>
+          {" "}
+          <Link to="/postProject">
+            <CustomFilledButton
+              title={"Post a Request"}
+              style={{
+                margin: "5px 0px 0px 0px",
+              }}
+            ></CustomFilledButton>
+          </Link>
+        </CustomLink>
       </FirstSection>
       <SecondSection>
         <Carousel style={{ height: "200px" }}>
@@ -101,4 +104,10 @@ const SecondSection = styled.div`
   justify-content: center;
   /* background-color: green; */
   clip-path: polygon(25% 0, 100% 0%, 100% 100%, 0% 100%);
+`;
+
+const CustomLink = styled.div`
+  a {
+    text-decoration: none;
+  }
 `;

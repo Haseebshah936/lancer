@@ -82,16 +82,16 @@ export default function CreateGig() {
   const [video, setVideo] = useState("");
 
   const handleBasicPlanFeaturesChange = (updatedFeatures) => {
-    console.log("updatedFeaturesBasicPlan", updatedFeatures);
+    // console.log("updatedFeaturesBasicPlan", updatedFeatures);
     setBasicPlan({ ...basicPlan, features: [...updatedFeatures] });
   };
 
-  useEffect(() => {
-    console.log("Basic", basicPlan);
-    console.log("Premium", premiumPlan);
-    console.log("Standard", standardPlan);
-    console.log("Gig Introduction", gigIntroduction);
-  }, [basicPlan, premiumPlan, standardPlan]);
+  // useEffect(() => {
+  //   console.log("Basic", basicPlan);
+  //   console.log("Premium", premiumPlan);
+  //   console.log("Standard", standardPlan);
+  //   console.log("Gig Introduction", gigIntroduction);
+  // }, [basicPlan, premiumPlan, standardPlan]);
 
   const [gigIntroduction, setGigIntroduction] = useState({
     gigTitle: "",
@@ -106,7 +106,7 @@ export default function CreateGig() {
       const response = await requestMethod.get(
         `category/subCategory/${gigToBeEditedData.category}`
       );
-      console.log("response", response.data);
+      // console.log("response", response.data);
       setGigIntroduction({
         gigTitle: gigToBeEditedData.title,
         gigCategory: {
@@ -139,7 +139,7 @@ export default function CreateGig() {
 
   useEffect(() => {
     if (editGigStatus) {
-      console.log("gigToBeEditedData", gigToBeEditedData);
+      // console.log("gigToBeEditedData", gigToBeEditedData);
       getSubCategory();
     }
   }, []);
@@ -215,7 +215,7 @@ export default function CreateGig() {
           const imagesArray = images
             .map((image) => image.uri)
             .filter((uri) => uri !== "");
-          console.log("Questions", questionArr);
+          // console.log("Questions", questionArr);
           const gig = {
             title: gigIntroduction.gigTitle,
             category: gigIntroduction.gigSubCategory._id,
@@ -277,7 +277,7 @@ export default function CreateGig() {
     if (activeStep < 4) {
       setActiveStep(step);
     }
-    console.log("I am in active step", activeStep);
+    // console.log("I am in active step", activeStep);
   };
 
   return (

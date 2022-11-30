@@ -15,6 +15,12 @@ const Filters = ({}) => {
   const [filterdraw, setFilterdraw] = useState(false);
   const toggleFiltersDraw = (open) => (event) => {
     console.log("asdsad");
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
 
     setFilterdraw(open);
   };

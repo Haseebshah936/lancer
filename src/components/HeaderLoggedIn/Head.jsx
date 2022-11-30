@@ -78,7 +78,7 @@ function Head({
             `http://localhost:3003/api/product/getProductBySearch/${search}`
           );
 
-          console.log("Search Response", response.data);
+          // console.log("Search Response", response.data);
           setSearchData(response.data);
           setSearchDataLoader(false);
           navigate("/search");
@@ -93,7 +93,7 @@ function Head({
             `http://localhost:3003/api/product/`
           );
 
-          console.log("Search Response", response.data);
+          // console.log("Search Response", response.data);
           setSearchData(response.data);
           setSearchDataLoader(false);
           navigate("/search");
@@ -132,14 +132,16 @@ function Head({
   }
 
   const allPurposeRoutes = () => {
-    return currentPath.includes("/profile/");
+    return (
+      currentPath.includes("/profile/") || currentPath.includes("/portfolio/")
+    );
   };
 
   useEffect(() => {
     // console.log(currentPath);
     if (allPurposeRoutes()) return;
     if (activeProfile === "seller" && !matchRoutesinf()) {
-      console.log("Active Profile", activeProfile);
+      // console.log("Active Profile", activeProfile);
       navigate("/f/dashboard");
     } else if (activeProfile !== "seller" && matchRoutesinf()) {
       navigate("/");

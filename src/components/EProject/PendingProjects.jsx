@@ -19,7 +19,7 @@ export default function PendingProjects({ data }) {
   useEffect(() => {
     const temp = data;
     const temp2 = temp.filter((p) => p.approvalStatus === false);
-    console.log("Pending project data", temp2);
+    // console.log("Pending project data", temp2);
     setPProjects(temp2);
   }, []);
   return (

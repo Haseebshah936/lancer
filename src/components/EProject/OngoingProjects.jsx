@@ -18,7 +18,7 @@ export default function OngoingProjects({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((p) => p.hiredStatus === true);
-    console.log("Ongoing Project data", temp);
+    // console.log("Ongoing Project data", temp);
     setProjects(temp);
   }, []);
   return (

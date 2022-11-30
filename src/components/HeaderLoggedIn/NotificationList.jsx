@@ -65,14 +65,14 @@ const NotificationList = ({ anchor, CloseList }) => {
   const handleDelete = (itemToDelete) => () => {
     let Items = ListData.filter((item) => item.key !== itemToDelete.key);
 
-    console.log("before", Items);
+    // console.log("before", Items);
 
     if (Items.length < 4 && Notifications.length >= count + 1) {
-      console.log("IN if");
+      // console.log("IN if");
       Items = [...Items, Notifications.slice(count, count + 1)[0]];
       setCount(count + 1);
     }
-    console.log("after", Items);
+    // console.log("after", Items);
     setListData(Items);
   };
 

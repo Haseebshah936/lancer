@@ -31,7 +31,13 @@ const CustomCardHeader = styled(CardHeader)({
   "a:hover": { color: colors.black },
 });
 
-const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
+const PortfolioCard = ({
+  hideProfileInfo = true,
+  ownerId,
+  productId,
+  styles,
+  ...props
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -48,24 +54,25 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
   return (
     <>
       <Card
-        style={style}
         sx={{
-          maxWidth: "20rem",
-          minWidth: "20rem",
-          marginRight: "2rem",
+          ...styles,
+          maxWidth: "22rem",
+          minWidth: "22rem",
+          marginRight: "1rem",
           border: "none",
           boxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
           WebkitBoxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
           borderRadius: "5%",
         }}
       >
-        <Link to="/portfolio/2">
+        <Link to={"/portfolio/" + productId}>
           <CardMedia
             component="img"
             image={props.GigImage}
             alt="Gig Image"
             sizes="contain"
             border-radius="15px"
+            height="120rem"
             style={{ cursor: "pointer" }}
           />
         </Link>
@@ -74,31 +81,40 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
             style={{ cursor: "pointer" }}
             sx={{ paddingTop: "2px", paddingBottom: "0px" }}
             avatar={
-              <NavLink to="/profile/1">
+              <NavLink to={"/profile/" + ownerId}>
                 <Avatar aria-label="recipe" src={props.Avatar}></Avatar>
               </NavLink>
             }
-            action={
-              <Tooltip title="Save To List" placement="right">
-                <IconButton
-                  onClick={handleOpen}
-                  aria-label="settings"
-                  sx={{ paddingTop: "15px", color: "#045c4a" }}
-                >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
+            // action={
+            //   <Tooltip title="Save To List" placement="right">
+            //     <IconButton
+            //       onClick={handleOpen}
+            //       aria-label="settings"
+            //       sx={{ paddingTop: "15px", color: "#045c4a" }}
+            //     >
+            //       <AddIcon />
+            //     </IconButton>
+            //   </Tooltip>
+            // }
+            title={
+              <NavLink to={"/profile/" + ownerId}>{props.SellerName}</NavLink>
             }
-            title={<NavLink to="/profile/1">{props.SellerName}</NavLink>}
             subheader={props.SellerLevel}
           />
         )}
         <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
           <LinkText>
-            <Link to="/portfolio/2">
+            <Link to={"/portfolio/" + productId}>
               <Typography
                 variant="h5"
-                sx={{ color: "black", fontWeight: 400 }}
+                sx={{
+                  color: "black",
+                  fontWeight: 400,
+                  // width: "65ch",
+                  // whiteSpace: "nowrap",
+                  // overflow: "hidden",
+                  // textOverflow: "ellipsis",
+                }}
                 style={{ cursor: "pointer" }}
               >
                 {props.GigTitle}
@@ -126,7 +142,7 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
             justifyContent: "space-between",
           }}
         >
-          <Tooltip title="Save To Favourites" placement="bottom">
+          {/* <Tooltip title="Save To Favourites" placement="bottom">
             <Checkbox
               {...label}
               icon={
@@ -140,12 +156,13 @@ const PortfolioCard = ({ hideProfileInfo = true, style, ...props }) => {
                 />
               }
             />
-          </Tooltip>
+          </Tooltip> */}
           <MiniWrapper2>
             <p
               style={{
                 color: "grey",
                 fontFamily: "'Gemunu Libre', sans-serif",
+                fontSize: "1.2rem",
               }}
             >
               STARTING AT
@@ -204,6 +221,8 @@ const MiniWrapper2 = styled.div`
   align-items: center;
   margin-left: 5px;
   margin-top: 4px;
+  justify-content: flex-end;
+  flex: 1;
 `;
 
 const LinkText = styled.div`

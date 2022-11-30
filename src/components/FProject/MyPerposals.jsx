@@ -18,7 +18,7 @@ export default function MyPerposals({ data }) {
   };
   useEffect(() => {
     const temp = data.filter((d) => d.perposalDes !== "");
-    console.log("My Perposal data", temp);
+    // console.log("My Perposal data", temp);
     setProjects(temp);
   }, []);
   return (

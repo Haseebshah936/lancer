@@ -7,13 +7,13 @@ import { teamImg } from "../../assets";
 import colors from "../../utils/colors";
 
 const GigsRPS = () => {
-  const a = [1, 2, 3, 4, 5, 6];
+  const a = [1, 2, 3, 4, 5];
   return (
     <div>
       <Container>
         <HeadingContainer>
           <Heading>
-            Rana Level Pro Services in{" "}
+            Pro Services in{" "}
             <p
               style={{
                 color: colors.textGreen,
@@ -41,14 +41,21 @@ const GigsRPS = () => {
               cursor: "pointer",
             }}
           >
-            View More
+            View&nbsp;More
           </h4>
         </HeadingContainer>
 
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2}>
+          <Grid item container rowSpacing={3}>
             {a.map((c) => (
-              <Grid item lg={2} md={3} sm={4}>
+              <Grid
+                item
+                lg={2}
+                md={3}
+                sm={4}
+                rowSpacing={3}
+                sx={{ mr: { lg: 4 } }}
+              >
                 <PortfolioCard
                   count={c}
                   GigImage={teamImg}

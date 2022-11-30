@@ -140,7 +140,7 @@ function ChatInput({ onSend, profilePic }) {
         option
       )
       .then((res) => {
-        console.log("Response", res);
+        // console.log("Response", res);
         setAttachments((prev) => {
           const arr = [...prev];
           arr[index].uploading = false;
@@ -159,7 +159,7 @@ function ChatInput({ onSend, profilePic }) {
       })
       .catch((err) => {
         if (err.message !== "canceled") console.log(err);
-        console.log("canceled");
+        // console.log("canceled");
       });
   };
 
@@ -256,7 +256,7 @@ function ChatInput({ onSend, profilePic }) {
         controller,
       };
     }
-    console.log("Attachment", msg, attachments.indexOf(msg));
+    // console.log("Attachment", msg, attachments.indexOf(msg));
     if (attachments.indexOf(msg) === -1) {
       setAttachments([...attachments, msg]);
       uploadAttachment(e.target.files[0], attachments.length, controller);
@@ -298,7 +298,7 @@ function ChatInput({ onSend, profilePic }) {
     //   //   console.log("Something went wrong, please try again later.");
     //   // }
     // }
-    console.log("remove attachment", attachments[i]);
+    // console.log("remove attachment", attachments[i]);
     setAttachments((prev) => {
       const arr = [...prev];
       arr[i] = {
@@ -330,7 +330,7 @@ function ChatInput({ onSend, profilePic }) {
   const longPress = useLongPress(onLongPress, onClickSend, defaultOptions);
 
   useEffect(() => {
-    console.log("attachments", attachments);
+    // console.log("attachments", attachments);
     if (attachments.length) {
       setAudioRecording(false);
       return;

@@ -66,7 +66,7 @@ function Login({ toggleClose }) {
           }
         );
         const { email, password, ...rest } = response.data;
-        console.log("Respnse", response);
+        // console.log("Respnse", response);
         handleLogin(email, password, rest);
       } catch (error) {
         console.log(error);
@@ -90,7 +90,7 @@ function Login({ toggleClose }) {
   // // }
 
   const responseFacebook = async (res) => {
-    console.log(res);
+    // console.log(res);
     const { accessToken, id } = res;
     try {
       const response = await axios.post(
@@ -100,9 +100,9 @@ function Login({ toggleClose }) {
           accessToken,
         }
       );
-      console.log("Response From facebook", response);
+      // console.log("Response From facebook", response);
       const { email, password, ...rest } = response.data;
-      console.log(response);
+      // console.log(response);
       handleLogin(email, password, rest);
     } catch (error) {
       handleAuthError(error);
@@ -133,7 +133,7 @@ function Login({ toggleClose }) {
         }
       );
       let { email: email1, password: password1, ...rest } = response.data;
-      console.log(response);
+      //console.log(response);
       handleLogin(email1, password1, rest);
     } catch (error) {
       setLoading(false);
