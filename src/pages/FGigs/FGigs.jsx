@@ -118,8 +118,7 @@ export default function FGigs() {
               >
                 <Grid
                   item
-                  xs={11}
-                  sm={9}
+                  xs={12}
                   marginLeft={"10px"}
                   my={{ xs: 1, md: 0 }}
                   // boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
