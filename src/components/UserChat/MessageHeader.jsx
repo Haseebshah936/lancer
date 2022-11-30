@@ -63,6 +63,7 @@ function MessageHeader({
       })
       .then((res) => {
         console.log("Response", res);
+        handleClose();
       })
       .catch((err) => {
         console.log(err);

@@ -52,7 +52,7 @@ function CustomChatItem({
     requestMethod
       .get(`/chatroom/getChatroom/${chatroom.id}/${user._id}`)
       .then((res) => {
-        console.log("res New message", res.data);
+        // console.log("res New message", res.data);
         changeChatroomsData(index, chatroom.id, res.data);
       })
       .catch((e) => {

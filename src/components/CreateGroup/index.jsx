@@ -73,7 +73,7 @@ function CreateGroup({ toggleClose }) {
           ...groupData,
           image: attachment.uri,
           creatorId: user._id,
-          participants: [user._id],
+          participants: [],
         }
       );
       setLoading(false);

@@ -32,7 +32,10 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import { Add, ArrowBack } from "@mui/icons-material";
 import MorePoper from "./MorePoper";
 import { useLocation, useNavigate } from "react-router-dom";
-import { watchCollection } from "../../db/helperFunction";
+import {
+  watchCollection,
+  watchCollectionForAll,
+} from "../../db/helperFunction";
 import CreateGroup from "../CreateGroup";
 const ChatRoomsData = [
   {
@@ -160,7 +163,7 @@ function Chat(props) {
         console.log(err);
         if (err.response.data === "Chatroom not found") {
           // console.log("Not found", location.state?.id);
-          createChatRoom(active.id, active?.userParticipantId)
+          createChatRoom(active.id, active?.participantId)
             .then(async (data) => {
               await requestMethod.post("message", {
                 ...newMessage,
@@ -310,7 +313,7 @@ function Chat(props) {
 
   const handleNewChatroom = (change) => {
     const { documentKey, fullDocument } = change;
-    // console.log("New chatroom added ", fullDocument);
+    console.log("New chatroom added ", fullDocument);
     requestMethod
       .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
       .then((res) => {
@@ -321,6 +324,22 @@ function Chat(props) {
       .catch((e) => {
         console.log("error", e);
       });
+  };
+
+  const handleChatroomUpdate = (change) => {
+    const { documentKey, fullDocument } = change;
+    console.log("Chatroom updated called", fullDocument);
+    console.log("Chatroom updated called", chatRooms);
+    // requestMethod
+    //   .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
+    //   .then((res) => {
+    //     // console.log("res New message", res.data);
+    //     setChatRoomsData((prev) => [res.data, ...prev]);
+    //     setChatRooms((prev) => [res.data, ...prev]);
+    //   })
+    //   .catch((e) => {
+    //     console.log("error", e);
+    //   });
   };
 
   useEffect(() => {
@@ -351,7 +370,6 @@ function Chat(props) {
       // console.log("Watching for new chatrooms");
       const filter = {
         filter: {
-          operationType: "insert",
           "fullDocument.participants": {
             $elemMatch: {
               userId: mongoose.Types.ObjectId(user._id),
@@ -359,12 +377,13 @@ function Chat(props) {
           },
         },
       };
-      watchCollection(
+      watchCollectionForAll(
         currentUser,
         "chatrooms",
         filter,
         breakAsyncIterator,
-        handleNewChatroom
+        handleNewChatroom,
+        handleChatroomUpdate
       );
     }
     return () => {
@@ -377,7 +396,7 @@ function Chat(props) {
   // }, [activeChatroomStatus]);
 
   useEffect(() => {
-    // console.log("Active", active);
+    console.log("Active", active);
   }, [active]);
 
   return (
@@ -444,7 +463,7 @@ function Chat(props) {
             onClickCall={handleCall}
             onClickVideoCall={handleVideoCall}
             temp={active.id === location.state?.id}
-            userId={active.userParticipantId}
+            userId={active.participantId}
           />
           {!reRender && (
             <MessagesContainer
