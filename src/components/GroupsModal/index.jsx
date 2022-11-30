@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Button, CircularProgress, TextField } from "@mui/material";
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  FormGroup,
+  RadioGroup,
+  TextField,
+} from "@mui/material";
 import styled from "styled-components";
 import {
   FacebookTwoTone,
@@ -30,6 +37,7 @@ import UploadAttachments from "../UploadAttachments";
 import { requestMethod } from "../../requestMethod";
 import CustomFilledButton from "../CustomFilledButton";
 import { Box } from "@mui/system";
+import AvatarRadio from "../AvatarRadio";
 
 const schema = Joi.object({
   attachment: Joi.object({
@@ -43,6 +51,7 @@ function GroupsModal({ toggleClose }) {
   const { user } = useRealmContext();
   const [chatRooms, setChatRooms] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [Selected, setSelected] = useState("");
 
   const getChatRooms = async () => {
     setChatRooms([]);
@@ -72,7 +81,22 @@ function GroupsModal({ toggleClose }) {
   return (
     <Wrap>
       <ClickAwayListener onClickAway={toggleClose}>
-        <p>Hello</p>
+        <Form>
+          <FormControl component="fieldset">
+            <FormGroup aria-label="position" column>
+              <RadioGroup
+                aria-labelledby="chat-group"
+                name="chat-group"
+                value={Selected}
+                onChange={(event) => {
+                  setSelected(event.target.value);
+                }}
+              >
+                <AvatarRadio></AvatarRadio>
+              </RadioGroup>
+            </FormGroup>
+          </FormControl>
+        </Form>
       </ClickAwayListener>
     </Wrap>
   );
@@ -91,7 +115,7 @@ const Wrap = styled.div`
   justify-content: center;
 `;
 
-const Form = styled.form`
+const Form = styled.div`
   margin: 2rem;
   padding: 4rem 3rem;
   border-radius: 0.5rem;

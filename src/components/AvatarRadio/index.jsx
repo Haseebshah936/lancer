@@ -1,12 +1,11 @@
 import { FormControlLabel, Radio } from "@mui/material";
 import styled from "styled-components";
+import colors from "../../utils/colors";
 
 function AvatarRadio({
   url = `https://api.lorem.space/image/face?w=200&h=200&hash=hc9era4i`,
   name = "Haseeb",
-  currency = "$",
-  earning = 3526,
-  orders = 500,
+  value,
 }) {
   return (
     <Container>
@@ -18,7 +17,7 @@ function AvatarRadio({
       </Wrapper>
       <Badge>
         <FormControlLabel
-          value="Verified Pro"
+          value={value}
           control={
             <Radio
               sx={{
@@ -29,7 +28,7 @@ function AvatarRadio({
               }}
             />
           }
-          label="Verified Pro"
+          label={value}
         />
       </Badge>
     </Container>
