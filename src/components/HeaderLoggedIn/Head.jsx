@@ -132,7 +132,9 @@ function Head({
   }
 
   const allPurposeRoutes = () => {
-    return currentPath.includes("/profile/");
+    return (
+      currentPath.includes("/profile/") || currentPath.includes("/portfolio/")
+    );
   };
 
   useEffect(() => {

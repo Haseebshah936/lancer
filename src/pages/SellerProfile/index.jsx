@@ -229,13 +229,16 @@ function SellerProfile(props) {
           <SellerProfileInfo
             style={{ minWidth: "25rem", flex: 0.2 }}
             isSame={isSame}
-            languages={[""]}
+            languages={userData.seller && userData.seller.languages}
             city=""
+            showExtraInfo={showProductsTab}
             country="Paksitan"
-            englishLevel="Intermediate"
+            englishLevel={showProductsTab && "Intermediate"}
             profilePic={userData.profilePic}
-            rating={userData.stars}
-            reviews={userData.reviews}
+            rating={showProductsTab ? userData?.seller?.rating : userData.stars}
+            reviews={
+              showProductsTab ? userData?.seller?.reviews : userData.reviews
+            }
             views={userData?.views ? userData?.views : 0}
             saved={
               user?._id === queryParams.id

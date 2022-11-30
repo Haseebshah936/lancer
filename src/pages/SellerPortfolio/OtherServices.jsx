@@ -1,127 +1,156 @@
-import { Button } from '@mui/material';
-import React, { useRef } from 'react';
+import { Button } from "@mui/material";
+import React, { useRef, useState } from "react";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import styled from 'styled-components';
-import { mobile } from '../../responsive';
-import PortfolioCard from '../../components/PortfolioCard';
-import { teamImg } from '../../assets';
-import colors from '../../utils/colors';
+import styled from "styled-components";
+import { mobile } from "../../responsive";
+import PortfolioCard from "../../components/PortfolioCard";
+import { teamImg } from "../../assets";
+import colors from "../../utils/colors";
+import { requestMethod } from "../../requestMethod";
+import { useEffect } from "react";
+import { handleError } from "../../utils/helperFunctions";
 
-
-function OtherServices({data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]}) {
+function OtherServices({ seller }) {
   const ref = useRef();
+  const GigRef = useRef();
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
   };
-  const GigRef = useRef();
-    return (
-        <BuyerListContainer>
-        <ButtonContainer>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: "2rem",
-              color: "black",
+  const getProducts = async (id) => {
+    const response = await requestMethod.get(`/product/byUserId/${id}`);
+    return response.data;
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    if (seller?._id) {
+      // console.log(seller);
+      getProducts(seller._id)
+        .then((res) => {
+          // console.log(res);
+          setData(res);
+          setLoading(false);
+        })
+        .catch((err) => {
+          setLoading(false);
+          // console.log(err);
+          handleError(err);
+        });
+    }
+  }, [seller]);
+
+  return (
+    <BuyerListContainer>
+      <ButtonContainer>
+        <Button
+          variant="outlined"
+          sx={{
+            borderRadius: "2rem",
+            color: "black",
+            borderColor: "#0000009e",
+            "&:hover": {
+              backgroundColor: "transparent",
               borderColor: "#0000009e",
-              "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "#0000009e",
-              },
-              marginRight: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              textTransform: "capitalize",
-              minWidth: "1rem",
-            }}
-            onClick={() => scroll(-GigRef.current.offsetWidth)}
-          >
-            <ArrowBackIcon fontSize="medium" />
-          </Button>
-        </ButtonContainer>
-        <BuyerContainer ref={ref}>
-          {data.map((c, i) => (
-            <div key={i} ref={GigRef}>
-              <PortfolioCard
-                hideProfileInfo={false}
-                count={c}
-                GigImage={teamImg}
-                Avatar={
-                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-                }
-                SellerName={"Muhammad Haseeb"}
-                SellerLevel={"Level Rana Seller"}
-                GigTitle={"I will assassinate Talha and Umer with pressure"}
-                SellerRating={"5.0"}
-                GigReviewsTotal={"33"}
-                GigStartPrice={"$50"}
-              />
-            </div>
-          ))}
-        </BuyerContainer>
-        <ButtonContainer>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: "2rem",
-              color: "white",
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              background:
-                " linear-gradient(130deg, #172f33, #43856b) border-box",
-              textTransform: "capitalize",
-            }}
-            onClick={() => scroll(GigRef.current.offsetWidth)}
-          >
-            <ArrowForwardIcon fontSize="medium" />
-          </Button>
-        </ButtonContainer>
-        <MobileButtonContainer>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: "2rem",
-              color: "white",
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
-              marginTop: "5rem",
-              textTransform: "capitalize",
-            }}
-            onClick={() => scroll(GigRef.current.offsetWidth)}
-          >
-            <ArrowForwardIcon fontSize="medium" />
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: "2rem",
-              color: "black",
+            },
+            marginRight: "1.5rem",
+            fontSize: "1rem",
+            padding: ".7rem 2rem",
+            minWidth: "1rem",
+            textTransform: "capitalize",
+            minWidth: "1rem",
+          }}
+          onClick={() => scroll(-GigRef.current.offsetWidth)}
+        >
+          <ArrowBackIcon fontSize="medium" />
+        </Button>
+      </ButtonContainer>
+      <BuyerContainer ref={ref}>
+        {data.map((c, i) => (
+          <div key={i} ref={GigRef}>
+            <PortfolioCard
+              style={{ marginRight: 0 }}
+              key={c._id}
+              hideProfileInfo={false}
+              count={c}
+              GigImage={c.images[0]}
+              Avatar={c.owner._id.profilePic}
+              SellerName={c.owner._id.name}
+              SellerLevel={c.owner._id.badge}
+              GigTitle={c.title}
+              SellerRating={c.owner._id.seller.rating}
+              GigReviewsTotal={c.owner._id.seller.reviews}
+              GigStartPrice={c.cost}
+              ownerId={c.owner._id._id}
+              productId={c._id}
+            />
+          </div>
+        ))}
+      </BuyerContainer>
+      <ButtonContainer>
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: "2rem",
+            color: "white",
+            marginLeft: "1.5rem",
+            fontSize: "1rem",
+            padding: ".7rem 2rem",
+            minWidth: "1rem",
+            background: " linear-gradient(130deg, #172f33, #43856b) border-box",
+            textTransform: "capitalize",
+          }}
+          onClick={() => scroll(GigRef.current.offsetWidth)}
+        >
+          <ArrowForwardIcon fontSize="medium" />
+        </Button>
+      </ButtonContainer>
+      <MobileButtonContainer>
+        <Button
+          variant="contained"
+          sx={{
+            borderRadius: "2rem",
+            color: "white",
+            marginLeft: "1.5rem",
+            fontSize: "1rem",
+            padding: ".7rem 2rem",
+            minWidth: "1rem",
+            background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
+            marginTop: "5rem",
+            textTransform: "capitalize",
+          }}
+          onClick={() => scroll(GigRef.current.offsetWidth)}
+        >
+          <ArrowForwardIcon fontSize="medium" />
+        </Button>
+        <Button
+          variant="outlined"
+          sx={{
+            borderRadius: "2rem",
+            color: "black",
+            borderColor: "#0000009e",
+            "&:hover": {
+              backgroundColor: "transparent",
               borderColor: "#0000009e",
-              "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "#0000009e",
-              },
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              textTransform: "capitalize",
-              minWidth: "1rem",
-              marginTop: "1rem",
-            }}
-            onClick={() => scroll(-GigRef.current.offsetWidth)}
-          >
-            <ArrowBackIcon fontSize="medium" />
-          </Button>
-        </MobileButtonContainer>
-      </BuyerListContainer>
-    );
+            },
+            marginLeft: "1.5rem",
+            fontSize: "1rem",
+            padding: ".7rem 2rem",
+            minWidth: "1rem",
+            textTransform: "capitalize",
+            minWidth: "1rem",
+            marginTop: "1rem",
+          }}
+          onClick={() => scroll(-GigRef.current.offsetWidth)}
+        >
+          <ArrowBackIcon fontSize="medium" />
+        </Button>
+      </MobileButtonContainer>
+    </BuyerListContainer>
+  );
 }
 
 export default OtherServices;

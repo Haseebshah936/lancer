@@ -31,7 +31,13 @@ const CustomCardHeader = styled(CardHeader)({
   "a:hover": { color: colors.black },
 });
 
-const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
+const PortfolioCard = ({
+  hideProfileInfo = true,
+  ownerId,
+  productId,
+  styles,
+  ...props
+}) => {
   const [open, setOpen] = React.useState(false);
 
   const handleOpen = () => {
@@ -59,7 +65,7 @@ const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
           borderRadius: "5%",
         }}
       >
-        <Link to="/portfolio/2">
+        <Link to={"/portfolio/" + productId}>
           <CardMedia
             component="img"
             image={props.GigImage}
@@ -75,28 +81,30 @@ const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
             style={{ cursor: "pointer" }}
             sx={{ paddingTop: "2px", paddingBottom: "0px" }}
             avatar={
-              <NavLink to="/profile/1">
+              <NavLink to={"/profile/" + ownerId}>
                 <Avatar aria-label="recipe" src={props.Avatar}></Avatar>
               </NavLink>
             }
-            action={
-              <Tooltip title="Save To List" placement="right">
-                <IconButton
-                  onClick={handleOpen}
-                  aria-label="settings"
-                  sx={{ paddingTop: "15px", color: "#045c4a" }}
-                >
-                  <AddIcon />
-                </IconButton>
-              </Tooltip>
+            // action={
+            //   <Tooltip title="Save To List" placement="right">
+            //     <IconButton
+            //       onClick={handleOpen}
+            //       aria-label="settings"
+            //       sx={{ paddingTop: "15px", color: "#045c4a" }}
+            //     >
+            //       <AddIcon />
+            //     </IconButton>
+            //   </Tooltip>
+            // }
+            title={
+              <NavLink to={"/profile/" + ownerId}>{props.SellerName}</NavLink>
             }
-            title={<NavLink to="/profile/1">{props.SellerName}</NavLink>}
             subheader={props.SellerLevel}
           />
         )}
         <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
           <LinkText>
-            <Link to="/portfolio/2">
+            <Link to={"/portfolio/" + productId}>
               <Typography
                 variant="h5"
                 sx={{
@@ -134,7 +142,7 @@ const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
             justifyContent: "space-between",
           }}
         >
-          <Tooltip title="Save To Favourites" placement="bottom">
+          {/* <Tooltip title="Save To Favourites" placement="bottom">
             <Checkbox
               {...label}
               icon={
@@ -148,12 +156,13 @@ const PortfolioCard = ({ hideProfileInfo = true, styles, ...props }) => {
                 />
               }
             />
-          </Tooltip>
+          </Tooltip> */}
           <MiniWrapper2>
             <p
               style={{
                 color: "grey",
                 fontFamily: "'Gemunu Libre', sans-serif",
+                fontSize: "1.2rem",
               }}
             >
               STARTING AT
@@ -212,6 +221,8 @@ const MiniWrapper2 = styled.div`
   align-items: center;
   margin-left: 5px;
   margin-top: 4px;
+  justify-content: flex-end;
+  flex: 1;
 `;
 
 const LinkText = styled.div`

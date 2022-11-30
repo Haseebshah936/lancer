@@ -2,11 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import Carousel from "react-bootstrap/Carousel";
 import "bootstrap/dist/css/bootstrap.min.css";
 import styled from "styled-components";
-import { miniMobile, miniPc, miniTablet, mobile, pc, tablet } from "../../responsive";
+import {
+  miniMobile,
+  miniPc,
+  miniTablet,
+  mobile,
+  pc,
+  tablet,
+} from "../../responsive";
 import colors from "../../utils/colors";
 import LeftButton from "./LeftButton";
 import RightButton from "./RightButton";
 import usePrevious from "../../Hooks/usePrevious";
+import { Box } from "@mui/material";
 
 function Gallery({
   items = [],
@@ -16,10 +24,10 @@ function Gallery({
   style,
   miniScrollBorderColor = colors.becomePartnerGreen,
   leftButtonVarient,
-  leftButton=(props) => <LeftButton {...props} />,
+  leftButton = (props) => <LeftButton {...props} />,
   leftButtonStyle,
   rightButtonVarient,
-  rightButton= (props) => <RightButton {...props}/>,
+  rightButton = (props) => <RightButton {...props} />,
   rightButtonStyle,
 }) {
   const [images, setImages] = useState([]);
@@ -49,7 +57,7 @@ function Gallery({
 
     setImages(images);
     setVideos(videos);
-  }, []);
+  }, [items]);
 
   return (
     <GalleryContainer style={style}>
@@ -58,19 +66,18 @@ function Gallery({
         activeIndex={index}
         onSelect={handleSelect}
         interval={scrollInterval}
-        
       >
         {images.map((e, i) => {
           return (
             <Carousel.Item key={i}>
-              <Image  src={e?.url} alt={e?.alt ? e?.alt : ""} />
+              <Image src={e?.url} alt={e?.alt ? e?.alt : ""} />
             </Carousel.Item>
           );
         })}
         {videos.map((e, i) => {
           return (
             <Carousel.Item key={i} id={i + images.length}>
-              <Video  controls>
+              <Video controls>
                 <source
                   src={e?.url}
                   type={e?.videoType ? e?.videoType : "video/mp4"}
@@ -82,8 +89,8 @@ function Gallery({
       </CarouselNew>
 
       {miniScroller && (
-        <IndicatorContainer >
-          <Indicator  ref={ref}>
+        <IndicatorContainer>
+          <Indicator ref={ref}>
             {images.map((e, i) => {
               return (
                 <IndicatorImage
@@ -100,28 +107,35 @@ function Gallery({
                 />
               );
             })}
-            {videos.map((e, i) => {
-              return (
-                <IndicatorImage
-                  key={i}
-                  borderColor={miniScrollBorderColor}
-                  ref={categoryRef}
-                  className={index === i + images.length ? "active" : ""}
-                  onClick={() => {
-                    setIndex(i + images.length);
-                  }}
-                  id={i + images.length}
-                  src={e?.thumbnail}
-                  alt={e?.alt ? e?.alt : ""}
-                />
-              );
-            })}
+            {videos.length > 0 &&
+              videos.map((e, i) => {
+                return (
+                  <IndicatorVideo
+                    key={i}
+                    borderColor={miniScrollBorderColor}
+                    ref={categoryRef}
+                    className={index === i + images.length ? "active" : ""}
+                    onClick={() => {
+                      setIndex(i + images.length);
+                    }}
+                    id={i + images.length}
+                    src={e?.thumbnail}
+                    alt={e?.alt ? e?.alt : ""}
+                  />
+                );
+              })}
           </Indicator>
-          <ButtonContainer >
-            {leftButton({onClick:() => scroll(-categoryRef.current.offsetWidth), varient: leftButtonVarient,
-            style: leftButtonStyle})}
-            {rightButton({onClick:() => scroll(categoryRef.current.offsetWidth),
-              varient: rightButtonVarient, style: rightButtonStyle})}
+          <ButtonContainer length={items.length}>
+            {leftButton({
+              onClick: () => scroll(-categoryRef.current.offsetWidth),
+              varient: leftButtonVarient,
+              style: leftButtonStyle,
+            })}
+            {rightButton({
+              onClick: () => scroll(categoryRef.current.offsetWidth),
+              varient: rightButtonVarient,
+              style: rightButtonStyle,
+            })}
           </ButtonContainer>
         </IndicatorContainer>
       )}
@@ -204,14 +218,30 @@ const IndicatorImage = styled.img`
   width: 12rem;
   height: 7rem;
   cursor: pointer;
+  object-fit: cover;
   margin-right: 1rem;
   &.active {
-    border: .4rem solid ${(props) => props.borderColor};
+    border: 0.4rem solid ${(props) => props.borderColor};
+  }
+`;
+const IndicatorVideo = styled.video`
+  width: 12rem;
+  width: "100%";
+  height: 7rem;
+  cursor: pointer;
+  object-fit: cover;
+  margin-right: 1rem;
+  &.active {
+    border: 0.4rem solid ${(props) => props.borderColor};
   }
 `;
 
 const ButtonContainer = styled.div`
-  display: flex;
+  display: ${(props) => (props.length > 8 ? "flex" : "none")};
+  ${pc({ display: (props) => (props.length > 6 ? "flex" : "none") })};
+  ${tablet({ display: (props) => (props.length > 3 ? "flex" : "none") })};
+  ${miniTablet({ display: (props) => (props.length > 4 ? "flex" : "none") })};
+  ${mobile({ display: (props) => (props.length >= 2 ? "flex" : "none") })};
   flex-direction: column;
   height: 100%;
   margin-right: 1.5rem;

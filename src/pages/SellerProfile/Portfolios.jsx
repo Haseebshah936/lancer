@@ -13,19 +13,19 @@ function Portfolios({
       {data.map((c, i) => (
         <PortfolioCard
           style={{ marginRight: 0 }}
-          key={i}
+          key={c._id}
           hideProfileInfo={false}
           count={c}
-          GigImage={teamImg}
-          Avatar={
-            "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-          }
-          SellerName={"Muhammad Haseeb"}
-          SellerLevel={"Level Rana Seller"}
-          GigTitle={"I will assassinate Talha and Umer with pressure"}
-          SellerRating={"5.0"}
-          GigReviewsTotal={"33"}
-          GigStartPrice={"$50"}
+          GigImage={c.images[0]}
+          Avatar={c.owner._id.profilePic}
+          SellerName={c.owner._id.name}
+          SellerLevel={c.owner._id.badge}
+          GigTitle={c.title}
+          SellerRating={c.owner._id.seller.rating}
+          GigReviewsTotal={c.owner._id.seller.reviews}
+          GigStartPrice={c.cost}
+          ownerId={c.owner._id._id}
+          productId={c._id}
         />
       ))}
     </Container>

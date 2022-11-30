@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
-import Header from "../../components/Header";
+import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer";
 import PricingPlan from "../../components/PricingPlan";
 import Gallery from "../../components/Gallery";
@@ -10,103 +10,147 @@ import OtherServices from "./OtherServices";
 import Reviews from "../../components/ReviewsComponent";
 import { packages, sellerSliderData } from "../../utils/dummyData";
 import ProfileReviewInfo from "../../components/ProfileReviewsInfo";
+import { useParams } from "react-router-dom";
+import { requestMethod } from "../../requestMethod";
+import { handleError } from "../../utils/helperFunctions";
+import { useRealmContext } from "../../db/RealmContext";
 
 function SellerPortfolio(props) {
   const title =
     "Get your premium quality product logo designing and | rebranding material in very low price";
   const rating = 5.0;
-  const reviews = 20;
   const views = 10000;
-
+  const { id } = useParams();
+  const [isSameUser, setIsSameUser] = useState(true);
+  const [productData, setProductData] = useState({});
+  const [sellerData, setSellerData] = useState({});
+  const [productMedia, setProductMedia] = useState([]);
+  const descriptionRef = useRef();
   const [save, setSave] = useState(false);
+  const { user } = useRealmContext();
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(true);
+  const [loadMore, setLoadMore] = useState(true);
+
+  const getSellerReviews = async (id, skip) => {
+    const response = await requestMethod.get(
+      `review/sellerReviews/${id}?skip=${skip}`
+    );
+    return response.data;
+  };
+
+  const handleLoadMoreReviews = async (id, skip) => {
+    setLoadingReviews(true);
+    getSellerReviews(id, skip)
+      .then((res) => {
+        if (res.length === 0) setLoadMore(false);
+        setReviews((prev) => [...prev, ...res]);
+        setLoadingReviews(false);
+      })
+      .catch((err) => {
+        setLoadingReviews(false);
+        handleError(err);
+      });
+  };
 
   const handleSave = () => setSave(!save);
+  const getProduct = async (id) => {
+    const response = await requestMethod.get("product/" + id);
+    return response.data;
+  };
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
       left: 0,
       behavior: "smooth",
     });
+    getProduct(id)
+      .then((data) => {
+        handleLoadMoreReviews(data.owner._id._id, 0);
+        setSellerData({
+          name: data.owner._id.name,
+          profilePic: data.owner._id.profilePic,
+          badge: data.owner._id.badge,
+          ...data.owner._id.seller,
+          _id: data.owner._id._id,
+        });
+        setProductData(data);
+        const media = [];
+        data.images.map((image) => {
+          media.push({
+            url: image,
+            type: "image",
+            thumbnail: image,
+          });
+        });
+        {
+          data.videos[0] &&
+            media.push({
+              url: data.videos[0],
+              type: "video",
+              thumbnail: data.videos[0],
+            });
+        }
+        setProductMedia(media);
+        descriptionRef.current.innerHTML = data.description;
+      })
+      .catch((err) => {
+        // console.log(err);
+        handleError(err);
+      });
   }, []);
+
+  useEffect(() => {
+    if (!sellerData) return;
+    if (user?._id === sellerData?._id) {
+      // console.log("Is same ", user._id, sellerData._id);
+      setIsSameUser(true);
+      return;
+    } else if (user?._id !== sellerData?._id) {
+      setIsSameUser(false);
+    }
+  }, [user, sellerData]);
 
   return (
     <>
-      <Header />
-      <Container>
-        <Wrapper>
-          <SubContainer1>
-            <Heading>{title}</Heading>
-            <ProfileReviewInfo
-              rating={rating}
+      <HeaderLoggedIn />
+      {productData && (
+        <Container>
+          <Wrapper>
+            <SubContainer1>
+              <Heading>{productData.title}</Heading>
+              <ProfileReviewInfo
+                rating={sellerData?.rating}
+                reviews={sellerData?.reviews}
+                views={0}
+                saved={save}
+                handleSave={handleSave}
+              />
+              <Gallery items={productMedia} />
+              <Description ref={descriptionRef} />
+            </SubContainer1>
+            <SubContainer2>
+              <PricingPlan pakages={productData?.packages} />
+              {!isSameUser && (
+                <SellerProfileInfo handleSave={handleSave} saved={save} />
+              )}
+            </SubContainer2>
+          </Wrapper>
+          <DetailsContainer>
+            <SubHeading>More Services</SubHeading>
+            <OtherServices seller={sellerData} />
+            <SubHeading>{sellerData?.reviews} Client Reviews</SubHeading>
+            <Reviews
+              loadMore={loadMore}
               reviews={reviews}
-              views={views}
-              saved={save}
-              handleSave={handleSave}
+              getMoreReviews={(skip) =>
+                handleLoadMoreReviews(sellerData._id, skip)
+              }
             />
-            <Gallery items={sellerSliderData} />
-            <Description>
-              Laboris id laborum irure in amet anim ad laboris reprehenderit
-              nostrud quis. Lorem proident sint voluptate sit incididunt
-              pariatur. Esse qui quis dolore tempor quis aute qui duis irure
-              amet. Laboris nostrud dolore excepteur excepteur cupidatat laboris
-              non labore officia aute. Id anim amet proident Lorem exercitation
-              elit ullamco id Lorem. Incididunt veniam do velit nostrud elit
-              proident aliqua reprehenderit magna. Sint do eiusmod enim
-              reprehenderit proident enim commodo sit minim nulla. Sint do dolor
-              est officia ut aliquip commodo adipisicing ullamco consequat.
-              Dolore ullamco sit non ipsum cupidatat consectetur qui do. Aliqua
-              in ad quis veniam nulla sint aliqua. Labore enim qui officia
-              ullamco cupidatat cupidatat consequat ut sit Lorem. Nostrud elit
-              consectetur laboris consequat excepteur magna elit nulla. Aliqua
-              nulla et cupidatat quis magna fugiat ipsum et minim anim
-              exercitation reprehenderit. Lorem labore est cupidatat quis
-              voluptate non. Tempor pariatur voluptate magna sit quis labore
-              sint Lorem nostrud tempor Lorem. Sint veniam consectetur laboris
-              magna laborum velit voluptate cupidatat fugiat pariatur dolor
-              labore. Dolor culpa reprehenderit commodo excepteur ad consequat
-              Lorem. Dolore deserunt adipisicing velit est minim excepteur in
-              tempor ea deserunt id aliqua. Sit nisi ipsum ad ea ad officia
-              deserunt. Deserunt exercitation aliquip proident laborum ea
-              ullamco tempor ad officia in proident minim velit.
-              <br />
-              <br />
-              Laboris id laborum irure in amet anim ad laboris reprehenderit
-              nostrud quis. Lorem proident sint voluptate sit incididunt
-              pariatur. Esse qui quis dolore tempor quis aute qui duis irure
-              amet. Laboris nostrud dolore excepteur excepteur cupidatat laboris
-              non labore officia aute. Id anim amet proident Lorem exercitation
-              elit ullamco id Lorem. Incididunt veniam do velit nostrud elit
-              proident aliqua reprehenderit magna. Sint do eiusmod enim
-              reprehenderit proident enim commodo sit minim nulla. Sint do dolor
-              est officia ut aliquip commodo adipisicing ullamco consequat.
-              Dolore ullamco sit non ipsum cupidatat consectetur qui do. Aliqua
-              in ad quis veniam nulla sint aliqua. Labore enim qui officia
-              ullamco cupidatat cupidatat consequat ut sit Lorem. Nostrud elit
-              consectetur laboris consequat excepteur magna elit nulla. Aliqua
-              nulla et cupidatat quis magna fugiat ipsum et minim anim
-              exercitation reprehenderit. Lorem labore est cupidatat quis
-              voluptate non. Tempor pariatur voluptate magna sit quis labore
-              sint Lorem nostrud tempor Lorem. Sint veniam consectetur laboris
-              magna laborum velit voluptate cupidatat fugiat pariatur dolor
-              labore. Dolor culpa reprehenderit commodo excepteur ad consequat
-              Lorem. Dolore deserunt adipisicing velit est minim excepteur in
-              tempor ea deserunt id aliqua. Sit nisi ipsum ad ea ad officia
-              deserunt. Deserunt exercitation aliquip proident laborum ea
-              ullamco tempor ad officia in proident minim velit.
-            </Description>
-          </SubContainer1>
-          <SubContainer2>
-            <PricingPlan pakages={packages} />
-            <SellerProfileInfo handleSave={handleSave} saved={save} />
-          </SubContainer2>
-        </Wrapper>
-        <DetailsContainer>
-          <SubHeading>More Services</SubHeading>
-          <OtherServices />
-          <SubHeading>{reviews} Client Reviews</SubHeading>
-          <Reviews />
-        </DetailsContainer>
-      </Container>
+          </DetailsContainer>
+        </Container>
+      )}
 
       <Footer />
     </>
@@ -192,6 +236,7 @@ const Description = styled.p`
   text-align: justify;
   margin-top: 2rem;
   font-size: 1.2rem;
+  min-height: 40vh;
 `;
 
 const SubHeading = styled.h2`
