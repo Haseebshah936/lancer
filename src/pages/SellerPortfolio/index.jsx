@@ -14,6 +14,8 @@ import { useParams } from "react-router-dom";
 import { requestMethod } from "../../requestMethod";
 import { handleError } from "../../utils/helperFunctions";
 import { useRealmContext } from "../../db/RealmContext";
+import { Box } from "@mui/system";
+import colors from "../../utils/colors";
 
 function SellerPortfolio(props) {
   const title =
@@ -132,6 +134,7 @@ function SellerPortfolio(props) {
                 handleSave={handleSave}
               />
               <Gallery items={productMedia} />
+              <SubHeading>About this product</SubHeading>
               <Description ref={descriptionRef} />
             </SubContainer1>
             <SubContainer2>
@@ -157,6 +160,7 @@ function SellerPortfolio(props) {
                   showButton={true}
                   saved={save}
                   skills={sellerData?.skills}
+                  userId={sellerData?._id}
                 />
               )}
             </SubContainer2>
@@ -173,6 +177,23 @@ function SellerPortfolio(props) {
               }
             />
           </DetailsContainer>
+          <SubHeading>Tags</SubHeading>
+          <Box display={"flex"} flexWrap="wrap" columnGap={"1rem"}>
+            {productData?.tags?.map((skill, index) => (
+              <Box
+                p={".5rem 1rem"}
+                border={`1px solid ${colors.lightGrey}`}
+                borderRadius={"8%"}
+                fontSize={"1.2rem"}
+                color={colors.gray}
+                component={"p"}
+                key={index}
+                maxWidth="50rem"
+              >
+                {skill}
+              </Box>
+            ))}
+          </Box>
         </Container>
       )}
 
@@ -210,6 +231,7 @@ const DetailsContainer = styled.div`
   ${miniTablet({
     width: "100%",
   })}
+  margin-bottom: 2rem;
 `;
 
 const SubContainer1 = styled.div`

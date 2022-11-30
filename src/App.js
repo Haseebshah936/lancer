@@ -119,7 +119,7 @@ function App(props) {
               <Route index element={<Dashboard />} />
             </Route>
 
-            <Route path="/chat/:id" element={<Chat />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="/createGig" element={<CreateGig />} />
             <Route path="/editGig" element={<CreateGig />} />
 

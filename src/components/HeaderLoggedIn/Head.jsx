@@ -133,7 +133,9 @@ function Head({
 
   const allPurposeRoutes = () => {
     return (
-      currentPath.includes("/profile/") || currentPath.includes("/portfolio/")
+      currentPath.includes("/profile/") ||
+      currentPath.includes("/portfolio/") ||
+      currentPath === "/chat"
     );
   };
 

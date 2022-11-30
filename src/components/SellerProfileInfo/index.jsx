@@ -6,6 +6,8 @@ import AboutSeller from "../AboutSeller/AboutSeller";
 import { miniTablet, mobile } from "../../responsive";
 import colors from "../../utils/colors";
 import ProfileReviewInfo from "../ProfileReviewsInfo";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 function SellerProfileInfo({
   languages = [],
@@ -29,55 +31,71 @@ function SellerProfileInfo({
   achivements = [],
   showButton = false,
   isSame = false,
+  userId = "",
 }) {
+  const navigate = useNavigate();
+  // useEffect(() => {
+  //   if(languages.length === 0) {
+  //   languages = languages.map((lang) => lang.languages);
+  //   }
+  // }, [languages])
   return (
     <Container style={{ ...style, maxHeight: showExtraInfo ? "100%" : "30vh" }}>
       <Wrapper>
-        <Image src={profilePic} />
-        <Name>
-          {name}{" "}
-          <TaskAlt
-            sx={{
-              fontSize: "1rem",
-              color: approved
-                ? colors.becomePartnerButtonGreen
-                : colors.googleRed,
+        <WrapperMini>
+          <Image src={profilePic} />
+
+          <Name
+            onClick={() => {
+              if (userId) {
+                navigate(`/profile/${userId}`);
+              }
             }}
+            style={{ cursor: userId ? "pointer" : "" }}
+          >
+            {name}{" "}
+            <TaskAlt
+              sx={{
+                fontSize: "1rem",
+                color: approved
+                  ? colors.becomePartnerButtonGreen
+                  : colors.googleRed,
+              }}
+            />
+          </Name>
+          <GigDescription>{description}</GigDescription>
+          <ProfileReviewInfo
+            size={1}
+            rating={rating}
+            reviews={reviews}
+            views={views}
+            saved={saved}
+            handleSave={handleSave}
           />
-        </Name>
-        <GigDescription>{description}</GigDescription>
-        <ProfileReviewInfo
-          size={1}
-          rating={rating}
-          reviews={reviews}
-          views={views}
-          saved={saved}
-          handleSave={handleSave}
-        />
-        <SubHeading>Location:</SubHeading>
-        <Text>
-          {city} {country}
-        </Text>
-        {languages.length > 0 && (
-          <>
-            <SubHeading>Languages:</SubHeading>
-            <Text>{languages.join(", ")}</Text>
-          </>
-        )}
-        {englishLevel && (
-          <>
-            <SubHeading>English level:</SubHeading>
-            <Text>{englishLevel}</Text>
-          </>
-        )}
-        {!isSame && showExtraInfo && (
-          <CustomIconButton variant="contained">
-            <ChatBubbleOutline />
-            &nbsp;&nbsp;Contact to this seller
-          </CustomIconButton>
-        )}
-        {showButton && (
-          <CustomIconButton variant="contained">
+          <SubHeading>Location:</SubHeading>
+          <Text>
+            {city} {country}
+          </Text>
+          {languages.length > 0 && (
+            <>
+              <SubHeading>Languages:</SubHeading>
+              <Text>{languages.join(", ")}</Text>
+            </>
+          )}
+          {englishLevel && (
+            <>
+              <SubHeading>English level:</SubHeading>
+              <Text>{englishLevel}</Text>
+            </>
+          )}
+        </WrapperMini>
+        {((!isSame && showExtraInfo) || showButton) && (
+          <CustomIconButton
+            onClick={() => {
+              navigate(`/chat`);
+            }}
+            variant="contained"
+          >
             <ChatBubbleOutline />
             &nbsp;&nbsp;Contact to this seller
           </CustomIconButton>
@@ -112,7 +130,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin-top: 5rem;
-  min-height: 46rem;
+  min-height: 44rem;
   ${miniTablet({
     marginRight: "3rem",
     boxShadow: "none",
@@ -123,6 +141,12 @@ const Container = styled.div`
 `;
 
 const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* flex: 1; */
+`;
+const WrapperMini = styled.div`
   display: flex;
   flex-direction: column;
 `;

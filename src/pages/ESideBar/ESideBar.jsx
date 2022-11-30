@@ -191,7 +191,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <NavLink to="/chat/1">
+                <NavLink to="/chat">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <MessageOutlinedIcon
