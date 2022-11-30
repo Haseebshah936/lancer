@@ -107,7 +107,7 @@ function Chat(props) {
 
   const handleChatRoomClick = (chatRoom) => {
     setActive(chatRoom);
-    console.log("Clicked", chatRoom);
+    // console.log("Clicked", chatRoom);
     setActiveChatroomStatus({
       id: chatRoom.id,
       status:
@@ -147,7 +147,7 @@ function Chat(props) {
       .catch((err) => {
         console.log(err);
         if (err.response.data === "Chatroom not found") {
-          console.log("Not found", location.state?.id);
+          // console.log("Not found", location.state?.id);
           createChatRoom(active.id, active?.userParticipantId)
             .then(async (data) => {
               await requestMethod.post("message", {
@@ -298,7 +298,7 @@ function Chat(props) {
 
   const handleNewChatroom = (change) => {
     const { documentKey, fullDocument } = change;
-    console.log("New chatroom added ", change);
+    // console.log("New chatroom added ", fullDocument);
     requestMethod
       .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
       .then((res) => {
@@ -336,7 +336,7 @@ function Chat(props) {
   useEffect(() => {
     let breakAsyncIterator = false;
     if (user) {
-      console.log("Watching for new chatrooms");
+      // console.log("Watching for new chatrooms");
       const filter = {
         filter: {
           operationType: "insert",
@@ -365,7 +365,7 @@ function Chat(props) {
   // }, [activeChatroomStatus]);
 
   useEffect(() => {
-    console.log("Active", active);
+    // console.log("Active", active);
   }, [active]);
 
   return (
