@@ -58,7 +58,7 @@ function MessageHeader({
   const handleAddToGroup = (chatroom) => {
     console.log(chatroom);
     requestMethod
-      .put(`chatroom/addParticipant/${chatroom.id}`, {
+      .put(`chatroom/addParticipant/${chatroom}`, {
         userId,
       })
       .then((res) => {

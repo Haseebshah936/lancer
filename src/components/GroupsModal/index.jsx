@@ -92,10 +92,24 @@ function GroupsModal({ toggleClose, handleAddToGroup }) {
                   setSelected(event.target.value);
                 }}
               >
-                <AvatarRadio></AvatarRadio>
+                {chatRooms.length > 0 &&
+                  chatRooms.map((c) => {
+                    return (
+                      <AvatarRadio
+                        key={c.id}
+                        url={c.avatar}
+                        name={c.title}
+                        value={c.id}
+                      />
+                    );
+                  })}
               </RadioGroup>
             </FormGroup>
           </FormControl>
+          <CustomFilledButton
+            title={"Add to Group"}
+            onClick={() => handleAddToGroup(Selected)}
+          />
         </Form>
       </ClickAwayListener>
     </Wrap>

@@ -2,11 +2,7 @@ import { FormControlLabel, Radio } from "@mui/material";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 
-function AvatarRadio({
-  url = `https://api.lorem.space/image/face?w=200&h=200&hash=hc9era4i`,
-  name = "Haseeb",
-  value,
-}) {
+function AvatarRadio({ url, name, value }) {
   return (
     <Container>
       <Wrapper>
@@ -15,22 +11,20 @@ function AvatarRadio({
           <NameText>{name}</NameText>
         </DetailsContainer>
       </Wrapper>
-      <Badge>
-        <FormControlLabel
-          value={value}
-          control={
-            <Radio
-              sx={{
+
+      <FormControlLabel
+        value={value}
+        control={
+          <Radio
+            sx={{
+              color: colors.textGreen,
+              "&.Mui-checked": {
                 color: colors.textGreen,
-                "&.Mui-checked": {
-                  color: colors.textGreen,
-                },
-              }}
-            />
-          }
-          label={value}
-        />
-      </Badge>
+              },
+            }}
+          />
+        }
+      />
     </Container>
   );
 }
