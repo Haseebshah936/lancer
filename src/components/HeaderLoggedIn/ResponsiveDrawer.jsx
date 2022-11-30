@@ -16,7 +16,7 @@ export default function ResponsiveDrawer({
   state,
   toggleLogin,
 }) {
-  const { user, currentUser } = useRealmContext();
+  const { user, currentUser, logOut } = useRealmContext();
   const { activeProfile, setActiveProfile } = useCustomContext();
   const navigate = useNavigate();
 
@@ -136,8 +136,22 @@ export default function ResponsiveDrawer({
                     </p>
                   )}
                 </Link>
-                {activeProfile === "seller" ? null : (
-                  <NavLink to="/e/dashboard">Dashboard</NavLink>
+                {activeProfile === "seller" ? (
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <NavLink to={`/profile/${user?._id}`}>Profile</NavLink>
+                    <NavLink to={`/f/gigs/${user?._id}`}>Gigs</NavLink>
+                    <NavLink to={`/f/settings/${user?._id}`}>Settings</NavLink>
+                    <NavLink to={`/f/payments/${user?._id}`}>Payments</NavLink>
+                    <NavLink onClick={logOut}>Log out</NavLink>
+                  </Box>
+                ) : (
+                  <Box display={"flex"} flexDirection={"column"}>
+                    <NavLink to={`/profile/${user?._id}`}>Profile</NavLink>
+                    <NavLink to="/postProject">Post Request</NavLink>
+                    <NavLink to="/e/dashboard">Dashboard</NavLink>
+                    <NavLink to="/e/settings">Setting</NavLink>
+                    <NavLink onClick={logOut}>Log out</NavLink>
+                  </Box>
                 )}
               </SubContainer>
             </ListItem>
