@@ -69,8 +69,8 @@ function CustomChatItem({
 
   useEffect(() => {
     let breakAsyncIterator_status = false;
+    let breakAsyncIterator_chatroom = false;
     if (user) {
-      let breakAsyncIterator_chatroom = false;
       if (!chatroom?.isGroup) {
         const filter = {
           filter: {
@@ -103,6 +103,7 @@ function CustomChatItem({
 
     return () => {
       breakAsyncIterator_status = true;
+      breakAsyncIterator_chatroom = true;
     };
   }, [user]);
 

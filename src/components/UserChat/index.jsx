@@ -32,6 +32,7 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import { ArrowBack } from "@mui/icons-material";
 import MorePoper from "./MorePoper";
 import { useLocation, useNavigate } from "react-router-dom";
+import { watchCollection } from "../../db/helperFunction";
 const ChatRoomsData = [
   {
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
@@ -295,6 +296,21 @@ function Chat(props) {
     [newData]
   );
 
+  const handleNewChatroom = (change) => {
+    const { documentKey, fullDocument } = change;
+    console.log("New chatroom added ", change);
+    requestMethod
+      .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
+      .then((res) => {
+        // console.log("res New message", res.data);
+        setChatRoomsData((prev) => [res.data, ...prev]);
+        setChatRooms((prev) => [res.data, ...prev]);
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
+  };
+
   useEffect(() => {
     setReRender(true);
     if (active) getChatRoomMessages(active.id);
@@ -316,6 +332,33 @@ function Chat(props) {
       setChatRoomsData((prev) => [location.state, ...prev]);
     }
   }, []);
+
+  useEffect(() => {
+    let breakAsyncIterator = false;
+    if (user) {
+      console.log("Watching for new chatrooms");
+      const filter = {
+        filter: {
+          operationType: "insert",
+          "fullDocument.participants": {
+            $elemMatch: {
+              userId: mongoose.Types.ObjectId(user._id),
+            },
+          },
+        },
+      };
+      watchCollection(
+        currentUser,
+        "chatrooms",
+        filter,
+        breakAsyncIterator,
+        handleNewChatroom
+      );
+    }
+    return () => {
+      breakAsyncIterator = true;
+    };
+  }, [user]);
 
   // useEffect(() => {
   //   console.log("Status changed", activeChatroomStatus);
