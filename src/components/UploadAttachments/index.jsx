@@ -28,7 +28,7 @@ function UploadAttachments({ attachment, setAttachment, type }) {
   };
 
   const uploadAttachment = (file, controller) => {
-    // console.log("CAlled");
+    console.log("CAlled");
     const option = {
       onUploadProgress: (progressEvent) => {
         const { loaded, total } = progressEvent;
@@ -58,8 +58,6 @@ function UploadAttachments({ attachment, setAttachment, type }) {
         URL.revokeObjectURL(attachment.uri);
         setAttachment((prev) => {
           return {
-            ...prev,
-            uploading: false,
             uri: res.data.secure_url,
           };
         });
@@ -77,9 +75,9 @@ function UploadAttachments({ attachment, setAttachment, type }) {
     });
   };
 
-  useEffect(() => {
-    // console.log("attachment", attachment);
-  }, [attachment]);
+  // useEffect(() => {
+  //   console.log("attachment", attachment);
+  // }, [attachment]);
   return (
     <>
       <Box

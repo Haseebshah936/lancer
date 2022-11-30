@@ -1,14 +1,23 @@
 import {
+  Add,
   ArrowBack,
   Call,
   Circle,
   FiberManualRecord,
   Videocam,
 } from "@mui/icons-material";
-import { ButtonBase, IconButton, StepButton, Typography } from "@mui/material";
+import {
+  ButtonBase,
+  IconButton,
+  Modal,
+  StepButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
 import { Box } from "@mui/system";
 import React from "react";
+import { useState } from "react";
 import { useEffect } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
@@ -16,6 +25,7 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
 import displayTime from "../../utils/DateAndTime/displayTime";
+import GroupsModal from "../GroupsModal";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -32,6 +42,16 @@ function MessageHeader({
   const monthToday = new Date(today).getMonth();
   const yearToday = new Date(today).getFullYear();
   const { activeChatroomStatus } = useCustomContext();
+  const [toggle, setToggle] = useState(false);
+
+  const handleToggle = () => {
+    setToggle(true);
+  };
+
+  const handleClose = () => {
+    setToggle(false);
+  };
+
   const isMatchToday = (date) => {
     const roundDate = new Date(date).getDate();
     const roundMonth = new Date(date).getMonth();
@@ -114,7 +134,26 @@ function MessageHeader({
         <IconButton onClick={onClickCall}>
           <Call fontSize="large" />
         </IconButton>
+        {!isGroup && (
+          <Tooltip title="Add to group">
+            <IconButton
+              onClick={handleToggle}
+              color="inherit"
+              ari-label="add to shopping cart"
+            >
+              <Add />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
+      <Modal
+        open={toggle}
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <GroupsModal toggleClose={handleClose} />
+      </Modal>
     </Container>
   );
 }
