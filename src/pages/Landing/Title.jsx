@@ -2,8 +2,34 @@ import styled from "styled-components";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { Button } from "@mui/material";
 import colors from "../../utils/colors";
-import {teamImg} from "../../assets/index"
+import { teamImg } from "../../assets/index";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 function Title(props) {
+  const navigate = useNavigate();
+  const {
+    setSearchData,
+
+    setSearchDataLoader,
+  } = useCustomContext();
+
+  const handleExplore = () => {
+    (async () => {
+      try {
+        const response = await axios.get(`http://localhost:3003/api/product/`);
+
+        // console.log("Search Response", response.data);
+        setSearchData(response.data);
+        setSearchDataLoader(false);
+        navigate("/search");
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+    navigate("/search");
+  };
+
   return (
     <Container>
       <TextContainer>
@@ -13,7 +39,7 @@ function Title(props) {
           best freelancer community specialized in every field.{" "}
         </Tagline>
         <ButtonContainer>
-          <Btn>
+          <Btn onClick={() => handleExplore()}>
             <BtnText>Explore</BtnText>
             <IconContainer>
               <ArrowUpwardIcon fontSize="medium" />
@@ -96,7 +122,8 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
+      border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;

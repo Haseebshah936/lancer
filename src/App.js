@@ -110,6 +110,8 @@ function App(props) {
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/signup" element={<Signup />} />
           </Route>
+          <Route path="/portfolio/:id" element={<SellerPortfolio />} />
+
           <Route path="/Search" element={<SearchResults />} />
 
           <Route element={<PrivateRoutes />}>
@@ -153,7 +155,6 @@ function App(props) {
             <Route path="/f/payments" element={<FPayments />} />
             <Route path="/f/settings" element={<FSettings />} />
           </Route>
-          <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
 

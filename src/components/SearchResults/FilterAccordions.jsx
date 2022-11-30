@@ -472,7 +472,10 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
       </FilterButtons>
       <DrawerButtons>
         <CustomFilledButton
-          onClick={handleFilters}
+          onClick={() => {
+            handleFilters();
+            toggleFiltersDraw(false);
+          }}
           title={"Apply Filters"}
           style={{ margin: "15px 0px 0px 0px", width: "100%" }}
         ></CustomFilledButton>

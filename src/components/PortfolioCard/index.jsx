@@ -124,7 +124,7 @@ const PortfolioCard = ({
                 }}
                 style={{ cursor: "pointer" }}
               >
-                {props.GigTitle.slice(0, 50)}
+                {props.GigTitle.slice(0, 50).concat("...")}
               </Typography>
             </Link>
           </LinkText>

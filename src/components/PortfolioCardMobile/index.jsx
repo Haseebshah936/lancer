@@ -47,7 +47,7 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
                     sx={{ color: "black", fontWeight: 400 }}
                     style={{ cursor: "pointer" }}
                   >
-                    {props.GigTitle}
+                    {props.GigTitle.slice(0, 50).concat("...")}
                   </Typography>
                 </Link>
               </LinkText>

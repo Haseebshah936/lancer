@@ -4,7 +4,9 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Filters from "../components/SearchResults/Filters";
 import styled from "styled-components";
-import Header from "../components/HeaderLoggedIn";
+import HeaderLoggedIn from "../components/HeaderLoggedIn";
+import Header from "../components/Header";
+
 import Footer from "../components/Footer";
 import SearchGrid from "../components/SearchResults/SearchGrid";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
@@ -12,11 +14,13 @@ import { tablet } from "../responsive";
 import { Pagination } from "@mui/material";
 import axios from "axios";
 import { useCustomContext } from "../Hooks/useCustomContext";
+import { useRealmContext } from "../db/RealmContext";
 
 const SearchResults = () => {
   const [pagination, setPagination] = useState(1);
   const [count, setCount] = useState(1);
   const { searchData } = useCustomContext();
+  const { user } = useRealmContext();
 
   // useEffect(() => {
   //   axios.get("http://localhost:3003/api/product/").then((response) => {
@@ -32,7 +36,7 @@ const SearchResults = () => {
 
   return (
     <Wrapper>
-      <Header />
+      {user ? <HeaderLoggedIn /> : <Header />}
 
       <Container>
         <Box sx={{ flexGrow: 1 }}>
