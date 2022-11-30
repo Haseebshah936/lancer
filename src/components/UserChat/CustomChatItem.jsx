@@ -147,7 +147,7 @@ function CustomChatItem({
   }, [status]);
 
   useEffect(() => {
-    console.log("Chatroom", chatroom);
+    // console.log("Chatroom", chatroom);
   }, [chatroom]);
 
   return (
