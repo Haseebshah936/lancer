@@ -203,7 +203,7 @@ const Sidebar = () => {
                   </CustomListItem>
                 </Link>
 
-                <NavLink to="/chat">
+                <Link to="/chat">
                   <CustomListItem disablePadding>
                     <ListItemIcon>
                       <MessageOutlinedIcon
@@ -219,7 +219,7 @@ const Sidebar = () => {
                       disableTypography={true}
                     />
                   </CustomListItem>
-                </NavLink>
+                </Link>
 
                 <Link to="/f/payments">
                   <CustomListItem disablePadding>

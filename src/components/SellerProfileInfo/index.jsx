@@ -8,6 +8,11 @@ import colors from "../../utils/colors";
 import ProfileReviewInfo from "../ProfileReviewsInfo";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { useCustomContext } from "../../Hooks/useCustomContext";
+import mongoose from "mongoose";
+import { requestMethod } from "../../requestMethod";
+import { handleError } from "../../utils/helperFunctions";
+import { useRealmContext } from "../../db/RealmContext";
 
 function SellerProfileInfo({
   languages = [],
@@ -39,6 +44,16 @@ function SellerProfileInfo({
   //   languages = languages.map((lang) => lang.languages);
   //   }
   // }, [languages])
+  const { user } = useRealmContext();
+  const { setChatrooms } = useCustomContext();
+  const createChatRoom = async (id) => {
+    const response = await requestMethod.post("chatroom/createChatroom", {
+      participantId: userId,
+      creatorId: user._id,
+    });
+    return response.data;
+  };
+
   return (
     <Container style={{ ...style, maxHeight: showExtraInfo ? "100%" : "30vh" }}>
       <Wrapper>
@@ -89,10 +104,37 @@ function SellerProfileInfo({
             </>
           )}
         </WrapperMini>
-        {((!isSame && showExtraInfo) || showButton) && (
+        {user && ((!isSame && showExtraInfo) || showButton) && (
           <CustomIconButton
             onClick={() => {
-              navigate(`/chat`);
+              const id = new mongoose.Types.ObjectId();
+              createChatRoom(id, userId)
+                .then((chatroom) => {
+                  // navigate(`/chat`, {
+                  //   state: {
+                  //     alt: "Geeks image",
+                  //     avatar: profilePic,
+                  //     date: new Date(),
+                  //     description: "",
+                  //     id: chatroom._id,
+                  //     isGroup: false,
+                  //     muted: false,
+                  //     subtitle: "",
+                  //     title: name,
+                  //     participantId: user._id,
+                  //     unread: false,
+                  //     userParticipantId: userId,
+                  //     isOnline: null,
+                  //     tempRoom: true,
+                  //   },
+                  // });
+
+                  navigate(`/chat`);
+                })
+                .catch((err) => {
+                  console.log(err);
+                  handleError(err);
+                });
             }}
             variant="contained"
           >

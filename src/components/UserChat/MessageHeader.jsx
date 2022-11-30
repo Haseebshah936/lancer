@@ -25,6 +25,7 @@ function MessageHeader({
   isGroup = false,
   onClickCall = () => {},
   onClickVideoCall = () => {},
+  temp = true,
 }) {
   const today = new Date().getTime();
   const dateToday = new Date(today).getDate();
@@ -77,7 +78,7 @@ function MessageHeader({
               {name}
             </Typography>
           </ButtonBase>
-          {!isGroup && (
+          {!isGroup && !temp && (
             <Typography
               ml={1.5}
               variant="h6"

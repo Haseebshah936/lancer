@@ -31,7 +31,7 @@ import mongoose from "mongoose";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { ArrowBack } from "@mui/icons-material";
 import MorePoper from "./MorePoper";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 const ChatRoomsData = [
   {
     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
@@ -70,6 +70,7 @@ function Chat(props) {
     setActiveChatroomStatus,
     activeChatroomStatus,
   } = useCustomContext();
+  const location = useLocation();
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
   const navigate = useNavigate();
@@ -79,13 +80,16 @@ function Chat(props) {
     requestMethod
       .get(`chatroom/getChatroomsById/${user._id}`)
       .then((res) => {
-        setChatRooms(res.data);
-        setChatRoomsData(res.data);
+        setChatRooms((prev) => [...prev, ...res.data]);
+        setChatRoomsData((prev) => [...prev, ...res.data]);
       })
       .catch((err) => console.log(err));
   };
 
+  // console.log("USERID", location.state);
+
   const getChatRoomMessages = (chatRoomId) => {
+    if (chatRoomId === location.state?.id) return;
     requestMethod
       .get(`message/${chatRoomId}/${user._id}`)
       .then((res) => {
@@ -95,12 +99,14 @@ function Chat(props) {
       })
       .catch((err) => {
         console.log(err);
+        if (err.response.data === "Chatroom not found") return;
         handleError(err);
       });
   };
 
   const handleChatRoomClick = (chatRoom) => {
     setActive(chatRoom);
+    console.log("Clicked", chatRoom);
     setActiveChatroomStatus({
       id: chatRoom.id,
       status:
@@ -113,6 +119,15 @@ function Chat(props) {
   const handleBackClick = () => {
     setActive(false);
     setActiveChatroomStatus(false);
+  };
+
+  const createChatRoom = async (id, participantId) => {
+    const response = await requestMethod.post("chatroom/createChatroomWithId", {
+      participantId,
+      creatorId: user._id,
+      id,
+    });
+    return response.data;
   };
 
   const handleSend = (message) => {
@@ -130,6 +145,22 @@ function Chat(props) {
       .then((res) => {})
       .catch((err) => {
         console.log(err);
+        if (err.response.data === "Chatroom not found") {
+          console.log("Not found", location.state?.id);
+          createChatRoom(active.id, active?.userParticipantId)
+            .then(async (data) => {
+              await requestMethod.post("message", {
+                ...newMessage,
+                chatroomId: data._id,
+              });
+              getChatRoomMessages(data._id);
+            })
+            .catch((err) => {
+              console.log(err);
+              handleError(err);
+            });
+          return;
+        }
         handleError(err);
       });
   };
@@ -276,9 +307,23 @@ function Chat(props) {
     }
   }, [user]);
 
+  useEffect(() => {
+    setActive(null);
+    setChatRooms([]);
+    setChatRoomsData([]);
+    if (location.state) {
+      setChatRooms((prev) => [location.state, ...prev]);
+      setChatRoomsData((prev) => [location.state, ...prev]);
+    }
+  }, []);
+
   // useEffect(() => {
   //   console.log("Status changed", activeChatroomStatus);
   // }, [activeChatroomStatus]);
+
+  useEffect(() => {
+    console.log("Active", active);
+  }, [active]);
 
   return (
     <Container>
@@ -316,31 +361,34 @@ function Chat(props) {
           />
         )}
       </ChatRoomsContainer>
-      <MessageContainer active={active}>
-        <MessageHeader
-          uri={active.avatar}
-          name={active.title}
-          status={active.isOnline}
-          isGroup={active.isGroup}
-          onBackClick={handleBackClick}
-          onClickCall={handleCall}
-          onClickVideoCall={handleVideoCall}
-        />
-        {!reRender && (
-          <MessagesContainer
-            scrollRef={scrollRef}
-            data={data}
-            active={active}
-            newData={newData}
-            handleScroll={handleScroll}
-            getNewMessage={getNewMessage}
-            setNewData={setNewData}
-            reRender={reRender}
+      {active && (
+        <MessageContainer active={active}>
+          <MessageHeader
+            uri={active.avatar}
+            name={active.title}
+            status={active.isOnline}
+            isGroup={active.isGroup}
+            onBackClick={handleBackClick}
+            onClickCall={handleCall}
+            onClickVideoCall={handleVideoCall}
+            temp={active.id === location.state?.id}
           />
-        )}
-        {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
-        <ChatInput onSend={handleSend} />
-      </MessageContainer>
+          {!reRender && (
+            <MessagesContainer
+              scrollRef={scrollRef}
+              data={data}
+              active={active}
+              newData={newData}
+              handleScroll={handleScroll}
+              getNewMessage={getNewMessage}
+              setNewData={setNewData}
+              reRender={reRender}
+            />
+          )}
+          {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
+          <ChatInput onSend={handleSend} />
+        </MessageContainer>
+      )}
     </Container>
   );
 }
