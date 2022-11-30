@@ -15,6 +15,7 @@ import styled from "styled-components";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "./../../requestMethod";
 import { handleError } from "./../../utils/helperFunctions";
+import { Navigate, useNavigate } from "react-router-dom";
 const attachmentData = [
   {
     uri: "",
@@ -49,6 +50,7 @@ export default function CreateGig() {
   const [standardPlanError, setStandardPlanError] = useState({});
   const [premiumPlanError, setPremiumPlanError] = useState({});
   const [questionArr, setQuestionArr] = useState([]);
+  const Navigate = useNavigate();
   const [question, setQuestion] = useState({
     title: "",
     discription: "",
@@ -270,6 +272,9 @@ export default function CreateGig() {
   const handleBack = () => {
     if (activeStep != 0) {
       setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    } else {
+      setEditGigStatus(false);
+      Navigate(-1);
     }
   };
 

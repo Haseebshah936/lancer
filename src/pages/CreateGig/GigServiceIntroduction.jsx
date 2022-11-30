@@ -149,30 +149,6 @@ export default function GigServiceIntroduction({
           </Grid>
         </Grid>
         <Grid item container sx={{ mt: 2 }} mobile={12}>
-          <ReactQuill
-            theme="snow"
-            value={gigIntroduction.gigDescription}
-            onChange={(e) => {
-              setGigIntroduction({
-                ...gigIntroduction,
-                gigDescription: e,
-              });
-              // console.log("Gig Description", gigIntroduction.gigDescription);
-            }}
-            style={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              height: "150px",
-            }}
-          />
-          {errors.gigDescription && (
-            <div className="alert alert-danger">
-              {"Please Enter Gig Description"}
-            </div>
-          )}
-        </Grid>
-        <Grid item container sx={{ mt: 2 }} mobile={12}>
           <Grid item container mobile={10}>
             <TextField
               sx={{
@@ -266,6 +242,28 @@ export default function GigServiceIntroduction({
                 </>
               ))}
             </Paper>
+          )}
+        </Grid>
+        <Grid item container sx={{ mt: 2 }} mobile={12}>
+          <ReactQuill
+            theme="snow"
+            value={gigIntroduction.gigDescription}
+            onChange={(e) => {
+              setGigIntroduction({
+                ...gigIntroduction,
+                gigDescription: e,
+              });
+              // console.log("Gig Description", gigIntroduction.gigDescription);
+            }}
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              height: "150px",
+            }}
+          />
+          {errors.gigDescription && (
+            <div className="alert alert-danger">{errors.gigDescription}</div>
           )}
         </Grid>
       </Grid>

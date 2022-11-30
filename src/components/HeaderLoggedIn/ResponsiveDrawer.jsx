@@ -4,16 +4,61 @@ import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import Button from "@mui/material/Button";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
 import { Avatar, IconButton, Typography } from "@mui/material";
+import { useRealmContext } from "../../db/RealmContext";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function ResponsiveDrawer({
   toggleDrawer = () => {},
   state,
   toggleLogin,
 }) {
+  const { user, currentUser } = useRealmContext();
+  const { activeProfile, setActiveProfile } = useCustomContext();
+  const navigate = useNavigate();
+
+  const location = useLocation();
+  const currentPath = location.pathname;
+  function matchRoutesinf() {
+    if (
+      currentPath === "/f/dashboard" ||
+      currentPath == "/f/Gigs" ||
+      currentPath == "/f/projects" ||
+      currentPath == "/f/favourites" ||
+      currentPath == "/f/reviews" ||
+      currentPath == "/f/messages" ||
+      currentPath == "/f/payments" ||
+      currentPath == "/f/settings" ||
+      currentPath == "/gig/gig" ||
+      currentPath == "/createGig" ||
+      currentPath == "/editGig"
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  const allPurposeRoutes = () => {
+    return (
+      currentPath.includes("/profile/") || currentPath.includes("/portfolio/")
+    );
+  };
+
+  React.useEffect(() => {
+    // console.log(currentPath);
+    if (allPurposeRoutes()) return;
+    if (activeProfile === "seller" && !matchRoutesinf()) {
+      // console.log("Active Profile", activeProfile);
+      navigate("/f/dashboard");
+    } else if (activeProfile !== "seller" && matchRoutesinf()) {
+      navigate("/");
+    }
+  }, [activeProfile, user, currentUser]);
+
   return (
     <Container>
       <SwipeableDrawer

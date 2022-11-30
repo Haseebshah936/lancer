@@ -61,7 +61,11 @@ export default function NavigationBar({
     gigTitle: Joi.string().required().label("Gig Title"),
     gigCategory: Joi.object().required().label("Gig Category"),
     gigSubCategory: Joi.object().required().label("Gig Sub Category"),
-    gigDescription: Joi.string().required().label("Gig Description"),
+    gigDescription: Joi.string()
+      .min(700)
+      .max(2500)
+      .required()
+      .label("Gig Description"),
     tage: Joi.array().items(Joi.string()).min(3).label("Tags"),
   };
 
