@@ -174,7 +174,7 @@ function SellerProfile(props) {
       setLoadingProductsData(true);
       getProducts()
         .then((data) => {
-          //console.log("Products", data);
+          console.log("Products", data);
           setProductsData(data);
           setLoadingProductsData(false);
         })
@@ -195,6 +195,18 @@ function SellerProfile(props) {
           handleError(err);
         });
     } else {
+      setLoadingProductsData(true);
+      getProducts()
+        .then((data) => {
+          console.log("Products", data);
+          setProductsData(data);
+          setLoadingProductsData(false);
+        })
+        .catch((err) => {
+          console.log("Error", err);
+          handleError(err);
+        });
+      setLoadingReviews(true);
       setLoadingReviews(true);
       getBuyerReviews()
         .then((data) => {

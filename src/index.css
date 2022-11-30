@@ -7,8 +7,12 @@
   text-decoration: none;
 }
 
-a:visited {
+*a:visited {
   color: black;
+}
+* a {
+  text-decoration: none !important;
+  color: black !important;
 }
 
 *::selection {

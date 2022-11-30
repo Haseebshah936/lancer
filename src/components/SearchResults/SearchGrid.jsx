@@ -43,6 +43,7 @@ const SearchGrid = () => {
               sm={4}
               rowspacing={2}
               columnSpacing={2}
+              key={c._id}
             >
               <Laptop>
                 <PortfolioCard
@@ -55,6 +56,8 @@ const SearchGrid = () => {
                   SellerRating={c?.rating}
                   GigReviewsTotal={c?.reviews}
                   GigStartPrice={c?.cost}
+                  ownerId={c?.owner?._id?._id}
+                  productId={c?._id}
                 />
               </Laptop>
 
@@ -69,6 +72,8 @@ const SearchGrid = () => {
                   SellerRating={c?.rating}
                   GigReviewsTotal={c?.reviews}
                   GigStartPrice={c?.cost}
+                  ownerId={c?.owner?._id?._id}
+                  productId={c?._id}
                 />
               </Mobile>
             </Grid>

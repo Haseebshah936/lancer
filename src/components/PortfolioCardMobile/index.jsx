@@ -12,7 +12,7 @@ import styled from "styled-components";
 import colors from "../../utils/colors";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
 import { StyleOutlined } from "@material-ui/icons";
-const PortfolioCardMobile = ({ ...props }) => {
+const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
   return (
     <>
       <Paper elevation={2} sx={{ pr: 1 }}>
@@ -41,7 +41,7 @@ const PortfolioCardMobile = ({ ...props }) => {
               mobile={7}
             >
               <LinkText>
-                <Link to="/portfolio/2">
+                <Link to={"/portfolio/" + productId}>
                   <Typography
                     variant="h5"
                     sx={{ color: "black", fontWeight: 400 }}
@@ -81,14 +81,16 @@ const PortfolioCardMobile = ({ ...props }) => {
                 src={props.Avatar}
               ></Avatar>
               <InfoWrapper>
-                <Typography
-                  variant="h6"
-                  style={{
-                    marginBottom: "-2px",
-                  }}
-                >
-                  {props.SellerName}
-                </Typography>
+                <Link to={"/profile/" + ownerId}>
+                  <Typography
+                    variant="h6"
+                    style={{
+                      marginBottom: "-2px",
+                    }}
+                  >
+                    {props.SellerName}
+                  </Typography>
+                </Link>
                 <Typography variant="subtitle1">
                   {props.SellerLevel}{" "}
                 </Typography>

@@ -58,6 +58,7 @@ const PortfolioCard = ({
           ...styles,
           maxWidth: "22rem",
           minWidth: "22rem",
+          minHeight: "30rem",
           marginRight: "1rem",
           border: "none",
           boxShadow: "3px 2px 16px 5px rgba(240, 240, 240, 0.75)",
@@ -72,11 +73,11 @@ const PortfolioCard = ({
             alt="Gig Image"
             sizes="contain"
             border-radius="15px"
-            height="120rem"
-            style={{ cursor: "pointer" }}
+            height="140rem"
+            style={{ cursor: "pointer", marginBottom: ".5rem" }}
           />
         </Link>
-        {hideProfileInfo && (
+        {
           <CustomCardHeader
             style={{ cursor: "pointer" }}
             sx={{ paddingTop: "2px", paddingBottom: "0px" }}
@@ -101,7 +102,7 @@ const PortfolioCard = ({
             }
             subheader={props.SellerLevel}
           />
-        )}
+        }
         <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
           <LinkText>
             <Link to={"/portfolio/" + productId}>
@@ -117,7 +118,7 @@ const PortfolioCard = ({
                 }}
                 style={{ cursor: "pointer" }}
               >
-                {props.GigTitle}
+                {props.GigTitle.slice(0, 50)}
               </Typography>
             </Link>
           </LinkText>
@@ -139,7 +140,7 @@ const PortfolioCard = ({
             paddingTop: "0px",
             display: "flex",
             marginRight: "1rem",
-            justifyContent: "space-between",
+            flexGrow: 1,
           }}
         >
           {/* <Tooltip title="Save To Favourites" placement="bottom">
@@ -218,6 +219,7 @@ const MiniWrapper = styled.div`
 `;
 const MiniWrapper2 = styled.div`
   display: flex;
+  align-self: flex-end;
   align-items: center;
   margin-left: 5px;
   margin-top: 4px;
