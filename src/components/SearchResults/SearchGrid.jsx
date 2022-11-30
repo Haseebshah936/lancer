@@ -31,7 +31,7 @@ const SearchGrid = () => {
           //   open={searchDataLoader}
           // >
           // <CircularProgress color={colors.textGreen} />
-          <Typography>Hello</Typography>
+          <Typography></Typography>
         ) : (
           // </Backdrop>
           searchData.map((c) => (
@@ -53,8 +53,8 @@ const SearchGrid = () => {
                   SellerName={c?.owner?._id?.name}
                   SellerLevel={c?.owner?._id?.badge}
                   GigTitle={c?.title}
-                  SellerRating={c?.rating}
-                  GigReviewsTotal={c?.reviews}
+                  SellerRating={c?.owner?._id?.seller?.rating}
+                  GigReviewsTotal={c?.owner?._id?.seller?.reviews}
                   GigStartPrice={c?.cost}
                   ownerId={c?.owner?._id?._id}
                   productId={c?._id}
@@ -69,8 +69,8 @@ const SearchGrid = () => {
                   SellerName={c?.owner?._id?.name}
                   SellerLevel={c?.owner?._id?.badge}
                   GigTitle={c?.title}
-                  SellerRating={c?.rating}
-                  GigReviewsTotal={c?.reviews}
+                  SellerRating={c?.owner?._id?.seller?.rating}
+                  GigReviewsTotal={c?.owner?._id?.seller?.reviews}
                   GigStartPrice={c?.cost}
                   ownerId={c?.owner?._id?._id}
                   productId={c?._id}

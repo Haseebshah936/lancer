@@ -67,11 +67,14 @@ function SellerPortfolio(props) {
     });
     getProduct(id)
       .then((data) => {
+        // console.log(data);
         handleLoadMoreReviews(data.owner._id._id, 0);
         setSellerData({
           name: data.owner._id.name,
           profilePic: data.owner._id.profilePic,
           badge: data.owner._id.badge,
+          country: data.owner._id.country,
+          emailVerified: data.owner._id.emailVerified,
           ...data.owner._id.seller,
           _id: data.owner._id._id,
         });
@@ -103,6 +106,7 @@ function SellerPortfolio(props) {
 
   useEffect(() => {
     if (!sellerData) return;
+    // console.log(sellerData);
     if (user?._id === sellerData?._id) {
       // console.log("Is same ", user._id, sellerData._id);
       setIsSameUser(true);
@@ -133,7 +137,27 @@ function SellerPortfolio(props) {
             <SubContainer2>
               <PricingPlan pakages={productData?.packages} />
               {!isSameUser && (
-                <SellerProfileInfo handleSave={handleSave} saved={save} />
+                <SellerProfileInfo
+                  name={sellerData?.name}
+                  achivements={sellerData?.achivements}
+                  profilePic={sellerData?.profilePic}
+                  badge={sellerData?.badge}
+                  rating={sellerData?.rating}
+                  reviews={sellerData?.reviews}
+                  description={sellerData?.about}
+                  languages={sellerData?.languages}
+                  showExtraInfo={false}
+                  isSame={isSameUser}
+                  country={sellerData?.country}
+                  educationalBackground={sellerData?.education}
+                  experience={sellerData?.experience}
+                  englishLevel={sellerData?.englishLevel}
+                  approved={sellerData?.emailVerified}
+                  handleSave={handleSave}
+                  showButton={true}
+                  saved={save}
+                  skills={sellerData?.skills}
+                />
               )}
             </SubContainer2>
           </Wrapper>

@@ -31,7 +31,7 @@ const SearchResults = () => {
   }, [pagination]);
 
   return (
-    <>
+    <Wrapper>
       <Header />
 
       <Container>
@@ -84,14 +84,22 @@ const SearchResults = () => {
         </Box>
       </Container>
       <Footer />
-    </>
+    </Wrapper>
   );
 };
 
 export default SearchResults;
 
+const Wrapper = styled.div`
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`;
+
 const Container = styled.div`
   margin-inline: 7%;
+
   ${tablet({
     display: "flex",
     alignItems: "center",

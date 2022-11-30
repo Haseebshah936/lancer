@@ -77,7 +77,7 @@ const PortfolioCard = ({
             style={{ cursor: "pointer", marginBottom: ".5rem" }}
           />
         </Link>
-        {
+        {hideProfileInfo && (
           <CustomCardHeader
             style={{ cursor: "pointer" }}
             sx={{ paddingTop: "2px", paddingBottom: "0px" }}
@@ -102,8 +102,14 @@ const PortfolioCard = ({
             }
             subheader={props.SellerLevel}
           />
-        }
-        <CardContent sx={{ paddingTop: "5px", paddingBottom: "0px" }}>
+        )}
+        <CardContent
+          sx={{
+            paddingTop: "5px",
+            paddingBottom: "0px",
+            height: hideProfileInfo ? "7rem" : "10rem",
+          }}
+        >
           <LinkText>
             <Link to={"/portfolio/" + productId}>
               <Typography

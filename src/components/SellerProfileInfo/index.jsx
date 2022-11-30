@@ -27,6 +27,7 @@ function SellerProfileInfo({
   educationalBackground = [],
   experience = [],
   achivements = [],
+  showButton = false,
   isSame = false,
 }) {
   return (
@@ -70,6 +71,12 @@ function SellerProfileInfo({
           </>
         )}
         {!isSame && showExtraInfo && (
+          <CustomIconButton variant="contained">
+            <ChatBubbleOutline />
+            &nbsp;&nbsp;Contact to this seller
+          </CustomIconButton>
+        )}
+        {showButton && (
           <CustomIconButton variant="contained">
             <ChatBubbleOutline />
             &nbsp;&nbsp;Contact to this seller

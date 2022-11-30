@@ -244,9 +244,9 @@ function SellerProfile(props) {
             languages={userData.seller && userData.seller.languages}
             city=""
             showExtraInfo={showProductsTab}
-            country="Paksitan"
+            country={userData?.country}
             englishLevel={showProductsTab && "Intermediate"}
-            profilePic={userData.profilePic}
+            profilePic={userData?.profilePic}
             rating={showProductsTab ? userData?.seller?.rating : userData.stars}
             reviews={
               showProductsTab ? userData?.seller?.reviews : userData.reviews
