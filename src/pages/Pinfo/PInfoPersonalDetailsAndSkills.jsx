@@ -49,10 +49,14 @@ export default function PInfoPersonalDetailsAndSkills() {
   const [languageError, setLanguageError] = React.useState({});
   const languageSchema = joi.object({
     language: joi.string().required(),
-    proficiency: joi.string().required(),
   });
   const validateLanguage = () => {
-    const result = languageSchema.validate(languageVar, { abortEarly: false });
+    const result = languageSchema.validate(
+      {
+        language: languageVar.language,
+      },
+      { abortEarly: false }
+    );
     if (!result.error) {
       setLanguageError({});
       return null;
@@ -114,24 +118,28 @@ export default function PInfoPersonalDetailsAndSkills() {
           ending: item.endingDate,
         };
       }),
+      languages: languageArray.map((item) => {
+        return item.language;
+      }),
     };
     // console.log(sData);
     // console.log(user);
 
-    ValidateAbout();
-    if (aboutError) {
-      // console.log("About Error", aboutError);
+    const res = ValidateAbout();
+    if (res) {
+      console.log("About Error", aboutError);
     } else {
       requestMethod
         .put(`user/makeSeller/${user?._id}`, sData)
         .then((res) => {
-          console.log("res from user", res.data);
+          console.log(res.data);
           setUser(res.data);
           navigate("/f/gigs");
         })
         .catch((err) => {
           console.log(err);
         });
+      console.log("sdata", sData);
       console.log("No error");
     }
   };
@@ -517,7 +525,11 @@ export default function PInfoPersonalDetailsAndSkills() {
                     {languageArray.map((item, index) => (
                       <Chip
                         label={item.language}
-                        onDelete={() => {}}
+                        onDelete={() => {
+                          setLanguageArray(
+                            languageArray.filter((item, i) => i !== index)
+                          );
+                        }}
                         className="m-2"
                         mt={2}
                       ></Chip>

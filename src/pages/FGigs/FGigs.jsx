@@ -95,9 +95,11 @@ export default function FGigs() {
                   display={"flex"}
                   justifyContent={"space-between"}
                 >
-                  <Box>
-                    <TitleP>Active Gigs</TitleP>
-                  </Box>
+                  {gigs.find((gig) => gig.state === "live") ? (
+                    <Box>
+                      <TitleP>Active Gigs</TitleP>
+                    </Box>
+                  ) : null}
                   <Box>
                     <CustomFilledButton
                       title={"Create Gigs"}
@@ -211,9 +213,11 @@ export default function FGigs() {
                   justifyContent={"space-between"}
                   my={2}
                 >
-                  <Box>
-                    <TitleP>Paused Gigs</TitleP>
-                  </Box>
+                  {gigs.find((gig) => gig.state !== "live") ? (
+                    <Box>
+                      <TitleP>Paused Gigs</TitleP>
+                    </Box>
+                  ) : null}
                 </Grid>
               </Grid>
 

@@ -38,7 +38,7 @@ export default function FSettings() {
     currency: user?.currency || "",
     DOB: user?.DOB?.substring(0, 10) || "",
     gender: user?.gender || "Male",
-    language: user?.language || "English",
+    language: user?.seller?.languages[0] || "English",
   });
   const valueObjSchema = Joi.object({
     name: Joi.string().required(),
