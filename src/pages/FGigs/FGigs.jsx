@@ -37,6 +37,8 @@ import CustomFilledButton from "./../../components/CustomFilledButton/index";
 
 import { useNavigate } from "react-router-dom";
 import GigMorePopper from "./GigMorePopper";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function FGigs() {
   const [gigs, setGigs] = React.useState([]);
