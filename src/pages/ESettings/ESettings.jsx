@@ -7,6 +7,8 @@ import {
   TextField,
   Autocomplete,
   Button,
+  ThemeProvider,
+  createTheme,
 } from "@mui/material";
 import Joi from "joi";
 import Styled from "styled-components";
@@ -141,26 +143,46 @@ export default function FSettings() {
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
-      <Grid container display={"flex"} justifyContent={"center"}>
-        <Grid item xs={12} md={11}>
-          <Grid container display={"flex"} justifyContent={"center"}>
-            <Grid item xs={11} sm={2.7}>
-              <ESideBar></ESideBar>
-            </Grid>
-            <Grid
-              item
-              xs={11}
-              sm={9}
-              marginLeft={"10px"}
-              my={{ xs: 1, md: 0 }}
-              // boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
-              paddingLeft={{ md: "10px" }}
-            >
-              <Grid container display={"flex"} justifyContent={"center"}>
-                <Grid item xs={11.5}>
-                  <TitleP className="text-left">Setting</TitleP>
-                </Grid>
-                {/* <Grid
+
+      <Container>
+        <Box sx={{ flexGrow: 1, pt: 1, pb: 1 }}>
+          <ThemeProvider
+            theme={createTheme({
+              breakpoints: {
+                values: {
+                  laptop: 1024,
+                  tablet: 640,
+                  mobile: 0,
+                  desktop: 1280,
+                  xs: 0,
+                  sm: 600,
+                  md: 900,
+                  lg: 1200,
+                  xl: 1536,
+                },
+              },
+            })}
+          >
+            <Grid container spacing={2}>
+              <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
+                <ESideBar></ESideBar>
+              </Grid>
+
+              <Grid
+                item
+                mobile={12}
+                tablet={7}
+                laptop={8}
+                desktop={9}
+                rowSpacing={2}
+                columnSpacing={2}
+              >
+                <Grid item xs={12} my={{ xs: 1, md: 0 }}>
+                  <Grid container display={"flex"} justifyContent={"center"}>
+                    <Grid item xs={11.5}>
+                      <TitleP className="text-left">Setting</TitleP>
+                    </Grid>
+                    {/* <Grid
                   item
                   xs={11.5}
                   display={"flex"}
@@ -249,359 +271,365 @@ export default function FSettings() {
                     />
                   </Button>
                 </Grid> */}
-                <Grid item xs={11.5}>
-                  <UploadAttachments
-                    attachment={profilePic}
-                    setAttachment={setProfilePic}
-                    type="img"
-                  />
-                </Grid>
-                <Grid item xs={11.5} mt={1}>
-                  <GreenBorderTextField
-                    id="outlined-basic"
-                    label="Name"
-                    variant="outlined"
-                    fullWidth
-                    style={{ color: colors.becomePartnerGreen }}
-                    value={valuesObj.name ? valuesObj.name : user?.name}
-                    onChange={(e) => {
-                      setValuesObj({
-                        ...valuesObj,
-                        name: e.target.value,
-                      });
-                    }}
-                  />
-                  {errorsValuesObj.name && (
-                    <div className="alert alert-danger">
-                      {errorsValuesObj.name}
-                    </div>
-                  )}
-                </Grid>
-                <Grid item xs={11.5} mt={2}>
-                  <GreenBorderTextField
-                    id="outlined-basic"
-                    label="Tag Line"
-                    variant="outlined"
-                    fullWidth
-                    style={{ color: colors.becomePartnerGreen }}
-                    value={tagLineVar ? tagLineVar : user?.tagLine}
-                    onChange={(e) => {
-                      setTagLineVar(e.target.value);
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={11.5} mt={2}>
-                  <Autocomplete
-                    fullWidth
-                    disablePortal
-                    id="combo-box-demo"
-                    value={
-                      valuesObj.currency
-                        ? { name: valuesObj.currency }
-                        : { name: user?.currency }
-                    }
-                    options={currenciesList}
-                    getOptionLabel={(option) => option.name}
-                    onChange={(e, value) => {
-                      setValuesObj({
-                        ...valuesObj,
-                        currency: value.name,
-                      });
-                    }}
-                    renderInput={(params) => (
-                      <GreenBorderTextField {...params} label="Curriencies" />
-                    )}
-                  />
-                  {errorsValuesObj.currency && (
-                    <div className="alert alert-danger">
-                      {errorsValuesObj.currency}
-                    </div>
-                  )}
-                </Grid>
-                <Grid item xs={11.5} mt={2}>
-                  <Grid
-                    container
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                  >
-                    <Grid item xs={12} sm={5.8}>
-                      <Autocomplete
-                        fullWidth
-                        disablePortal
-                        id="combo-box-demo"
-                        value={
-                          valuesObj.gender
-                            ? { label: valuesObj.gender }
-                            : { label: user?.gender }
-                        }
-                        options={genderOptions}
-                        getOptionLabel={(option) => option.label}
-                        onChange={(e, value) => {
-                          setValuesObj({
-                            ...valuesObj,
-                            gender: value.label,
-                          });
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Gender" />
-                        )}
+                    <Grid item xs={11.5}>
+                      <UploadAttachments
+                        attachment={profilePic}
+                        setAttachment={setProfilePic}
+                        type="img"
                       />
-                      {errorsValuesObj.gender && (
-                        <div className="alert alert-danger">
-                          {errorsValuesObj.gender}
-                        </div>
-                      )}
                     </Grid>
-                    <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
-                      <label>DOB</label>
-                      <input
-                        id="startDate"
-                        className="form-control"
-                        value={valuesObj.DOB ? valuesObj.DOB : user?.DOB}
-                        type="date"
+                    <Grid item xs={11.5} mt={1}>
+                      <GreenBorderTextField
+                        id="outlined-basic"
+                        label="Name"
+                        variant="outlined"
+                        fullWidth
+                        style={{ color: colors.becomePartnerGreen }}
+                        value={valuesObj.name ? valuesObj.name : user?.name}
                         onChange={(e) => {
                           setValuesObj({
                             ...valuesObj,
-                            DOB: e.target.value,
+                            name: e.target.value,
                           });
-                          console.log("DOB", e.target.value);
                         }}
-                        style={{ width: "100%", height: "36px" }}
                       />
-                      {errorsValuesObj.DOB && (
+                      {errorsValuesObj.name && (
                         <div className="alert alert-danger">
-                          {errorsValuesObj.DOB}
+                          {errorsValuesObj.name}
                         </div>
                       )}
                     </Grid>
-                  </Grid>
-                </Grid>
-                <Grid item xs={11.5} mt={2}>
-                  <Grid
-                    container
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                  >
-                    <Grid item xs={12} sm={5.8}>
+                    <Grid item xs={11.5} mt={2}>
+                      <GreenBorderTextField
+                        id="outlined-basic"
+                        label="Tag Line"
+                        variant="outlined"
+                        fullWidth
+                        style={{ color: colors.becomePartnerGreen }}
+                        value={tagLineVar ? tagLineVar : user?.tagLine}
+                        onChange={(e) => {
+                          setTagLineVar(e.target.value);
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={11.5} mt={2}>
                       <Autocomplete
                         fullWidth
                         disablePortal
                         id="combo-box-demo"
-                        options={humanLanguages}
                         value={
-                          valuesObj.language
-                            ? { name: valuesObj.language }
-                            : { name: user?.language }
+                          valuesObj.currency
+                            ? { name: valuesObj.currency }
+                            : { name: user?.currency }
                         }
+                        options={currenciesList}
                         getOptionLabel={(option) => option.name}
                         onChange={(e, value) => {
                           setValuesObj({
                             ...valuesObj,
-                            language: value.name,
+                            currency: value.name,
                           });
                         }}
                         renderInput={(params) => (
-                          <TextField {...params} label="Langauge" />
+                          <GreenBorderTextField
+                            {...params}
+                            label="Curriencies"
+                          />
                         )}
                       />
-                      {errorsValuesObj.language && (
+                      {errorsValuesObj.currency && (
                         <div className="alert alert-danger">
-                          {errorsValuesObj.language}
+                          {errorsValuesObj.currency}
                         </div>
                       )}
                     </Grid>
-                    <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
-                      <Autocomplete
-                        fullWidth
-                        disablePortal
-                        id="combo-box-demo"
-                        options={CountryNAME}
-                        value={
-                          valuesObj.country
-                            ? { label: valuesObj.country }
-                            : { label: user?.country }
-                        }
-                        getOptionLabel={(option) => option.label}
-                        onChange={(e, value) => {
-                          // console.log(value.label);
-                          setValuesObj({
-                            ...valuesObj,
-                            country: value.label,
-                          });
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} label="Country" />
-                        )}
-                      />
-                      {errorsValuesObj.country && (
-                        <div className="alert alert-danger">
-                          {errorsValuesObj.country}
-                        </div>
-                      )}
+                    <Grid item xs={11.5} mt={2}>
+                      <Grid
+                        container
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                      >
+                        <Grid item xs={12} sm={5.8}>
+                          <Autocomplete
+                            fullWidth
+                            disablePortal
+                            id="combo-box-demo"
+                            value={
+                              valuesObj.gender
+                                ? { label: valuesObj.gender }
+                                : { label: user?.gender }
+                            }
+                            options={genderOptions}
+                            getOptionLabel={(option) => option.label}
+                            onChange={(e, value) => {
+                              setValuesObj({
+                                ...valuesObj,
+                                gender: value.label,
+                              });
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Gender" />
+                            )}
+                          />
+                          {errorsValuesObj.gender && (
+                            <div className="alert alert-danger">
+                              {errorsValuesObj.gender}
+                            </div>
+                          )}
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
+                          <label>DOB</label>
+                          <input
+                            id="startDate"
+                            className="form-control"
+                            value={valuesObj.DOB ? valuesObj.DOB : user?.DOB}
+                            type="date"
+                            onChange={(e) => {
+                              setValuesObj({
+                                ...valuesObj,
+                                DOB: e.target.value,
+                              });
+                              console.log("DOB", e.target.value);
+                            }}
+                            style={{ width: "100%", height: "36px" }}
+                          />
+                          {errorsValuesObj.DOB && (
+                            <div className="alert alert-danger">
+                              {errorsValuesObj.DOB}
+                            </div>
+                          )}
+                        </Grid>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xs={11.5}
-                  mt={2}
-                  display={"flex"}
-                  justifyContent={"center"}
-                >
-                  <Button
-                    variant="contained"
-                    style={{
-                      backgroundColor: colors.becomePartnerGreen,
-                      width: "120px",
-                      height: "35px",
-                    }}
-                    onClick={() => {
-                      setUpdateFlag(updateFalg + 1);
-                      const errors = valueObjValidate();
-                      if (errors) {
-                        console.log(errors);
-                      } else {
-                        // console.log(valuesObj);
-                        requestMethod
-                          .put(`user/updateProfile/${user?._id}`, {
-                            profilePic: valuesObj.profilePic,
-                            name: valuesObj.name,
-                            country: valuesObj.country,
-                            currency: valuesObj.currency,
-                            DOB: valuesObj.DOB,
-                            gender: valuesObj.gender,
-                          })
-                          .then((res) => {
-                            console.log("Profile Updated");
-                            setUser(res.data);
-                          });
-                      }
-                    }}
-                  >
-                    Update setting
-                  </Button>
-                </Grid>
-                <Grid item xs={11.5} mt={2}>
-                  <TitleP>Social Links</TitleP>
-                  <Grid
-                    container
-                    display={"flex"}
-                    justifyContent={"space-between"}
-                  >
-                    <Grid item xs={12} sm={5.8} mt={1.3}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="Facebook"
-                        value={valuesObj.facebook}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            facebook: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
-                    </Grid>
-                    <Grid item xs={12} sm={5.8} mt={1.3}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="Twitter"
-                        value={valuesObj.twitter}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            twitter: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
-                    </Grid>
-                    <Grid item xs={12} sm={5.8} mt={1.3}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="Instagram"
-                        value={valuesObj.instagram}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            instagram: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
-                    </Grid>
-                    <Grid item xs={12} sm={5.8} mt={1.3}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="LinkedIn"
-                        value={valuesObj.linkedin}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            linkedin: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
-                    </Grid>
-                    <Grid item xs={12} sm={5.8} mt={1.3}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="Dribble"
-                        value={valuesObj.dribble}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            dribble: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
-                    </Grid>
-                    <Grid item xs={12} sm={5.8} mt={1}>
-                      <GreenBorderTextField
-                        variant="outlined"
-                        fullWidth
-                        style={{ color: colors.becomePartnerGreen }}
-                        label="Behance"
-                        value={valuesObj.behance}
-                        onChange={(e) => {
-                          setSocialLinks({
-                            ...socialLinks,
-                            behance: e.target.value,
-                          });
-                        }}
-                      ></GreenBorderTextField>
+                    <Grid item xs={11.5} mt={2}>
+                      <Grid
+                        container
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                      >
+                        <Grid item xs={12} sm={5.8}>
+                          <Autocomplete
+                            fullWidth
+                            disablePortal
+                            id="combo-box-demo"
+                            options={humanLanguages}
+                            value={
+                              valuesObj.language
+                                ? { name: valuesObj.language }
+                                : { name: user?.language }
+                            }
+                            getOptionLabel={(option) => option.name}
+                            onChange={(e, value) => {
+                              setValuesObj({
+                                ...valuesObj,
+                                language: value.name,
+                              });
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Langauge" />
+                            )}
+                          />
+                          {errorsValuesObj.language && (
+                            <div className="alert alert-danger">
+                              {errorsValuesObj.language}
+                            </div>
+                          )}
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={{ xs: 1, sm: 0 }}>
+                          <Autocomplete
+                            fullWidth
+                            disablePortal
+                            id="combo-box-demo"
+                            options={CountryNAME}
+                            value={
+                              valuesObj.country
+                                ? { label: valuesObj.country }
+                                : { label: user?.country }
+                            }
+                            getOptionLabel={(option) => option.label}
+                            onChange={(e, value) => {
+                              // console.log(value.label);
+                              setValuesObj({
+                                ...valuesObj,
+                                country: value.label,
+                              });
+                            }}
+                            renderInput={(params) => (
+                              <TextField {...params} label="Country" />
+                            )}
+                          />
+                          {errorsValuesObj.country && (
+                            <div className="alert alert-danger">
+                              {errorsValuesObj.country}
+                            </div>
+                          )}
+                        </Grid>
+                      </Grid>
                     </Grid>
                     <Grid
                       item
-                      xs={12}
-                      mt={1.2}
+                      xs={11.5}
+                      mt={2}
                       display={"flex"}
                       justifyContent={"center"}
                     >
                       <Button
                         variant="contained"
                         style={{
-                          width: "160px",
                           backgroundColor: colors.becomePartnerGreen,
+                          width: "120px",
+                          height: "35px",
+                        }}
+                        onClick={() => {
+                          setUpdateFlag(updateFalg + 1);
+                          const errors = valueObjValidate();
+                          if (errors) {
+                            console.log(errors);
+                          } else {
+                            // console.log(valuesObj);
+                            requestMethod
+                              .put(`user/updateProfile/${user?._id}`, {
+                                profilePic: valuesObj.profilePic,
+                                name: valuesObj.name,
+                                country: valuesObj.country,
+                                currency: valuesObj.currency,
+                                DOB: valuesObj.DOB,
+                                gender: valuesObj.gender,
+                              })
+                              .then((res) => {
+                                console.log("Profile Updated");
+                                setUser(res.data);
+                              });
+                          }
                         }}
                       >
-                        Update Social Links
+                        Update setting
                       </Button>
+                    </Grid>
+                    <Grid item xs={11.5} mt={2}>
+                      <TitleP>Social Links</TitleP>
+                      <Grid
+                        container
+                        display={"flex"}
+                        justifyContent={"space-between"}
+                      >
+                        <Grid item xs={12} sm={5.8} mt={1.3}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="Facebook"
+                            value={valuesObj.facebook}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                facebook: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={1.3}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="Twitter"
+                            value={valuesObj.twitter}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                twitter: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={1.3}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="Instagram"
+                            value={valuesObj.instagram}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                instagram: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={1.3}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="LinkedIn"
+                            value={valuesObj.linkedin}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                linkedin: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={1.3}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="Dribble"
+                            value={valuesObj.dribble}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                dribble: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid item xs={12} sm={5.8} mt={1}>
+                          <GreenBorderTextField
+                            variant="outlined"
+                            fullWidth
+                            style={{ color: colors.becomePartnerGreen }}
+                            label="Behance"
+                            value={valuesObj.behance}
+                            onChange={(e) => {
+                              setSocialLinks({
+                                ...socialLinks,
+                                behance: e.target.value,
+                              });
+                            }}
+                          ></GreenBorderTextField>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          mt={1.2}
+                          display={"flex"}
+                          justifyContent={"center"}
+                        >
+                          <Button
+                            variant="contained"
+                            style={{
+                              width: "160px",
+                              backgroundColor: colors.becomePartnerGreen,
+                            }}
+                          >
+                            Update Social Links
+                          </Button>
+                        </Grid>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+          </ThemeProvider>
+        </Box>
+      </Container>
+
       <Footer></Footer>
     </div>
   );
@@ -620,3 +648,7 @@ const GreenBorderTextField = Styled(TextField)`
       }
     }
   `;
+
+const Container = Styled.div`
+  margin-inline: 7%;
+`;

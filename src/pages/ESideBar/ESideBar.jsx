@@ -40,7 +40,7 @@ const CustomList = styled(List)({
 });
 
 const CustomListText = styled(ListItemText)({
-  color: colors.textGreen,
+  color: colors.black,
   ":hover": {
     color: colors.textGreen,
     cursor: "pointer",
@@ -117,137 +117,11 @@ const Sidebar = () => {
           <Box
             sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           >
-            <nav>
-              <CustomList>
-                <Link to="/e/dashboard">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <DashboardOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Dashboard"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
-                <Link to="/e/projects">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <WorkOutlineOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Projects"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
-                <Link to="/e/favourites">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <FavoriteBorderOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Favourites"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
-                <Link to="/e/reviews">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <StarOutlineOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Reviews"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
-                <NavLink to="/chat">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <MessageOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Messages"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </NavLink>
-
-                <Link to="/e/payments">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <PaidOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Payments"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
-                <Link to="/e/settings">
-                  <CustomListItem disablePadding>
-                    <ListItemIcon>
-                      <SettingsOutlinedIcon
-                        sx={{
-                          color: colors.textGreen,
-                          fontSize: "2.2rem",
-                          cursor: "pointer",
-                        }}
-                      />
-                    </ListItemIcon>
-                    <CustomListText
-                      primary="Settings"
-                      disableTypography={true}
-                    />
-                  </CustomListItem>
-                </Link>
-
+            <CustomList>
+              <Link to="/e/dashboard">
                 <CustomListItem disablePadding>
                   <ListItemIcon>
-                    <PowerSettingsNewOutlinedIcon
+                    <DashboardOutlinedIcon
                       sx={{
                         color: colors.textGreen,
                         fontSize: "2.2rem",
@@ -256,13 +130,122 @@ const Sidebar = () => {
                     />
                   </ListItemIcon>
                   <CustomListText
-                    onClick={logOut}
-                    primary="Logout"
+                    primary="Dashboard"
                     disableTypography={true}
                   />
                 </CustomListItem>
-              </CustomList>
-            </nav>
+              </Link>
+
+              <Link to="/e/projects">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <WorkOutlineOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText primary="Projects" disableTypography={true} />
+                </CustomListItem>
+              </Link>
+
+              <Link to="/e/favourites">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <FavoriteBorderOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText
+                    primary="Favourites"
+                    disableTypography={true}
+                  />
+                </CustomListItem>
+              </Link>
+
+              <Link to="/e/reviews">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <StarOutlineOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText primary="Reviews" disableTypography={true} />
+                </CustomListItem>
+              </Link>
+
+              <NavLink to="/chat">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <MessageOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText primary="Messages" disableTypography={true} />
+                </CustomListItem>
+              </NavLink>
+
+              <Link to="/e/payments">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <PaidOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText primary="Payments" disableTypography={true} />
+                </CustomListItem>
+              </Link>
+
+              <Link to="/e/settings">
+                <CustomListItem disablePadding>
+                  <ListItemIcon>
+                    <SettingsOutlinedIcon
+                      sx={{
+                        color: colors.textGreen,
+                        fontSize: "2.2rem",
+                        cursor: "pointer",
+                      }}
+                    />
+                  </ListItemIcon>
+                  <CustomListText primary="Settings" disableTypography={true} />
+                </CustomListItem>
+              </Link>
+
+              <CustomListItem disablePadding>
+                <ListItemIcon>
+                  <PowerSettingsNewOutlinedIcon
+                    sx={{
+                      color: colors.textGreen,
+                      fontSize: "2.2rem",
+                      cursor: "pointer",
+                    }}
+                  />
+                </ListItemIcon>
+                <CustomListText
+                  onClick={logOut}
+                  primary="Logout"
+                  disableTypography={true}
+                />
+              </CustomListItem>
+            </CustomList>
           </Box>
         </Paper>
       </Sticky>
