@@ -30,7 +30,7 @@ export function RealmAppProvider({ appId, children }) {
       .then((res) => {
         setUser(res.data);
       });
-  }, []);
+  }, [currentUser]);
 
   const logIn = React.useCallback(
     async (email, password, rest) => {
