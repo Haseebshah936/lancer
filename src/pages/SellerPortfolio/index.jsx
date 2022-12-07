@@ -30,6 +30,7 @@ import {
   CheckOutlined,
   Close,
 } from "@mui/icons-material";
+import CartDrawer from "./CartDrawer";
 
 const GigDiscription = ({ value, onChange, styles }) => {
   return (
@@ -226,36 +227,37 @@ function SellerPortfolio(props) {
   return (
     <>
       <HeaderLoggedIn />
-      {productData ? (
-        <Container>
-          <Wrapper>
-            <SubContainer1>
-              <Heading>{productData.title}</Heading>
-              <ProfileReviewInfo
-                rating={sellerData?.rating}
-                reviews={sellerData?.reviews}
-                views={0}
-                saved={save}
-                handleSave={handleSave}
-              />
-              <Gallery items={productMedia} />
-              <SubHeading>About this product</SubHeading>
-              <Description ref={descriptionRef} />
-              <SubHeading>Compare Packages</SubHeading>
-              {/* StartPackage */}
+      <ThemeProvider
+        theme={createTheme({
+          breakpoints: {
+            values: {
+              laptop: 1024,
+              tablet: 640,
+              mobile: 0,
+              desktop: 1280,
+            },
+          },
+        })}
+      >
+        <CartDrawer />
+        {productData ? (
+          <Container>
+            <Wrapper>
+              <SubContainer1>
+                <Heading>{productData.title}</Heading>
+                <ProfileReviewInfo
+                  rating={sellerData?.rating}
+                  reviews={sellerData?.reviews}
+                  views={0}
+                  saved={save}
+                  handleSave={handleSave}
+                />
+                <Gallery items={productMedia} />
+                <SubHeading>About this product</SubHeading>
+                <Description ref={descriptionRef} />
+                <SubHeading>Compare Packages</SubHeading>
+                {/* StartPackage */}
 
-              <ThemeProvider
-                theme={createTheme({
-                  breakpoints: {
-                    values: {
-                      laptop: 1024,
-                      tablet: 640,
-                      mobile: 0,
-                      desktop: 1280,
-                    },
-                  },
-                })}
-              >
                 <Grid container className="border">
                   <Grid
                     item
@@ -793,89 +795,87 @@ function SellerPortfolio(props) {
                     </Grid>
                   </Grid>
                 </Grid>
-              </ThemeProvider>
 
-              {/* End Package */}
-
-              <SubHeading>Compare Packages</SubHeading>
-            </SubContainer1>
-            <SubContainer2>
-              <PricingPlan pakages={productData?.packages} />
-              {!isSameUser && (
-                <SellerProfileInfo
-                  name={sellerData?.name}
-                  achivements={sellerData?.achivements}
-                  profilePic={sellerData?.profilePic}
-                  badge={sellerData?.badge}
-                  rating={sellerData?.rating}
-                  reviews={sellerData?.reviews}
-                  description={sellerData?.about}
-                  languages={sellerData?.languages}
-                  showExtraInfo={false}
-                  isSame={isSameUser}
-                  country={sellerData?.country}
-                  educationalBackground={sellerData?.education}
-                  experience={sellerData?.experience}
-                  englishLevel={sellerData?.englishLevel}
-                  approved={sellerData?.emailVerified}
-                  handleSave={handleSave}
-                  showButton={true}
-                  saved={save}
-                  skills={sellerData?.skills}
-                  userId={sellerData?._id}
-                />
-              )}
-            </SubContainer2>
-          </Wrapper>
-          <DetailsContainer>
-            <SubHeading>More Services</SubHeading>
-            <OtherServices seller={sellerData} />
-            <SubHeading>{sellerData?.reviews} Client Reviews</SubHeading>
-            <Reviews
-              loadMore={loadMore}
-              reviews={reviews}
-              getMoreReviews={(skip) =>
-                handleLoadMoreReviews(sellerData._id, skip)
-              }
+                {/* End Package */}
+              </SubContainer1>
+              <SubContainer2>
+                <PricingPlan pakages={productData?.packages} />
+                {!isSameUser && (
+                  <SellerProfileInfo
+                    name={sellerData?.name}
+                    achivements={sellerData?.achivements}
+                    profilePic={sellerData?.profilePic}
+                    badge={sellerData?.badge}
+                    rating={sellerData?.rating}
+                    reviews={sellerData?.reviews}
+                    description={sellerData?.about}
+                    languages={sellerData?.languages}
+                    showExtraInfo={false}
+                    isSame={isSameUser}
+                    country={sellerData?.country}
+                    educationalBackground={sellerData?.education}
+                    experience={sellerData?.experience}
+                    englishLevel={sellerData?.englishLevel}
+                    approved={sellerData?.emailVerified}
+                    handleSave={handleSave}
+                    showButton={true}
+                    saved={save}
+                    skills={sellerData?.skills}
+                    userId={sellerData?._id}
+                  />
+                )}
+              </SubContainer2>
+            </Wrapper>
+            <DetailsContainer>
+              <SubHeading>More Services</SubHeading>
+              <OtherServices seller={sellerData} />
+              <SubHeading>{sellerData?.reviews} Client Reviews</SubHeading>
+              <Reviews
+                loadMore={loadMore}
+                reviews={reviews}
+                getMoreReviews={(skip) =>
+                  handleLoadMoreReviews(sellerData._id, skip)
+                }
+              />
+            </DetailsContainer>
+            <SubHeading>Tags</SubHeading>
+            <Box display={"flex"} flexWrap="wrap" columnGap={"1rem"}>
+              {productData?.tags?.map((skill, index) => (
+                <Box
+                  p={".5rem 1rem"}
+                  border={`1px solid ${colors.lightGrey}`}
+                  borderRadius={"8%"}
+                  fontSize={"1.2rem"}
+                  color={colors.gray}
+                  component={"p"}
+                  key={index}
+                  maxWidth="50rem"
+                >
+                  {skill}
+                </Box>
+              ))}
+            </Box>
+          </Container>
+        ) : (
+          <Grid
+            item
+            container
+            justifyContent="center"
+            alignItems="center"
+            sx={{ height: "100vh" }}
+          >
+            <CircularProgress
+              sx={{
+                "&.MuiCircularProgress-root": {
+                  color: colors.textGreen,
+                },
+              }}
             />
-          </DetailsContainer>
-          <SubHeading>Tags</SubHeading>
-          <Box display={"flex"} flexWrap="wrap" columnGap={"1rem"}>
-            {productData?.tags?.map((skill, index) => (
-              <Box
-                p={".5rem 1rem"}
-                border={`1px solid ${colors.lightGrey}`}
-                borderRadius={"8%"}
-                fontSize={"1.2rem"}
-                color={colors.gray}
-                component={"p"}
-                key={index}
-                maxWidth="50rem"
-              >
-                {skill}
-              </Box>
-            ))}
-          </Box>
-        </Container>
-      ) : (
-        <Grid
-          item
-          container
-          justifyContent="center"
-          alignItems="center"
-          sx={{ height: "100vh" }}
-        >
-          <CircularProgress
-            sx={{
-              "&.MuiCircularProgress-root": {
-                color: colors.textGreen,
-              },
-            }}
-          />
-        </Grid>
-      )}
+          </Grid>
+        )}
 
-      <Footer />
+        <Footer />
+      </ThemeProvider>
     </>
   );
 }

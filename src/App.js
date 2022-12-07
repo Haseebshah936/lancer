@@ -65,6 +65,7 @@ function App(props) {
   const { chatrooms, setChatrooms } = useState([]);
   const { currentUser, user } = useRealmContext();
   const [activeProfile, setActiveProfile] = useState(false);
+  const [cartDrawer, setCartDrawer] = useState(false);
   const [editGigStatus, setEditGigStatus] = useState(false);
   const [gigToBeEditedData, setGigToBeEditedData] = useState({});
 
@@ -79,6 +80,8 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        cartDrawer,
+        setCartDrawer,
         searchDataLoader,
         setSearchDataLoader,
         terms,
