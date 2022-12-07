@@ -16,7 +16,78 @@ import { handleError } from "../../utils/helperFunctions";
 import { useRealmContext } from "../../db/RealmContext";
 import { Box } from "@mui/system";
 import colors from "../../utils/colors";
-import { CircularProgress, Grid } from "@mui/material";
+import {
+  Checkbox,
+  CircularProgress,
+  Grid,
+  Typography,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
+import {
+  AttachMoneyOutlined,
+  Check,
+  CheckOutlined,
+  Close,
+} from "@mui/icons-material";
+
+const GigDiscription = ({ value, onChange, styles }) => {
+  return (
+    <CustomTextArea
+      fullWidth
+      id="outlined-multiline-static"
+      placeholder="Enter Description"
+      value={value}
+      onChange={onChange}
+      style={{ ...styles, padding: "1rem 0.5rem" }}
+    />
+  );
+};
+const InputField = ({
+  label,
+  onChange,
+  value,
+  styles,
+  type,
+  placeholder,
+  id,
+  name,
+}) => {
+  return (
+    <CustomInput
+      id={id}
+      type={type}
+      fullWidth
+      placeholder={placeholder}
+      name={name}
+      label={label}
+      onChange={onChange}
+      value={value}
+      style={{ ...styles, padding: "1rem 0.5rem" }}
+    />
+  );
+};
+const CheckBox = ({ onChange, checked, label, error }) => {
+  return (
+    <Checkbox
+      icon={<Close />}
+      checkedIcon={<Check />}
+      checked={checked}
+      disableRipple
+      onChange={onChange}
+      sx={{
+        cursor: "default",
+        "& .MuiSvgIcon-root": {
+          fontSize: "2rem",
+        },
+        color: colors.googleRed,
+        "&.Mui-checked": {
+          color: colors.textGreen,
+        },
+      }}
+    />
+  );
+};
 
 function SellerPortfolio(props) {
   const title =
@@ -27,6 +98,12 @@ function SellerPortfolio(props) {
   const [isSameUser, setIsSameUser] = useState(true);
   const [productData, setProductData] = useState({});
   const [sellerData, setSellerData] = useState({});
+  const [basicPlan, setBasicPlan] = useState({});
+  const [standardPlan, setStandardPlan] = useState({});
+  const [premiumPlan, setPremiumPlan] = useState({});
+  const [categoryFeatures, setCategoryFeatures] = useState([]);
+  const [subCategoryFeatures, setSubCategoryFeatures] = useState([]);
+
   const [productMedia, setProductMedia] = useState([]);
   const descriptionRef = useRef();
   const [save, setSave] = useState(false);
@@ -62,6 +139,22 @@ function SellerPortfolio(props) {
     return response.data;
   };
 
+  const getSubCategory = async (id) => {
+    const response = await requestMethod.get("category/subCategory/" + id);
+    return response.data;
+  };
+
+  useEffect(() => {
+    if (productData) {
+      getSubCategory(productData.category).then((object) => {
+        setCategoryFeatures(object.category.features);
+        setSubCategoryFeatures(object.features);
+        console.log("Category Features: ", categoryFeatures);
+        console.log("SubCategory Features: ", subCategoryFeatures);
+      });
+    }
+  }, [productData]);
+
   useEffect(() => {
     window.scrollTo({
       top: 0,
@@ -82,6 +175,17 @@ function SellerPortfolio(props) {
           _id: data.owner._id._id,
         });
         setProductData(data);
+
+        console.log(data);
+        const { _id: id1, ...package1 } = data.packages[0];
+        const { _id: id2, ...package2 } = data.packages[1];
+        const { _id: id3, ...package3 } = data.packages[2];
+        setBasicPlan(package1);
+        setStandardPlan(package2);
+        setPremiumPlan(package3);
+        console.log("Basic Plan", basicPlan);
+        console.log("Standard Plan", standardPlan);
+        console.log("Premium Plan", premiumPlan);
         const media = [];
         data.images.map((image) => {
           media.push({
@@ -137,6 +241,563 @@ function SellerPortfolio(props) {
               <Gallery items={productMedia} />
               <SubHeading>About this product</SubHeading>
               <Description ref={descriptionRef} />
+              <SubHeading>Compare Packages</SubHeading>
+              {/* StartPackage */}
+
+              <ThemeProvider
+                theme={createTheme({
+                  breakpoints: {
+                    values: {
+                      laptop: 1024,
+                      tablet: 640,
+                      mobile: 0,
+                      desktop: 1280,
+                    },
+                  },
+                })}
+              >
+                <Grid container className="border">
+                  <Grid
+                    item
+                    container
+                    mobile={3}
+                    className="border"
+                    sx={{ backgroundColor: "#F5F5F5" }}
+                  ></Grid>
+                  <Grid
+                    item
+                    container
+                    mobile={3}
+                    className="border"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Box
+                      className="border-bottom"
+                      sx={{
+                        backgroundColor: "#F5F5F5",
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: " center",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        sx={{ mt: 1, mb: 1, fontWeight: "bold" }}
+                      >
+                        BASIC
+                      </Typography>
+                    </Box>
+                    <Box className="border-bottom" sx={{ width: "100%" }}>
+                      <Box className="border-bottom">
+                        <InputField
+                          placeholder="Enter Title"
+                          styles={{
+                            backgroundColor: "white",
+                            mb: 1,
+                            paddingInline: "",
+                          }}
+                          label="BasicPlanTitle"
+                          value={basicPlan.name}
+                        />
+                      </Box>
+
+                      <GigDiscription
+                        styles={{
+                          backgroundColor: "white",
+                          mb: 1,
+                        }}
+                        value={basicPlan.description}
+                      />
+                    </Box>
+
+                    <Box
+                      sx={{
+                        width: "100%",
+                        mt: 1,
+                      }}
+                    >
+                      <InputField
+                        styles={{
+                          width: "100%",
+                          backgroundColor: "white",
+                        }}
+                        placeholder="Delivery Days"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={basicPlan.delivery}
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    mobile={3}
+                    className="border"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Box
+                      className="border-bottom"
+                      sx={{
+                        width: "100%",
+                        justifyContent: "center",
+                        alignItems: " center",
+                        backgroundColor: "#F5F5F5",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        sx={{ mt: 1, mb: 1, fontWeight: "bold" }}
+                      >
+                        STANDARD
+                      </Typography>
+                    </Box>
+                    <Box className="border-bottom" sx={{ width: "100%" }}>
+                      <Box className="border-bottom">
+                        <InputField
+                          placeholder="Enter Title"
+                          styles={{
+                            backgroundColor: "white",
+                            mb: 1,
+                            paddingInline: "",
+                          }}
+                          label="Package Title"
+                          value={standardPlan.name}
+                        />
+                      </Box>
+
+                      <GigDiscription
+                        styles={{
+                          backgroundColor: "white",
+                          mb: 1,
+                        }}
+                        value={standardPlan.description}
+                      />
+                    </Box>
+
+                    <Box sx={{ width: "100%", mt: 1 }}>
+                      <InputField
+                        styles={{
+                          width: "100%",
+                          backgroundColor: "white",
+                        }}
+                        placeholder="Delivery Days"
+                        type="number"
+                        value={standardPlan.delivery}
+                        min="0"
+                        step="1"
+                      />
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    mobile={3}
+                    className="border"
+                    alignItems="center"
+                    justifyContent="center"
+                  >
+                    <Box
+                      className="border-bottom"
+                      sx={{
+                        width: "100%",
+                        justifyContent: "center",
+                        backgroundColor: "#F5F5F5",
+                        alignItems: " center",
+                        display: "flex",
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        sx={{ mt: 1, mb: 1, fontWeight: "bold" }}
+                      >
+                        PREMIUM
+                      </Typography>
+                    </Box>
+                    <Box className="border-bottom" sx={{ width: "100%" }}>
+                      <Box className="border-bottom">
+                        <InputField
+                          placeholder="Enter Title"
+                          styles={{
+                            backgroundColor: "white",
+                            mb: 1,
+                            paddingInline: "",
+                          }}
+                          label="Package Title"
+                          value={premiumPlan.name}
+                        />
+                      </Box>
+
+                      <GigDiscription
+                        styles={{
+                          backgroundColor: "white",
+                          mb: 1,
+                        }}
+                        value={premiumPlan.description}
+                      />
+                    </Box>
+
+                    <Box sx={{ width: "100%", mt: 1 }}>
+                      <InputField
+                        styles={{
+                          width: "100%",
+                          backgroundColor: "white",
+                        }}
+                        placeholder="Delivery Days"
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={premiumPlan.delivery}
+                      />
+                    </Box>
+                  </Grid>
+                  {categoryFeatures.map((feature, i) => {
+                    return (
+                      <>
+                        <Grid container mobile={12} sx={{ height: "50px" }}>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            mobile={3}
+                            className="border"
+                            sx={{ backgroundColor: "#F5F5F5" }}
+                          >
+                            <Typography variant="h6" sx={{ pl: 1 }}>
+                              {feature.title}
+                            </Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-bottom border-end"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                name={feature.title}
+                                styles={{ width: "100%" }}
+                                placeholder={`Enter ${feature.title}`}
+                                value={
+                                  basicPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].quantity
+                                    ? basicPlan.features[
+                                        i + subCategoryFeatures.length
+                                      ].quantity
+                                    : ""
+                                }
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={
+                                  basicPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].active
+                                }
+                              />
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-bottom border-end"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                styles={{ width: "100%" }}
+                                value={
+                                  standardPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].quantity
+                                    ? standardPlan.features[
+                                        i + subCategoryFeatures.length
+                                      ].quantity
+                                    : ""
+                                }
+                                placeholder={`Enter ${feature.title}`}
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={
+                                  standardPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].active
+                                }
+                              />
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-top border-bottom"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                value={
+                                  premiumPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].quantity
+                                    ? premiumPlan.features[
+                                        i + subCategoryFeatures.length
+                                      ].quantity
+                                    : ""
+                                }
+                                styles={{ width: "100%" }}
+                                placeholder={`Enter ${feature.title}`}
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={
+                                  premiumPlan.features[
+                                    i + subCategoryFeatures.length
+                                  ].active
+                                }
+                              />
+                            )}
+                          </Grid>
+                        </Grid>
+                      </>
+                    );
+                  })}
+                  {subCategoryFeatures.map((feature, i) => {
+                    return (
+                      <>
+                        <Grid
+                          container
+                          mobile={12}
+                          sx={{ height: "50px" }}
+                          // alignItems="center"
+                          // justifyContent="center"
+                        >
+                          <Grid
+                            item
+                            container
+                            mobile={3}
+                            className="border"
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            sx={{ backgroundColor: "#F5F5F5" }}
+                          >
+                            <Typography variant="h6" sx={{ pl: 1 }}>
+                              {feature.title}
+                            </Typography>
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-end border-bottom"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                value={
+                                  basicPlan.features[i].quantity === 0
+                                    ? ""
+                                    : basicPlan.features[i].quantity
+                                }
+                                styles={{ width: "100%" }}
+                                placeholder={`Enter ${feature.title}`}
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={basicPlan.features[i].active}
+                              />
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-end border-bottom"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                value={
+                                  standardPlan.features[i].quantity
+                                    ? standardPlan.features[i].quantity
+                                    : ""
+                                }
+                                styles={{ width: "100%" }}
+                                placeholder={`Enter ${feature.title}`}
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={standardPlan.features[i].active}
+                              />
+                            )}
+                          </Grid>
+                          <Grid
+                            item
+                            container
+                            alignItems="center"
+                            justifyContent="center"
+                            mobile={3}
+                            className="border border-top border-bottom"
+                          >
+                            {feature.quantityBased && (
+                              <InputField
+                                value={
+                                  premiumPlan.features[i].quantity
+                                    ? premiumPlan.features[i].quantity
+                                    : ""
+                                }
+                                styles={{ width: "100%" }}
+                                placeholder={`Enter ${feature.title}`}
+                                type="number"
+                                min="0"
+                                step="1"
+                              />
+                            )}
+                            {feature.quantityBased === false && (
+                              <CheckBox
+                                checked={premiumPlan.features[i].active}
+                              />
+                            )}
+                          </Grid>
+                        </Grid>
+                      </>
+                    );
+                  })}
+                  <Grid container mobile={12} sx={{ height: "50px" }}>
+                    <Grid
+                      item
+                      container
+                      mobile={3}
+                      className="border"
+                      alignItems="center"
+                      justifyContent="flex-start"
+                      sx={{ backgroundColor: "#F5F5F5" }}
+                    >
+                      <Typography variant="h6" sx={{ pl: 1 }}>
+                        Price
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      justifyContent="center"
+                      mobile={3}
+                      className="border border-end border-bottom"
+                    >
+                      <Grid item container direction="row" alignItems="center">
+                        <InputField
+                          styles={{
+                            width: "90%",
+                            backgroundColor: "white",
+                          }}
+                          placeholder="Enter Price"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={basicPlan.cost}
+                        />
+                        <AttachMoneyOutlined
+                          sx={{
+                            color: colors.textGreen,
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      justifyContent="center"
+                      mobile={3}
+                      className="border border-end border-bottom"
+                    >
+                      <Grid item container direction="row" alignItems="center">
+                        <InputField
+                          styles={{
+                            width: "90%",
+                            backgroundColor: "white",
+                          }}
+                          placeholder="Enter Price"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={standardPlan.cost}
+                        />
+                        <AttachMoneyOutlined
+                          sx={{
+                            color: colors.textGreen,
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      container
+                      alignItems="center"
+                      justifyContent="center"
+                      mobile={3}
+                      className="border border-top border-bottom"
+                    >
+                      <Grid item container direction="row" alignItems="center">
+                        <InputField
+                          styles={{
+                            width: "90%",
+                            backgroundColor: "white",
+                          }}
+                          placeholder="Enter Price"
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={premiumPlan.cost}
+                        />
+                        <AttachMoneyOutlined
+                          sx={{
+                            color: colors.textGreen,
+                          }}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </ThemeProvider>
+
+              {/* End Package */}
+
+              <SubHeading>Compare Packages</SubHeading>
             </SubContainer1>
             <SubContainer2>
               <PricingPlan pakages={productData?.packages} />
@@ -306,4 +967,24 @@ const SubHeading = styled.h2`
   font-weight: 600;
   font-size: 1.6rem;
   margin-block: 2rem;
+`;
+
+const CustomTextArea = styled.textarea`
+  height: 60px;
+  outline: none;
+  border: 0px;
+`;
+
+const CustomInput = styled.input`
+  outline: none;
+  cursor: default;
+  border: 0px;
+  ::-webkit-outer-spin-button,
+  ::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+  &:focus {
+    color: transparent;
+    text-shadow: 0px 0px 0px #000000;
+  }
 `;
