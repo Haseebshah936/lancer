@@ -6,6 +6,8 @@ import CustomIconButton from "../CustomIconButton";
 import PackageOfferings from "./PackageOfferings";
 import PropTypes from "prop-types";
 import { ArrowRightAlt } from "@mui/icons-material";
+import { useCustomContext } from "../../Hooks/useCustomContext";
+import CartDrawer from "../../pages/SellerPortfolio/CartDrawer";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -34,6 +36,7 @@ TabPanel.propTypes = {
 };
 
 function PackagePlan({ value, index, theme, plan }) {
+  const { setCartDrawer } = useCustomContext();
   return (
     <TabPanel value={value} index={index} dir={theme.direction}>
       <Heading>{plan?.name} package</Heading>
@@ -54,6 +57,10 @@ function PackagePlan({ value, index, theme, plan }) {
       <CustomIconButton
         text="Hire me for your task"
         rightIcon={<ArrowRightAlt />}
+        onClick={() => {
+          setCartDrawer(true);
+          console.log("Open Cart", CartDrawer);
+        }}
       />
     </TabPanel>
   );
