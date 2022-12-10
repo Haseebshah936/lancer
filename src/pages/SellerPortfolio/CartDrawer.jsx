@@ -8,9 +8,13 @@ import {
   IconButton,
 } from "@mui/material";
 import React from "react";
+import CustomFilledButton from "../../components/CustomFilledButton";
+import CustomIconButton from "../../components/CustomIconButton";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import colors from "../../utils/colors";
+import ExtrasCard from "./ExtrasCard";
 import MainCard from "./MainCard";
+import OrderSummary from "./OrderSummary";
 
 export default function CartDrawer() {
   const { setCartDrawer, cartDrawer } = useCustomContext();
@@ -24,19 +28,23 @@ export default function CartDrawer() {
         PaperProps={{
           sx: {
             py: 2,
-            px: 4,
-            overflowX: "hidden",
+
+            overflow: "hidden",
           },
         }}
       >
         <Box
           sx={{
-            width: { mobile: "auto", laptop: 410 },
-            height: { mobile: "100vh", laptop: "auto" },
+            display: "flex",
+            flexDirection: "column",
+            // justifyContent: "space-between",
+            // alignItems: "center",
+            width: { mobile: "auto", laptop: 450 },
+            height: "100vh",
           }}
         >
-          <Header>
-            <HeaderText>Order options</HeaderText>
+          <Header sx={{ px: 4 }}>
+            <Heading>Order options</Heading>
             <IconButton disableRipple onClick={() => setCartDrawer(false)}>
               <CloseOutlined
                 sx={{
@@ -49,9 +57,8 @@ export default function CartDrawer() {
           </Header>
           <Divider
             sx={{
-              mx: -5,
+              mx: -4,
               borderBottomWidth: "2px",
-              mb: 3,
 
               "&.MuiDivider-root": {
                 backgroundColor: "#E6E7E9",
@@ -59,9 +66,42 @@ export default function CartDrawer() {
             }}
           />
 
-          {/* <Container> */}
-          <MainCard />
-          {/* </Container> */}
+          <CartListContainer sx={{ px: 4, py: 3 }} component="div">
+            <MainCard />
+
+            <ExtrasContainer sx={{ pt: 3 }}>
+              <Heading>Upgrade your order with extras</Heading>
+              <ExtrasCard />
+            </ExtrasContainer>
+
+            <Divider sx={{ my: 3 }} />
+            <OrderSummary />
+          </CartListContainer>
+
+          <Divider
+            sx={{
+              mx: -4,
+
+              borderBottomWidth: "2px",
+
+              "&.MuiDivider-root": {
+                backgroundColor: "#E6E7E9",
+              },
+            }}
+          />
+
+          <Footer sx={{ px: 4, pt: 3 }}>
+            <CustomIconButton
+              style={{
+                marginTop: "0px",
+                marginBottom: "10px",
+                fontSize: "1.5rem",
+              }}
+              text={`Continue ($900)`}
+              onClick={() => {}}
+            />
+            <Typography variant="h6">You won't be charged yet</Typography>
+          </Footer>
         </Box>
       </SwipeableDrawer>
     </>
@@ -74,14 +114,28 @@ const Header = styled(Box)({
   justifyContent: "space-between",
   paddingTop: "20px",
   paddingBottom: "20px",
+  height: "100px",
+  // flexShrink: "0",
 });
 
-const HeaderText = styled(Typography)({
+const Heading = styled(Typography)({
   fontSize: "1.8rem",
   fontWeight: "600",
   color: colors.black,
 });
 
-const Container = styled(Box)({
-  overflow: "scroll",
+const CartListContainer = styled(Box)({
+  flexGrow: "1",
+  overflowY: "scroll",
 });
+
+const Footer = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-start",
+  flexDirection: "column",
+  height: "200px",
+  // flexShrink: "0",
+});
+
+const ExtrasContainer = styled(Box)({});
