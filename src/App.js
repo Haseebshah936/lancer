@@ -57,6 +57,8 @@ import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 import TempPage from "./pages/TempPage/TempPage";
 import CreateGig from "./pages/CreateGig";
 import axios from "axios";
+import FileUpload from './pages/TempPage/FileUpload';
+import OrderStatus from './pages/OrderStatus/OrderStatus';
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -157,9 +159,15 @@ function App(props) {
             <Route path="/f/teams" element={<FTeams />} />
             <Route path="/f/payments" element={<FPayments />} />
             <Route path="/f/settings" element={<FSettings />} />
+
           </Route>
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
+          {/* just temp haseeb bata donst worry */}
+          <Route path="/uploadImage" element={<FileUpload />} />\
+          {/* just temp haseeb bata donst worry */}
+
+          <Route path="/orderStatus" element={<OrderStatus />} />
 
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />

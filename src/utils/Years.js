@@ -7,5 +7,4 @@ const yaers = YearsTemp.map((y) => {
         { label: y.toString(), year: y }
     )
 })
-console.log(yaers);
 export const Years = yaers;
