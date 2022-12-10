@@ -51,6 +51,7 @@
     "recharts": "^2.1.16",
     "styled-components": "^5.3.6",
     "use-long-press": "^2.0.2",
+    "use-react-countdown": "^1.0.4",
     "web-vitals": "^3.0.4"
   },
   "scripts": {

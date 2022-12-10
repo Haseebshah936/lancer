@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Grid, Button, Divider, Box } from "@mui/material";
-import Timeline from "@mui/lab/Timeline";
+import { Grid, Divider, Box } from "@mui/material";
+
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
@@ -9,7 +9,6 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 
 export default function StatusChangeTimelineItem({ Icon, data }) {
   const [palcedOrderVar, setPlacedOrderVar] = useState({
@@ -55,11 +54,6 @@ export default function StatusChangeTimelineItem({ Icon, data }) {
   );
 }
 
-const UserNameP = styled.p`
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: ${colors.becomePartnerGreen};
-`;
 const TitleTextP = styled.p`
   font-size: 1.3rem;
   font-weight: 600;
