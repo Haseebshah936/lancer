@@ -3,18 +3,16 @@ import styled from "styled-components";
 import { Grid, Button, Divider, Box } from "@mui/material";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
-import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
+import WorkIcon from "@mui/icons-material/Work";
 
-export default function OrderPalcedTimelineItem() {
+export default function LastTimeLine() {
   const [palcedOrderVar, setPlacedOrderVar] = useState({
-    userName: "Umer Abid",
-    titleText: "placed the order",
-    time: "Nov 5, 3:49 PM",
+    // userName: "Umer Abid",
+    titleText: "ORDER PROGRESS SO FAR",
   });
 
   return (
@@ -24,17 +22,19 @@ export default function OrderPalcedTimelineItem() {
       </TimelineOppositeContent>
       <TimelineSeparator>
         <TimelineDot color="primary">
-          <BusinessCenterIcon fontSize="large" />
+          <WorkIcon fontSize="large" />
         </TimelineDot>
-        <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} />
+        {/* <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} /> */}
       </TimelineSeparator>
       <TimelineContent sx={{ py: "12px", px: 2 }}>
-        <Box className="d-flex to-row">
-          <UserNameP>{palcedOrderVar.userName}</UserNameP>
+        <Box
+          className="d-flex to-row border rounded p-2 align-items-center pt-3 pb-1"
+          style={{ backgroundColor: "#efeff0" }}
+        >
+          {/* <UserNameP>{palcedOrderVar.userName}</UserNameP> */}
           <p>&nbsp;&nbsp;</p>
           <TitleTextP>{palcedOrderVar.titleText}</TitleTextP>
           <p>&nbsp;&nbsp;</p>
-          <TimeP>{palcedOrderVar.time}</TimeP>
         </Box>
         <Grid
           container
