@@ -1,13 +1,42 @@
 import {
   AddCircleOutlineOutlined,
   RemoveCircleOutlineOutlined,
+  StarBorder,
+  ExpandMore,
+  ExpandLess,
+  AccessTime,
+  AccessTimeOutlined,
 } from "@mui/icons-material";
-import { Divider, Paper, Typography } from "@mui/material";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import {
+  Collapse,
+  Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { Box, styled } from "@mui/system";
-import React from "react";
+import React, { useState } from "react";
 import colors from "../../utils/colors";
 
-export default function OrderSummary() {
+export default function OrderSummary({
+  gigQuantity,
+  IncGigQuantity = () => {},
+  DecGigQuantity = () => {},
+  check,
+}) {
+  const [open, setOpen] = useState(false);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
   return (
     <>
       <Paper
@@ -24,7 +53,12 @@ export default function OrderSummary() {
       >
         <Header>
           <Heading>$1200</Heading>
-          <Order>Single Order</Order>
+          <Order>
+            Single Order{" "}
+            {gigQuantity > 1 && (
+              <Order sx={{ display: "inline" }}>(X{gigQuantity})</Order>
+            )}{" "}
+          </Order>
         </Header>
         <Divider
           sx={{
@@ -35,7 +69,70 @@ export default function OrderSummary() {
             },
           }}
         />
-        <Order>Single Order</Order>
+
+        <CustomList sx={{ py: 0 }}>
+          <CustomListItem sx={{ padding: 0 }} onClick={handleClick}>
+            <ListItemIcon>
+              <AccessTimeOutlined
+                sx={{
+                  fontSize: "2.0rem",
+                  cursor: "pointer",
+                }}
+              />
+            </ListItemIcon>
+            {gigQuantity > 1 ? (
+              <CustomListText
+                primary={`Inbox (X${gigQuantity})`}
+                disableTypography={true}
+              />
+            ) : (
+              <CustomListText primary="Inbox" disableTypography={true} />
+            )}{" "}
+            {open ? <ExpandLess /> : <ExpandMore />}
+          </CustomListItem>
+
+          <Collapse in={open} timeout="auto" unmountOnExit>
+            <CustomList sx={{ paddingTop: 0 }}>
+              <CustomListText
+                sx={{ pl: 4 }}
+                primary="Responsive Design"
+                disableTypography={true}
+              />
+            </CustomList>
+          </Collapse>
+        </CustomList>
+
+        <CustomList sx={{ py: 0 }}>
+          <CustomListItem sx={{ padding: 0 }}>
+            <ListItemIcon>
+              <AccessTimeOutlined
+                sx={{
+                  fontSize: "2.0rem",
+                  cursor: "pointer",
+                }}
+              />
+            </ListItemIcon>
+            <CustomListText
+              primary="14-day-delivery"
+              disableTypography={true}
+            />
+          </CustomListItem>
+
+          <CustomListItem sx={{ padding: 0 }}>
+            <ListItemIcon>
+              <AccessTimeOutlined
+                sx={{
+                  fontSize: "2.0rem",
+                  cursor: "pointer",
+                }}
+              />
+            </ListItemIcon>
+            <CustomListText
+              primary="14-day-delivery"
+              disableTypography={true}
+            />
+          </CustomListItem>
+        </CustomList>
 
         <Divider
           sx={{
@@ -51,23 +148,27 @@ export default function OrderSummary() {
           <GigQuantity>Gig Quantity</GigQuantity>
 
           <IncrementContainer>
-            <AddCircleOutlineOutlined
-              sx={{
-                color: colors.textGreen,
-                "&.MuiSvgIcon-root": {
-                  fontSize: "2.5rem",
-                },
-              }}
-            />
-            <Quantity sx={{ pl: 0 }}>1</Quantity>
-            <RemoveCircleOutlineOutlined
-              sx={{
-                color: colors.textGreen,
-                "&.MuiSvgIcon-root": {
-                  fontSize: "2.5rem",
-                },
-              }}
-            />
+            <IconButton disableRipple onClick={IncGigQuantity}>
+              <AddCircleOutlineOutlined
+                sx={{
+                  color: colors.textGreen,
+                  "&.MuiSvgIcon-root": {
+                    fontSize: "2.5rem",
+                  },
+                }}
+              />
+            </IconButton>
+            <Quantity sx={{ pl: 0 }}>{gigQuantity}</Quantity>
+            <IconButton disableRipple onClick={DecGigQuantity}>
+              <RemoveCircleOutlineOutlined
+                sx={{
+                  color: colors.textGreen,
+                  "&.MuiSvgIcon-root": {
+                    fontSize: "2.5rem",
+                  },
+                }}
+              />
+            </IconButton>
           </IncrementContainer>
         </Footer>
       </Paper>
@@ -126,4 +227,24 @@ const Quantity = styled(Typography)({
   fontSize: "1.7rem",
   fontWeight: "500",
   color: colors.gray,
+});
+
+const CustomList = styled(List)({
+  color: colors.black,
+  fontSize: "1.6rem !important",
+  "& .MuiListItemIcon-root": {
+    minWidth: 0,
+    marginRight: "10px",
+  },
+});
+
+const CustomListText = styled(ListItemText)({
+  fontSize: "1.5rem",
+  fontWeight: "400",
+  color: "#404145",
+});
+
+const CustomListItem = styled(ListItem)({
+  marginBottom: "5px",
+  color: "#404145",
 });

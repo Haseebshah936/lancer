@@ -33,9 +33,7 @@ const CheckBox = ({ onChange, checked, label, error }) => {
   );
 };
 
-export default function ExtrasCard() {
-  const [check, setCheck] = useState(false);
-
+export default function ExtrasCard({ check, setCheck = () => {} }) {
   return (
     <>
       <Box
@@ -81,23 +79,27 @@ export default function ExtrasCard() {
                 <Price>$900</Price>
 
                 <IncrementContainer>
-                  <AddCircleOutlineOutlined
-                    sx={{
-                      color: colors.textGreen,
-                      "&.MuiSvgIcon-root": {
-                        fontSize: "2.5rem",
-                      },
-                    }}
-                  />
+                  <IconButton disableRipple>
+                    <AddCircleOutlineOutlined
+                      sx={{
+                        color: colors.textGreen,
+                        "&.MuiSvgIcon-root": {
+                          fontSize: "2.5rem",
+                        },
+                      }}
+                    />
+                  </IconButton>
                   <Days sx={{ pl: 0 }}>1</Days>
-                  <RemoveCircleOutlineOutlined
-                    sx={{
-                      color: colors.textGreen,
-                      "&.MuiSvgIcon-root": {
-                        fontSize: "2.5rem",
-                      },
-                    }}
-                  />
+                  <IconButton disableRipple>
+                    <RemoveCircleOutlineOutlined
+                      sx={{
+                        color: colors.textGreen,
+                        "&.MuiSvgIcon-root": {
+                          fontSize: "2.5rem",
+                        },
+                      }}
+                    />
+                  </IconButton>
                 </IncrementContainer>
               </Footer>
             </>

@@ -7,7 +7,7 @@ import {
   Divider,
   IconButton,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import CustomFilledButton from "../../components/CustomFilledButton";
 import CustomIconButton from "../../components/CustomIconButton";
 import { useCustomContext } from "../../Hooks/useCustomContext";
@@ -16,8 +16,13 @@ import ExtrasCard from "./ExtrasCard";
 import MainCard from "./MainCard";
 import OrderSummary from "./OrderSummary";
 
-export default function CartDrawer() {
+export default function CartDrawer({
+  gigQuantity,
+  IncGigQuantity = () => {},
+  DecGigQuantity = () => {},
+}) {
   const { setCartDrawer, cartDrawer } = useCustomContext();
+  const [check, setCheck] = useState(false);
   return (
     <>
       <SwipeableDrawer
@@ -67,15 +72,20 @@ export default function CartDrawer() {
           />
 
           <CartListContainer sx={{ px: 4, py: 3 }} component="div">
-            <MainCard />
+            <MainCard gigQuantity={gigQuantity} />
 
             <ExtrasContainer sx={{ pt: 3 }}>
               <Heading>Upgrade your order with extras</Heading>
-              <ExtrasCard />
+              <ExtrasCard check={check} setCheck={setCheck} />
             </ExtrasContainer>
 
             <Divider sx={{ my: 3 }} />
-            <OrderSummary />
+            <OrderSummary
+              gigQuantity={gigQuantity}
+              IncGigQuantity={IncGigQuantity}
+              DecGigQuantity={DecGigQuantity}
+              check={check}
+            />
           </CartListContainer>
 
           <Divider

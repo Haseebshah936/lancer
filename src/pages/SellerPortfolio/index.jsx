@@ -31,6 +31,7 @@ import {
   Close,
 } from "@mui/icons-material";
 import CartDrawer from "./CartDrawer";
+import { UserState } from "realm-web";
 
 const GigDiscription = ({ value, onChange, styles }) => {
   return (
@@ -112,6 +113,18 @@ function SellerPortfolio(props) {
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
   const [loadMore, setLoadMore] = useState(true);
+
+  const [gigQuantity, setGigQuantity] = useState(1);
+
+  const IncGigQuantity = () => {
+    setGigQuantity(gigQuantity + 1);
+  };
+
+  const DecGigQuantity = () => {
+    if (gigQuantity > 1) {
+      setGigQuantity(gigQuantity - 1);
+    }
+  };
 
   const getSellerReviews = async (id, skip) => {
     const response = await requestMethod.get(
@@ -239,7 +252,11 @@ function SellerPortfolio(props) {
           },
         })}
       >
-        <CartDrawer />
+        <CartDrawer
+          gigQuantity={gigQuantity}
+          IncGigQuantity={IncGigQuantity}
+          DecGigQuantity={DecGigQuantity}
+        />
         {productData ? (
           <Container>
             <Wrapper>

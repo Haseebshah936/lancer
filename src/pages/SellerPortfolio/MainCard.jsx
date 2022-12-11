@@ -3,7 +3,7 @@ import { Box, styled } from "@mui/system";
 import React from "react";
 import colors from "../../utils/colors";
 
-export default function MainCard() {
+export default function MainCard({ gigQuantity }) {
   return (
     <>
       <Paper
@@ -22,7 +22,12 @@ export default function MainCard() {
         }}
       >
         <Header>
-          <Heading>Basic</Heading>
+          <Heading>
+            Basic
+            {gigQuantity > 1 && (
+              <Quantity sx={{ display: "inline" }}>(X{gigQuantity})</Quantity>
+            )}{" "}
+          </Heading>
           <Price>$900</Price>
         </Header>
         <Description>
@@ -64,4 +69,11 @@ const Name = styled(Typography)({
   paddingRight: "3px",
   fontWeight: "600",
   color: colors.black,
+});
+
+const Quantity = styled(Typography)({
+  paddingLeft: "5px",
+  fontSize: "1.7rem",
+  fontWeight: "500",
+  color: colors.gray,
 });
