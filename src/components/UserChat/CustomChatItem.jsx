@@ -86,19 +86,19 @@ function CustomChatItem({
           handleOnlineStatus
         );
       }
-      const filter = {
-        filter: {
-          operationType: "update",
-          "fullDocument._id": mongoose.Types.ObjectId(chatroom.id),
-        },
-      };
-      watchCollection(
-        currentUser,
-        "chatrooms",
-        filter,
-        breakAsyncIterator_chatroom,
-        handleNewMessage
-      );
+      // const filter = {
+      //   filter: {
+      //     operationType: "update",
+      //     "fullDocument._id": mongoose.Types.ObjectId(chatroom.id),
+      //   },
+      // };
+      // watchCollection(
+      //   currentUser,
+      //   "chatrooms",
+      //   filter,
+      //   breakAsyncIterator_chatroom,
+      //   handleNewMessage
+      // );
     }
 
     return () => {

@@ -27,6 +27,7 @@ export const watchCollectionForAll = async (
   callBack1,
   callBack2
 ) => {
+  console.log("🚀 ~ file: helperFunction.js:32 ~ Attached ");
   const mongo = currentUser.mongoClient("mongodb-atlas");
   const collection = mongo.db("test").collection(collectionName);
   // console.log(collection);
