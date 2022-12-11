@@ -404,10 +404,10 @@ const ChatRoomsContainer = styled.div`
   ${miniPc({ width: "40%" })}
   ${miniTablet({
     border: "none",
-    display: (props) => (!props.active ? "block" : "none"),
+    display: (props) => (!props.active ? "flex" : "none"),
     width: "100%",
   })};
-  /* height: 100%; */
+  height: 100%;
 `;
 
 const MessageContainer = styled.div`
