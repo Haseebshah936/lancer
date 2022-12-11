@@ -37,28 +37,18 @@ import {
   watchCollectionForAll,
 } from "../../db/helperFunction";
 import CreateGroup from "../CreateGroup";
-const ChatRoomsData = [
-  {
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Kursat",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(new Date().getTime() - 500000),
-    unread: true,
-    muted: false,
-    showMute: true,
-  },
-  {
-    avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-    alt: "kursat_avatar",
-    title: "Haseeb",
-    subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-    date: new Date(new Date().getTime() - 500000),
-    unread: false,
-    muted: false,
-    showMute: true,
-  },
-];
+import {
+  getChatRoomMessages,
+  getChatRooms,
+  handleCall,
+  handleChatRoomClick,
+  handleChatroomsData,
+  handleFilter,
+  handleMuteChatRoom,
+  handleScroll,
+  handleSend,
+  handleVideoCall,
+} from "./handlersForIndex";
 
 function Chat(props) {
   const messageRef = useRef();
@@ -78,9 +68,11 @@ function Chat(props) {
   const location = useLocation();
   const [loadingMore, setLoadingMore] = useState(false);
   const [reRender, setReRender] = useState(true);
+  let callerRef = undefined;
   const navigate = useNavigate();
 
   const [toggle, setToggle] = useState(false);
+  const [called, setCalled] = useState(false);
 
   const handleToggle = () => {
     setToggle(true);
@@ -90,210 +82,19 @@ function Chat(props) {
     setToggle(false);
   };
 
-  const getChatRooms = async () => {
-    setChatRooms([]);
-    setChatRooms([]);
-    requestMethod
-      .get(`chatroom/getChatroomsById/${user._id}`)
-      .then((res) => {
-        setChatRooms((prev) => [...prev, ...res.data]);
-        setChatRoomsData((prev) => [...prev, ...res.data]);
-      })
-      .catch((err) => console.log(err));
-  };
-
-  // console.log("USERID", location.state);
-
-  const getChatRoomMessages = (chatRoomId) => {
-    if (chatRoomId === location.state?.id) return;
-    requestMethod
-      .get(`message/${chatRoomId}/${user._id}`)
-      .then((res) => {
-        setData(res.data);
-        setNewData([]);
-        setReRender(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        if (err.response.data === "Chatroom not found") return;
-        handleError(err);
-      });
-  };
-
-  const handleChatRoomClick = (chatRoom) => {
-    setActive(chatRoom);
-    // console.log("Clicked", chatRoom);
-    setActiveChatroomStatus({
-      id: chatRoom.id,
-      status:
-        new Date(chatRoom.isOnline).getTime() >= new Date().getTime() - 30000 &&
-        new Date(chatRoom.isOnline).getTime() < new Date().getTime(),
-      isOnline: chatRoom.isOnline,
-    });
-  };
-
   const handleBackClick = () => {
     setActive(false);
     setActiveChatroomStatus(false);
   };
 
-  const createChatRoom = async (id, participantId) => {
-    const response = await requestMethod.post("chatroom/createChatroomWithId", {
-      participantId,
-      creatorId: user._id,
-      id,
-    });
-    return response.data;
-  };
-
-  const handleSend = (message) => {
-    let newMessage = handleMessageCreation(user._id, active.id, message);
-    newMessage = {
-      ...newMessage,
-      userId: {
-        _id: user._id,
-        name: user.name,
-      },
-    };
-    setNewData((prev) => [...prev, newMessage]);
-    requestMethod
-      .post("message", newMessage)
-      .then((res) => {})
-      .catch((err) => {
-        console.log(err);
-        if (err.response.data === "Chatroom not found") {
-          // console.log("Not found", location.state?.id);
-          createChatRoom(active.id, active?.participantId)
-            .then(async (data) => {
-              await requestMethod.post("message", {
-                ...newMessage,
-                chatroomId: data._id,
-              });
-              getChatRoomMessages(data._id);
-            })
-            .catch((err) => {
-              console.log(err);
-              handleError(err);
-            });
-          return;
-        }
-        handleError(err);
-      });
-  };
-
-  const handleMuteChatRoom = (chatroom, muted) => {
-    const index = chatRooms.indexOf(chatroom);
-    let newChatRooms = [...chatRooms];
-    newChatRooms[index].muted = !muted;
-    setChatRooms(newChatRooms);
-    requestMethod
-      .put(`chatroom/${muted ? "unMute" : "mute"}Chatroom/${chatroom.id}`, {
-        participantId: chatroom.userParticipantId,
-      })
-      .catch((err) => {
-        console.log("Error", err);
-        newChatRooms = [...chatRooms];
-        newChatRooms[index].muted = muted;
-        setChatRooms(newChatRooms);
-        handleError(err);
-      });
-  };
-
-  const handleFilter = (value) => {
-    if (value !== "") {
-      setChatRooms(
-        chatRooms.filter((chatRoom) =>
-          chatRoom.title.toLowerCase().includes(value.toLowerCase())
-        )
-      );
-    } else {
-      setChatRooms(chatRoomsData);
-    }
-  };
-
-  const handleChatroomsData = (i, id, state) => {
-    let newChatRoomsData = [...chatRoomsData];
-    newChatRoomsData[i] = {
-      ...newChatRoomsData[i],
-      ...state,
-    };
-    setChatRoomsData(newChatRoomsData);
-    // setChatRoomsData(newChatrooms);
-    setChatRooms((prev) => {
-      let newChatRooms = [...prev];
-      let index = newChatRooms.findIndex((chatRoom) => chatRoom.id === id);
-      // console.log("Chatroom Index", index);
-      newChatRooms[index] = {
-        ...newChatRooms[index],
-        ...state,
-      };
-      return newChatRooms;
-    });
-  };
-
-  const handleCall = () => {};
-
-  const handleVideoCall = () => {};
-
-  // useEffect(() => {
-  //   messageRef.current.scrollIntoView({
-  //     block: "end",
-  //     inline: "nearest",
-  //   });
-  // }, [data, active]);
-
-  // useEffect(() => {
-  //   // console.log("Chatrooms", chatRooms);
-  // }, [chatRooms]);
-
-  const handleScroll = () => {
-    const target = scrollRef.current;
-    const difference = Math.sqrt(
-      Math.pow(target.scrollHeight - target.scrollTop - target.clientHeight, 2)
-    );
-    // console.log(difference);
-    if (difference <= 1 && !loadingMore) {
-      // console.log("I am in");
-      setLoadingMore(true);
-      requestMethod
-        .get(
-          `message/${active.id}/${user._id}?skip=${
-            data.length + newData.length
-          }`
-        )
-        .then((res) => {
-          // console.log("Load more", res.data);
-          setLoadingMore(false);
-          setData((pre) => [...pre, ...res.data]);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoadingMore(false);
-          handleError(err);
-        });
-    }
-  };
-
   const getNewMessage = useCallback(
     (messageId, realmMessageObject) => {
-      // const id = newData[newData.length - 1]?.userId._id;
-      // console.log("New Message userId", newData);
-      // if (id !== user._id)
       requestMethod
         .get(`message/${active.id}/${messageId}/${user._id}`)
         .then((res) => {
-          // console.log(res.data);
           setNewData((prev) => {
             const prevMessage = prev[prev.length - 1];
-            // console.log("Previous state", prevMessage);
-            // console.log("New message", res.data?.userId?._id);
-            // console.log(
-            //   "Condition",
-            //   !prev.length,
-            //   prevMessage?.userId?._id !== res.data?.userId?._id,
-            //   prevMessage?.userId?._id === res.data?.userId?._id &&
-            //     prevMessage?.server === true
-            // );
+
             if (
               !(
                 prevMessage?.userId?._id === res.data?.userId?._id &&
@@ -313,11 +114,10 @@ function Chat(props) {
 
   const handleNewChatroom = (change) => {
     const { documentKey, fullDocument } = change;
-    console.log("New chatroom added ", fullDocument);
+    // console.log("New chatroom added ", fullDocument);
     requestMethod
       .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
       .then((res) => {
-        // console.log("res New message", res.data);
         setChatRoomsData((prev) => [res.data, ...prev]);
         setChatRooms((prev) => [res.data, ...prev]);
       })
@@ -328,31 +128,120 @@ function Chat(props) {
 
   const handleChatroomUpdate = (change) => {
     const { documentKey, fullDocument } = change;
-    console.log("Chatroom updated called", fullDocument);
-    console.log("Chatroom updated called", chatRooms);
-    // requestMethod
-    //   .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
-    //   .then((res) => {
-    //     // console.log("res New message", res.data);
-    //     setChatRoomsData((prev) => [res.data, ...prev]);
-    //     setChatRooms((prev) => [res.data, ...prev]);
-    //   })
-    //   .catch((e) => {
-    //     console.log("error", e);
-    //   });
+    // console.log("Chatroom updated called", fullDocument);
+    // console.log("Chatroom updated called", chatRooms);
+    requestMethod
+      .get(`/chatroom/getChatroom/${fullDocument._id}/${user._id}`)
+      .then((res) => {
+        setChatRoomsData((prev) => {
+          let newChatRooms = [...prev];
+          let index = newChatRooms.findIndex(
+            (chatRoom) => chatRoom.id === res.data.id
+          );
+          // console.log("index", index);
+          if (index === -1) {
+            return [res.data, ...prev];
+          }
+          newChatRooms[index] = {
+            ...newChatRooms[index],
+            ...res.data,
+          };
+          // console.log(
+          //   "newChatRooms",
+          //   new Date(newChatRooms[index].date).getTime()
+          // );
+          return newChatRooms.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+        });
+        setChatRooms((prev) => {
+          let newChatRooms = [...prev];
+          let index = newChatRooms.findIndex(
+            (chatRoom) => chatRoom.id === res.data.id
+          );
+          if (index === -1) {
+            return [res.data, ...prev];
+          }
+          newChatRooms[index] = {
+            ...newChatRooms[index],
+            ...res.data,
+          };
+          return newChatRooms.sort((a, b) => {
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+        });
+      })
+      .catch((e) => {
+        console.log("error", e);
+      });
   };
 
   useEffect(() => {
+    let breakAsyncIterator = false;
+    if (user?._id && !called) {
+      setCalled(true);
+      // console.log("Chatroom watcher called");
+      callerRef = user._id;
+      const filter1 = {
+        filter: {
+          operationType: "insert",
+          "fullDocument.participants": {
+            $elemMatch: {
+              userId: mongoose.Types.ObjectId(user._id),
+            },
+          },
+        },
+      };
+      const filter2 = {
+        filter: {
+          operationType: "update",
+          "fullDocument.participants": {
+            $elemMatch: {
+              userId: mongoose.Types.ObjectId(user._id),
+            },
+          },
+        },
+      };
+      watchCollection(
+        currentUser,
+        "chatrooms",
+        filter1,
+        breakAsyncIterator,
+        handleNewChatroom
+      );
+
+      watchCollection(
+        currentUser,
+        "chatrooms",
+        filter2,
+        breakAsyncIterator,
+        handleChatroomUpdate
+      );
+    }
+    return () => {
+      breakAsyncIterator = true;
+      setCalled(false);
+    };
+  }, [user]);
+
+  useEffect(() => {
     setReRender(true);
-    if (active) getChatRoomMessages(active.id);
+    if (active)
+      getChatRoomMessages(
+        active.id,
+        location,
+        user._id,
+        setData,
+        setNewData,
+        setReRender
+      );
   }, [active]);
 
   useEffect(() => {
     if (user?._id) {
-      //console.log("User", user._id);
-      getChatRooms();
+      getChatRooms(setChatRooms, setChatRoomsData, user._id);
     }
-  }, [user]);
+  }, [user?._id]);
 
   useEffect(() => {
     setActive(null);
@@ -364,46 +253,12 @@ function Chat(props) {
     }
   }, []);
 
-  useEffect(() => {
-    let breakAsyncIterator = false;
-    if (user) {
-      // console.log("Watching for new chatrooms");
-      const filter = {
-        filter: {
-          "fullDocument.participants": {
-            $elemMatch: {
-              userId: mongoose.Types.ObjectId(user._id),
-            },
-          },
-        },
-      };
-      watchCollectionForAll(
-        currentUser,
-        "chatrooms",
-        filter,
-        breakAsyncIterator,
-        handleNewChatroom,
-        handleChatroomUpdate
-      );
-    }
-    return () => {
-      breakAsyncIterator = true;
-    };
-  }, [user]);
-
-  // useEffect(() => {
-  //   console.log("Status changed", activeChatroomStatus);
-  // }, [activeChatroomStatus]);
-
-  useEffect(() => {
-    console.log("Active", active);
-  }, [active]);
-
   return (
     <Container>
       <ChatRoomsContainer active={active}>
         <Box
           marginTop={"2rem"}
+          marginBottom={"1rem"}
           display={"flex"}
           justifyContent={"space-evenly"}
           alignItems={"center"}
@@ -433,6 +288,31 @@ function Chat(props) {
             </IconButton>
           </Tooltip>
         </Box>
+        {chatRooms.length > 0 && (
+          <ChatRooms
+            chatrooms={chatRooms}
+            onRoomClick={(chatroom) =>
+              handleChatRoomClick(chatroom, setActive, setActiveChatroomStatus)
+            }
+            onMuteClick={(chatroom, muted) =>
+              handleMuteChatRoom(chatroom, muted, chatRooms, setChatRooms)
+            }
+            onFilter={(value) =>
+              handleFilter(value, setChatRooms, chatRoomsData)
+            }
+            changeChatroomsData={(i, id, state) =>
+              handleChatroomsData(
+                i,
+                id,
+                state,
+                chatRoomsData,
+                setChatRooms,
+                setChatRoomsData
+              )
+            }
+            setChatRooms={setChatRooms}
+          />
+        )}
         <Modal
           open={toggle}
           style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
@@ -441,16 +321,6 @@ function Chat(props) {
         >
           <CreateGroup toggleClose={handleClose} />
         </Modal>
-        {chatRooms.length > 0 && (
-          <ChatRooms
-            chatrooms={chatRooms}
-            onRoomClick={handleChatRoomClick}
-            onMuteClick={handleMuteChatRoom}
-            onFilter={handleFilter}
-            changeChatroomsData={handleChatroomsData}
-            setChatRooms={setChatRooms}
-          />
-        )}
       </ChatRoomsContainer>
       {active && (
         <MessageContainer active={active}>
@@ -471,14 +341,27 @@ function Chat(props) {
               data={data}
               active={active}
               newData={newData}
-              handleScroll={handleScroll}
+              handleScroll={() =>
+                handleScroll(
+                  scrollRef,
+                  loadingMore,
+                  setLoadingMore,
+                  active,
+                  user,
+                  data,
+                  newData,
+                  setData
+                )
+              }
               getNewMessage={getNewMessage}
               setNewData={setNewData}
               reRender={reRender}
             />
           )}
           {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
-          <ChatInput onSend={handleSend} />
+          <ChatInput
+            onSend={(message) => handleSend(message, user, active, setNewData)}
+          />
         </MessageContainer>
       )}
     </Container>
@@ -515,11 +398,13 @@ const Container = styled.div`
 
 const ChatRoomsContainer = styled.div`
   width: 35%;
+  display: flex;
+  flex-direction: column;
   border-right: 1px solid ${colors.lightGrey};
   ${miniPc({ width: "40%" })}
   ${miniTablet({
     border: "none",
-    display: (props) => (!props.active ? "block" : "none"),
+    display: (props) => (!props.active ? "flex" : "none"),
     width: "100%",
   })};
   height: 100%;

@@ -144,8 +144,8 @@ const ChatRoomsContainer = styled.div`
   display: flex;
   padding-bottom: 1rem;
   flex-direction: column;
-  height: 100%;
-  flex-shrink: 1;
+  /* height: 100%; */
+  overflow-y: scroll;
   .rce-citem-status {
     border: 1px solid white;
     height: 10px;
@@ -158,38 +158,4 @@ const ChatRoomsContainer = styled.div`
     height: 10px;
     width: 10px;
   }
-  /* ${mobile({ margin: "2rem 0rem" })} */
-`;
-
-const SearchBox = styled.div`
-  border: 1px solid ${colors.lightGrey};
-  border-radius: 10rem;
-  align-self: center;
-  padding: 0.5rem 1rem;
-  min-width: 28rem;
-  width: 80%;
-  display: flex;
-  justify-content: space-between;
-  ${miniPc({
-    minWidth: "22rem",
-  })}
-`;
-const Button = styled.div`
-  /* border-bottom: 2px solid black; */
-  align-self: center;
-  font-size: 1.6rem;
-  padding: 0.5rem 0.5rem 0.5rem 1rem;
-  display: none;
-  justify-content: space-between;
-  align-items: center;
-  margin-right: 1rem;
-  animation: slide 2s ease-in-out;
-  &:hover {
-    animation: slide 2s infinite;
-  }
-  font-weight: 700;
-  ${mobile({
-    display: "flex",
-  })}
-  cursor: pointer;
 `;
