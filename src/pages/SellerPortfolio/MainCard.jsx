@@ -3,7 +3,13 @@ import { Box, styled } from "@mui/system";
 import React from "react";
 import colors from "../../utils/colors";
 
-export default function MainCard({ gigQuantity }) {
+export default function MainCard({
+  gigQuantity,
+  title = "Basic",
+  description = "I will do basic work for you",
+  price = "900",
+  type = "Basic",
+}) {
   return (
     <>
       <Paper
@@ -23,16 +29,16 @@ export default function MainCard({ gigQuantity }) {
       >
         <Header>
           <Heading>
-            Basic
+            {type}
             {gigQuantity > 1 && (
               <Quantity sx={{ display: "inline" }}>(X{gigQuantity})</Quantity>
             )}{" "}
           </Heading>
-          <Price>$900</Price>
+          <Price>${price}</Price>
         </Header>
         <Description>
-          <Name>Basic Web App</Name>I will develop an asp net mvc, dot net core
-          or blazor webapp
+          <Name>{title}</Name>
+          {description}
         </Description>
       </Paper>
     </>

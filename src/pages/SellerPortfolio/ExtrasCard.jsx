@@ -33,13 +33,23 @@ const CheckBox = ({ onChange, checked, label, error }) => {
   );
 };
 
-export default function ExtrasCard({ check, setCheck = () => {} }) {
+export default function ExtrasCard({
+  title = "basic",
+  days = "3",
+  price = "100",
+  checkArr,
+  setCheckArr = () => {},
+  id,
+}) {
   return (
     <>
       <Box
         component="div"
+        sx={{ mb: 2 }}
         onClick={() => {
-          setCheck(!check);
+          let newArr = [...checkArr];
+          newArr[id].checked = !newArr[id].checked;
+          setCheckArr(newArr);
         }}
       >
         <Paper
@@ -58,25 +68,25 @@ export default function ExtrasCard({ check, setCheck = () => {} }) {
         >
           <Header>
             <SubHeader>
-              <Heading>Basic</Heading>
-              <Days>(+3 days)</Days>
+              <Heading>{title}</Heading>
+              <Days>(+{days} days)</Days>
             </SubHeader>
             <CheckBox
-              checked={check}
+              checked={checkArr[id]?.checked}
               onChange={(e) => {
-                setCheck(e.target.checked);
+                let newArr = [...checkArr];
+                newArr[id].checked = e.target.checked;
+                setCheckArr(newArr);
               }}
             />
           </Header>
-          <Description>
-            I will develop an asp net mvc, dot net core or blazor webapp
-          </Description>
-          {check ? (
+          <Description>Add this extra to your order.</Description>
+          {checkArr[id]?.checked ? (
             <>
               {" "}
-              <Divider sx={{ my: 3 }} />
+              <Divider sx={{ my: 2 }} />
               <Footer>
-                <Price>$900</Price>
+                <Price>${price}</Price>
 
                 <IncrementContainer>
                   <IconButton disableRipple>
@@ -104,7 +114,7 @@ export default function ExtrasCard({ check, setCheck = () => {} }) {
               </Footer>
             </>
           ) : (
-            <Price>$900</Price>
+            <Price>${price}</Price>
           )}
         </Paper>
       </Box>

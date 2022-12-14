@@ -159,12 +159,17 @@ function SellerPortfolio(props) {
   };
 
   useEffect(() => {
+    console.log("Category Features: ", categoryFeatures);
+    console.log("SubCategory Features: ", subCategoryFeatures);
+  }, [categoryFeatures, subCategoryFeatures]);
+
+  useEffect(() => {
     if (productData) {
       getSubCategory(productData.category).then((object) => {
         setCategoryFeatures(object.category.features);
         setSubCategoryFeatures(object.features);
-        console.log("Category Features: ", categoryFeatures);
-        console.log("SubCategory Features: ", subCategoryFeatures);
+
+        console.log("Product Data, ", productData);
       });
     }
   }, [productData]);
@@ -256,6 +261,7 @@ function SellerPortfolio(props) {
           gigQuantity={gigQuantity}
           IncGigQuantity={IncGigQuantity}
           DecGigQuantity={DecGigQuantity}
+          Extras={productData ? productData.additionalFeatures : []}
         />
         {productData ? (
           <Container>

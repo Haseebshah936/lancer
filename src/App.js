@@ -57,8 +57,8 @@ import CompleteProfile from "./pages/CompleteProfile/CompleteProfile";
 import TempPage from "./pages/TempPage/TempPage";
 import CreateGig from "./pages/CreateGig";
 import axios from "axios";
-import FileUpload from './pages/TempPage/FileUpload';
-import OrderStatus from './pages/OrderStatus/OrderStatus';
+import FileUpload from "./pages/TempPage/FileUpload";
+import OrderStatus from "./pages/OrderStatus/OrderStatus";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -74,6 +74,7 @@ function App(props) {
   const [searchData, setSearchData] = useState([]);
   const [terms, setTerms] = useState("");
   const [searchDataLoader, setSearchDataLoader] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState({});
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -82,6 +83,8 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        selectedPlan,
+        setSelectedPlan,
         cartDrawer,
         setCartDrawer,
         searchDataLoader,
@@ -116,9 +119,7 @@ function App(props) {
             <Route path="/signup" element={<Signup />} />
           </Route>
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
-
           <Route path="/Search" element={<SearchResults />} />
-
           <Route element={<PrivateRoutes />}>
             <Route path="/buyermain" element={<BuyerMain />} />
             <Route path="/sellerdashboard" element={<SellerDashboard />}>
@@ -159,16 +160,13 @@ function App(props) {
             <Route path="/f/teams" element={<FTeams />} />
             <Route path="/f/payments" element={<FPayments />} />
             <Route path="/f/settings" element={<FSettings />} />
-
           </Route>
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
           {/* just temp haseeb bata donst worry */}
           <Route path="/uploadImage" element={<FileUpload />} />\
           {/* just temp haseeb bata donst worry */}
-
           <Route path="/orderStatus" element={<OrderStatus />} />
-
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>

@@ -36,6 +36,7 @@ TabPanel.propTypes = {
 };
 
 function PackagePlan({ value, index, theme, plan }) {
+  const { setSelectedPlan } = useCustomContext();
   const { setCartDrawer } = useCustomContext();
   return (
     <TabPanel value={value} index={index} dir={theme.direction}>
@@ -58,7 +59,9 @@ function PackagePlan({ value, index, theme, plan }) {
         text="Hire me for your task"
         rightIcon={<ArrowRightAlt />}
         onClick={() => {
+          setSelectedPlan(plan);
           setCartDrawer(true);
+          console.log("plan", plan);
           console.log("Open Cart", CartDrawer);
         }}
       />
