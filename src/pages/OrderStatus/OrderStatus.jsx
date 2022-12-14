@@ -20,6 +20,8 @@ import OrderJustStartedComp from "../../components/OrderStausComp/OrderJustStart
 import OrderCompletedComp from "../../components/OrderStausComp/OrderCompletedComp";
 import FreelancerReviewTimeLine from "../../components/OrderStausComp/FreelancerReviewTimeLine";
 import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
+import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
+import Footer from "../../components/Footer";
 
 export default function OrderStatus() {
   return (
@@ -63,7 +65,9 @@ export default function OrderStatus() {
           <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
             <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
               <OrderPalcedTimelineItem></OrderPalcedTimelineItem>
+              {/* Requiremnets send Timeline started*/}
               <RequirementsTimelineItem></RequirementsTimelineItem>
+              {/* Requiremnets send Timeline Ends*/}
               {/* Order Started */}
               <StatusChangeTimelineItem
                 Icon={RocketIcon}
@@ -72,6 +76,10 @@ export default function OrderStatus() {
                   time: "Nov 5, 3:49 PM",
                 }}
               ></StatusChangeTimelineItem>
+              {/* Delivery Time updated timeline started */}
+              <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine>
+              {/* Delivery Time updated timeline ended */}
+
               {/* Delivery Time updated staus change*/}
               <StatusChangeTimelineItem
                 Icon={AccessAlarmIcon}
@@ -129,6 +137,7 @@ export default function OrderStatus() {
           <Grid xs={11} mt={0.7}></Grid>
         </Grid>
       </Grid>
+      <Footer></Footer>
     </div>
   );
 }
