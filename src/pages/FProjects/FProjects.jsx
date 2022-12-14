@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   createTheme,
@@ -21,13 +21,29 @@ import FSideBar from "../../pages/FSideBar/FSideBar";
 // import Sidebar from "../../components/DashboardComponents/Sidebar";
 
 import Footer from "../../components/Footer/index";
+import { requestMethod } from "../../requestMethod";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
+  const [allAvalibleProjects, setAllAvalibleProjects] = React.useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+  const getAllAvalibleProjects = async () => {
+    const res = await requestMethod
+      .get("project")
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log("err in catching all projects", err);
+      });
+  };
+
+  useEffect(() => {
+    getAllAvalibleProjects();
+  }, []);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>

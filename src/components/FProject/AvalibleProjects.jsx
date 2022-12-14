@@ -1,5 +1,14 @@
 import { Avatar, Box, Button, Grid, Pagination } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import List from "@mui/material/List";
+import Divider from "@mui/material/Divider";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
@@ -21,6 +30,43 @@ export default function AvalibleProjects({ data }) {
     // console.log("All data", temp);
     setProjects(temp);
   }, []);
+  // Slide Show Starts
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event &&
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <Box
+      sx={{
+        width:
+          anchor === "top" || anchor === "bottom"
+            ? "auto"
+            : { xs: "30rem", sm: "80rem" },
+      }}
+      // role="presentation"
+      onClick={toggleDrawer(anchor, false)}
+      onKeyDown={toggleDrawer(anchor, false)}
+    >
+      <Divider />
+      here is the drawer
+    </Box>
+  );
+
   return (
     <div style={{ width: "100%" }}>
       {_DATA.currentData().map((p) => (
@@ -72,16 +118,34 @@ export default function AvalibleProjects({ data }) {
               <Grid item xs={5} sm={2.5}>
                 <CenterDiv>
                   <div>
-                    <Button
-                      variant="contained"
-                      style={{
-                        width: "12rem",
-                        backgroundColor: colors.becomePartnerGreen,
-                        fontWeight: "700",
-                      }}
-                    >
-                      Send Perposal
-                    </Button>
+                    {/* Send Perposal */}
+                    {["right"].map((anchor) => (
+                      <React.Fragment key={anchor}>
+                        <Button
+                          onClick={toggleDrawer(anchor, true)}
+                          variant="contained"
+                          style={{
+                            // width: "12rem",
+                            backgroundColor: colors.becomePartnerGreen,
+                            fontWeight: "700",
+                          }}
+                        >
+                          Send Perposal
+                        </Button>
+                        <SwipeableDrawer
+                          anchor={anchor}
+                          open={state[anchor]}
+                          onClose={toggleDrawer(anchor, false)}
+                          onOpen={toggleDrawer(anchor, true)}
+                          sx={{
+                            backgroundColor: "#11ffee00",
+                          }}
+                        >
+                          {list(anchor)}
+                        </SwipeableDrawer>
+                      </React.Fragment>
+                    ))}
+
                     <SmallP
                       className="mt-1 text-center"
                       style={{

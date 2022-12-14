@@ -10,14 +10,18 @@ import Header from "../../components/HeaderLoggedIn";
 import Footer from "../../components/Footer";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { requestMethod } from "./../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function PostProject() {
   const navigate = useNavigate();
+  const { user } = useRealmContext();
   const [uploading, setUploading] = useState("false");
+  const [gcategories, setgCategories] = useState([]);
   const [postProjectData, setPostProjectData] = useState({
     title: "",
     category: "",
-    pricingType: "",
+    // pricingType: "",
     budget: "",
     days: "",
     experties: [],
@@ -34,10 +38,10 @@ export default function PostProject() {
   const schema = {
     title: Joi.string().required().label("Title"),
     category: Joi.string().required().label("Category"),
-    pricingType: Joi.string().required().label("Pricing Type"),
-    budget: Joi.string().required().label("Budget"),
+    // pricingType: Joi.string().required().label("Pricing Type"),
+    budget: Joi.number().min(10).required().label("Budget"),
     experties: Joi.array().items(Joi.string()).min(3).label("Experties"),
-    description: Joi.string().required().label("Discription"),
+    description: Joi.string().min(50).required().label("Discription"),
     days: Joi.number().required().label("Days"),
   };
   const validate = () => {
@@ -45,7 +49,7 @@ export default function PostProject() {
       {
         title: postProjectData.title,
         category: postProjectData.category,
-        pricingType: postProjectData.pricingType,
+        // pricingType: postProjectData.pricingType,
         budget: postProjectData.budget,
         experties: postProjectData.experties,
         description: postProjectData.description,
@@ -156,6 +160,68 @@ export default function PostProject() {
   // React.useEffect(() => {
   //   console.log(postProjectData);
   // }, [postProjectData]);
+  const getGigCategories = async () => {
+    await requestMethod
+      .get("category/categories")
+      .then((res) => {
+        // console.log("🚀 ~ file: PostProject.jsx:165 ~ .then ~ res", res.data);
+        const newData = res.data.map((item) => {
+          return {
+            value: item._id,
+            label: item.title,
+          };
+        });
+        setgCategories(newData);
+        console.log(
+          "🚀 ~ file: PostProject.jsx:172 ~ newData ~ newData",
+          newData
+        );
+
+        // setGigCategories(res.data);
+      })
+      .catch((err) => {
+        console.log("err in catching gig categories");
+      });
+  };
+  React.useEffect(() => {
+    getGigCategories();
+  }, []);
+  const handelPostProject = async () => {
+    // {
+    //   "creatorId": "636d03f645f3326a91731116",
+    //   "title": "Landing Page for my website",
+    //   "category": "637b55c63e6d5d9b496d7e17",
+    //   "description": "I want an eligent looking promotional page for my website.",
+    //   "budget": 40,
+    //   "pricingType": "fixed",
+    //   "days": 7,
+    //   "experties": ["Web development"],
+    //   "files": []
+    // }
+    const pushData = {
+      creatorId: user?._id,
+      title: postProjectData.title,
+      category: postProjectData.category,
+      description: postProjectData.description,
+      budget: postProjectData.budget,
+      pricingType: "fixed",
+      days: postProjectData.days,
+      experties: postProjectData.experties,
+      files: postProjectData.files,
+    };
+    console.log("🚀 ~ file: PostProject.jsx:187 ~ .then ~ pushData", pushData);
+
+    requestMethod
+      .post("project/", pushData)
+      .then((res) => {
+        console.log("🚀 ~ file: PostProject.jsx:187 ~ .then ~ res", res);
+        navigate(-1);
+      })
+      .catch((err) => {
+        console.log("🚀 ~ file: PostProject.jsx:189 ~ .catch ~ err", err);
+      });
+  };
+
   return (
     <div width="100vw">
       <Header></Header>
@@ -176,15 +242,15 @@ export default function PostProject() {
             label={"Category Type *"}
             name={"Category Type"}
             placeholder={"Select Category"}
-            value={postProjectData.category}
-            list={gigCategories}
+            // value={postProjectData.category}
+            list={gcategories}
             error={error.category}
             onChange={(e, value) => {
-              setPostProjectData({ ...postProjectData, category: value.label });
+              setPostProjectData({ ...postProjectData, category: value.value });
             }}
           ></DropDownInputComp>
           {/* Bidding Type */}
-          <DropDownInputComp
+          {/* <DropDownInputComp
             label={"Pricing Type *"}
             name={"pricingType"}
             placeholder={"Select Pricing Type"}
@@ -197,9 +263,9 @@ export default function PostProject() {
                 pricingType: value.label,
               });
             }}
-          ></DropDownInputComp>
+          ></DropDownInputComp> */}
           {/* if bidding Type is Fixed Budget Price */}
-          {postProjectData.pricingType === "Fixed Budget Price" ? (
+          {/* {postProjectData.pricingType === "Fixed Budget Price" ? (
             <div>
               <TextFeildComp
                 label={"Budget"}
@@ -215,25 +281,27 @@ export default function PostProject() {
             </div>
           ) : (
             <div></div>
-          )}
+          )} */}
           {/* if bidding Type is FHourly Pricing */}
-          {postProjectData.pricingType === "Hourly Pricing" ? (
-            <div>
-              <TextFeildComp
-                label={"Budget"}
-                placeholder={"Enter Budget"}
-                value={postProjectData.budget}
-                onChange={(e) =>
-                  setPostProjectData({
-                    ...postProjectData,
-                    budget: e.target.value,
-                  })
-                }
-              ></TextFeildComp>
-            </div>
-          ) : (
+          {/* {postProjectData.pricingType !== "Hourly Pricing" ? ( */}
+          <div>
+            <TextFeildComp
+              label={"Budget"}
+              placeholder={"Enter Budget"}
+              value={postProjectData.budget}
+              onChange={(e) =>
+                setPostProjectData({
+                  ...postProjectData,
+                  budget: e.target.value,
+                })
+              }
+              error={error.budget}
+            ></TextFeildComp>
+          </div>
+
+          {/* ) : (
             <div></div>
-          )}
+          )} */}
           {/* Adding No. of Days */}
           <TextFeildComp
             label={"No. of Days"}
@@ -525,11 +593,12 @@ export default function PostProject() {
                 onClick={() => {
                   const v = validate();
                   if (v) {
-                    // console.log("error");
+                    console.log("error");
                   } else {
                     // console.log("no error");
-                    // console.log(postProjectData);
-                    navigate(-1);
+                    console.log(postProjectData);
+                    handelPostProject();
+                    // navigate(-1);
                   }
                 }}
               >
