@@ -111,7 +111,7 @@ export default function FProjects() {
                       //   indicatorColor={colors.becomePartnerGreen}
                     >
                       <Tab
-                        label="Avalible Perposals"
+                        label="Avalible Projects"
                         style={{ color: colors.black, fontWeight: "bold" }}
                       />
                       <Tab
