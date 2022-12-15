@@ -7,7 +7,7 @@ import {
   Divider,
   IconButton,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import CustomFilledButton from "../../components/CustomFilledButton";
 import CustomIconButton from "../../components/CustomIconButton";
 import { useCustomContext } from "../../Hooks/useCustomContext";
@@ -20,9 +20,34 @@ export default function CartDrawer({
   gigQuantity,
   IncGigQuantity = () => {},
   DecGigQuantity = () => {},
+  Extras,
 }) {
-  const { setCartDrawer, cartDrawer } = useCustomContext();
+  const { setCartDrawer, cartDrawer, selectedPlan } = useCustomContext();
   const [check, setCheck] = useState(false);
+  const [checkArr, setCheckArr] = useState([]);
+
+  useEffect(() => {
+    console.log("Checked Array", checkArr);
+  }, [checkArr]);
+
+  useEffect(() => {
+    if (Extras) {
+      const ExtraArr = Extras.map((item) => {
+        if (item.active) {
+          return {
+            title: item.title,
+            quantity: item.quantity,
+            checked: false,
+            quantityBased: item.quantityBased,
+          };
+        }
+      });
+      setCheckArr(ExtraArr);
+
+      console.log("Extras Array", ExtraArr);
+    }
+  }, [Extras]);
+
   return (
     <>
       <SwipeableDrawer
@@ -72,11 +97,38 @@ export default function CartDrawer({
           />
 
           <CartListContainer sx={{ px: 4, py: 3 }} component="div">
-            <MainCard gigQuantity={gigQuantity} />
+            <MainCard
+              gigQuantity={gigQuantity}
+              title={selectedPlan.name}
+              description={selectedPlan.description}
+              price={selectedPlan.cost}
+              type={selectedPlan.name}
+            />
 
             <ExtrasContainer sx={{ pt: 3 }}>
               <Heading>Upgrade your order with extras</Heading>
-              <ExtrasCard check={check} setCheck={setCheck} />
+
+              {Extras?.map((item, i) => {
+                if (item.active) {
+                  return (
+                    <ExtrasCard
+                      key={i}
+                      id={i}
+                      check={check}
+                      checkArr={checkArr ? checkArr : []}
+                      setCheckArr={setCheckArr}
+                      setCheck={setCheck}
+                      title={item.title}
+                      price={item.cost}
+                      // onChange={() => {
+                      //   const newArr = [...checkArr];
+                      //   newArr[i].checked = !newArr[i].checked;
+                      //   setCheckArr(newArr);
+                      // }}
+                    />
+                  );
+                }
+              })}
             </ExtrasContainer>
 
             <Divider sx={{ my: 3 }} />
