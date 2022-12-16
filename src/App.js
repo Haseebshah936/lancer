@@ -20,7 +20,13 @@ function App(props) {
           <Route path="/signup" element={<Signup />} />
           <Route path="/ranking" element={<Ranking />} />
           <Route path="/home" element={<Landing />} />
-          <Route path="*" element={<Navigate to="/home" replace/>} />
+          <Route path="/pinfo" element={<PInfo></PInfo>}>
+            <Route path="" element={<PInfoPersonalDetailsAndSkills></PInfoPersonalDetailsAndSkills>}></Route>
+            <Route path="personaldetailsandskills" element={<PInfoPersonalDetailsAndSkills></PInfoPersonalDetailsAndSkills>}></Route>
+            <Route path="experienceandeducation" element={<PInfoExperienceAndEducation></PInfoExperienceAndEducation>}></Route>
+            <Route path="pinfoprojectsandrewards" element={<PInfoProjectsAndRewards></PInfoProjectsAndRewards>}></Route>
+          </Route>
+          <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
       </Router>
     </CustomContextProvider>
