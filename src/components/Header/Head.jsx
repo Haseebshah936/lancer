@@ -4,6 +4,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { Button, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import colors from "../../utils/colors";
+import logo from "../../assets/logo.png"
 
 function Head({ toggleDrawer, toggleLogin }) {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ function Head({ toggleDrawer, toggleLogin }) {
           <MenuIcon fontSize="large" />
         </IconButton>
         <Link to="/">
-          <Image src="logo.png" />
+          <Image src={logo} />
         </Link>
       </Menucontainer>
       <Wrapper>
@@ -89,7 +90,7 @@ const Container = styled.div`
   align-items: center;
   padding-block: 1.5rem;
   @media (max-width: 786px) {
-    padding-inline: 3%;
+    padding-inline: 7%;
   }
 `;
 const Menucontainer = styled.div`

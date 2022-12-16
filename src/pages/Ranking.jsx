@@ -2,25 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
+import Newsletter from "../components/NewsLetterComponent";
 import ProfileComponent from "../components/ProfileComponent";
 
 function Ranking(props) {
-  const a = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15
-  ];
+  const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
   return (
     <Wrapper>
       <Header />
       <Container>
         <Heading>Top Sellers This Month</Heading>
         <ProfileContainer>
-          {a.map((c) => (
+          {a.map((c, i) => (
             // <div className="col-xxl-3 col-lg-4 col-md-6 col-xs-1">
-            <ProfileComponent count={c} />
+            <ProfileComponent key={i} count={c} />
             // </div>
           ))}
         </ProfileContainer>
       </Container>
+      <Newsletter />
       <Footer />
     </Wrapper>
   );
@@ -33,7 +33,7 @@ const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-`
+`;
 
 const Container = styled.div`
   display: flex;

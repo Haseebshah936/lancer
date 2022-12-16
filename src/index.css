@@ -7,12 +7,36 @@
   text-decoration: none;
 }
 
-a:visited {
+*a:visited {
   color: black;
+}
+* a {
+  text-decoration: none !important;
+  color: black !important;
 }
 
 *::selection {
   background-color: rgba(0, 0, 0, 0.2);
+}
+*::-webkit-scrollbar {
+  width: 0.6rem;
+  height: 0.6rem;
+}
+*::-webkit-scrollbar-button {
+  display: none;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: gray;
+  border-radius: 10rem;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-corner {
+  display: none;
+}
+*::-webkit-resizer {
+  display: none;
 }
 
 body {
@@ -25,7 +49,7 @@ html {
   overflow-x: hidden;
 }
 
-@media (min-width: 2000px){
+@media (min-width: 2000px) {
   html {
     font-size: 100%;
   }

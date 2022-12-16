@@ -1,49 +1,209 @@
 import { FacebookTwoTone, Google, Twitter } from "@mui/icons-material";
-import { Button } from "@mui/material";
+import { Alert, Button, CircularProgress } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 import { useCustomContext } from "../Hooks/useCustomContext";
 import colors from "../utils/colors";
+import { useGoogleLogin } from "@react-oauth/google";
+import * as joi from "joi";
+import axios from "axios";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import * as queryString from "query-string";
+import { signup } from "../assets";
+import { useRealmContext } from "../db/RealmContext";
+import { toast } from "react-toastify";
+import * as Realm from "realm-web";
+import { handleAuthError, handleRealmError } from "../utils/helperFunctions";
+
+const schema = joi.object({
+  email: joi
+    .string()
+    .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
+    .required(),
+  password: joi.string().min(6).max(128).required(),
+});
 
 function Signup(props) {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
+  const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
+  const { signup, realmApp } = useRealmContext();
 
   useEffect(() => {
-      setOpen(false)
-  }, [])
+    setOpen(false);
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // if (!(email === "" || password === "")) {
-    //   const auth = getAuth(firebaseApp);
-    //   signInWithEmailAndPassword(auth, email, password)
-    //     .then((userCredential) => {
-    //       const user = userCredential.user;
-    //       if (!user.emailVerified) {
-    //         sendEmailVerification(auth.currentUser).then(() => {
-    //           alert(
-    //             "A verification link was sent to you Please verify your Email"
-    //           );
-    //         });
-    //         setLogin(false);
-    //       } else {
-    //         setLogin(user);
-    //         setLoaded(false);
-    //       }
-    //     })
-    //     .catch((error) => {
-    //       const errorCode = error.code;
-    //       alert(errorCode.substring(5, errorCode.length).replaceAll("-", " "));
-    //     });
-    // }
+  const handleSignup = (email, password, rest) => {
+    signup(email, password, rest)
+      .then(() => {
+        setLoading(false);
+        toast.success("Signup Successfull");
+        navigate("/home");
+      })
+      .catch((err) => {
+        setLoading(false);
+        handleRealmError(err);
+      });
   };
+
+  const googleAuth = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      // console.log(code);
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/google/signup",
+          {
+            // http://localhost:3001/auth/google backend that will exchange the code
+            code,
+          }
+        );
+        const { email, password, ...rest } = response.data;
+        handleSignup(email, password, rest);
+      } catch (error) {
+        handleAuthError(error);
+      }
+    },
+    redirect_uri: "http://localhost:3000/home",
+  });
+
+  // const facebookAuth = async () => {
+  // const stringifiedParams = queryString.stringify({
+  //   client_id: "881136853269267",
+  //   redirect_uri: "https://localhost:3000",
+  //   scope: ["email", "user_friends", "public_profile"].join(","), // comma seperated string
+  //   response_type: "code",
+  //   auth_type: "rerequest",
+  //   display: "popup",
+  // });
+
+  // const facebookLoginUrl = `https://www.facebook.com/v15.0/dialog/oauth?${stringifiedParams}`;
+  // // }
+
+  const responseFacebook = async (res) => {
+    // console.log(res);
+    const { accessToken, id } = res;
+    try {
+      const response = await axios.post(
+        "http://localhost:3003/api/auth/facebook/signup",
+        {
+          id,
+          accessToken,
+        }
+      );
+      // console.log("Response From facebook", response);
+      const { email, password, rest } = response.data;
+      handleSignup(email, password, rest);
+    } catch (error) {
+      handleAuthError(error);
+    }
+  };
+
+  const handleChange = ({ target }) => {
+    const newData = {
+      ...user,
+    };
+    newData[target.name] = target.value;
+    setUser(newData);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    const { error } = schema.validate(user, { abortEarly: false });
+    if (error) {
+      const { details } = error;
+      details.map((e, i) => {
+        toast.error(e.message);
+      });
+      setLoading(false);
+      return;
+    } else {
+      try {
+        const response = await axios.post(
+          "http://localhost:3003/api/auth/signup",
+          {
+            ...user,
+          }
+        );
+        // console.log(response.data);
+
+        const { email, password, ...rest } = response.data;
+        handleSignup(email, password, rest);
+      } catch (error) {
+        setLoading(false);
+        // console.log(error.data);
+        handleAuthError(error);
+      }
+    }
+  };
+
+  // const loadScript = (src) =>
+  //   new Promise((resolve, reject) => {
+  //     if (document.querySelector(`script[src="${src}"]`)) return resolve();
+  //     const script = document.createElement("script");
+  //     script.src = src;
+  //     script.onload = () => resolve();
+  //     script.onerror = (err) => reject(err);
+  //     document.body.appendChild(script);
+  //   });
+
+  // const googleButton = useRef(null);
+
+  // useEffect(() => {
+  //   const src = "https://accounts.google.com/gsi/client";
+  //   const id =
+  //     "30719619583-j2d2baepb0dkbscqrm3661mb6bomooch.apps.googleusercontent.com";
+
+  //   loadScript(src)
+  //     .then(() => {
+  //       /*global google*/
+  //       console.log(google);
+  //       google.accounts.id.initialize({
+  //         client_id: id,
+  //         callback: handleCredentialResponse,
+  //       });
+  //       google.accounts.id.renderButton(googleButton.current, {
+  //         theme: "filled_blue",
+  //         size: "large",
+  //       });
+  //     })
+  //     .catch(console.error);
+
+  //   return () => {
+  //     const scriptTag = document.querySelector(`script[src="${src}"]`);
+  //     if (scriptTag) document.body.removeChild(scriptTag);
+  //   };
+  // }, []);
+
+  // async function handleCredentialResponse(response) {
+  //   console.log("Encoded JWT ID token: " + response.credential);
+  //   // const credentials = Realm.Credentials.jwt(response.credential);
+  //   // try {
+  //   //   // Authenticate the user
+  //   //   const user = await realmApp.logIn(credentials);
+  //   //   // `App.currentUser` updates to match the logged in user
+  //   //   console.assert(user.id === realmApp.currentUser.id);
+  //   //   return user;
+  //   // } catch (err) {
+  //   //   console.error("Failed to log in", err);
+  //   // }
+  //   googleAuth(response.credential);
+  // }
+
   return (
     <Container>
       <Wrapper>
@@ -76,20 +236,42 @@ function Signup(props) {
               <SocialIcon c={colors.twitterBlue}>
                 <Twitter htmlColor={colors.twitterBlue} />
               </SocialIcon>
-              <SocialIcon c={colors.facebookBlue}>
+              {/* <a href={facebookLoginUrl}> */}
+              <FacebookLogin
+                appId="881136853269267"
+                autoLoad={false}
+                fields="name,email,picture"
+                callback={responseFacebook}
+                render={(renderProps) => (
+                  <SocialIcon
+                    onClick={renderProps.onClick}
+                    c={colors.facebookBlue}
+                  >
+                    <FacebookTwoTone htmlColor={colors.facebookBlue} />
+                  </SocialIcon>
+                )}
+              />
+              {/* <SocialIcon c={colors.facebookBlue}>
                 <FacebookTwoTone htmlColor={colors.facebookBlue} />
-              </SocialIcon>
-              <SocialIcon c={colors.googleRed}>
+              </SocialIcon> */}
+              {/* </a> */}
+              <SocialIcon
+                onClick={async () => {
+                  googleAuth();
+                  // await axios.post("http://localhost:3003/api/auth/google")
+                }}
+                c={colors.googleRed}
+              >
                 <Google htmlColor={colors.googleRed} />
               </SocialIcon>
             </SocialContainer>
             <Tagline>or do via email</Tagline>
+
             <Input
               type="email"
               name="email"
-              onChange={(text) => setEmail(text.target.value)}
+              onChange={(text) => handleChange(text)}
               placeholder="Email"
-              autoFocus={true}
             />
             <Input
               type="password"
@@ -97,7 +279,7 @@ function Signup(props) {
               className="box"
               placeholder="Password"
               onChange={(e) => {
-                setPassword(e.target.value);
+                handleChange(e);
               }}
             />
             <ButtonContainer>
@@ -114,7 +296,17 @@ function Signup(props) {
                 </label>
               </RemberMeContainer>
               <Btn type={"submit"}>
-                <BtnText>Sign up</BtnText>
+                {!loading ? (
+                  <BtnText>Sign up</BtnText>
+                ) : (
+                  <CircularProgress
+                    style={{
+                      color: colors.primaryGreen,
+                      fontSize: ".5rem",
+                    }}
+                    size={20}
+                  />
+                )}
               </Btn>
             </ButtonContainer>
           </Form>
@@ -138,7 +330,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 7% 15%;
+  padding: 5% 15% 3% 15%;
   @media (max-width: 450px) {
     padding: 0 0%;
   }
@@ -146,7 +338,7 @@ const Container = styled.div`
 
 const Wrapper = styled.div`
   display: flex;
-  height: 80vh;
+  height: 85vh;
   background-color: #fdfdfd;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.986);
   -webkit-box-shadow: 3px 2px 16px 5px rgb(240, 240, 240);
@@ -230,6 +422,12 @@ const Tagline = styled.p`
   opacity: 0.6;
 `;
 
+const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const Input = styled.input`
   padding: 1.5rem 1.5rem;
   margin-block: 0.5rem !important;
@@ -298,7 +496,8 @@ const Btn = styled(Button)`
     bottom: 0;
     border-radius: 50px;
     border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen}) border-box;
+    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
+      border-box;
     -webkit-mask: linear-gradient(#fff 0 0) padding-box,
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: destination-out;
@@ -317,7 +516,7 @@ const BtnText = styled.div`
 
 const Image = styled.div`
   flex: 1;
-  background: url("https://res.cloudinary.com/dj46ttbl8/image/upload/v1655380143/lancer/66677de7-8d41-4091-92af-78f9c175d4ca_vdckxb.png");
+  background: url(${signup});
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

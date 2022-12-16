@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import { Backdrop, Button, CircularProgress } from "@mui/material";
 import Head from "./Head";
 import ResponsiveDrawer from "./ResponsiveDrawer";
-import Login from "../Login";
+import Login from "../LoginCompoent";
 import { ClickAwayListener } from "@material-ui/core";
 import Modal from "@mui/material/Modal";
 import { useCustomContext } from "../../Hooks/useCustomContext";
@@ -44,4 +44,4 @@ function Header(props) {
   );
 }
 
-export default Header;
+export default memo(Header);
