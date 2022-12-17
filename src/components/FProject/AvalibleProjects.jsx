@@ -1,5 +1,17 @@
-import { Avatar, Box, Button, Grid, Pagination } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Grid,
+  Pagination,
+  Radio,
+  Drawer,
+  TextField,
+} from "@mui/material";
+import React, { useRef, useState, useEffect } from "react";
+import * as Reactt from "react";
+import Joi from "joi";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
@@ -13,14 +25,61 @@ import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 import { requestMethod } from "../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function AvalibleProjects({ data }) {
   const [projects, setProjects] = useState([]);
+  const [activeGigs, setActiveGigs] = useState([]);
   const [selectedProjectID, setSelectedProjectID] = useState("");
   const [selecteProjectData, setSelectedProjectData] = useState({});
+  const [drawerState, setDrawerState] = useState(false);
+  // Radios
+  const [selectedValue, setSelectedValue] = React.useState("");
+  const [perposlVar, setPerposlVar] = useState({
+    description: "",
+    price: "",
+    days: "",
+  });
+  const [autoFocusVar, setAutoFocusVar] = useState({
+    description: false,
+    price: false,
+    days: false,
+  });
+  const peropsalVarSchema = Joi.object({
+    description: Joi.string().min(50).required(),
+    price: Joi.number().min(10).required(),
+    days: Joi.number().min(1).required(),
+    Gig: Joi.string().required(),
+  });
+  const [perposalError, setPerposalError] = useState({});
+  const ValidatePerposal = () => {
+    const result = peropsalVarSchema.validate(
+      {
+        description: perposlVar.description,
+        price: perposlVar.price,
+        days: perposlVar.days,
+        Gig: selectedValue,
+      },
+      { abortEarly: false }
+    );
+    if (!result.error) {
+      setPerposalError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setPerposalError(errors);
+    return errors;
+  };
+  const { user } = useRealmContext();
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
-
+  const handleChangeRadio = (event) => {
+    setSelectedValue(event.target.value);
+    console.log("Selected Value", selectedValue);
+  };
   const count = Math.ceil(projects.length / PER_PAGE);
   const _DATA = usePagination(projects, PER_PAGE);
 
@@ -53,30 +112,17 @@ export default function AvalibleProjects({ data }) {
     bottom: false,
     right: false,
   });
+  const ref = useRef(null);
 
-  const toggleDrawer = (anchor, open) => (event) => {
-    if (
-      event &&
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    setState({ ...state, [anchor]: open });
-  };
-
-  const list = (anchor) => (
+  const Listt = () => (
     <Box
       sx={{
-        width:
-          anchor === "top" || anchor === "bottom"
-            ? "auto"
-            : { xs: "30rem", sm: "60rem" },
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        overflowY: "scroll",
+        // justifyContent="flex-end" # DO NOT USE THIS WITH 'scroll'
       }}
-      // role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
     >
       <Divider />
       <Grid container display="flex" justifyContent={"center"} my={1}>
@@ -128,44 +174,6 @@ export default function AvalibleProjects({ data }) {
             {/* Third Box */}
             <Grid item xs={5} sm={2.5}>
               <CenterDiv>
-                {/* Send Perposal */}
-                {/* <div
-                  // style={{ opacity: 0.1 }}
-                  onClick={() => {
-                    setSelectedProjectID(p._id);
-                    console.log("Selected Project ID", selectedProjectID);
-                  }}
-                >
-                  {["right"].map((anchor) => (
-                    <React.Fragment key={anchor}>
-                      <Button
-                        onClick={toggleDrawer(anchor, true)}
-                        variant="contained"
-                        style={{
-                          // width: "12rem",
-                          backgroundColor: colors.becomePartnerGreen,
-                          fontWeight: "700",
-                        }}
-                      >
-                        Send Perposal
-                      </Button>
-                      <SwipeableDrawer
-                        anchor={anchor}
-                        open={state[anchor]}
-                        onClose={toggleDrawer(anchor, false)}
-                        onOpen={toggleDrawer(anchor, true)}
-                        PaperProps={{
-                          sx: {
-                            opacity: 1,
-                            overflow: "hidden",
-                          },
-                        }}
-                      >
-                        {list(anchor)}
-                      </SwipeableDrawer>
-                    </React.Fragment>
-                  ))}
-                </div> */}
                 <SmallP
                   className="mt-1 text-center"
                   style={{
@@ -237,6 +245,184 @@ export default function AvalibleProjects({ data }) {
         </Grid>
       </Grid>
       {selectedProjectID}
+      <Grid container display={"flex"} justifyContent={"center"}>
+        {activeGigs.map((gig) => (
+          <Grid
+            container
+            item
+            xs={11}
+            key={gig._id}
+            mt={1}
+            boxShadow="rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px"
+            borderRadius="5px"
+          >
+            <Grid item xs={3}>
+              <Box
+                component={"img"}
+                src={gig.images[0]}
+                alt="gig Image"
+                width={"100%"}
+                height={"80px"}
+              ></Box>
+            </Grid>
+            <Grid
+              item
+              xs={7}
+              p={1}
+              style={{ textOverflow: "ellipsis", overflow: "hidden" }}
+            >
+              <Box maxWidth={{ xs: "90px", sm: "260px" }}>
+                <GigTitle>{gig.title}</GigTitle>
+              </Box>
+            </Grid>
+            <Grid
+              item
+              xs={2}
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+            >
+              <Radio
+                checked={selectedValue === gig._id}
+                // onChange={handleChange}
+                value={gig._id}
+                sx={{
+                  "& .MuiSvgIcon-root": {
+                    fontSize: 15,
+                  },
+                }}
+                onChange={(e) => {
+                  setSelectedValue(e.target.value);
+                  console.log("Selected Value", selectedValue);
+                }}
+                name="radio-buttons"
+                inputProps={{ "aria-label": "A" }}
+              />
+            </Grid>
+          </Grid>
+        ))}
+      </Grid>
+      <Grid container mt={1} display={"flex"} justifyContent={"center"}>
+        <Grid item xs={11} display="flex" justifyContent="center">
+          {perposalError.Gig && (
+            <div className="alert alert-danger">
+              {"Select a Gig to send perposal"}
+            </div>
+          )}
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          <GreenTextField
+            variant="outlined"
+            value={perposlVar.price}
+            onChange={(e) => {
+              setAutoFocusVar({
+                price: true,
+                description: false,
+                days: false,
+              });
+              setPerposlVar({
+                ...perposlVar,
+                price: e.target.value,
+              });
+            }}
+            autoFocus={autoFocusVar.price}
+            label="Budget"
+            fullWidth
+            type="number"
+          ></GreenTextField>
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          {perposalError.price && (
+            <div className="alert alert-danger">{perposalError.price}</div>
+          )}
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          <GreenTextField
+            variant="outlined"
+            value={perposlVar.days}
+            onChange={(e) => {
+              setAutoFocusVar({
+                price: false,
+                description: false,
+                days: true,
+              });
+              setPerposlVar({
+                ...perposlVar,
+                days: e.target.value,
+              });
+            }}
+            label="No. of Days"
+            fullWidth
+            autoFocus={autoFocusVar.days}
+            type="number"
+          ></GreenTextField>
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          {perposalError.days && (
+            <div className="alert alert-danger">{perposalError.days}</div>
+          )}
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          <GreenTextField
+            variant="outlined"
+            value={perposlVar.description}
+            onChange={(e) => {
+              // scroll to ref={ref} when something is typed
+              setAutoFocusVar({
+                price: false,
+                description: true,
+                days: false,
+              });
+              setPerposlVar({
+                ...perposlVar,
+                description: e.target.value,
+              });
+            }}
+            label="Description"
+            multiline
+            rows={4}
+            fullWidth
+            autoFocus={autoFocusVar.description}
+            onFocus={(e) => {
+              var temp_value = e.target.value;
+              e.target.value = "";
+              e.target.value = temp_value;
+            }}
+          ></GreenTextField>
+        </Grid>
+        <Grid item xs={11} mt={1} display="flex" justifyContent="center">
+          {perposalError.description && (
+            <div className="alert alert-danger">
+              {perposalError.description}
+            </div>
+          )}
+        </Grid>
+      </Grid>
+      <Grid container mt={1} display={"flex"} justifyContent={"center"}>
+        <Grid item xs={11} display="flex" justifyContent="center">
+          <GreenButton
+            variant="contained"
+            width="90px"
+            sx={{
+              backgroundColor: colors.becomePartnerButtonGreen,
+              "&:hover": {
+                backgroundColor: colors.becomePartnerButtonGreen,
+              },
+            }}
+            onClick={() => {
+              let v = ValidatePerposal();
+              if (v) {
+                console.log("Perposal Error", perposalError);
+              } else {
+                sendPerposalFunc();
+              }
+            }}
+            mb={2}
+          >
+            Send Perposal
+          </GreenButton>
+        </Grid>
+      </Grid>
     </Box>
   );
   // Slide Show Ends
@@ -249,15 +435,43 @@ export default function AvalibleProjects({ data }) {
       })
       .catch((err) => {
         console.log(
-          "🚀 ~ file: AvalibleProjects.jsx:77 ~ getAllPendingProjects ~ err",
+          "🚀 ~ file: AvalibleProjects.jsx:252 ~ getAllPendingProjects ~ err",
           err
         );
       });
   };
   useEffect(() => {
     getAllPendingProjects();
+    requestMethod
+      .get(`product/byUserId/${user?._id}`)
+      .then((response) => {
+        // const aGigs = response.data.map((gig) => {
+        //   if (gig.state === "live") {
+        //     return gig;
+        //   }
+        // });
+        const aGigs = response.data.filter((gig) => gig.state === "live");
+        setActiveGigs(aGigs);
+        console.log("all gigs", aGigs);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
-
+  useEffect(() => {
+    console.log("values changed", perposlVar);
+  }, [perposlVar]);
+  const sendPerposalFunc = async () => {
+    let data = {
+      projectId: selectedProjectID,
+      creatorId: user?._id,
+      productId: selectedValue,
+      description: perposlVar.description,
+      budget: perposlVar.price,
+      duration: perposlVar.days,
+    };
+    console.log("data", data);
+  };
   return (
     <div style={{ width: "100%" }}>
       {_DATA?.currentData().map((p) => (
@@ -316,35 +530,17 @@ export default function AvalibleProjects({ data }) {
                       console.log("Selected Project ID", selectedProjectID);
                     }}
                   >
-                    {["right"].map((anchor) => (
-                      <React.Fragment key={anchor}>
-                        <Button
-                          onClick={toggleDrawer(anchor, true)}
-                          variant="contained"
-                          style={{
-                            // width: "12rem",
-                            backgroundColor: colors.becomePartnerGreen,
-                            fontWeight: "700",
-                          }}
-                        >
-                          Send Perposal
-                        </Button>
-                        <SwipeableDrawer
-                          anchor={anchor}
-                          open={state[anchor]}
-                          onClose={toggleDrawer(anchor, false)}
-                          onOpen={toggleDrawer(anchor, true)}
-                          PaperProps={{
-                            sx: {
-                              opacity: 1,
-                              overflow: "hidden",
-                            },
-                          }}
-                        >
-                          {list(anchor)}
-                        </SwipeableDrawer>
-                      </React.Fragment>
-                    ))}
+                    <Button
+                      onClick={() => setDrawerState(true)}
+                      variant="contained"
+                      style={{
+                        // width: "12rem",
+                        backgroundColor: colors.becomePartnerGreen,
+                        fontWeight: "700",
+                      }}
+                    >
+                      Send Perposal
+                    </Button>
                   </div>
                   <SmallP
                     className="mt-1 text-center"
@@ -416,6 +612,23 @@ export default function AvalibleProjects({ data }) {
           </Grid>
         </Grid>
       ))}
+      <Drawer
+        anchor="right"
+        disableEnforceFocus
+        // variant=""
+        open={drawerState}
+        onClose={() => setDrawerState(false)}
+        onOpen={() => setDrawerState(true)}
+        PaperProps={{
+          sx: {
+            opacity: 1,
+            overflow: "hidden",
+            width: { xs: "85%", sm: "45%" },
+          },
+        }}
+      >
+        <Listt></Listt>
+      </Drawer>
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
           <Pagination
@@ -424,7 +637,7 @@ export default function AvalibleProjects({ data }) {
             page={page}
             variant="outlined"
             // color={colors.becomePartnerGreen}
-            onChange={handleChange}
+            onChange={handleChangeRadio}
           />
         </Grid>
       </Grid>
@@ -476,4 +689,26 @@ const DiscriptionBox = styled(Box)`
   padding: 1rem;
   margin: 1rem;
   font-size: 1.2rem;
+`;
+const GigTitle = styled.p`
+  font-size: 1.5rem;
+  margin: 0px 0px 5px;
+`;
+const GreenTextField = styled(TextField)`
+  & label.Mui-focused {
+    color: ${colors.becomePartnerGreen};
+  }
+  & .MuiOutlinedInput-root {
+    &.Mui-focused fieldset {
+      border-color: ${colors.becomePartnerGreen};
+    }
+  
+`;
+const GreenButton = styled(Button)`
+  background-color: ${colors.becomePartnerButtonGreen};
+  color: white;
+  "&:hover": {
+    background-color: ${colors.becomePartnerButtonGreen};
+    color: white;
+  }
 `;
