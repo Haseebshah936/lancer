@@ -146,6 +146,7 @@ export default function MyPerposals({ data }) {
     </div>
   );
 }
+
 const ProjectTitle = styled.p`
   font-size: 1.5rem;
   font-weight: bold;

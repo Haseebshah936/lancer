@@ -27,8 +27,10 @@ import usePagination from "./Pagination";
 import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import { handleError } from "./../../utils/helperFunctions";
+import { useNavigate } from "react-router-dom";
 
 export default function AvalibleProjects({ data }) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [activeGigs, setActiveGigs] = useState([]);
   const [selectedProjectID, setSelectedProjectID] = useState("");
@@ -247,6 +249,28 @@ export default function AvalibleProjects({ data }) {
       </Grid>
       {selectedProjectID}
       <Grid container display={"flex"} justifyContent={"center"}>
+        <Grid item xs={11}>
+          {activeGigs.length === 0 ? (
+            <div>
+              <h3 className="text-center">Kindly Create a Gig</h3>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: colors.becomePartnerGreen,
+                  color: "white",
+                  "&:hover": {
+                    backgroundColor: colors.becomePartnerGreen,
+                  },
+                }}
+                onClick={() => {
+                  navigate("/f/Gigs");
+                }}
+              >
+                Create Gig
+              </Button>
+            </div>
+          ) : null}
+        </Grid>
         {activeGigs.map((gig) => (
           <Grid
             container
