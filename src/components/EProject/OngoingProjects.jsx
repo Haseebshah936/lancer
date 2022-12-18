@@ -9,8 +9,8 @@ export default function OngoingProjects({ data }) {
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
 
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -79,7 +79,7 @@ export default function OngoingProjects({ data }) {
                         fontWeight: "700",
                       }}
                     >
-                      View Details
+                      Chat
                     </Button>
                     <SmallP
                       className="mt-1"
@@ -88,7 +88,7 @@ export default function OngoingProjects({ data }) {
                         fontWeight: "bold",
                       }}
                     >
-                      Hired on {p.hiredOn}
+                      Hired on {p?.hired.createdAt.substring(0, 10)}
                     </SmallP>
                   </div>
                 </CenterDiv>
@@ -116,7 +116,7 @@ export default function OngoingProjects({ data }) {
               </SmallP>
               <Avatar
                 alt="Remy Sharp"
-                src={p.imageURL}
+                src={p?.hired?.userId?.profilePic}
                 sx={{ width: 50, height: 50 }}
               />
               <SmallP

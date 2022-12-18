@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Box, Avatar, Button, Pagination } from "@mui/material";
+import { Grid, Box, Avatar, Button, Pagination, Drawer } from "@mui/material";
+
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
@@ -16,6 +22,30 @@ export default function MyPerposals({ data }) {
     setPage(p);
     _DATA.jump(p);
   };
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+  const [drawerState, setDrawerState] = useState(false);
+  const Listt = () => (
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        overflowY: "scroll",
+        // justifyContent="flex-end" # DO NOT USE THIS WITH 'scroll'
+      }}
+    >
+      Hello WWorld
+    </Box>
+  );
+
   useEffect(() => {
     const temp = data.filter((d) => d.perposalDes !== "");
     // console.log("My Perposal data", temp);
@@ -45,32 +75,38 @@ export default function MyPerposals({ data }) {
               >
                 <Box display={"flex"} flexDirection="column">
                   <Box paddingLeft={{ md: "8px" }}>
-                    <Avatar alt="Cindy Baker" src={p.eImageURL} />
+                    <Avatar alt="Cindy Baker" src={p?.creatorId?.profilePic} />
                   </Box>
-                  <UserName className="text-center">{p.eUserName}</UserName>
-                  <Box className="border rounded text-center">Client</Box>
+                  <UserName className="text-center">
+                    &nbsp;{p.eUserName}&nbsp;
+                  </UserName>
+                  <Box className="border rounded text-center">
+                    {p?.creatorId?.name}
+                  </Box>
                 </Box>
               </Grid>
               <Grid item xs={12} md={2} display="flex" flexDirection="column">
                 <SubTitle className="text-md-center mt-md-3">
-                  {"Client Price"}
+                  {"Budget Offered"}
                 </SubTitle>
-                <ColoredText className="text-md-center">{p.budget}</ColoredText>
+                <ColoredText className="text-md-center">
+                  $ {p.budget}
+                </ColoredText>
               </Grid>
               <Grid item xs={12} md={2}>
                 <SubTitle className="text-md-center mt-md-3">
                   {"Job Type"}
                 </SubTitle>
                 <ColoredText className="text-md-center">
-                  {p.pricingType}
+                  {"Fixed Price"}
                 </ColoredText>
               </Grid>
               <Grid item xs={12} md={3}>
                 <SubTitle className="text-md-center mt-md-3">
-                  {"Your Price"}
+                  {"Duartion"}
                 </SubTitle>
                 <ColoredText className="text-md-center">
-                  $ {p.budget}
+                  {p.duration}
                 </ColoredText>
               </Grid>
               <Grid
@@ -80,40 +116,17 @@ export default function MyPerposals({ data }) {
                 display="flex"
                 justifyContent={"center"}
                 flexDirection="column"
-              >
-                <Button
-                  variant="contained"
-                  style={{
-                    backgroundColor: colors.becomePartnerButtonGreen,
-                    fontWeight: "bold",
-                    height: "30px",
-                    width: "12rem",
-                  }}
-                >
-                  Edit&nbsp;Peroposal
-                </Button>
-                <Button
-                  variant="contained"
-                  style={{
-                    backgroundColor: colors.becomePartnerButtonGreen,
-                    fontWeight: "bold",
-                    marginTop: "10px",
-                    height: "30px",
-                    width: "12rem",
-                  }}
-                >
-                  Edit&nbsp;Peroposal
-                </Button>
-
-                <DeleteP onClick={() => {}}>Delete Perposal</DeleteP>
-              </Grid>
+              ></Grid>
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Box className="border rounded p-3">
+            <Box
+              className="border rounded p-3"
+              style={{ wordBreak: "break-all" }}
+            >
               <SubTitle className="mt-md-2">Description</SubTitle>
 
-              <PerposalDes>{p.perposalDes}</PerposalDes>
+              <PerposalDes>{p.description}</PerposalDes>
             </Box>
           </Grid>
         </Grid>
@@ -133,6 +146,7 @@ export default function MyPerposals({ data }) {
     </div>
   );
 }
+
 const ProjectTitle = styled.p`
   font-size: 1.5rem;
   font-weight: bold;
@@ -159,5 +173,12 @@ const DeleteP = styled.p`
   padding-left: 15px;
 `;
 const PerposalDes = styled.p`
+  font-size: 1.2rem;
+`;
+const DialogP = styled.p`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+const DialogPSmall = styled.p`
   font-size: 1.2rem;
 `;

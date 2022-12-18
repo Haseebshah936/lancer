@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   createTheme,
@@ -6,6 +6,7 @@ import {
   Tab,
   Tabs,
   ThemeProvider,
+  Drawer,
 } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
@@ -18,12 +19,48 @@ import PendingProjects from "../../components/EProject/PendingProjects";
 import CancelledProjects from "./../../components/EProject/CancelledProjects";
 import ESideBar from "../../pages/ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
+import { requestMethod } from "./../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function EProjects() {
+  const { user } = useRealmContext();
+  const [drawerValue, setDrawerValue] = useState(false);
+
   const [value, setValue] = React.useState(0);
+  const [pendingProjects, setPendingProjects] = useState([]);
+  const [ongoingProjects, setOngoingProjects] = useState([]);
+  const [completedProjects, setCompletedProjects] = useState([]);
+  const [cancelledProjects, setCancelledProjects] = useState([]);
+  const onGoingProjectFun = async () => {
+    await requestMethod
+      .get(`project/creator/onGoing/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setOngoingProjects(res.data);
+      });
+  };
+  useEffect(() => {
+    onGoingProjectFun();
+  }, []);
+
+  const pendingProjectsFun = async () => {
+    const res = await requestMethod
+      .get(`project/creator/pending/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setPendingProjects(res.data);
+      });
+  };
+  useEffect(() => {
+    pendingProjectsFun();
+  }, []);
 
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    pendingProjectsFun();
+    onGoingProjectFun();
+    setTimeout(() => {
+      setValue(newValue);
+    }, 700);
   };
   return (
     <div style={{ width: "100vw" }}>
@@ -113,10 +150,14 @@ export default function EProjects() {
                         <AllProjects data={allProject}></AllProjects>
                       )}
                       {value === 1 && (
-                        <PendingProjects data={allProject}></PendingProjects>
+                        <PendingProjects
+                          data={pendingProjects}
+                        ></PendingProjects>
                       )}
                       {value === 2 && (
-                        <OngoingProjects data={allProject}></OngoingProjects>
+                        <OngoingProjects
+                          data={ongoingProjects}
+                        ></OngoingProjects>
                       )}
                       {value === 3 && (
                         <CompletedProjects
