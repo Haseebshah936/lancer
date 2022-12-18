@@ -22,13 +22,47 @@ import FSideBar from "../../pages/FSideBar/FSideBar";
 
 import Footer from "../../components/Footer/index";
 import { requestMethod } from "../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
+  const { user } = useRealmContext();
   const [allAvalibleProjects, setAllAvalibleProjects] = React.useState([]);
-
+  const [myPerposals, setMyPerposals] = React.useState([]);
+  const allAvalibleProjectsFun = async () => {
+    const res = await requestMethod
+      .get(`project/pending/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setAllAvalibleProjects(res.data);
+      });
+  };
+  useEffect(() => {
+    allAvalibleProjectsFun();
+  }, []);
+  const allMyPerposalsFun = async () => {
+    const res = await requestMethod
+      .get(`proposal/user/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setMyPerposals(res.data);
+      });
+  };
+  useEffect(() => {
+    allMyPerposalsFun();
+  }, []);
+  useEffect(() => {
+    allMyPerposalsFun();
+    allAvalibleProjectsFun();
+    console.log("allAvalibleProjects", allAvalibleProjects);
+    console.log("myPerposals", myPerposals);
+  }, [value]);
   const handleChange = (event, newValue) => {
-    setValue(newValue);
+    allMyPerposalsFun();
+    allAvalibleProjectsFun();
+    setTimeout(() => {
+      setValue(newValue);
+    }, 700);
   };
   const getAllAvalibleProjects = async () => {
     const res = await requestMethod
@@ -135,10 +169,12 @@ export default function FProjects() {
                   <Grid container>
                     <Grid item xs={12} display="flex" justifyContent={"center"}>
                       {value === 0 && (
-                        <AvalibleProjects data={allProject}></AvalibleProjects>
+                        <AvalibleProjects
+                          data={allAvalibleProjects}
+                        ></AvalibleProjects>
                       )}
                       {value === 1 && (
-                        <MyPerposals data={allProject}></MyPerposals>
+                        <MyPerposals data={myPerposals}></MyPerposals>
                       )}
                       {value === 2 && (
                         <OnGoingProjects data={allProject}></OnGoingProjects>

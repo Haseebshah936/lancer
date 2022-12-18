@@ -142,6 +142,7 @@ function App(props) {
             />
 
             <Route path="/postProject" element={<PostProject />} />
+
             <Route path="/e/dashboard" element={<EDashborad />} />
             <Route path="/e/projects" element={<EProjects />} />
             <Route path="/e/favourites" element={<EFavourites />} />

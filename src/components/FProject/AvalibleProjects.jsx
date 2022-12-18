@@ -26,6 +26,7 @@ import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
+import { handleError } from "./../../utils/helperFunctions";
 
 export default function AvalibleProjects({ data }) {
   const [projects, setProjects] = useState([]);
@@ -80,8 +81,8 @@ export default function AvalibleProjects({ data }) {
     setSelectedValue(event.target.value);
     console.log("Selected Value", selectedValue);
   };
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -425,23 +426,28 @@ export default function AvalibleProjects({ data }) {
       </Grid>
     </Box>
   );
+
+  // const paginationFun = () => {};
+  // useEffect(() => {
+  //   _DATA = usePagination(projects, PER_PAGE);
+  // }, [projects]);
   // Slide Show Ends
-  const getAllPendingProjects = async () => {
-    await requestMethod
-      .get("project/pending")
-      .then((res) => {
-        console.log(res.data);
-        setProjects(res.data);
-      })
-      .catch((err) => {
-        console.log(
-          "🚀 ~ file: AvalibleProjects.jsx:252 ~ getAllPendingProjects ~ err",
-          err
-        );
-      });
-  };
+  // const getAllPendingProjects = async () => {
+  //   await requestMethod
+  //     .get("project/pending")
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setProjects(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(
+  //         "🚀 ~ file: AvalibleProjects.jsx:252 ~ getAllPendingProjects ~ err",
+  //         err
+  //       );
+  //     });
+  // };
   useEffect(() => {
-    getAllPendingProjects();
+    // getAllPendingProjects();
     requestMethod
       .get(`product/byUserId/${user?._id}`)
       .then((response) => {
@@ -471,6 +477,25 @@ export default function AvalibleProjects({ data }) {
       duration: perposlVar.days,
     };
     console.log("data", data);
+    requestMethod
+      .post("proposal", data)
+      .then((res) => {
+        console.log(res.data);
+        setDrawerState(false);
+        setPerposlVar({
+          price: "",
+          days: "",
+          description: "",
+        });
+        setAutoFocusVar({
+          price: false,
+          description: false,
+          days: false,
+        });
+      })
+      .catch((err) => {
+        handleError(err);
+      });
   };
   return (
     <div style={{ width: "100%" }}>
@@ -549,7 +574,16 @@ export default function AvalibleProjects({ data }) {
                       fontWeight: "bold",
                     }}
                   >
-                    Posted on {p.projectPostDate}
+                    Posted on
+                  </SmallP>
+                  <SmallP
+                    className="mt-1 text-center"
+                    style={{
+                      color: colors.becomePartnerGreen,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {p.createdAt.substring(0, 10)}
                   </SmallP>
                 </CenterDiv>
               </Grid>
@@ -637,7 +671,7 @@ export default function AvalibleProjects({ data }) {
             page={page}
             variant="outlined"
             // color={colors.becomePartnerGreen}
-            onChange={handleChangeRadio}
+            onChange={handleChange}
           />
         </Grid>
       </Grid>
