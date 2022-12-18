@@ -23,22 +23,37 @@ export default function CartDrawer({
   Extras,
 }) {
   const { setCartDrawer, cartDrawer, selectedPlan } = useCustomContext();
-  const [check, setCheck] = useState(false);
   const [checkArr, setCheckArr] = useState([]);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    console.log("Checked Array", checkArr);
-  }, [checkArr]);
+    setTotal(selectedPlan.cost);
+  }, []);
+
+  useEffect(() => {
+    checkArr.map((item) => {
+      if (item.checked) {
+        console.log("Cost", item.cost);
+        console.log("quantity", item.quantity);
+
+        let t = selectedPlan.cost * gigQuantity + item.cost * item.quantity;
+        setTotal(t);
+      } else {
+        setTotal(selectedPlan.cost * gigQuantity);
+      }
+    });
+  }, [checkArr, gigQuantity]);
 
   useEffect(() => {
     if (Extras) {
+      console.log("Additional", Extras);
       const ExtraArr = Extras.map((item) => {
         if (item.active) {
           return {
             title: item.title,
-            quantity: item.quantity,
+            quantity: 0,
             checked: false,
-            quantityBased: item.quantityBased,
+            cost: item.cost,
           };
         }
       });
@@ -114,12 +129,12 @@ export default function CartDrawer({
                     <ExtrasCard
                       key={i}
                       id={i}
-                      check={check}
                       checkArr={checkArr ? checkArr : []}
                       setCheckArr={setCheckArr}
-                      setCheck={setCheck}
                       title={item.title}
                       price={item.cost}
+                      days={item.time}
+
                       // onChange={() => {
                       //   const newArr = [...checkArr];
                       //   newArr[i].checked = !newArr[i].checked;
@@ -133,10 +148,14 @@ export default function CartDrawer({
 
             <Divider sx={{ my: 3 }} />
             <OrderSummary
+              total={total}
               gigQuantity={gigQuantity}
               IncGigQuantity={IncGigQuantity}
               DecGigQuantity={DecGigQuantity}
-              check={check}
+              plan={selectedPlan.name}
+              delivery={selectedPlan.delivery}
+              checkArr={checkArr}
+              features={selectedPlan.features}
             />
           </CartListContainer>
 

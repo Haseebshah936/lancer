@@ -6,6 +6,11 @@ import {
   ExpandLess,
   AccessTime,
   AccessTimeOutlined,
+  Check,
+  Inventory,
+  Inventory2Outlined,
+  Square,
+  Add,
 } from "@mui/icons-material";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import DraftsIcon from "@mui/icons-material/Drafts";
@@ -26,10 +31,14 @@ import React, { useState } from "react";
 import colors from "../../utils/colors";
 
 export default function OrderSummary({
+  total,
   gigQuantity,
   IncGigQuantity = () => {},
   DecGigQuantity = () => {},
-  check,
+  features,
+  plan,
+  delivery,
+  checkArr,
 }) {
   const [open, setOpen] = useState(false);
 
@@ -52,7 +61,7 @@ export default function OrderSummary({
         }}
       >
         <Header>
-          <Heading>$1200</Heading>
+          <Heading>${total}</Heading>
           <Order>
             Single Order{" "}
             {gigQuantity > 1 && (
@@ -73,7 +82,7 @@ export default function OrderSummary({
         <CustomList sx={{ py: 0 }}>
           <CustomListItem sx={{ padding: 0 }} onClick={handleClick}>
             <ListItemIcon>
-              <AccessTimeOutlined
+              <Inventory2Outlined
                 sx={{
                   fontSize: "2.0rem",
                   cursor: "pointer",
@@ -82,22 +91,56 @@ export default function OrderSummary({
             </ListItemIcon>
             {gigQuantity > 1 ? (
               <CustomListText
-                primary={`Inbox (X${gigQuantity})`}
+                primary={`${plan} (X${gigQuantity}) `}
                 disableTypography={true}
               />
             ) : (
-              <CustomListText primary="Inbox" disableTypography={true} />
+              <CustomListText primary={plan} disableTypography={true} />
             )}{" "}
             {open ? <ExpandLess /> : <ExpandMore />}
           </CustomListItem>
 
           <Collapse in={open} timeout="auto" unmountOnExit>
             <CustomList sx={{ paddingTop: 0 }}>
-              <CustomListText
-                sx={{ pl: 4 }}
-                primary="Responsive Design"
-                disableTypography={true}
-              />
+              {features.map((feature) => {
+                return (
+                  <CustomListItem sx={{ padding: 0, pl: 4 }}>
+                    <CustomListText
+                      primary={feature.title}
+                      disableTypography={true}
+                    />
+                  </CustomListItem>
+                );
+              })}
+
+              {checkArr.map((feature) => {
+                if (feature.checked) {
+                  return (
+                    <CustomListItem sx={{ padding: 0, pl: 4 }}>
+                      <ListItemIcon>
+                        <Add
+                          sx={{
+                            fontSize: "2.0rem",
+                            cursor: "pointer",
+                          }}
+                        />
+                      </ListItemIcon>
+
+                      {feature.quantity > 1 ? (
+                        <CustomListText
+                          primary={`${feature.title} (X${feature.quantity})`}
+                          disableTypography={true}
+                        />
+                      ) : (
+                        <CustomListText
+                          primary={feature.title}
+                          disableTypography={true}
+                        />
+                      )}
+                    </CustomListItem>
+                  );
+                }
+              })}
             </CustomList>
           </Collapse>
         </CustomList>
@@ -113,22 +156,7 @@ export default function OrderSummary({
               />
             </ListItemIcon>
             <CustomListText
-              primary="14-day-delivery"
-              disableTypography={true}
-            />
-          </CustomListItem>
-
-          <CustomListItem sx={{ padding: 0 }}>
-            <ListItemIcon>
-              <AccessTimeOutlined
-                sx={{
-                  fontSize: "2.0rem",
-                  cursor: "pointer",
-                }}
-              />
-            </ListItemIcon>
-            <CustomListText
-              primary="14-day-delivery"
+              primary={`${delivery}-day delivery`}
               disableTypography={true}
             />
           </CustomListItem>

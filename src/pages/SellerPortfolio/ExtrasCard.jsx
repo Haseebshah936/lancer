@@ -35,8 +35,8 @@ const CheckBox = ({ onChange, checked, label, error }) => {
 
 export default function ExtrasCard({
   title = "basic",
-  days = "3",
   price = "100",
+  days,
   checkArr,
   setCheckArr = () => {},
   id,
@@ -46,11 +46,12 @@ export default function ExtrasCard({
       <Box
         component="div"
         sx={{ mb: 2 }}
-        onClick={() => {
-          let newArr = [...checkArr];
-          newArr[id].checked = !newArr[id].checked;
-          setCheckArr(newArr);
-        }}
+        // onClick={() => {
+        //   let newArr = [...checkArr];
+        //   newArr[id].checked = !newArr[id].checked;
+        //   newArr[id].quantity = newArr[id].checked ? 1 : 0;
+        //   setCheckArr(newArr);
+        // }}
       >
         <Paper
           variant="outlined"
@@ -69,13 +70,14 @@ export default function ExtrasCard({
           <Header>
             <SubHeader>
               <Heading>{title}</Heading>
-              <Days>(+{days} days)</Days>
+              {days > 0 && <Days>(+{days} days)</Days>}
             </SubHeader>
             <CheckBox
               checked={checkArr[id]?.checked}
               onChange={(e) => {
                 let newArr = [...checkArr];
                 newArr[id].checked = e.target.checked;
+                newArr[id].quantity = newArr[id].checked ? 1 : 0;
                 setCheckArr(newArr);
               }}
             />
@@ -89,7 +91,14 @@ export default function ExtrasCard({
                 <Price>${price}</Price>
 
                 <IncrementContainer>
-                  <IconButton disableRipple>
+                  <IconButton
+                    disableRipple
+                    onClick={() => {
+                      let newArr = [...checkArr];
+                      newArr[id].quantity = newArr[id].quantity + 1;
+                      setCheckArr(newArr);
+                    }}
+                  >
                     <AddCircleOutlineOutlined
                       sx={{
                         color: colors.textGreen,
@@ -99,8 +108,16 @@ export default function ExtrasCard({
                       }}
                     />
                   </IconButton>
-                  <Days sx={{ pl: 0 }}>1</Days>
-                  <IconButton disableRipple>
+                  <Quantity sx={{ pl: 0 }}>{checkArr[id].quantity}</Quantity>
+                  <IconButton
+                    disableRipple
+                    onClick={() => {
+                      let newArr = [...checkArr];
+                      newArr[id].quantity =
+                        newArr[id].quantity === 1 ? 1 : newArr[id].quantity - 1;
+                      setCheckArr(newArr);
+                    }}
+                  >
                     <RemoveCircleOutlineOutlined
                       sx={{
                         color: colors.textGreen,
@@ -154,6 +171,13 @@ const Price = styled(Typography)({
 });
 
 const Days = styled(Typography)({
+  paddingLeft: "5px",
+  fontSize: "1.7rem",
+  fontWeight: "500",
+  color: colors.gray,
+});
+
+const Quantity = styled(Typography)({
   paddingLeft: "5px",
   fontSize: "1.7rem",
   fontWeight: "500",
