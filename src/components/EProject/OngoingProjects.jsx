@@ -1,10 +1,12 @@
 import { Avatar, Box, Button, Grid, Pagination } from "@mui/material";
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 
 export default function OngoingProjects({ data }) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
@@ -70,25 +72,52 @@ export default function OngoingProjects({ data }) {
               {/* Third Box */}
               <Grid item xs={5} sm={2.5}>
                 <CenterDiv>
-                  <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                    }}
+                  >
                     <Button
                       variant="contained"
                       style={{
-                        width: "12rem",
+                        width: { xs: "90px", md: "8rem" },
                         backgroundColor: colors.becomePartnerGreen,
                         fontWeight: "700",
+                        marginTop: "6px",
                       }}
                     >
                       Chat
                     </Button>
+                    <Button
+                      variant="contained"
+                      style={{
+                        width: { xs: "90px", md: "8rem" },
+                        backgroundColor: colors.becomePartnerGreen,
+                        fontWeight: "700",
+                        marginTop: "6px",
+                      }}
+                      onClick={() => navigate(`/orderStatus`)}
+                    >
+                      View
+                    </Button>
                     <SmallP
-                      className="mt-1"
+                      className="mt-1 text-center"
                       style={{
                         color: colors.becomePartnerGreen,
                         fontWeight: "bold",
                       }}
                     >
-                      Hired on {p?.hired.createdAt.substring(0, 10)}
+                      Hired on
+                    </SmallP>
+                    <SmallP
+                      className="mt-1 text-center"
+                      style={{
+                        color: colors.becomePartnerGreen,
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {p?.hired.createdAt.substring(0, 10)}
                     </SmallP>
                   </div>
                 </CenterDiv>

@@ -23,7 +23,11 @@ export default function OrderPalcedTimelineItem() {
         {/* 10:00 am */}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot color="primary">
+        <TimelineDot
+          sx={{
+            backgroundColor: colors.becomePartnerGreen,
+          }}
+        >
           <BusinessCenterIcon fontSize="large" />
         </TimelineDot>
         <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} />

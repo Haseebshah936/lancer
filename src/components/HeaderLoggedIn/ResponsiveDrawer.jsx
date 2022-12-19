@@ -46,7 +46,8 @@ export default function ResponsiveDrawer({
     return (
       currentPath.includes("/profile/") ||
       currentPath.includes("/portfolio/") ||
-      currentPath == "/chat"
+      currentPath == "/chat" ||
+      currentPath == "/orderStatus"
     );
   };
 

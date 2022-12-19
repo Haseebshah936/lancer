@@ -121,6 +121,8 @@ function App(props) {
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/Search" element={<SearchResults />} />
           <Route element={<PrivateRoutes />}>
+            <Route path="/orderStatus" element={<OrderStatus />} />
+
             <Route path="/buyermain" element={<BuyerMain />} />
             <Route path="/sellerdashboard" element={<SellerDashboard />}>
               <Route path="favourites" element={<Favourites />} />
@@ -167,7 +169,6 @@ function App(props) {
           {/* just temp haseeb bata donst worry */}
           <Route path="/uploadImage" element={<FileUpload />} />\
           {/* just temp haseeb bata donst worry */}
-          <Route path="/orderStatus" element={<OrderStatus />} />
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>

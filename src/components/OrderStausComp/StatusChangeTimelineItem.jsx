@@ -26,7 +26,11 @@ export default function StatusChangeTimelineItem({ Icon, data }) {
         {/* 10:00 am */}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot color="primary">
+        <TimelineDot
+          sx={{
+            backgroundColor: colors.becomePartnerGreen,
+          }}
+        >
           <Icon fontSize="large" />
         </TimelineDot>
         <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} />

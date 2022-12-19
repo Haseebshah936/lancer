@@ -30,7 +30,11 @@ export default function RequirementsTimelineItem() {
         {/* 10:00 am */}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot color="primary">
+        <TimelineDot
+          sx={{
+            backgroundColor: colors.becomePartnerGreen,
+          }}
+        >
           <EventNoteIcon fontSize="large" />
         </TimelineDot>
         <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} />

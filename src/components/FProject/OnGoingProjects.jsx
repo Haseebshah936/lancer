@@ -3,14 +3,16 @@ import React, { useState, useEffect } from "react";
 import usePagination from "../FProject/Pagination";
 import styled from "styled-components";
 import colors from "../../utils/colors";
+import { useNavigate } from "react-router-dom";
 
 export default function OnGoingProjects({ data }) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
 
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -42,7 +44,7 @@ export default function OnGoingProjects({ data }) {
                 <TitleP>{p.title}</TitleP>
               </Grid>
               <Grid item xs={12}>
-                <ClientPriceP>{"Client Price"}</ClientPriceP>
+                <ClientPriceP>{"Budget"}</ClientPriceP>
               </Grid>
               <Grid item xs={12} display="flex" flexDirection={"row"}>
                 <ClientBudgetP>${p.budget}.00&nbsp;</ClientBudgetP>
@@ -52,14 +54,14 @@ export default function OnGoingProjects({ data }) {
           </Grid>
           <Grid item xs={12} md={4} display="flex" alignItems={"center"}>
             <Box display="flex" flexDirection={"row"} alignItems="center">
-              <Avatar src={p.eImageURL}></Avatar>
+              <Avatar src={p?.creatorId?.profilePic}></Avatar>
               <Box display="flex" flexDirection={"column"}>
-                <UserNameP className="ps-3">{p.eUserName}</UserNameP>
-                <DateP className="ps-3">{p.eJoiningDate}</DateP>
+                <UserNameP className="ps-3">{p?.creatorId?.name}</UserNameP>
+                <DateP className="ps-3">{p?.creatorId?.badge}</DateP>
                 <Rating
                   className="ps-2"
                   name="read-only"
-                  value={p.eRating}
+                  value={p?.creatorId?.seller?.rating}
                   readOnly
                 />
               </Box>
@@ -84,11 +86,24 @@ export default function OnGoingProjects({ data }) {
                 fontWeight: "700",
               }}
             >
-              View&nbsp;Details
+              Chat
+            </Button>
+            <Button
+              variant="contained"
+              style={{
+                width: "12rem",
+                height: "30px",
+                backgroundColor: colors.becomePartnerGreen,
+                fontWeight: "700",
+                marginTop: "6px",
+              }}
+              onClick={() => navigate(`/orderStatus`)}
+            >
+              View
             </Button>
             <ProjectAcceptaceDateP>Project Taken On</ProjectAcceptaceDateP>
             <ProjectAcceptaceDateP>
-              {p.perposalAcceptanceDate}
+              {p?.hired?.createdAt.slice(0, 10)}
             </ProjectAcceptaceDateP>
           </Grid>
         </Grid>

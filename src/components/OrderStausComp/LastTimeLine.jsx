@@ -21,7 +21,11 @@ export default function LastTimeLine() {
         {/* 10:00 am */}
       </TimelineOppositeContent>
       <TimelineSeparator>
-        <TimelineDot color="primary">
+        <TimelineDot
+          sx={{
+            backgroundColor: colors.becomePartnerGreen,
+          }}
+        >
           <WorkIcon fontSize="large" />
         </TimelineDot>
         {/* <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} /> */}

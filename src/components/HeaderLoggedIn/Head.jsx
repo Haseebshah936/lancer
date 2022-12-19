@@ -136,12 +136,13 @@ function Head({
     return (
       currentPath.includes("/profile/") ||
       currentPath.includes("/portfolio/") ||
-      currentPath == "/chat"
+      currentPath == "/chat" ||
+      currentPath == "/orderStatus"
     );
   };
 
   useEffect(() => {
-    // console.log(currentPath);
+    console.log(currentPath);
     if (allPurposeRoutes()) return;
     if (activeProfile === "seller" && !matchRoutesinf()) {
       navigate("/f/dashboard");

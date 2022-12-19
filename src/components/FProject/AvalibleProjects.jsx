@@ -247,7 +247,7 @@ export default function AvalibleProjects({ data }) {
           )}
         </Grid>
       </Grid>
-      {selectedProjectID}
+      {/* {selectedProjectID} */}
       <Grid container display={"flex"} justifyContent={"center"}>
         <Grid item xs={11}>
           {activeGigs.length === 0 ? (

@@ -29,6 +29,7 @@ export default function FProjects() {
   const { user } = useRealmContext();
   const [allAvalibleProjects, setAllAvalibleProjects] = React.useState([]);
   const [myPerposals, setMyPerposals] = React.useState([]);
+  const [ongoingProjects, setOngoingProjects] = useState([]);
   const allAvalibleProjectsFun = async () => {
     const res = await requestMethod
       .get(`project/pending/${user?._id}`)
@@ -51,9 +52,22 @@ export default function FProjects() {
   useEffect(() => {
     allMyPerposalsFun();
   }, []);
+  const allOngoingProjectsFun = async () => {
+    await requestMethod
+      .get(`project/seller/onGoing/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setOngoingProjects(res.data);
+      });
+  };
+  useEffect(() => {
+    allOngoingProjectsFun();
+  }, []);
+
   useEffect(() => {
     allMyPerposalsFun();
     allAvalibleProjectsFun();
+    allOngoingProjectsFun();
     console.log("allAvalibleProjects", allAvalibleProjects);
     console.log("myPerposals", myPerposals);
   }, [value]);
@@ -177,7 +191,9 @@ export default function FProjects() {
                         <MyPerposals data={myPerposals}></MyPerposals>
                       )}
                       {value === 2 && (
-                        <OnGoingProjects data={allProject}></OnGoingProjects>
+                        <OnGoingProjects
+                          data={ongoingProjects}
+                        ></OnGoingProjects>
                       )}
                       {value === 3 && (
                         <CompletedProjects
