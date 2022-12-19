@@ -387,7 +387,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-bottom border-end"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       name={feature.title}
                       styles={{ width: "100%" }}
@@ -416,7 +416,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={
                         basicPlan.features[i + SubCategory.features.length]
@@ -443,7 +443,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-bottom border-end"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       styles={{ width: "100%" }}
                       value={
@@ -473,7 +473,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={
                         standardPlan.features[i + SubCategory.features.length]
@@ -499,7 +499,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-top border-bottom"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       value={
                         premiumPlan.features[i + SubCategory.features.length]
@@ -529,7 +529,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={
                         premiumPlan.features[i + SubCategory.features.length]
@@ -582,7 +582,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-end border-bottom"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       value={
                         basicPlan.features[i].quantity === 0
@@ -609,7 +609,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={basicPlan.features[i].active}
                       onChange={(e) => {
@@ -631,7 +631,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-end border-bottom"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       value={
                         standardPlan.features[i].quantity
@@ -658,7 +658,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={standardPlan.features[i].active}
                       onChange={(e) => {
@@ -680,7 +680,7 @@ export default function GigMyServicePricing({
                   mobile={3}
                   className="border border-top border-bottom"
                 >
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       value={
                         premiumPlan.features[i].quantity
@@ -707,7 +707,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {feature.quantityBased === false && (
+                  {feature.type === "" && (
                     <CheckBox
                       checked={premiumPlan.features[i].active}
                       onChange={(e) => {
@@ -894,7 +894,7 @@ export default function GigMyServicePricing({
                   </Typography>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {feature.quantityBased && (
+                  {feature.type === "quantity" && (
                     <InputField
                       value={additionalFeatures[i].quantity}
                       placeholder={`Enter ${feature.title}`}
@@ -911,6 +911,66 @@ export default function GigMyServicePricing({
                         setAdditionalFeatures(hold);
                       }}
                     />
+                  )}
+                  {feature.type === "time" && (
+                    <InputField
+                      value={additionalFeatures[i].time}
+                      placeholder={`Enter Delivery days`}
+                      type="number"
+                      min="0"
+                      step="1"
+                      onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
+                        const hold = [...additionalFeatures];
+                        hold[i].time = val;
+                        setAdditionalFeatures(hold);
+                      }}
+                    />
+                  )}
+                  {feature.type === "timeAndQuantity" && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <InputField
+                        value={additionalFeatures[i].quantity}
+                        placeholder={`Enter ${feature.title}`}
+                        type="number"
+                        min="0"
+                        step="1"
+                        onChange={(e) => {
+                          let val = parseInt(e.target.value, 10);
+
+                          val = val >= 0 ? val : 0;
+
+                          const hold = [...additionalFeatures];
+                          hold[i].quantity = val;
+                          setAdditionalFeatures(hold);
+                        }}
+                      />
+
+                      <InputField
+                        value={additionalFeatures[i].time}
+                        placeholder={`Enter Delivery days`}
+                        type="number"
+                        min="0"
+                        step="1"
+                        onChange={(e) => {
+                          let val = parseInt(e.target.value, 10);
+                          val = val >= 0 ? val : 0;
+                          const hold = [...additionalFeatures];
+                          hold[i].time = val;
+                          setAdditionalFeatures(hold);
+                        }}
+                      />
+                    </div>
                   )}
                   <InputField
                     value={
@@ -966,7 +1026,7 @@ export default function GigMyServicePricing({
                   </Typography>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {feature.quantityBased && (
+                  {additionalFeatures.type === "quantity" && (
                     <InputField
                       value={additionalFeatures[i].quantity}
                       placeholder={`Enter ${feature.title}`}
@@ -984,6 +1044,68 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
+
+                  {additionalFeatures.type === "time" && (
+                    <InputField
+                      value={additionalFeatures[i].time}
+                      placeholder={`Enter Delivery days`}
+                      type="number"
+                      min="0"
+                      step="1"
+                      onChange={(e) => {
+                        let val = parseInt(e.target.value, 10);
+
+                        val = val >= 0 ? val : 0;
+
+                        const hold = [...additionalFeatures];
+                        hold[i].time = val;
+                        setAdditionalFeatures(hold);
+                      }}
+                    />
+                  )}
+                  {additionalFeatures.type === "timeAndQuantity" && (
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "space-evenly",
+                      }}
+                    >
+                      <InputField
+                        value={additionalFeatures[i].quantity}
+                        placeholder={`Enter ${feature.title}`}
+                        type="number"
+                        min="0"
+                        step="1"
+                        onChange={(e) => {
+                          let val = parseInt(e.target.value, 10);
+
+                          val = val >= 0 ? val : 0;
+
+                          const hold = [...additionalFeatures];
+                          hold[i].quantity = val;
+                          setAdditionalFeatures(hold);
+                        }}
+                      />
+
+                      <InputField
+                        value={additionalFeatures[i].time}
+                        placeholder={`Enter Delivery days`}
+                        type="number"
+                        min="0"
+                        step="1"
+                        onChange={(e) => {
+                          let val = parseInt(e.target.value, 10);
+                          val = val >= 0 ? val : 0;
+                          const hold = [...additionalFeatures];
+                          hold[i].time = val;
+                          setAdditionalFeatures(hold);
+                        }}
+                      />
+                    </div>
+                  )}
+
                   <InputField
                     value={
                       additionalFeatures[i].cost

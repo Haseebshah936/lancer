@@ -34,7 +34,7 @@ export default function MainCard({
               <Quantity sx={{ display: "inline" }}>(X{gigQuantity})</Quantity>
             )}{" "}
           </Heading>
-          <Price>${price}</Price>
+          <Price>${price * gigQuantity}</Price>
         </Header>
         <Description>
           <Name>{title}</Name>

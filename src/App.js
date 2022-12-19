@@ -59,6 +59,7 @@ import CreateGig from "./pages/CreateGig";
 import axios from "axios";
 import FileUpload from "./pages/TempPage/FileUpload";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
+import PurchaseScreen from "./pages/PurchaseScreen";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -114,10 +115,12 @@ function App(props) {
           <Route element={<AuthRoutes />}>
             <Route path="/home" element={<Landing />} />
             <Route path="/about" element={<About />} />
+
             <Route path="/contactus" element={<ContactUs />} />
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/signup" element={<Signup />} />
           </Route>
+          <Route path="/payments" element={<PurchaseScreen />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
           <Route path="/Search" element={<SearchResults />} />
           <Route element={<PrivateRoutes />}>
@@ -144,7 +147,6 @@ function App(props) {
             />
 
             <Route path="/postProject" element={<PostProject />} />
-
             <Route path="/e/dashboard" element={<EDashborad />} />
             <Route path="/e/projects" element={<EProjects />} />
             <Route path="/e/favourites" element={<EFavourites />} />

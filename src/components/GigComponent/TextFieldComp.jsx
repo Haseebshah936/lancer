@@ -1,8 +1,17 @@
 import React from "react";
-import { Grid, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import colors from "../../utils/colors";
 
-export default function TextFieldComp({ label, value, onChange, name, error }) {
+export default function TextFieldComp({
+  label,
+  value,
+  onChange,
+  name,
+  error,
+  pattern,
+  onFocus,
+  type,
+}) {
   return (
     <>
       <TextField
@@ -28,6 +37,8 @@ export default function TextFieldComp({ label, value, onChange, name, error }) {
         label={label}
         value={value}
         onChange={onChange}
+        inputProps={{ pattern: pattern, onFocus: onFocus, type: type }}
+        // pattern={pattern}
       />
     </>
   );
