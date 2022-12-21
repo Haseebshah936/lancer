@@ -33,16 +33,22 @@ export default function OrderSummary({ style = {}, order }) {
           Width: "100%",
         }}
       >
-        <Grid item container direction="row" justifyContent="space-evenly">
+        <Grid
+          item
+          container
+          direction="row"
+          alignItems="center"
+          justifyContent="space-evenly"
+        >
           <Grid item mobile={4}>
             {" "}
             <CardMedia
               component="img"
               sizes="contain"
               border="1px"
-              style={{
+              sx={{
                 cursor: "pointer",
-                height: "75px",
+                height: { laptop: "75px", mobile: "150px" },
                 borderRadius: "15px",
                 borderColor: "transparent",
               }}
@@ -51,7 +57,12 @@ export default function OrderSummary({ style = {}, order }) {
             />
           </Grid>
           <Grid item mobile={7}>
-            <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
+            <Typography
+              sx={{
+                fontSize: { laptop: "1.7rem", mobile: "2.0rem" },
+                color: "#62646a",
+              }}
+            >
               {order?.title}
             </Typography>
           </Grid>
