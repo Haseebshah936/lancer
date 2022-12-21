@@ -37,6 +37,7 @@ export default function CartDrawer({
     extraFeatures: [],
     total: 0,
     delivery: 0,
+    gigQuantity: 1,
   });
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
@@ -59,6 +60,7 @@ export default function CartDrawer({
       extraFeatures: checkArr ? checkArr : [],
       total: total ? total : selectedPlan?.cost,
       delivery: selectedPlan?.delivery,
+      gigQuantity: gigQuantity,
     });
   }, [total, selectedPlan, productData]);
 

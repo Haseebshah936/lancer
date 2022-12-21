@@ -68,7 +68,9 @@ export default function OrderSummary({ style = {}, order }) {
                 color: "#62646a",
               }}
             >
-              {order?.planName}
+              {order?.gigQuantity > 1
+                ? order?.planName + " (X" + order?.gigQuantity + ")"
+                : order?.planName}
             </Typography>
           </Grid>
           <Grid
@@ -79,7 +81,7 @@ export default function OrderSummary({ style = {}, order }) {
             justifyContent="flex-end"
           >
             <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
-              ${order?.planCost}
+              ${order?.planCost * order?.gigQuantity}
             </Typography>
           </Grid>
         </Grid>
@@ -131,10 +133,17 @@ export default function OrderSummary({ style = {}, order }) {
                               }}
                             />
                           </ListItemIcon>
-                          <CustomListText
-                            primary={`${feature.title}`}
-                            disableTypography={true}
-                          />
+                          {feature.quantity > 1 ? (
+                            <CustomListText
+                              primary={`${feature.title} (X${feature.quantity})`}
+                              disableTypography={true}
+                            />
+                          ) : (
+                            <CustomListText
+                              primary={`${feature.title}`}
+                              disableTypography={true}
+                            />
+                          )}
                         </CustomListItem>
                       </Grid>
                       <Grid
