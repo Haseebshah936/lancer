@@ -1,10 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useReactCountdown } from "use-react-countdown";
 import { Grid, Button, Divider } from "@mui/material";
 import styled from "styled-components";
 import colors from "../../utils/colors";
+import DeliverOrderComp from "../OrderStausComp/DeliverOrderComp";
 
 export default function OrderCountDown() {
+  const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
+  const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
+  const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
+    useState(false);
+
   let dateToEndCountdownAt = "July 22, 2029 00:00:00";
   const { days, hours, minutes, seconds } =
     useReactCountdown(dateToEndCountdownAt);
@@ -17,6 +23,10 @@ export default function OrderCountDown() {
         borderRadius: "7px",
       }}
     >
+      <DeliverOrderComp
+        deliverOrderPopValue={deliverOrderPopValue}
+        setDeliverOrderPopValue={setDeliverOrderPopValue}
+      ></DeliverOrderComp>
       <Grid
         container
         display={"flex"}
@@ -58,6 +68,7 @@ export default function OrderCountDown() {
               minWidth: "135px",
               maxWidth: "135px",
             }}
+            onClick={() => setDeliverOrderPopValue(true)}
           >
             Deliver
           </Button>

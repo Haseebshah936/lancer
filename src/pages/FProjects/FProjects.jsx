@@ -23,61 +23,60 @@ import FSideBar from "../../pages/FSideBar/FSideBar";
 import Footer from "../../components/Footer/index";
 import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
+import LoadingComp from "../../components/LoadingComp/LoadingComp";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
   const { user } = useRealmContext();
+  const [loadingValue, setLoadingValue] = useState(false);
   const [allAvalibleProjects, setAllAvalibleProjects] = React.useState([]);
   const [myPerposals, setMyPerposals] = React.useState([]);
   const [ongoingProjects, setOngoingProjects] = useState([]);
   const allAvalibleProjectsFun = async () => {
-    const res = await requestMethod
-      .get(`project/pending/${user?._id}`)
-      .then((res) => {
-        console.log(res.data);
-        setAllAvalibleProjects(res.data);
-      });
+    setLoadingValue(true);
+    await requestMethod.get(`project/pending/${user?._id}`).then((res) => {
+      console.log(res.data);
+      setAllAvalibleProjects(res.data);
+    });
+    setLoadingValue(false);
   };
-  useEffect(() => {
-    allAvalibleProjectsFun();
-  }, []);
+  // useEffect(() => {
+  //   allAvalibleProjectsFun();
+  // }, []);
   const allMyPerposalsFun = async () => {
-    const res = await requestMethod
-      .get(`proposal/user/${user?._id}`)
-      .then((res) => {
-        console.log(res.data);
-        setMyPerposals(res.data);
-      });
+    setLoadingValue(true);
+    await requestMethod.get(`proposal/user/${user?._id}`).then((res) => {
+      console.log(res.data);
+      setMyPerposals(res.data);
+    });
+    setLoadingValue(false);
   };
-  useEffect(() => {
-    allMyPerposalsFun();
-  }, []);
+  // useEffect(() => {
+  //   allMyPerposalsFun();
+  // }, []);
   const allOngoingProjectsFun = async () => {
+    setLoadingValue(true);
     await requestMethod
       .get(`project/seller/onGoing/${user?._id}`)
       .then((res) => {
         console.log(res.data);
         setOngoingProjects(res.data);
       });
+    setLoadingValue(false);
   };
-  useEffect(() => {
-    allOngoingProjectsFun();
-  }, []);
 
-  useEffect(() => {
-    allMyPerposalsFun();
-    allAvalibleProjectsFun();
-    allOngoingProjectsFun();
-    console.log("allAvalibleProjects", allAvalibleProjects);
-    console.log("myPerposals", myPerposals);
-  }, [value]);
-  const handleChange = (event, newValue) => {
-    allMyPerposalsFun();
-    allAvalibleProjectsFun();
-    setTimeout(() => {
-      setValue(newValue);
-    }, 700);
-  };
+  // useEffect(() => {
+  //   allOngoingProjectsFun();
+  // }, []);
+
+  // useEffect(() => {
+  //   allMyPerposalsFun();
+  //   allAvalibleProjectsFun();
+  //   allOngoingProjectsFun();
+  //   // console.log("allAvalibleProjects", allAvalibleProjects);
+  //   // console.log("myPerposals", myPerposals);
+  // }, [value]);
+
   const getAllAvalibleProjects = async () => {
     const res = await requestMethod
       .get("project")
@@ -88,10 +87,37 @@ export default function FProjects() {
         console.log("err in catching all projects", err);
       });
   };
-
   useEffect(() => {
-    getAllAvalibleProjects();
+    setValue(value);
+    console.log("value", value);
+  }, [value]);
+  useEffect(() => {
+    // setLoadingValue(true);
+    // getAllAvalibleProjects();
+    // setLoadingValue(false);
+    // console.log("allAvalibleProjects", allAvalibleProjects);
+    // // while (true) {
+    // //   setTimeout(() => {
+    // //     console.log("Loading Value", loadingValue);
+    // //   }, 300);
+    // // }
+    handleChange("e", 0);
   }, []);
+
+  const handleChange = (event, newValue) => {
+    console.log("value in handel", loadingValue);
+    if (newValue === 0) {
+      allAvalibleProjectsFun();
+    } else if (newValue === 1) {
+      allMyPerposalsFun();
+    } else if (newValue === 2) {
+      allOngoingProjectsFun();
+    }
+    // allMyPerposalsFun();
+    // allAvalibleProjectsFun();
+    // allOngoingProjectsFun();
+    setValue(newValue);
+  };
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -182,19 +208,28 @@ export default function FProjects() {
                   </Box>
                   <Grid container>
                     <Grid item xs={12} display="flex" justifyContent={"center"}>
-                      {value === 0 && (
-                        <AvalibleProjects
-                          data={allAvalibleProjects}
-                        ></AvalibleProjects>
-                      )}
-                      {value === 1 && (
-                        <MyPerposals data={myPerposals}></MyPerposals>
-                      )}
-                      {value === 2 && (
-                        <OnGoingProjects
-                          data={ongoingProjects}
-                        ></OnGoingProjects>
-                      )}
+                      {value === 0 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <AvalibleProjects
+                            data={allAvalibleProjects}
+                          ></AvalibleProjects>
+                        ))}
+                      {value === 1 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <MyPerposals data={myPerposals}></MyPerposals>
+                        ))}
+                      {value === 2 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <OnGoingProjects
+                            data={ongoingProjects}
+                          ></OnGoingProjects>
+                        ))}
                       {value === 3 && (
                         <CompletedProjects
                           data={allProject}

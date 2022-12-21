@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Grid, Button, Divider, Box } from "@mui/material";
 // import { Timeline, TimelineEvent } from "react-event-timeline";
@@ -22,11 +22,13 @@ import FreelancerReviewTimeLine from "../../components/OrderStausComp/Freelancer
 import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
 import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
 import Footer from "../../components/Footer";
+import DeliverOrderComp from "../../components/OrderStausComp/DeliverOrderComp";
 
 export default function OrderStatus() {
   return (
     <div>
       <HeaderLoggedIn></HeaderLoggedIn>
+
       <Grid
         container
         // mr={{ xs: 0, sm: 3 }}
