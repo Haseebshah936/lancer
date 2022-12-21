@@ -293,10 +293,3 @@ const CustomListItem = styled(ListItem)({
   marginBottom: "5px",
   color: "#404145",
 });
-
-const ExtrasDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-`;
