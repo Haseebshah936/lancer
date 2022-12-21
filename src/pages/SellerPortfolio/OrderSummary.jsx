@@ -102,7 +102,7 @@ export default function OrderSummary({
 
           <Collapse in={open} timeout="auto" unmountOnExit>
             <CustomList sx={{ paddingTop: 0 }}>
-              {features.map((feature) => {
+              {features?.map((feature) => {
                 return (
                   <CustomListItem sx={{ padding: 0, pl: 4 }}>
                     <CustomListText
@@ -113,7 +113,7 @@ export default function OrderSummary({
                 );
               })}
 
-              {checkArr.map((feature) => {
+              {checkArr?.map((feature) => {
                 if (feature.checked) {
                   return (
                     <CustomListItem sx={{ padding: 0, pl: 4 }}>

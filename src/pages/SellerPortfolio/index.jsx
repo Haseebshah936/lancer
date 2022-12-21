@@ -195,7 +195,7 @@ function SellerPortfolio(props) {
         });
         setProductData(data);
 
-        console.log(data);
+        console.log("Product Data ", productData);
         const { _id: id1, ...package1 } = data.packages[0];
         const { _id: id2, ...package2 } = data.packages[1];
         const { _id: id3, ...package3 } = data.packages[2];
@@ -262,6 +262,7 @@ function SellerPortfolio(props) {
           IncGigQuantity={IncGigQuantity}
           DecGigQuantity={DecGigQuantity}
           Extras={productData ? productData.additionalFeatures : []}
+          productData={productData}
         />
         {productData ? (
           <Container>

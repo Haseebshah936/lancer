@@ -15,20 +15,57 @@ import colors from "../../utils/colors";
 import ExtrasCard from "./ExtrasCard";
 import MainCard from "./MainCard";
 import OrderSummary from "./OrderSummary";
+import { useNavigate } from "react-router-dom";
 
 export default function CartDrawer({
   gigQuantity,
   IncGigQuantity = () => {},
   DecGigQuantity = () => {},
   Extras,
+  productData,
+  // title = "",
+  // image = "",
 }) {
   const { setCartDrawer, cartDrawer, selectedPlan } = useCustomContext();
   const [checkArr, setCheckArr] = useState([]);
+  const [orderState, setOrderState] = useState({
+    title: "",
+    image: "",
+    planName: "",
+    planCost: 0,
+    features: [],
+    extraFeatures: [],
+    total: 0,
+    delivery: 0,
+  });
   const [total, setTotal] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log("Checked Array", checkArr);
+  }, [checkArr]);
+
+  useEffect(() => {
+    console.log("Order State", orderState);
+  }, [orderState]);
+
+  useEffect(() => {
+    setOrderState({
+      title: productData?.title,
+      image: productData?.images ? productData?.images[0] : "",
+      planName: selectedPlan?.name,
+      planCost: selectedPlan?.cost,
+      features: selectedPlan?.features,
+      extraFeatures: checkArr ? checkArr : [],
+      total: total ? total : selectedPlan?.cost,
+      delivery: selectedPlan?.delivery,
+    });
+  }, [total, selectedPlan, productData]);
 
   useEffect(() => {
     setTotal(selectedPlan.cost);
-  }, []);
+    console.log("Total", total);
+  }, [selectedPlan]);
 
   useEffect(() => {
     checkArr.map((item) => {
@@ -178,8 +215,12 @@ export default function CartDrawer({
                 marginBottom: "10px",
                 fontSize: "1.5rem",
               }}
-              text={`Continue ($900)`}
-              onClick={() => {}}
+              text={`Continue ($${total})`}
+              onClick={() => {
+                navigate(`/payments`, {
+                  state: orderState,
+                });
+              }}
             />
             <Typography variant="h6">You won't be charged yet</Typography>
           </Footer>

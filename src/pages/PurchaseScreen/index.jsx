@@ -1,5 +1,5 @@
-import { Grid, Typography } from "@mui/material";
-import React, { useState } from "react";
+import { CardMedia, Grid, Radio, RadioGroup, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import Cards from "react-credit-cards";
 import { Visa, Mastercard } from "react-pay-icons";
 import "react-credit-cards/es/styles-compiled.css";
@@ -12,8 +12,21 @@ import {
   formatExpirationDate,
 } from "../../utils/payment";
 import TextFieldComp from "../../components/GigComponent/TextFieldComp";
+import CustomIconButton from "../../components/CustomIconButton";
+
+import OrderSummary from "./OrderSummary";
+import colors from "../../utils/colors";
+
+import { jazz, EasyPaisa } from "../../assets";
+import { useLocation } from "react-router-dom";
 
 export default function PurchaseScreen() {
+  const { state } = useLocation();
+
+  useEffect(() => {
+    console.log("Order State from Navigation: ", state);
+  }, [state]);
+
   const [Card, setCard] = useState({
     number: "",
     name: "",
@@ -49,94 +62,189 @@ export default function PurchaseScreen() {
     setCard({ ...Card, [target.name]: target.value });
   };
 
+  const [select, setSelect] = useState("card");
+
+  useEffect(() => {
+    console.log("Select: ", select);
+  }, [select]);
+
   return (
     <>
       <Container>
         <HeaderLoggedIn />
 
         <Content>
-          <Grid container>
-            <Grid item container mobile={8}>
-              <Grid
-                item
-                container
-                flexDirection="row"
-                alignItems="center"
-                justifyContent="flex-start"
-                mobile={12}
+          <Grid container columnSpacing={{ laptop: 2, desktop: 0 }}>
+            <Grid item mobile={12} laptop={7}>
+              <RadioGroup
+                sx={{ m: 0, p: 0, width: "100%" }}
+                defaultValue="card"
+                name="payment"
+                value={select}
+                onChange={(event) => {
+                  setSelect(event.target.value);
+                }}
               >
-                <Typography variant="h4">Credit & Debit Cards</Typography>
-                <Visa style={{ marginLeft: "5px", width: "2.5rem" }} />
-                <Mastercard style={{ marginLeft: "5px", width: "2.5rem" }} />
-              </Grid>
-
-              <Grid item container mobile={12} sx={{ mt: 1 }}>
-                <Grid item mobile={5.75}>
-                  <TextFieldComp
-                    label="Enter Your Full Name"
-                    name="name"
-                    value={Card.name}
-                    pattern="[a-z A-Z-]+"
-                    // error={errors.gigTitle}
-                    onChange={handleInputChange}
-                    onFocus={handleInputFocus}
+                <RadioContainer>
+                  <Radio
+                    value="card"
+                    sx={{
+                      color: colors.textGreen,
+                      "&.Mui-checked": {
+                        color: colors.textGreen,
+                      },
+                    }}
                   />
-                </Grid>
-                <Grid item mobile={0.5}></Grid>
 
-                <Grid item mobile={5.75}>
-                  <TextFieldComp
-                    label="Card Number"
-                    name="number"
-                    value={Card.number}
-                    type="tel"
-                    pattern="[\d| ]{16,22}"
-                    // error={errors.gigTitle}
-                    onChange={handleInputChange}
-                    onFocus={handleInputFocus}
-                  />
-                </Grid>
-              </Grid>
+                  <Typography variant="h4">Credit & Debit Cards</Typography>
+                  <Visa style={{ marginLeft: "5px", width: "2.5rem" }} />
+                  <Mastercard style={{ marginLeft: "5px", width: "2.5rem" }} />
+                </RadioContainer>
 
-              <Grid item container mobile={12}>
-                <Grid item mobile={5.75}>
-                  <TextFieldComp
-                    label="Expiration Date"
-                    type="tel"
-                    name="expiry"
-                    value={Card.expiry}
-                    pattern="\d\d/\d\d"
-                    // error={errors.gigTitle}
-                    onChange={handleInputChange}
-                    onFocus={handleInputFocus}
-                  />
-                </Grid>
-                <Grid item mobile={0.5}></Grid>
+                {select === "card" && (
+                  <Grid container mobile={12} sx={{ my: 2 }}>
+                    <Grid item container mobile={12}>
+                      <Grid container justifyContent="center" mobile={12}>
+                        <Grid item mobile={12}>
+                          <Cards
+                            cvc={Card.cvc}
+                            expiry={Card.expiry}
+                            focused={Card.focused}
+                            name={Card.name}
+                            number={Card.number}
+                            callback={handleCallback}
+                          />
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        item
+                        container
+                        mobile={12}
+                        rowSpacing={1}
+                        sx={{ pt: 2 }}
+                      >
+                        <Grid item mobile={12} laptop={5.75}>
+                          <TextFieldComp
+                            label="Enter Your Full Name"
+                            name="name"
+                            value={Card.name}
+                            pattern="[a-z A-Z-]+"
+                            // error={errors.gigTitle}
+                            onChange={handleInputChange}
+                            onFocus={handleInputFocus}
+                          />
+                        </Grid>
+                        <Grid item mobile={12} laptop={0.5}></Grid>
 
-                <Grid item mobile={5.75}>
-                  <TextFieldComp
-                    label="Security Code"
-                    type="tel"
-                    name="cvc"
-                    value={Card.cvc}
-                    pattern="\d{3}"
-                    // error={errors.gigTitle}
-                    onChange={handleInputChange}
-                    onFocus={handleInputFocus}
+                        <Grid item mobile={12} laptop={5.75}>
+                          <TextFieldComp
+                            label="Card Number"
+                            name="number"
+                            value={Card.number}
+                            type="tel"
+                            pattern="[\d| ]{16,22}"
+                            // error={errors.gigTitle}
+                            onChange={handleInputChange}
+                            onFocus={handleInputFocus}
+                          />
+                        </Grid>
+                      </Grid>
+
+                      <Grid
+                        item
+                        container
+                        rowSpacing={1}
+                        mobile={12}
+                        sx={{ pt: 2 }}
+                      >
+                        <Grid item mobile={12} laptop={5.75}>
+                          <TextFieldComp
+                            label="Expiration Date"
+                            type="tel"
+                            name="expiry"
+                            value={Card.expiry}
+                            pattern="\d\d/\d\d"
+                            // error={errors.gigTitle}
+                            onChange={handleInputChange}
+                            onFocus={handleInputFocus}
+                          />
+                        </Grid>
+                        <Grid item mobile={12} laptop={0.5}></Grid>
+
+                        <Grid item mobile={12} laptop={5.75}>
+                          <TextFieldComp
+                            label="Security Code"
+                            type="tel"
+                            name="cvc"
+                            value={Card.cvc}
+                            pattern="\d{3}"
+                            // error={errors.gigTitle}
+                            onChange={handleInputChange}
+                            onFocus={handleInputFocus}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                )}
+
+                <RadioContainer>
+                  <Radio
+                    value="jazz"
+                    sx={{
+                      color: colors.textGreen,
+                      "&.Mui-checked": {
+                        color: colors.textGreen,
+                      },
+                    }}
                   />
-                </Grid>
-              </Grid>
+                  <Typography variant="h4">JazzCash</Typography>
+                  <CardMedia
+                    sx={{ ml: 1 }}
+                    component="img"
+                    sizes="contain"
+                    style={{
+                      width: "35px",
+                    }}
+                    image={jazz}
+                    alt="Gig Image"
+                  />
+                </RadioContainer>
+
+                <RadioContainer>
+                  <Radio
+                    value="easypaisa"
+                    sx={{
+                      color: colors.textGreen,
+                      "&.Mui-checked": {
+                        color: colors.textGreen,
+                      },
+                    }}
+                  />
+
+                  <Typography variant="h4">EasyPaisa</Typography>
+                  <CardMedia
+                    sx={{ ml: 1 }}
+                    component="img"
+                    sizes="contain"
+                    style={{
+                      width: "30px",
+                    }}
+                    image={EasyPaisa}
+                    alt="Gig Image"
+                  />
+                </RadioContainer>
+              </RadioGroup>
             </Grid>
 
-            <Grid item container mobile={4}>
-              <Cards
-                cvc={Card.cvc}
-                expiry={Card.expiry}
-                focused={Card.focused}
-                name={Card.name}
-                number={Card.number}
-                callback={handleCallback}
-              />
+            <Grid item mobile={1}></Grid>
+
+            <Grid item mobile={12} laptop={4}>
+              <Grid item container justifyContent="center" mobile={12}>
+                <Grid item mobile={12}>
+                  <OrderSummary order={state} style={{ mt: 0 }} />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </Content>
@@ -156,4 +264,12 @@ const Container = styled.div`
 
 const Content = styled.div`
   padding-inline: 7%;
+`;
+
+const RadioContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5px 0px;
 `;
