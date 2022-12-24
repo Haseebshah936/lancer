@@ -1,3 +1,4 @@
+import { ButtonBase } from "@material-ui/core";
 import { ExitToApp, Report } from "@material-ui/icons";
 import { Logout } from "@mui/icons-material";
 import { Button, CircularProgress, Paper } from "@mui/material";
@@ -5,12 +6,14 @@ import { Box } from "@mui/system";
 import React from "react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "../../requestMethod";
 import colors from "../../utils/colors";
 import { handleError } from "../../utils/helperFunctions";
 import CustomIconButton from "../CustomIconButton";
+import CustomReportModal from "../CustomReportModal";
 import ProfileComponent from "../ProfileComponent";
 import MorePopper from "./MorePoper";
 
@@ -27,6 +30,20 @@ function ChatInfo({ drawer }) {
   const [data, setData] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [activeParticipant, setActiveParticipant] = useState(null);
+  const [participantDetails, setParticipantDetails] = useState({
+    ordersCount: 0,
+  });
+  const [toggle, setToggle] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleOpenReport = () => {
+    setToggle(true);
+  };
+
+  const handleCloseReport = () => {
+    setToggle(false);
+  };
 
   const expandDescription = () => {
     setDescription({
@@ -57,6 +74,22 @@ function ChatInfo({ drawer }) {
           data: [],
           loading: false,
         });
+      });
+  };
+
+  const getParticipantDetails = () => {
+    requestMethod
+      .get(
+        `/project/projectBetween/${active?.participantId}/${active?.userParticipantId}`
+      )
+      .then((res) => {
+        console.log(res);
+        setParticipantDetails({
+          ordersCount: res.data.count,
+        });
+      })
+      .catch((err) => {
+        handleError(err);
       });
   };
 
@@ -124,7 +157,24 @@ function ChatInfo({ drawer }) {
       });
   };
 
+  const leaveGroup = () => {
+    removeParticipant(active?.userParticipantId);
+  };
+
+  const resetState = () => {
+    setActiveParticipant(null);
+    setParticipants({
+      data: [],
+      loading: true,
+    });
+    setDescription({
+      text: "",
+      showMore: false,
+    });
+  };
+
   useEffect(() => {
+    console.log(active);
     if (active?.description && active.description.length > 200) {
       setDescription((prev) => {
         return {
@@ -139,16 +189,9 @@ function ChatInfo({ drawer }) {
       });
     }
     if (active && drawer && active?.isGroup) getParticipants();
+    if (active && drawer && !active?.isGroup) getParticipantDetails();
     return () => {
-      setActiveParticipant(null);
-      setParticipants({
-        data: [],
-        loading: true,
-      });
-      setDescription({
-        text: "",
-        showMore: false,
-      });
+      resetState();
     };
   }, [active, drawer]);
 
@@ -158,7 +201,16 @@ function ChatInfo({ drawer }) {
         <ImageContainer>
           <Image src={active.avatar} />
         </ImageContainer>
-        <Title>{active.title}</Title>
+        <Title
+          onClick={() => {
+            if (!active?.isGroup) {
+              navigate(`/profile/${active?.participantId}`);
+            }
+          }}
+          isGroup={active.isGroup}
+        >
+          {active.title}
+        </Title>
         <Description>
           {description.text}
           {description?.showMore && (
@@ -204,25 +256,42 @@ function ChatInfo({ drawer }) {
           )}
         </Participants>
       ) : (
-        <ParticipantDetail></ParticipantDetail>
+        <ParticipantDetail>
+          <ParticipantOrderDetails>
+            <OrderTitle>Orders</OrderTitle>
+            <OrderCount>{participantDetails?.ordersCount}</OrderCount>
+          </ParticipantOrderDetails>
+        </ParticipantDetail>
       )}
 
+      {active.isGroup && (
+        <CustomIconButton
+          style={buttonStyles}
+          text={"Exit Group"}
+          leftIcon={
+            <Logout
+              sx={{
+                transform: "rotate(180deg)",
+              }}
+            />
+          }
+          onClick={leaveGroup}
+        />
+      )}
       <CustomIconButton
-        style={buttonStyles}
-        text={"Exit Group"}
-        leftIcon={
-          <Logout
-            sx={{
-              transform: "rotate(180deg)",
-            }}
-          />
-        }
-        onClick={() => removeParticipant(active?.userParticipantId)}
-      />
-      <CustomIconButton
-        style={buttonStyles}
-        text={"Report Group"}
+        style={{
+          ...buttonStyles,
+          backgroundColor: colors.black,
+          marginBottom: "2rem",
+        }}
+        text={`Report ${active?.isGroup ? " Group" : " Chat"}`}
         leftIcon={<Report />}
+        onClick={handleOpenReport}
+      />
+      <CustomReportModal
+        chatroomId={active?.id}
+        toggleClose={handleCloseReport}
+        toggle={toggle}
       />
     </Container>
   );
@@ -264,6 +333,10 @@ const Title = styled.h3`
   font-size: 2rem;
   font-weight: bold;
   margin-block: 1rem;
+  &:hover {
+    cursor: ${(props) => (!props.isGroup ? "pointer" : "default")};
+    text-decoration: ${(props) => (!props.isGroup ? "underline" : "default")};
+  }
 `;
 
 const Description = styled.p`
@@ -298,9 +371,26 @@ const ParticipantDetail = styled.div`
   flex: 1;
 `;
 
+const ParticipantOrderDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-inline: 2rem;
+`;
+
+const OrderTitle = styled.h4`
+  font-size: 1.2rem;
+  font-weight: bold;
+`;
+
+const OrderCount = styled.p`
+  font-size: 1rem;
+`;
+
 const buttonStyles = {
   marginTop: "0rem",
   marginBottom: "1rem",
-  backgroundColor: colors.googleRed,
+  backgroundColor: colors.gray,
   width: "50%",
 };
