@@ -16,8 +16,33 @@ import styled from "styled-components";
 import { teamImg } from "../../assets";
 import CustomIconButton from "../../components/CustomIconButton";
 import colors from "../../utils/colors";
+import Joi from "joi-browser";
 
-export default function OrderSummary({ style = {}, order }) {
+export default function OrderSummary({ style = {}, order, Card, setErrors }) {
+  const CardSchema = {
+    name: Joi.string().required().label("Name"),
+    number: Joi.string().creditCard().required().label("Card Number"),
+    expiry: Joi.date().greater("now").required().label("Expiration Date"),
+    cvc: Joi.number().min(3).max(3).required().label("CVC/Security Code"),
+  };
+
+  const Validate = () => {
+    const result = Joi.validate(Card, CardSchema, {
+      abortEarly: false,
+    });
+    if (!result.error) {
+      setErrors({});
+      console.log("No Error");
+      return null;
+    }
+    const error = {};
+    for (let item of result.error.details) {
+      error[item.path[0]] = item.message;
+    }
+    setErrors(error);
+    return error;
+  };
+
   return (
     <>
       <Paper
@@ -244,7 +269,9 @@ export default function OrderSummary({ style = {}, order }) {
                 fontSize: "1.5rem",
               }}
               text={`Pay Now`}
-              onClick={() => {}}
+              onClick={() => {
+                Validate();
+              }}
             />
             <Grid
               item

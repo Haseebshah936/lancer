@@ -19,13 +19,15 @@ import colors from "../../utils/colors";
 
 import { jazz, EasyPaisa } from "../../assets";
 import { useLocation } from "react-router-dom";
+import { useCallback } from "react";
 
 export default function PurchaseScreen() {
+  const [errors, setErrors] = useState([]);
   const { state } = useLocation();
 
   useEffect(() => {
-    console.log("Order State from Navigation: ", state);
-  }, [state]);
+    console.log("Errors", errors);
+  }, [errors]);
 
   const [Card, setCard] = useState({
     number: "",
@@ -37,11 +39,23 @@ export default function PurchaseScreen() {
     formData: null,
   });
 
-  const handleCallback = ({ issuer }, isValid) => {
-    if (isValid) {
-      setCard({ issuer });
-    }
-  };
+  const handleCallback = useCallback(
+    ({ issuer }, isValid) => {
+      console.log("Evernt", issuer);
+      console.log("isValid", isValid);
+      if (isValid) {
+        setCard({ ...Card, issuer });
+        console.log("Valid ", issuer);
+      }
+    },
+    [Card]
+  );
+
+  // const handleCallback = ({ issuer }, isValid) => {
+  //   if (isValid) {
+  //     setCard({ issuer });
+  //   }
+  // };
 
   const handleInputFocus = ({ target }) => {
     setCard({
@@ -67,6 +81,10 @@ export default function PurchaseScreen() {
   useEffect(() => {
     console.log("Select: ", select);
   }, [select]);
+
+  useEffect(() => {
+    console.log("Card:", Card);
+  }, [Card]);
 
   return (
     <>
@@ -112,7 +130,7 @@ export default function PurchaseScreen() {
                             focused={Card.focused}
                             name={Card.name}
                             number={Card.number}
-                            callback={handleCallback}
+                            callback={(e, j) => handleCallback(e, j)}
                           />
                         </Grid>
                       </Grid>
@@ -184,6 +202,7 @@ export default function PurchaseScreen() {
                           />
                         </Grid>
                       </Grid>
+                      <input type="hidden" name="issuer" value={Card.issuer} />
                     </Grid>
                   </Grid>
                 )}
@@ -242,7 +261,13 @@ export default function PurchaseScreen() {
             <Grid item mobile={12} laptop={4}>
               <Grid item container justifyContent="center" mobile={12}>
                 <Grid item mobile={12}>
-                  <OrderSummary order={state} style={{ mt: 0 }} />
+                  <OrderSummary
+                    Card={Card}
+                    errors={errors}
+                    setErrors={setErrors}
+                    order={state}
+                    style={{ mt: 0 }}
+                  />
                 </Grid>
               </Grid>
             </Grid>
