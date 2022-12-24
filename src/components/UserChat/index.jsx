@@ -372,7 +372,17 @@ function Chat(props) {
             onSend={(message) => handleSend(message, user, active, setNewData)}
           />
           <RightDrawer drawer={drawer} toggleDrawer={toggleDrawer}>
-            <ChatInfo drawer={drawer} />
+            <ChatInfo
+              drawer={drawer}
+              removeChatroom={(id) => {
+                setChatRooms(
+                  chatRooms.filter((chatroom) => chatroom.id !== id)
+                );
+                setChatRoomsData(
+                  chatRoomsData.filter((chatroom) => chatroom.id !== id)
+                );
+              }}
+            />
           </RightDrawer>
         </MessageContainer>
       )}
