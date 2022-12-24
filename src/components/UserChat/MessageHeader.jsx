@@ -39,6 +39,7 @@ function MessageHeader({
   onClickCall = () => {},
   onClickVideoCall = () => {},
   temp = true,
+  toggleDrawer = () => {},
 }) {
   const today = new Date().getTime();
   const dateToday = new Date(today).getDate();
@@ -112,6 +113,7 @@ function MessageHeader({
               },
             }}
             LinkComponent={"h5"}
+            onClick={toggleDrawer}
           >
             <Typography variant="h5" sx={{ cursor: "pointer" }}>
               {name}

@@ -1,11 +1,13 @@
+import { Box } from "@mui/material";
 import React, { useEffect } from "react";
-import { useCallback } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
 import { handleError } from "../../utils/helperFunctions";
 import CustomMessageBox from "./CustomMessageBox";
 import { handleMessageFormation } from "./HelperFunctions";
+import RightDrawer from "./RightDrawer";
 
 function MessagesContainer({
   data,
@@ -42,6 +44,7 @@ function MessagesContainer({
       breakAsyncIterator = true; // Exit async iterator
     };
   }, []);
+
   return (
     <ChatContainer onScroll={handleScroll} ref={scrollRef}>
       {newData.length > 0 ? (

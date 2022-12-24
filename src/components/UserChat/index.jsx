@@ -49,6 +49,8 @@ import {
   handleSend,
   handleVideoCall,
 } from "./handlersForIndex";
+import RightDrawer from "./RightDrawer";
+import ChatInfo from "./ChatInfo";
 
 function Chat(props) {
   const messageRef = useRef();
@@ -73,6 +75,12 @@ function Chat(props) {
 
   const [toggle, setToggle] = useState(false);
   const [called, setCalled] = useState(false);
+
+  const [drawer, setDrawer] = useState(true);
+
+  const toggleDrawer = (state) => {
+    setDrawer(state);
+  };
 
   const handleToggle = () => {
     setToggle(true);
@@ -235,6 +243,7 @@ function Chat(props) {
         setNewData,
         setReRender
       );
+    setDrawer(false);
   }, [active]);
 
   useEffect(() => {
@@ -334,6 +343,7 @@ function Chat(props) {
             onClickVideoCall={handleVideoCall}
             temp={active.id === location.state?.id}
             userId={active.participantId}
+            toggleDrawer={() => toggleDrawer(true)}
           />
           {!reRender && (
             <MessagesContainer
@@ -358,10 +368,12 @@ function Chat(props) {
               reRender={reRender}
             />
           )}
-          {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
           <ChatInput
             onSend={(message) => handleSend(message, user, active, setNewData)}
           />
+          <RightDrawer drawer={drawer} toggleDrawer={toggleDrawer}>
+            <ChatInfo drawer={drawer} />
+          </RightDrawer>
         </MessageContainer>
       )}
     </Container>
