@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useRealmContext } from "../../db/RealmContext";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "../../requestMethod";
 import colors from "../../utils/colors";
@@ -17,8 +18,9 @@ import CustomReportModal from "../CustomReportModal";
 import ProfileComponent from "../ProfileComponent";
 import MorePopper from "./MorePoper";
 
-function ChatInfo({ drawer }) {
-  const { activeChatroom: active } = useCustomContext();
+function ChatInfo({ drawer, removeChatroom }) {
+  const { activeChatroom: active, setActiveChatroom } = useCustomContext();
+  const { user } = useRealmContext();
   const [description, setDescription] = useState({
     text: "",
     showMore: false,
@@ -61,10 +63,13 @@ function ChatInfo({ drawer }) {
           data: res.data,
           loading: false,
         });
-        const isAdmin = res.data.filter((participants) => {
-          participants._id === active.userParticipantId && setIsAdmin(true);
+        const isAdmin = res.data.filter((participant) => {
+          return (
+            participant._id === active.userParticipantId && participant?.isAdmin
+          );
         });
         if (isAdmin.length > 0) {
+          console.log("Is Admin", isAdmin);
           setIsAdmin(true);
         }
       })
@@ -159,6 +164,8 @@ function ChatInfo({ drawer }) {
 
   const leaveGroup = () => {
     removeParticipant(active?.userParticipantId);
+    removeChatroom(active?.id);
+    setActiveChatroom(null);
   };
 
   const resetState = () => {
@@ -236,7 +243,9 @@ function ChatInfo({ drawer }) {
                 ordersBoxTitle=""
                 orders={participant?.isAdmin ? "Admin" : "Participant"}
                 component={
-                  isAdmin && participant?._id !== active?.userParticipantId ? (
+                  isAdmin &&
+                  participant?._id !== active?.userParticipantId &&
+                  participant?._id !== user._id ? (
                     <MorePopper
                       onClick={() => {
                         setActiveParticipant(participant?._id);
