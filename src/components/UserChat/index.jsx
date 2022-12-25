@@ -341,6 +341,9 @@ function Chat(props) {
             onBackClick={handleBackClick}
             onClickCall={handleCall}
             onClickVideoCall={handleVideoCall}
+            onMeetingClick={(message) =>
+              handleSend(message, user, active, setNewData)
+            }
             temp={active.id === location.state?.id}
             userId={active.participantId}
             toggleDrawer={() => toggleDrawer(true)}
@@ -453,7 +456,7 @@ const MessageContainer = styled.div`
     max-width: 70%;
     padding-right: 1.2rem;
     color: #4b3030;
-    min-width: auto;
+    min-width: 25%;
     box-shadow: none;
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
@@ -463,11 +466,19 @@ const MessageContainer = styled.div`
     color: ${colors.white};
   }
 
+  .rce-mbox-time {
+    margin-top: 1rem;
+    color: ${colors.white};
+  }
+
   .rce-mbox.rce-mbox-right {
     color: ${colors.black};
     padding-top: 1.2rem;
     background-color: ${colors.userChatMessageBackground};
     .rce-mbox-text {
+      color: ${colors.black};
+    }
+    .rce-mbox-time {
       color: ${colors.black};
     }
   }
@@ -483,6 +494,9 @@ const MessageContainer = styled.div`
   }
   ${miniTablet({
     flexDirection: "column",
+    ".rce-mbox": {
+      minWidth: "40%",
+    },
   })}
   ${mobile({
     ".rce-mbox": {

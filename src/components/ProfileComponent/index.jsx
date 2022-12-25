@@ -11,11 +11,12 @@ function ProfileComponent({
   ordersBoxTitle = "Orders",
   orderBoxStyle,
   component,
+  onClick = () => {},
   ...props
 }) {
   return (
     <Container style={style} {...props}>
-      <Wrapper>
+      <Wrapper onClick={onClick}>
         {count && <CountText>{count}</CountText>}
         <Image src={url} />
         <DetailsContainer>
@@ -58,6 +59,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
+  width: 50%;
 `;
 
 const CountText = styled.h3`

@@ -1,9 +1,16 @@
 import React from "react";
-import { Avatar, MessageBox } from "react-chat-elements";
+import {
+  Avatar,
+  MeetingItem,
+  MeetingLink,
+  MessageBox,
+} from "react-chat-elements";
 import styled from "styled-components";
 import AutoLinkText from "react-autolink-text2";
 import colors from "../../utils/colors";
 import { miniMobile, mobile } from "../../responsive";
+import "react-chat-elements/dist/main.css";
+import { toast } from "react-toastify";
 
 function CustomMessageBox({
   position,
@@ -28,16 +35,30 @@ function CustomMessageBox({
           marginLeft: position === "left" ? "1.5rem" : 0,
         }}
       >
-        <MessageBox
-          position={position}
-          type={type}
-          title={title}
-          text={props?.text && <AutoLinkText text={props?.text} />}
-          data={props?.data}
-          {...props}
-          onDownload={() => handleDownload(props?.data?.uri)}
-          // onClick={() => handleDownload(props?.data?.uri)}
-        />
+        {type !== "meetingLink" ? (
+          <MessageBox
+            position={position}
+            type={type}
+            title={title}
+            text={props?.text && <AutoLinkText text={props?.text} />}
+            data={props?.data}
+            {...props}
+            onDownload={() => handleDownload(props?.data?.uri)}
+            onMeetingLinkClick={() => handleDownload(props?.data?.uri)}
+            // onClick={() => handleDownload(props?.data?.uri)}
+          />
+        ) : (
+          <MeetingItem
+            subject={props?.text}
+            {...props}
+            avatars={[{ src: avatar }]}
+            onMeetingClick={() => handleDownload(props?.data?.uri)}
+            onShareClick={() => {
+              toast.success("Meeting Link Copied");
+              navigator.clipboard.writeText(props?.data?.uri);
+            }}
+          />
+        )}
         <Triangle position={position} />
       </Wrapper>
     </Container>
@@ -114,6 +135,14 @@ const Container = styled.div`
   .rce-mbox-file > button > * {
     padding: 0rem 0.5rem;
   }
+
+  .rce-mtitem-button {
+    background-color: ${colors.becomePartnerButtonGreen};
+  }
+  .rce-mtitem-share {
+    color: ${colors.becomePartnerButtonGreen};
+  }
+
   ${miniMobile({
     ".rce-mbox-file>button>*": {
       padding: "0rem .4rem",

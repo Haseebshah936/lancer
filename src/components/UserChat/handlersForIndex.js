@@ -66,6 +66,7 @@ export const handleSend = (message, user, active, setNewData) => {
     userId: {
       _id: user._id,
       name: user.name,
+      profilePic: user.profilePic,
     },
   };
   setNewData((prev) => [...prev, newMessage]);

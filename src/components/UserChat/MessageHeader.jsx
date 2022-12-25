@@ -3,6 +3,7 @@ import {
   ArrowBack,
   Call,
   Circle,
+  Event,
   FiberManualRecord,
   Videocam,
 } from "@mui/icons-material";
@@ -27,6 +28,7 @@ import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
 import displayTime from "../../utils/DateAndTime/displayTime";
 import { handleError } from "../../utils/helperFunctions";
+import CreateMeeting from "../CreateMeeting";
 import GroupsModal from "../GroupsModal";
 
 function MessageHeader({
@@ -40,6 +42,7 @@ function MessageHeader({
   onClickVideoCall = () => {},
   temp = true,
   toggleDrawer = () => {},
+  onMeetingClick = () => {},
 }) {
   const today = new Date().getTime();
   const dateToday = new Date(today).getDate();
@@ -47,6 +50,12 @@ function MessageHeader({
   const yearToday = new Date(today).getFullYear();
   const { activeChatroomStatus } = useCustomContext();
   const [toggle, setToggle] = useState(false);
+  const [toggleMetting, setToggleMeeting] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const handleToggleMeeting = () => {
+    setToggleMeeting(true);
+  };
 
   const handleToggle = () => {
     setToggle(true);
@@ -72,6 +81,20 @@ function MessageHeader({
       });
   };
 
+  const handleMeetingCreation = (details) => {
+    const msg = {
+      userId: 1,
+      userName: "Haseeb",
+      type: "meetingLink",
+      data: {
+        uri: "https://meet.google.com/mgm-xttq-adf",
+      },
+      text: details || "Meeting Created",
+    };
+    setToggleMeeting(false);
+    onMeetingClick(msg);
+  };
+
   const isMatchToday = (date) => {
     const roundDate = new Date(date).getDate();
     const roundMonth = new Date(date).getMonth();
@@ -92,6 +115,7 @@ function MessageHeader({
         )
       : new Date(activeChatroomStatus?.isOnline).toDateString();
   };
+
   return (
     <Container>
       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -149,12 +173,20 @@ function MessageHeader({
         </Box>
       </Box>
       <Box sx={{ display: "flex", alignItems: "center" }}>
-        <IconButton onClick={onClickVideoCall}>
-          <Videocam fontSize="large" />
-        </IconButton>
-        <IconButton onClick={onClickCall}>
-          <Call fontSize="large" />
-        </IconButton>
+        {!isGroup ? (
+          <>
+            <IconButton onClick={onClickVideoCall}>
+              <Videocam fontSize="large" />
+            </IconButton>
+            <IconButton onClick={onClickCall}>
+              <Call fontSize="large" />
+            </IconButton>
+          </>
+        ) : (
+          <IconButton onClick={handleToggleMeeting}>
+            <Event fontSize="large" />
+          </IconButton>
+        )}
         {!isGroup && (
           <Tooltip title="Add to group">
             <IconButton
@@ -176,6 +208,18 @@ function MessageHeader({
         <GroupsModal
           toggleClose={handleClose}
           handleAddToGroup={handleAddToGroup}
+        />
+      </Modal>
+      <Modal
+        open={toggleMetting}
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <CreateMeeting
+          loading={loading}
+          toggleClose={() => setToggleMeeting(false)}
+          onSubmit={(details) => handleMeetingCreation(details)}
         />
       </Modal>
     </Container>

@@ -58,7 +58,7 @@ function ChatInfo({ drawer, removeChatroom }) {
     requestMethod
       .get("/chatroom/participants/" + active.id)
       .then((res) => {
-        console.log(res);
+        console.log("Participants ", res);
         setParticipants({
           data: res.data,
           loading: false,
@@ -163,9 +163,18 @@ function ChatInfo({ drawer, removeChatroom }) {
   };
 
   const leaveGroup = () => {
-    removeParticipant(active?.userParticipantId);
-    removeChatroom(active?.id);
-    setActiveChatroom(null);
+    removeParticipant();
+    requestMethod
+      .put(`/chatroom/removeParticipant/${active?.id}`, {
+        userId: active?.userParticipantId,
+      })
+      .then((res) => {
+        removeChatroom(active?.id);
+        setActiveChatroom(null);
+      })
+      .catch((err) => {
+        handleError(err);
+      });
   };
 
   const resetState = () => {
@@ -242,6 +251,9 @@ function ChatInfo({ drawer, removeChatroom }) {
                 earning={null}
                 ordersBoxTitle=""
                 orders={participant?.isAdmin ? "Admin" : "Participant"}
+                onClick={() => {
+                  navigate(`/profile/${participant?.userId?._id}`);
+                }}
                 component={
                   isAdmin &&
                   participant?._id !== active?.userParticipantId &&
