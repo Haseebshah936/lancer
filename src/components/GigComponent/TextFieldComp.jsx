@@ -11,6 +11,7 @@ export default function TextFieldComp({
   pattern,
   onFocus,
   type,
+  errmsg = "Field is Required",
 }) {
   return (
     <>
@@ -32,7 +33,7 @@ export default function TextFieldComp({
         id="fullWidth"
         variant="outlined"
         error={error === undefined ? false : true}
-        helperText={error === undefined ? "" : "Please Enter Gig Title"}
+        helperText={error === undefined ? "" : errmsg}
         name={name}
         label={label}
         value={value}

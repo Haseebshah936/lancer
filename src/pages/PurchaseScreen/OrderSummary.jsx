@@ -17,22 +17,73 @@ import { teamImg } from "../../assets";
 import CustomIconButton from "../../components/CustomIconButton";
 import colors from "../../utils/colors";
 import Joi from "joi-browser";
+import { useRealmContext } from "../../db/RealmContext";
+import { toast } from "react-toastify";
+import { handleError } from "../../utils/helperFunctions";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function OrderSummary({ style = {}, order, Card, setErrors }) {
+export default function OrderSummary({
+  style = {},
+  order,
+  Card,
+  setErrors,
+  method,
+}) {
+  const { currentUser } = useRealmContext();
+  const navigate = useNavigate();
+
   const CardSchema = {
     name: Joi.string().required().label("Name"),
-    number: Joi.string().creditCard().required().label("Card Number"),
-    expiry: Joi.date().greater("now").required().label("Expiration Date"),
-    cvc: Joi.number().min(3).max(3).required().label("CVC/Security Code"),
+    number: Joi.string().length(19).required().label("Card Number"),
+    // expiry: Joi.date().greater("now").required().label("Expiration Date"),
+    expiry: Joi.string(),
+    cvc: Joi.string().length(3).required().label("CVC/Security Code"),
+    issuer: Joi.string(),
+    focused: Joi.string(),
   };
 
   const Validate = () => {
+    // const tempCard = { ...Card, expiry: `00-${Card.expiry.replace("/", "-")}` };
+    console.log(" currentUser.id", currentUser.id);
+
     const result = Joi.validate(Card, CardSchema, {
       abortEarly: false,
     });
+    console.log("Errors Result: ", result);
     if (!result.error) {
       setErrors({});
       console.log("No Error");
+
+      const Project = {
+        title: order.title,
+        freelancerId: order.freelancerId,
+        employerId: currentUser.id,
+        amount: order.total,
+        paymentMethod: method,
+        productId: order.gigID,
+        days: order.delivery,
+        revisionsAllowed: "3",
+        extras: order.extraFeatures,
+      };
+
+      (async () => {
+        try {
+          console.log(Project);
+          const response = await axios.post(
+            "http://localhost:3003/api/invoice/invoiceAndProject",
+            Project
+          );
+          // gig = {};
+
+          toast.success("Order Placed Successfully");
+          // setLoading(false);
+          navigate("/home");
+        } catch (error) {
+          handleError(error);
+        }
+      })();
+
       return null;
     }
     const error = {};

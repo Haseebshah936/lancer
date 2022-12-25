@@ -61,6 +61,8 @@ export default function CartDrawer({
       total: total ? total : selectedPlan?.cost,
       delivery: selectedPlan?.delivery,
       gigQuantity: gigQuantity,
+      gigID: productData?._id,
+      freelancerId: productData?.owner?._id?._id,
     });
   }, [total, selectedPlan, productData]);
 
