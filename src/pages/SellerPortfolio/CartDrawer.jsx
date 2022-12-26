@@ -72,35 +72,35 @@ export default function CartDrawer({
   }, [selectedPlan]);
 
   useEffect(() => {
-    checkArr.map((item) => {
-      if (item.checked) {
-        console.log("Cost", item.cost);
-        console.log("quantity", item.quantity);
+    checkArr?.map((item) => {
+      if (item?.checked) {
+        console.log("Cost", item?.cost);
+        console?.log("quantity", item?.quantity);
 
-        let t = selectedPlan.cost * gigQuantity + item.cost * item.quantity;
+        let t = selectedPlan?.cost * gigQuantity + item?.cost * item?.quantity;
         setTotal(t);
       } else {
-        setTotal(selectedPlan.cost * gigQuantity);
+        setTotal(selectedPlan?.cost * gigQuantity);
       }
     });
   }, [checkArr, gigQuantity]);
 
   useEffect(() => {
     if (Extras) {
-      console.log("Additional", Extras);
-      const ExtraArr = Extras.map((item) => {
-        if (item.active) {
+      console?.log("Additional", Extras);
+      const ExtraArr = Extras?.map((item) => {
+        if (item?.active) {
           return {
-            title: item.title,
+            title: item?.title,
             quantity: 0,
             checked: false,
-            cost: item.cost,
+            cost: item?.cost,
           };
         }
       });
       setCheckArr(ExtraArr);
 
-      console.log("Extras Array", ExtraArr);
+      console?.log("Extras Array", ExtraArr);
     }
   }, [Extras]);
 

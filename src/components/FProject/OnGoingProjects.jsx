@@ -85,6 +85,7 @@ export default function OnGoingProjects({ data }) {
                 backgroundColor: colors.becomePartnerGreen,
                 fontWeight: "700",
               }}
+              onClick={() => {}}
             >
               Chat
             </Button>
@@ -97,7 +98,9 @@ export default function OnGoingProjects({ data }) {
                 fontWeight: "700",
                 marginTop: "6px",
               }}
-              onClick={() => navigate(`/orderStatus`)}
+              onClick={() =>
+                navigate(`/orderStatus`, { state: { projectId: p._id } })
+              }
             >
               View
             </Button>

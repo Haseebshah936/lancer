@@ -23,15 +23,14 @@ import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
 import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
 import Footer from "../../components/Footer";
 import DeliverOrderComp from "../../components/OrderStausComp/DeliverOrderComp";
-import { useLocation } from "react-router-dom";
+import DeadlineUpdateRequestTimeLine from "../../components/OrderStausComp/DeadlineUpdateRequestTimeLine";
+import RequestForRequirements from "../../components/OrderStausComp/RequestForRequirements";
 
-export default function OrderStatus() {
-  const location = useLocation();
-  const pID = location.state.projectId;
+export default function OrderStatusTemp() {
   return (
     <div>
       <HeaderLoggedIn></HeaderLoggedIn>
-      {location?.state?.projectId}
+
       <Grid
         container
         // mr={{ xs: 0, sm: 3 }}
@@ -54,6 +53,19 @@ export default function OrderStatus() {
             </Grid>
           </Grid>
           {/* Order Just Started Comp End*/}
+          {/* Request for requiremnets starts here*/}
+          <Grid
+            container
+            item
+            xs={12}
+            display={"flex"}
+            justifyContent={"center"}
+          >
+            <Grid item xs={11.5}>
+              <RequestForRequirements></RequestForRequirements>
+            </Grid>
+          </Grid>
+          {/* Request for requiremnets Ends here*/}
           {/* Order Completed Comp Started */}
           <Grid
             container
@@ -81,6 +93,9 @@ export default function OrderStatus() {
                   time: "Nov 5, 3:49 PM",
                 }}
               ></StatusChangeTimelineItem>
+              {/* Deadline Update request Time Line for buyer side Starts here */}
+              <DeadlineUpdateRequestTimeLine></DeadlineUpdateRequestTimeLine>
+              {/* Deadline Update request Time Line for buyer side ends here */}
               {/* Delivery Time updated timeline started */}
               <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine>
               {/* Delivery Time updated timeline ended */}

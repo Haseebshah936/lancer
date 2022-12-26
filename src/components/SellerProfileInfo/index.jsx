@@ -13,6 +13,7 @@ import mongoose from "mongoose";
 import { requestMethod } from "../../requestMethod";
 import { handleError } from "../../utils/helperFunctions";
 import { useRealmContext } from "../../db/RealmContext";
+import useCreateChat from "../../Hooks/useCreateChat";
 
 function SellerProfileInfo({
   languages = [],
@@ -38,21 +39,24 @@ function SellerProfileInfo({
   isSame = false,
   userId = "",
 }) {
-  const navigate = useNavigate();
-  // useEffect(() => {
-  //   if(languages.length === 0) {
-  //   languages = languages.map((lang) => lang.languages);
-  //   }
-  // }, [languages])
   const { user } = useRealmContext();
-  const { setChatrooms } = useCustomContext();
-  const createChatRoom = async (id) => {
-    const response = await requestMethod.post("chatroom/createChatroom", {
-      participantId: userId,
-      creatorId: user._id,
-    });
-    return response.data;
-  };
+  // const { setChatrooms } = useCustomContext();
+  const { createChatRoom_Navigate } = useCreateChat();
+  const navigate = useNavigate();
+  // const createChatRoom = (userId) => {
+  //   requestMethod
+  //     .post("chatroom/createChatroom", {
+  //       participantId: userId,
+  //       creatorId: user._id,
+  //     })
+  //     .then((res) => {
+  //       navigate(`/chat`);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //       handleError(err);
+  //     });
+  // };
 
   return (
     <Container style={{ ...style, maxHeight: showExtraInfo ? "100%" : "30vh" }}>
@@ -107,34 +111,7 @@ function SellerProfileInfo({
         {user && ((!isSame && showExtraInfo) || showButton) && (
           <CustomIconButton
             onClick={() => {
-              const id = new mongoose.Types.ObjectId();
-              createChatRoom(id, userId)
-                .then((chatroom) => {
-                  // navigate(`/chat`, {
-                  //   state: {
-                  //     alt: "Geeks image",
-                  //     avatar: profilePic,
-                  //     date: new Date(),
-                  //     description: "",
-                  //     id: chatroom._id,
-                  //     isGroup: false,
-                  //     muted: false,
-                  //     subtitle: "",
-                  //     title: name,
-                  //     participantId: user._id,
-                  //     unread: false,
-                  //     userParticipantId: userId,
-                  //     isOnline: null,
-                  //     tempRoom: true,
-                  //   },
-                  // });
-
-                  navigate(`/chat`);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  handleError(err);
-                });
+              createChatRoom_Navigate(user._id, userId);
             }}
             variant="contained"
           >
@@ -239,3 +216,24 @@ const AboutContainer = styled.div`
     display: "none",
   })}
 `;
+
+// const id = new mongoose.Types.ObjectId();
+//
+// navigate(`/chat`, {
+//   state: {
+//     alt: "Geeks image",
+//     avatar: profilePic,
+//     date: new Date(),
+//     description: "",
+//     id: chatroom._id,
+//     isGroup: false,
+//     muted: false,
+//     subtitle: "",
+//     title: name,
+//     participantId: user._id,
+//     unread: false,
+//     userParticipantId: userId,
+//     isOnline: null,
+//     tempRoom: true,
+//   },
+// });

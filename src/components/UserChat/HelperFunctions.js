@@ -25,8 +25,10 @@ export function handleMessageFormation(message) {
   return {
     userId: message?.userId?._id,
     userName: message?.userId?.name,
+    avatar: message?.userId?.profilePic,
     type: message?.type,
     text: message?.text,
+    date: new Date(message?.createdAt),
     data,
   };
 }

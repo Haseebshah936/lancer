@@ -106,7 +106,7 @@ export default function OrderSummary({
                 return (
                   <CustomListItem sx={{ padding: 0, pl: 4 }}>
                     <CustomListText
-                      primary={feature.title}
+                      primary={feature?.title}
                       disableTypography={true}
                     />
                   </CustomListItem>
@@ -114,7 +114,7 @@ export default function OrderSummary({
               })}
 
               {checkArr?.map((feature) => {
-                if (feature.checked) {
+                if (feature?.checked) {
                   return (
                     <CustomListItem sx={{ padding: 0, pl: 4 }}>
                       <ListItemIcon>
@@ -126,14 +126,14 @@ export default function OrderSummary({
                         />
                       </ListItemIcon>
 
-                      {feature.quantity > 1 ? (
+                      {feature?.quantity > 1 ? (
                         <CustomListText
-                          primary={`${feature.title} (X${feature.quantity})`}
+                          primary={`${feature?.title} (X${feature?.quantity})`}
                           disableTypography={true}
                         />
                       ) : (
                         <CustomListText
-                          primary={feature.title}
+                          primary={feature?.title}
                           disableTypography={true}
                         />
                       )}

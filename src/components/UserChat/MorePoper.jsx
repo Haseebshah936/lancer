@@ -151,6 +151,7 @@ const PoperElementButton = styled(ButtonBase)`
   flex: 1;
   justify-content: center !important;
   align-items: center;
+  background-color: white !important;
 `;
 
 const PoperElementText = styled.p`
