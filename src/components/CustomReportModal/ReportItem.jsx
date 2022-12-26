@@ -1,21 +1,18 @@
 import { FormControlLabel, Radio } from "@mui/material";
+import { useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 
-function AvatarRadio({ url, name, value }) {
+function ReportItem({ name, value, active, handleSelected }) {
   return (
-    <Container>
-      <Wrapper>
-        <Image src={url} />
-        <DetailsContainer>
-          <NameText>{name}</NameText>
-        </DetailsContainer>
-      </Wrapper>
-
+    <Container onClick={handleSelected}>
+      <NameText>{name}</NameText>
       <FormControlLabel
         value={value}
         control={
           <Radio
+            checked={active}
             sx={{
               color: colors.textGreen,
               "&.Mui-checked": {
@@ -29,12 +26,12 @@ function AvatarRadio({ url, name, value }) {
   );
 }
 
-export default AvatarRadio;
+export default ReportItem;
 
 const Container = styled.div`
   display: flex;
   align-items: center;
-  margin: 4rem 2.5rem 0;
+  margin: 2rem 2.5rem 0;
   cursor: pointer;
   :hover {
     opacity: 0.8;

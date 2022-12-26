@@ -1,22 +1,40 @@
 import styled from "styled-components";
 
-function ProfileComponent({ url=`https://api.lorem.space/image/face?w=200&h=200&hash=hc9era4i`,count = 1, name="Haseeb", currency="$", earning=3526, orders=500 }) {
+function ProfileComponent({
+  url = `https://api.lorem.space/image/face?w=200&h=200&hash=hc9era4i`,
+  count = 1,
+  name = "Haseeb",
+  currency = "$",
+  earning = 3526,
+  orders = 500,
+  style,
+  ordersBoxTitle = "Orders",
+  orderBoxStyle,
+  component,
+  onClick = () => {},
+  ...props
+}) {
   return (
-    <Container>
-      <Wrapper>
-        <CountText>{count}</CountText>
+    <Container style={style} {...props}>
+      <Wrapper onClick={onClick}>
+        {count && <CountText>{count}</CountText>}
         <Image src={url} />
         <DetailsContainer>
           <NameText>{name}</NameText>
-          <EarnedContainer>
-            <p>{currency}</p> <Amount>{earning}</Amount>
-          </EarnedContainer>
+          {earning && (
+            <EarnedContainer>
+              <p>{currency}</p> <Amount>{earning}</Amount>
+            </EarnedContainer>
+          )}
         </DetailsContainer>
       </Wrapper>
-      <Badge>
-        <Text>Orders</Text>
-        <Text>{orders}</Text>
-      </Badge>
+      {orders && (
+        <Badge style={orderBoxStyle}>
+          <Text>{ordersBoxTitle}</Text>
+          <Text>{orders}</Text>
+        </Badge>
+      )}
+      {component}
     </Container>
   );
 }
@@ -35,11 +53,13 @@ const Container = styled.div`
   min-width: 25em;
   justify-content: space-between;
   flex: 1;
+  max-height: 3.5rem;
 `;
 
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
+  width: 50%;
 `;
 
 const CountText = styled.h3`
@@ -82,7 +102,7 @@ const Amount = styled.p`
 const Badge = styled.div`
   background-color: #e7f5ee;
   padding: 0.5rem 1.5rem;
-  border-radius: 45%;
+  border-radius: 50%;
   color: #5ec480;
   align-items: center;
   display: flex;

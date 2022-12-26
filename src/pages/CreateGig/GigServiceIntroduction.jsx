@@ -92,6 +92,7 @@ export default function GigServiceIntroduction({
             name="serviceTitle"
             value={gigIntroduction.gigTitle}
             error={errors.gigTitle}
+            errmsg="Service Title is Required"
             onChange={(e) => {
               setGigIntroduction({
                 ...gigIntroduction,

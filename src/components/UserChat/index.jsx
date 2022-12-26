@@ -49,6 +49,8 @@ import {
   handleSend,
   handleVideoCall,
 } from "./handlersForIndex";
+import RightDrawer from "./RightDrawer";
+import ChatInfo from "./ChatInfo";
 
 function Chat(props) {
   const messageRef = useRef();
@@ -73,6 +75,12 @@ function Chat(props) {
 
   const [toggle, setToggle] = useState(false);
   const [called, setCalled] = useState(false);
+
+  const [drawer, setDrawer] = useState(true);
+
+  const toggleDrawer = (state) => {
+    setDrawer(state);
+  };
 
   const handleToggle = () => {
     setToggle(true);
@@ -235,6 +243,7 @@ function Chat(props) {
         setNewData,
         setReRender
       );
+    setDrawer(false);
   }, [active]);
 
   useEffect(() => {
@@ -332,8 +341,12 @@ function Chat(props) {
             onBackClick={handleBackClick}
             onClickCall={handleCall}
             onClickVideoCall={handleVideoCall}
+            onMeetingClick={(message) =>
+              handleSend(message, user, active, setNewData)
+            }
             temp={active.id === location.state?.id}
             userId={active.participantId}
+            toggleDrawer={() => toggleDrawer(true)}
           />
           {!reRender && (
             <MessagesContainer
@@ -358,10 +371,22 @@ function Chat(props) {
               reRender={reRender}
             />
           )}
-          {/* <div style={{ height: ".5rem" }} ref={messageRef} /> */}
           <ChatInput
             onSend={(message) => handleSend(message, user, active, setNewData)}
           />
+          <RightDrawer drawer={drawer} toggleDrawer={toggleDrawer}>
+            <ChatInfo
+              drawer={drawer}
+              removeChatroom={(id) => {
+                setChatRooms(
+                  chatRooms.filter((chatroom) => chatroom.id !== id)
+                );
+                setChatRoomsData(
+                  chatRoomsData.filter((chatroom) => chatroom.id !== id)
+                );
+              }}
+            />
+          </RightDrawer>
         </MessageContainer>
       )}
     </Container>
@@ -431,7 +456,7 @@ const MessageContainer = styled.div`
     max-width: 70%;
     padding-right: 1.2rem;
     color: #4b3030;
-    min-width: auto;
+    min-width: 25%;
     box-shadow: none;
     background-color: ${colors.becomePartnerButtonGreen};
     margin: 0px;
@@ -441,11 +466,19 @@ const MessageContainer = styled.div`
     color: ${colors.white};
   }
 
+  .rce-mbox-time {
+    margin-top: 1rem;
+    color: ${colors.white};
+  }
+
   .rce-mbox.rce-mbox-right {
     color: ${colors.black};
     padding-top: 1.2rem;
     background-color: ${colors.userChatMessageBackground};
     .rce-mbox-text {
+      color: ${colors.black};
+    }
+    .rce-mbox-time {
       color: ${colors.black};
     }
   }
@@ -461,6 +494,9 @@ const MessageContainer = styled.div`
   }
   ${miniTablet({
     flexDirection: "column",
+    ".rce-mbox": {
+      minWidth: "40%",
+    },
   })}
   ${mobile({
     ".rce-mbox": {

@@ -19,13 +19,17 @@ import colors from "../../utils/colors";
 
 import { jazz, EasyPaisa } from "../../assets";
 import { useLocation } from "react-router-dom";
+import { useCallback } from "react";
+import { Wallet } from "@mui/icons-material";
 
 export default function PurchaseScreen() {
+  const [errors, setErrors] = useState([]);
   const { state } = useLocation();
 
   useEffect(() => {
-    console.log("Order State from Navigation: ", state);
-  }, [state]);
+    console.log("Errors", errors);
+    console.log("Date Error", errors.expiry);
+  }, [errors]);
 
   const [Card, setCard] = useState({
     number: "",
@@ -34,14 +38,25 @@ export default function PurchaseScreen() {
     cvc: "",
     issuer: "",
     focused: "",
-    formData: null,
   });
 
-  const handleCallback = ({ issuer }, isValid) => {
-    if (isValid) {
-      setCard({ issuer });
-    }
-  };
+  const handleCallback = useCallback(
+    ({ issuer }, isValid) => {
+      console.log("Evernt", issuer);
+      console.log("isValid", isValid);
+      if (isValid) {
+        setCard({ ...Card, issuer });
+        console.log("Valid ", issuer);
+      }
+    },
+    [Card]
+  );
+
+  // const handleCallback = ({ issuer }, isValid) => {
+  //   if (isValid) {
+  //     setCard({ issuer });
+  //   }
+  // };
 
   const handleInputFocus = ({ target }) => {
     setCard({
@@ -62,11 +77,15 @@ export default function PurchaseScreen() {
     setCard({ ...Card, [target.name]: target.value });
   };
 
-  const [select, setSelect] = useState("card");
+  const [select, setSelect] = useState("creditCard");
 
   useEffect(() => {
     console.log("Select: ", select);
   }, [select]);
+
+  useEffect(() => {
+    console.log("Card:", Card);
+  }, [Card]);
 
   return (
     <>
@@ -78,7 +97,7 @@ export default function PurchaseScreen() {
             <Grid item mobile={12} laptop={7}>
               <RadioGroup
                 sx={{ m: 0, p: 0, width: "100%" }}
-                defaultValue="card"
+                defaultValue="creditCard"
                 name="payment"
                 value={select}
                 onChange={(event) => {
@@ -87,7 +106,7 @@ export default function PurchaseScreen() {
               >
                 <RadioContainer>
                   <Radio
-                    value="card"
+                    value="creditCard"
                     sx={{
                       color: colors.textGreen,
                       "&.Mui-checked": {
@@ -101,7 +120,7 @@ export default function PurchaseScreen() {
                   <Mastercard style={{ marginLeft: "5px", width: "2.5rem" }} />
                 </RadioContainer>
 
-                {select === "card" && (
+                {select === "creditCard" && (
                   <Grid container mobile={12} sx={{ my: 2 }}>
                     <Grid item container mobile={12}>
                       <Grid container justifyContent="center" mobile={12}>
@@ -112,7 +131,7 @@ export default function PurchaseScreen() {
                             focused={Card.focused}
                             name={Card.name}
                             number={Card.number}
-                            callback={handleCallback}
+                            callback={(e, j) => handleCallback(e, j)}
                           />
                         </Grid>
                       </Grid>
@@ -129,7 +148,8 @@ export default function PurchaseScreen() {
                             name="name"
                             value={Card.name}
                             pattern="[a-z A-Z-]+"
-                            // error={errors.gigTitle}
+                            error={errors.name}
+                            errmsg={errors.name}
                             onChange={handleInputChange}
                             onFocus={handleInputFocus}
                           />
@@ -143,7 +163,8 @@ export default function PurchaseScreen() {
                             value={Card.number}
                             type="tel"
                             pattern="[\d| ]{16,22}"
-                            // error={errors.gigTitle}
+                            error={errors.number}
+                            errmsg={errors.number}
                             onChange={handleInputChange}
                             onFocus={handleInputFocus}
                           />
@@ -164,7 +185,8 @@ export default function PurchaseScreen() {
                             name="expiry"
                             value={Card.expiry}
                             pattern="\d\d/\d\d"
-                            // error={errors.gigTitle}
+                            error={errors.expiry}
+                            errmsg={errors.expiry}
                             onChange={handleInputChange}
                             onFocus={handleInputFocus}
                           />
@@ -178,19 +200,21 @@ export default function PurchaseScreen() {
                             name="cvc"
                             value={Card.cvc}
                             pattern="\d{3}"
-                            // error={errors.gigTitle}
+                            error={errors.cvc}
+                            errmsg={errors.cvc}
                             onChange={handleInputChange}
                             onFocus={handleInputFocus}
                           />
                         </Grid>
                       </Grid>
+                      <input type="hidden" name="issuer" value={Card.issuer} />
                     </Grid>
                   </Grid>
                 )}
 
                 <RadioContainer>
                   <Radio
-                    value="jazz"
+                    value="JazzCash"
                     sx={{
                       color: colors.textGreen,
                       "&.Mui-checked": {
@@ -213,7 +237,7 @@ export default function PurchaseScreen() {
 
                 <RadioContainer>
                   <Radio
-                    value="easypaisa"
+                    value="EasyPaisa"
                     sx={{
                       color: colors.textGreen,
                       "&.Mui-checked": {
@@ -234,6 +258,23 @@ export default function PurchaseScreen() {
                     alt="Gig Image"
                   />
                 </RadioContainer>
+
+                <RadioContainer>
+                  <Radio
+                    value="wallet"
+                    sx={{
+                      color: colors.textGreen,
+                      "&.Mui-checked": {
+                        color: colors.textGreen,
+                      },
+                    }}
+                  />
+
+                  <Typography variant="h4">Wallet</Typography>
+                  <Wallet
+                    sx={{ ml: 1, fontSize: "3.0rem", color: colors.textGreen }}
+                  />
+                </RadioContainer>
               </RadioGroup>
             </Grid>
 
@@ -242,7 +283,14 @@ export default function PurchaseScreen() {
             <Grid item mobile={12} laptop={4}>
               <Grid item container justifyContent="center" mobile={12}>
                 <Grid item mobile={12}>
-                  <OrderSummary order={state} style={{ mt: 0 }} />
+                  <OrderSummary
+                    Card={Card}
+                    errors={errors}
+                    setErrors={setErrors}
+                    order={state}
+                    method={select}
+                    style={{ mt: 0 }}
+                  />
                 </Grid>
               </Grid>
             </Grid>

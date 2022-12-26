@@ -10,7 +10,9 @@ export function formatCreditCardNumber(value) {
   }
 
   const issuer = Payment.fns.cardType(value);
+
   const clearValue = clearNumber(value);
+
   let nextValue;
 
   switch (issuer) {
@@ -30,7 +32,8 @@ export function formatCreditCardNumber(value) {
       nextValue = `${clearValue.slice(0, 4)} ${clearValue.slice(
         4,
         8
-      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 19)}`;
+      )} ${clearValue.slice(8, 12)} ${clearValue.slice(12, 16)}`;
+
       break;
   }
 

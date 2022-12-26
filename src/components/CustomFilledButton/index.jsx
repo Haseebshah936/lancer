@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import React from "react";
 import colors from "../../utils/colors";
 
@@ -9,6 +9,7 @@ function CustomFilledButton({
   color2 = colors.primaryGreen,
   type = "",
   onClick = () => {},
+  loading = false,
   ...props
 }) {
   return (
@@ -30,7 +31,16 @@ function CustomFilledButton({
       type={type}
       {...props}
     >
-      {title}
+      {loading ? (
+        <CircularProgress
+          size={15}
+          sx={{
+            color: "white",
+          }}
+        />
+      ) : (
+        title
+      )}
     </Button>
   );
 }
