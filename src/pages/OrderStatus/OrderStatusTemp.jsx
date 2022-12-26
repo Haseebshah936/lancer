@@ -24,6 +24,7 @@ import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpd
 import Footer from "../../components/Footer";
 import DeliverOrderComp from "../../components/OrderStausComp/DeliverOrderComp";
 import DeadlineUpdateRequestTimeLine from "../../components/OrderStausComp/DeadlineUpdateRequestTimeLine";
+import RequestForRequirements from "../../components/OrderStausComp/RequestForRequirements";
 
 export default function OrderStatusTemp() {
   return (
@@ -52,6 +53,19 @@ export default function OrderStatusTemp() {
             </Grid>
           </Grid>
           {/* Order Just Started Comp End*/}
+          {/* Request for requiremnets starts here*/}
+          <Grid
+            container
+            item
+            xs={12}
+            display={"flex"}
+            justifyContent={"center"}
+          >
+            <Grid item xs={11.5}>
+              <RequestForRequirements></RequestForRequirements>
+            </Grid>
+          </Grid>
+          {/* Request for requiremnets Ends here*/}
           {/* Order Completed Comp Started */}
           <Grid
             container

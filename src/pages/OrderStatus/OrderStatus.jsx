@@ -23,12 +23,15 @@ import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
 import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
 import Footer from "../../components/Footer";
 import DeliverOrderComp from "../../components/OrderStausComp/DeliverOrderComp";
+import { useLocation } from "react-router-dom";
 
 export default function OrderStatus() {
+  const location = useLocation();
+  const pID = location.state.projectId;
   return (
     <div>
       <HeaderLoggedIn></HeaderLoggedIn>
-
+      {location?.state?.projectId}
       <Grid
         container
         // mr={{ xs: 0, sm: 3 }}
