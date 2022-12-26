@@ -60,6 +60,7 @@ import axios from "axios";
 import FileUpload from "./pages/TempPage/FileUpload";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
 import PurchaseScreen from "./pages/PurchaseScreen";
+import OrderStatusTemp from "./pages/OrderStatus/OrderStatusTemp";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -125,6 +126,8 @@ function App(props) {
           <Route path="/Search" element={<SearchResults />} />
           <Route element={<PrivateRoutes />}>
             <Route path="/orderStatus" element={<OrderStatus />} />
+            <Route path="/orderStatus/temp" element={<OrderStatusTemp />} />
+
 
             <Route path="/buyermain" element={<BuyerMain />} />
             <Route path="/sellerdashboard" element={<SellerDashboard />}>

@@ -4,6 +4,8 @@ import { Grid, Button, Divider } from "@mui/material";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import DeliverOrderComp from "../OrderStausComp/DeliverOrderComp";
+import CancelOrderComp from "../OrderStausComp/CancelOrderComp";
+import ExtendDeliverDateComp from "../OrderStausComp/ExtendDeliverDateComp";
 
 export default function OrderCountDown() {
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
@@ -27,6 +29,15 @@ export default function OrderCountDown() {
         deliverOrderPopValue={deliverOrderPopValue}
         setDeliverOrderPopValue={setDeliverOrderPopValue}
       ></DeliverOrderComp>
+      <CancelOrderComp
+        cancelOrderPopValue={cancelOrderPopValue}
+        setCancelOrderPopValue={setCancelOrderPopValue}
+      ></CancelOrderComp>
+      <ExtendDeliverDateComp
+        deadlineExtendedPopValue={deadlineExtendedPopValue}
+        setDeadlineExtendedPopValue={setDeadlineExtendedPopValue}
+      ></ExtendDeliverDateComp>
+
       <Grid
         container
         display={"flex"}
@@ -86,6 +97,7 @@ export default function OrderCountDown() {
               minWidth: "135px",
               maxWidth: "135px",
             }}
+            onClick={() => setDeadlineExtendedPopValue(true)}
           >
             Extend Time
           </Button>
@@ -103,6 +115,7 @@ export default function OrderCountDown() {
               minWidth: "135px",
               maxWidth: "135px",
             }}
+            onClick={() => setCancelOrderPopValue(true)}
           >
             Cancel Order
           </Button>

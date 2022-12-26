@@ -10,10 +10,10 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
-export default function DeadlineUpdatedTimeLine() {
+export default function DeadlineUpdateRequestTimeLine() {
   const [orderTimeChangedVar, setOrderRequirementsVar] = useState({
     userName: "Umer Abid",
-    titleText: "Deadline Updated",
+    titleText: "Requested for Deadline Update",
     time: "Nov 5, 3:49 PM",
     timeChangedFrom: "Nov 5, 3:49 PM",
     timeChangedTo: "Nov 5, 3:49 PM",
@@ -44,7 +44,7 @@ export default function DeadlineUpdatedTimeLine() {
         </Box>
         <RequirementBox>
           <RequirementTitleBox>
-            <RequirementP>Deadline Changed from</RequirementP>
+            <RequirementP>New requested Deadline from</RequirementP>
           </RequirementTitleBox>
           <RequirementDescriptionBox>
             <Grid container>
@@ -61,12 +61,55 @@ export default function DeadlineUpdatedTimeLine() {
             </Grid>
           </RequirementDescriptionBox>
         </RequirementBox>
+
         <Grid
           container
           display={"flex"}
           justifyContent={"center"}
           mt={{ xs: 1, sm: 1 }}
         >
+          <Grid container item xs={12} marginBottom={1}>
+            <Grid item xs={9}></Grid>
+            <Grid
+              item
+              xs={12}
+              sm={3}
+              display={"flex"}
+              justifyContent={"space-around"}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: colors.becomePartnerButtonGreen,
+                  color: "white",
+
+                  fontSize: "1.2rem",
+                  fontWeight: 600,
+                  "&:hover": {
+                    backgroundColor: colors.becomePartnerButtonGreen,
+                  },
+                }}
+              >
+                Accept
+              </Button>
+              <Box marginLeft={{ xs: 0, sm: 1 }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: colors.becomePartnerButtonGreen,
+                    color: "white",
+                    fontSize: "1.2rem",
+                    fontWeight: 600,
+                    "&:hover": {
+                      backgroundColor: colors.becomePartnerButtonGreen,
+                    },
+                  }}
+                >
+                  Reject
+                </Button>
+              </Box>
+            </Grid>
+          </Grid>
           <Grid item xs={12}>
             <Divider sx={{ backgroundColor: "#EFEFF0" }} />
           </Grid>

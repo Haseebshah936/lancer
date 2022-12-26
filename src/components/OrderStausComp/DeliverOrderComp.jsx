@@ -146,6 +146,8 @@ export default function DeliverOrderComp({
             multiline
             rows={4}
             fullWidth
+            marginLeft={{ xs: 0, sm: 1 }}
+            marginRight={{ xs: 0, sm: 1 }}
           />
           <Box className="d-flex flex-wrap">
             {url?.map((u, index) => (
