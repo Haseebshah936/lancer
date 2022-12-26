@@ -79,14 +79,7 @@ export default function GigMyServicePricing({
   setAdditionalFeatures,
 }) {
   // useEffect(() => {
-  //   // console.log("Basic", basicPlan);
-  //   // console.log("Premium", premiumPlan);
-  //   // console.log("Standard", standardPlan);
-  //   // console.log()
-  // }, [basicPlan, premiumPlan, standardPlan]);
-
-  // useEffect(() => {
-  //   console.log("additionalFeatures", additionalFeatures);
+  //   console.log("additionalFeatures: ", additionalFeatures);
   // }, [additionalFeatures]);
 
   return (
@@ -145,6 +138,7 @@ export default function GigMyServicePricing({
                   backgroundColor: basicPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
+                  width: "100%",
                 }}
                 label="BasicPlanTitle"
                 value={basicPlan.name}
@@ -161,6 +155,7 @@ export default function GigMyServicePricing({
                   ? "#ffdadb"
                   : "white",
                 mb: 1,
+                width: "100%",
               }}
               value={basicPlan.description}
               error={basicPlanError.description}
@@ -181,6 +176,7 @@ export default function GigMyServicePricing({
               styles={{
                 width: "100%",
                 backgroundColor: basicPlanError.delivery ? "#ffdadb" : "white",
+                width: "100%",
               }}
               placeholder="Delivery Days"
               type="number"
@@ -229,6 +225,7 @@ export default function GigMyServicePricing({
                   backgroundColor: standardPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
+                  width: "100%",
                 }}
                 label="Package Title"
                 value={standardPlan.name}
@@ -244,6 +241,7 @@ export default function GigMyServicePricing({
                   ? "#ffdadb"
                   : "white",
                 mb: 1,
+                width: "100%",
               }}
               value={standardPlan.description}
               error={standardPlanError.description}
@@ -312,6 +310,7 @@ export default function GigMyServicePricing({
                   backgroundColor: premiumPlanError.name ? "#ffdadb" : "white",
                   mb: 1,
                   paddingInline: "",
+                  width: "100%",
                 }}
                 label="Package Title"
                 value={premiumPlan.name}
@@ -327,6 +326,7 @@ export default function GigMyServicePricing({
                   ? "#ffdadb"
                   : "white",
                 mb: 1,
+                width: "100%",
               }}
               value={premiumPlan.description}
               error={premiumPlanError.description}
@@ -343,6 +343,7 @@ export default function GigMyServicePricing({
                 backgroundColor: premiumPlanError.delivery
                   ? "#ffdadb"
                   : "white",
+                width: "100%",
               }}
               placeholder="Delivery Days"
               type="number"
@@ -879,12 +880,17 @@ export default function GigMyServicePricing({
               >
                 <div style={{ display: "flex", alignItems: "center" }}>
                   <CheckBox
-                    checked={additionalFeatures[i].active}
+                    checked={
+                      additionalFeatures[
+                        i + SubCategory.additionalFeatures.length
+                      ].active
+                    }
                     onChange={(e) => {
                       //console.log("Addition feature", additionalFeatures);
                       const hold = [...additionalFeatures];
                       //console.log("Addition Hold", hold);
-                      hold[i].active = e.target.checked;
+                      hold[i + SubCategory.additionalFeatures.length].active =
+                        e.target.checked;
                       setAdditionalFeatures(hold);
                       //console.log("Additional features ", additionalFeatures);
                     }}
@@ -896,7 +902,15 @@ export default function GigMyServicePricing({
                 <div style={{ display: "flex", alignItems: "center" }}>
                   {feature.type === "quantity" && (
                     <InputField
-                      value={additionalFeatures[i].quantity}
+                      value={
+                        additionalFeatures[
+                          i + SubCategory.additionalFeatures.length
+                        ].quantity > 0
+                          ? additionalFeatures[
+                              i + SubCategory.additionalFeatures.length
+                            ].quantity
+                          : null
+                      }
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       min="0"
@@ -907,14 +921,24 @@ export default function GigMyServicePricing({
                         val = val >= 0 ? val : 0;
 
                         const hold = [...additionalFeatures];
-                        hold[i].quantity = val;
+                        hold[
+                          i + SubCategory.additionalFeatures.length
+                        ].quantity = val;
                         setAdditionalFeatures(hold);
                       }}
                     />
                   )}
                   {feature.type === "time" && (
                     <InputField
-                      value={additionalFeatures[i].time}
+                      value={
+                        additionalFeatures[
+                          i + SubCategory.additionalFeatures.length
+                        ].time > 0
+                          ? additionalFeatures[
+                              i + SubCategory.additionalFeatures.length
+                            ].time
+                          : null
+                      }
                       placeholder={`Enter Delivery days`}
                       type="number"
                       min="0"
@@ -925,7 +949,8 @@ export default function GigMyServicePricing({
                         val = val >= 0 ? val : 0;
 
                         const hold = [...additionalFeatures];
-                        hold[i].time = val;
+                        hold[i + SubCategory.additionalFeatures.length].time =
+                          val;
                         setAdditionalFeatures(hold);
                       }}
                     />
@@ -940,7 +965,15 @@ export default function GigMyServicePricing({
                       }}
                     >
                       <InputField
-                        value={additionalFeatures[i].quantity}
+                        value={
+                          additionalFeatures[
+                            i + SubCategory.additionalFeatures.length
+                          ].quantity > 0
+                            ? additionalFeatures[
+                                i + SubCategory.additionalFeatures.length
+                              ].quantity
+                            : null
+                        }
                         placeholder={`Enter ${feature.title}`}
                         type="number"
                         min="0"
@@ -951,13 +984,23 @@ export default function GigMyServicePricing({
                           val = val >= 0 ? val : 0;
 
                           const hold = [...additionalFeatures];
-                          hold[i].quantity = val;
+                          hold[
+                            i + SubCategory.additionalFeatures.length
+                          ].quantity = val;
                           setAdditionalFeatures(hold);
                         }}
                       />
 
                       <InputField
-                        value={additionalFeatures[i].time}
+                        value={
+                          additionalFeatures[
+                            i + SubCategory.additionalFeatures.length
+                          ].time > 0
+                            ? additionalFeatures[
+                                i + SubCategory.additionalFeatures.length
+                              ].time
+                            : null
+                        }
                         placeholder={`Enter Delivery days`}
                         type="number"
                         min="0"
@@ -966,7 +1009,8 @@ export default function GigMyServicePricing({
                           let val = parseInt(e.target.value, 10);
                           val = val >= 0 ? val : 0;
                           const hold = [...additionalFeatures];
-                          hold[i].time = val;
+                          hold[i + SubCategory.additionalFeatures.length].time =
+                            val;
                           setAdditionalFeatures(hold);
                         }}
                       />
@@ -974,8 +1018,12 @@ export default function GigMyServicePricing({
                   )}
                   <InputField
                     value={
-                      additionalFeatures[i].cost
-                        ? additionalFeatures[i].cost
+                      additionalFeatures[
+                        i + SubCategory.additionalFeatures.length
+                      ].cost
+                        ? additionalFeatures[
+                            i + SubCategory.additionalFeatures.length
+                          ].cost
                         : ""
                     }
                     placeholder={`Enter Price`}
@@ -987,7 +1035,8 @@ export default function GigMyServicePricing({
 
                       val = val >= 0 ? val : 0;
                       const hold = [...additionalFeatures];
-                      hold[i].cost = val;
+                      hold[i + SubCategory.additionalFeatures.length].cost =
+                        val;
                       setAdditionalFeatures(hold);
                     }}
                   />
@@ -1019,6 +1068,7 @@ export default function GigMyServicePricing({
                       const hold = [...additionalFeatures];
                       hold[i].active = e.target.checked;
                       setAdditionalFeatures(hold);
+                      console.log(additionalFeatures);
                     }}
                   />
                   <Typography variant="h6" sx={{ ml: 1 }}>
@@ -1026,9 +1076,13 @@ export default function GigMyServicePricing({
                   </Typography>
                 </div>
                 <div style={{ display: "flex", alignItems: "center" }}>
-                  {additionalFeatures.type === "quantity" && (
+                  {feature.type === "quantity" && (
                     <InputField
-                      value={additionalFeatures[i].quantity}
+                      value={
+                        additionalFeatures[i].quantity > 0
+                          ? additionalFeatures[i].quantity
+                          : null
+                      }
                       placeholder={`Enter ${feature.title}`}
                       type="number"
                       min="0"
@@ -1045,9 +1099,13 @@ export default function GigMyServicePricing({
                     />
                   )}
 
-                  {additionalFeatures.type === "time" && (
+                  {feature.type === "time" && (
                     <InputField
-                      value={additionalFeatures[i].time}
+                      value={
+                        additionalFeatures[i].time > 0
+                          ? additionalFeatures[i].time
+                          : null
+                      }
                       placeholder={`Enter Delivery days`}
                       type="number"
                       min="0"
@@ -1063,7 +1121,7 @@ export default function GigMyServicePricing({
                       }}
                     />
                   )}
-                  {additionalFeatures.type === "timeAndQuantity" && (
+                  {feature.type === "timeAndQuantity" && (
                     <div
                       style={{
                         display: "flex",
@@ -1073,7 +1131,11 @@ export default function GigMyServicePricing({
                       }}
                     >
                       <InputField
-                        value={additionalFeatures[i].quantity}
+                        value={
+                          additionalFeatures[i].quantity > 0
+                            ? additionalFeatures[i].quantity
+                            : null
+                        }
                         placeholder={`Enter ${feature.title}`}
                         type="number"
                         min="0"
@@ -1090,7 +1152,11 @@ export default function GigMyServicePricing({
                       />
 
                       <InputField
-                        value={additionalFeatures[i].time}
+                        value={
+                          additionalFeatures[i].time > 0
+                            ? additionalFeatures[i].time
+                            : null
+                        }
                         placeholder={`Enter Delivery days`}
                         type="number"
                         min="0"

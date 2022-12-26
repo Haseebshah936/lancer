@@ -166,6 +166,12 @@ function SellerPortfolio(props) {
   useEffect(() => {
     if (productData) {
       getSubCategory(productData.category).then((object) => {
+        console.log(
+          "Category Features in Useeffect: ",
+          object.category.features
+        );
+        console.log("SubCategory Features Useeffect : ", object.features);
+
         setCategoryFeatures(object.category.features);
         setSubCategoryFeatures(object.features);
 
@@ -323,6 +329,7 @@ function SellerPortfolio(props) {
                             backgroundColor: "white",
                             mb: 1,
                             paddingInline: "",
+                            width: "100%",
                           }}
                           label="BasicPlanTitle"
                           value={basicPlan.name}
@@ -333,6 +340,7 @@ function SellerPortfolio(props) {
                         styles={{
                           backgroundColor: "white",
                           mb: 1,
+                          width: "100%",
                         }}
                         value={basicPlan.description}
                       />
@@ -390,6 +398,7 @@ function SellerPortfolio(props) {
                             backgroundColor: "white",
                             mb: 1,
                             paddingInline: "",
+                            width: "100%",
                           }}
                           label="Package Title"
                           value={standardPlan.name}
@@ -398,6 +407,7 @@ function SellerPortfolio(props) {
 
                       <GigDiscription
                         styles={{
+                          width: "100%",
                           backgroundColor: "white",
                           mb: 1,
                         }}
@@ -452,6 +462,7 @@ function SellerPortfolio(props) {
                             backgroundColor: "white",
                             mb: 1,
                             paddingInline: "",
+                            width: "100%",
                           }}
                           label="Package Title"
                           value={premiumPlan.name}
@@ -462,6 +473,7 @@ function SellerPortfolio(props) {
                         styles={{
                           backgroundColor: "white",
                           mb: 1,
+                          width: "100%",
                         }}
                         value={premiumPlan.description}
                       />
@@ -506,26 +518,28 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-bottom border-end"
                           >
-                            {feature.quantityBased && (
-                              <InputField
-                                name={feature.title}
-                                styles={{ width: "100%" }}
-                                placeholder={`Enter ${feature.title}`}
-                                value={
-                                  basicPlan.features[
-                                    i + subCategoryFeatures.length
-                                  ].quantity
-                                    ? basicPlan.features[
-                                        i + subCategoryFeatures.length
-                                      ].quantity
-                                    : ""
-                                }
-                                type="number"
-                                min="0"
-                                step="1"
-                              />
-                            )}
-                            {feature.quantityBased === false && (
+                            {
+                              (feature.type = "quantity" && (
+                                <InputField
+                                  name={feature.title}
+                                  styles={{ width: "100%" }}
+                                  placeholder={`Enter ${feature.title}`}
+                                  value={
+                                    basicPlan.features[
+                                      i + subCategoryFeatures.length
+                                    ].quantity
+                                      ? basicPlan.features[
+                                          i + subCategoryFeatures.length
+                                        ].quantity
+                                      : ""
+                                  }
+                                  type="number"
+                                  min="0"
+                                  step="1"
+                                />
+                              ))
+                            }
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={
                                   basicPlan.features[
@@ -543,7 +557,7 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-bottom border-end"
                           >
-                            {feature.quantityBased && (
+                            {feature.type === "quantity" && (
                               <InputField
                                 styles={{ width: "100%" }}
                                 value={
@@ -561,7 +575,7 @@ function SellerPortfolio(props) {
                                 step="1"
                               />
                             )}
-                            {feature.quantityBased === false && (
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={
                                   standardPlan.features[
@@ -579,7 +593,7 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-top border-bottom"
                           >
-                            {feature.quantityBased && (
+                            {feature.type === "quantity" && (
                               <InputField
                                 value={
                                   premiumPlan.features[
@@ -597,7 +611,7 @@ function SellerPortfolio(props) {
                                 step="1"
                               />
                             )}
-                            {feature.quantityBased === false && (
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={
                                   premiumPlan.features[
@@ -642,7 +656,7 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-end border-bottom"
                           >
-                            {feature.quantityBased && (
+                            {feature.type === "quantity" && (
                               <InputField
                                 value={
                                   basicPlan.features[i].quantity === 0
@@ -656,7 +670,7 @@ function SellerPortfolio(props) {
                                 step="1"
                               />
                             )}
-                            {feature.quantityBased === false && (
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={basicPlan.features[i].active}
                               />
@@ -670,7 +684,7 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-end border-bottom"
                           >
-                            {feature.quantityBased && (
+                            {feature.type === "quantity" && (
                               <InputField
                                 value={
                                   standardPlan.features[i].quantity
@@ -684,7 +698,7 @@ function SellerPortfolio(props) {
                                 step="1"
                               />
                             )}
-                            {feature.quantityBased === false && (
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={standardPlan.features[i].active}
                               />
@@ -698,7 +712,7 @@ function SellerPortfolio(props) {
                             mobile={3}
                             className="border border-top border-bottom"
                           >
-                            {feature.quantityBased && (
+                            {feature.type === "quantity" && (
                               <InputField
                                 value={
                                   premiumPlan.features[i].quantity
@@ -712,7 +726,7 @@ function SellerPortfolio(props) {
                                 step="1"
                               />
                             )}
-                            {feature.quantityBased === false && (
+                            {feature.type === "" && (
                               <CheckBox
                                 checked={premiumPlan.features[i].active}
                               />

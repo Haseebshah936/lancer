@@ -60,6 +60,8 @@ export default function AsyncAutoComplete({
       ...Category.additionalFeatures,
     ];
 
+    // console.log("All additional", allAdditional);
+
     const newfeatures = all.map((e) => {
       return {
         title: e.title,
@@ -90,6 +92,7 @@ export default function AsyncAutoComplete({
         active: false,
         quantity: 0,
         cost: 0,
+        type: e.type,
       };
     });
 
