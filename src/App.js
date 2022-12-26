@@ -61,6 +61,7 @@ import FileUpload from "./pages/TempPage/FileUpload";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
 import PurchaseScreen from "./pages/PurchaseScreen";
 import CustomerSupport from "./pages/CustomerSupport";
+import OrderStatusTemp from './pages/OrderStatus/OrderStatusTemp';
 
 function App(props) {
   const [open, setOpen] = useState(false);
