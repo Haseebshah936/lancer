@@ -61,7 +61,8 @@ import FileUpload from "./pages/TempPage/FileUpload";
 import OrderStatus from "./pages/OrderStatus/OrderStatus";
 import PurchaseScreen from "./pages/PurchaseScreen";
 import CustomerSupport from "./pages/CustomerSupport";
-import OrderStatusTemp from './pages/OrderStatus/OrderStatusTemp';
+import OrderStatusTemp from "./pages/OrderStatus/OrderStatusTemp";
+import AddCategory from "./pages/AddCategory";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -122,6 +123,7 @@ function App(props) {
             <Route path="/ranking" element={<Ranking />} />
             <Route path="/signup" element={<Signup />} />
           </Route>
+          <Route path="/AddCategory" element={<AddCategory />} />
           <Route path="/payments" element={<PurchaseScreen />} />
           <Route path="/customersupport" element={<CustomerSupport />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
@@ -129,7 +131,6 @@ function App(props) {
           <Route element={<PrivateRoutes />}>
             <Route path="/orderStatus" element={<OrderStatus />} />
             <Route path="/orderStatus/temp" element={<OrderStatusTemp />} />
-
 
             <Route path="/buyermain" element={<BuyerMain />} />
             <Route path="/sellerdashboard" element={<SellerDashboard />}>
