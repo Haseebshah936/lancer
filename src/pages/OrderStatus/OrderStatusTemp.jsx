@@ -62,7 +62,7 @@ export default function OrderStatusTemp() {
             justifyContent={"center"}
           >
             <Grid item xs={11.5}>
-              <RequestForRequirements></RequestForRequirements>
+              <OrderCompletedComp></OrderCompletedComp>
             </Grid>
           </Grid>
           {/* Request for requiremnets Ends here*/}
@@ -85,6 +85,9 @@ export default function OrderStatusTemp() {
               {/* Requiremnets send Timeline started*/}
               <RequirementsTimelineItem></RequirementsTimelineItem>
               {/* Requiremnets send Timeline Ends*/}
+              {/* Request For for more requirements time line starts here */}
+              <RequestForRequirements></RequestForRequirements>
+              {/* Request For for more requirements time line ends here */}
               {/* Order Started */}
               <StatusChangeTimelineItem
                 Icon={RocketIcon}

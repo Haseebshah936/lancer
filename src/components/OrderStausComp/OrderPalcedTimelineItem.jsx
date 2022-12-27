@@ -10,11 +10,11 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
 import BusinessCenterIcon from "@mui/icons-material/BusinessCenter";
 
-export default function OrderPalcedTimelineItem() {
+export default function OrderPalcedTimelineItem({ userName, time }) {
   const [palcedOrderVar, setPlacedOrderVar] = useState({
-    userName: "Umer Abid",
+    userName,
     titleText: "placed the order",
-    time: "Nov 5, 3:49 PM",
+    time,
   });
 
   return (

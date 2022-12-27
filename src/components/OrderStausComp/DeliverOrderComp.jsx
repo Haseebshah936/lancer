@@ -158,6 +158,9 @@ export default function DeliverOrderComp({
                   height: "80px",
                   margin: "6px",
                   borderRadius: "5px",
+                  "&:hover": {
+                    backgroundColor: "#FF8886",
+                  },
                 }}
                 boxShadow="rgba(0, 0, 0, 0.1) 0px 4px 12px"
                 display={"flex"}
@@ -165,15 +168,22 @@ export default function DeliverOrderComp({
                 flexDirection={"column"}
                 overflowWrap={"anywheres"}
               >
-                <FileNameP className="text-center">
-                  {u.fileName.substring(0, 10)}
-                </FileNameP>
-                <FileNameP className="text-center">
-                  {u.fileName.substring(10, 19)}...
-                </FileNameP>
-                <FileExtensionP className="text-center">
-                  .{u.url.split(".")[u.url.split(".").length - 1]}
-                </FileExtensionP>
+                <Box
+                  onClick={() => {
+                    console.log("clicked");
+                    setUrl(url.filter((item) => item.url !== u.url));
+                  }}
+                >
+                  <FileNameP className="text-center">
+                    {u.fileName.substring(0, 10)}
+                  </FileNameP>
+                  <FileNameP className="text-center">
+                    {u.fileName.substring(10, 19)}...
+                  </FileNameP>
+                  <FileExtensionP className="text-center">
+                    .{u.url.split(".")[u.url.split(".").length - 1]}
+                  </FileExtensionP>
+                </Box>
               </Box>
             ))}
             <Button
@@ -235,6 +245,7 @@ export default function DeliverOrderComp({
     </div>
   );
 }
+
 const HaederP = styled.p`
   font-size: 1.45rem;
   font-weight: 600;

@@ -10,18 +10,18 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
-export default function RequirementsTimelineItem() {
+export default function RequirementsTimelineItem({
+  userName,
+  requirementDescription,
+  requirementDescriptionLinks,
+  time,
+}) {
   const [orderRequirementsVar, setOrderRequirementsVar] = useState({
-    userName: "Umer Abid",
+    userName,
     titleText: "Sent the Requirements",
-    time: "Nov 5, 3:49 PM",
-    requirementDescription:
-      "All the requirements are sent to the seller. and here are some extra links for the seller to check out.",
-    requirementDescriptionLinks: [
-      "https://www.google.com",
-      "https://www.google.com",
-      "https://www.google.com",
-    ],
+    time,
+    requirementDescription,
+    requirementDescriptionLinks,
   });
 
   return (
@@ -57,7 +57,7 @@ export default function RequirementsTimelineItem() {
             <RequirementDescriptionP>
               {orderRequirementsVar?.requirementDescription}
             </RequirementDescriptionP>
-            {orderRequirementsVar?.requirementDescriptionLinks.map(
+            {orderRequirementsVar?.requirementDescriptionLinks?.map(
               (link, index) => {
                 return (
                   <RequirementDescriptionLinksP key={index}>
@@ -65,6 +65,12 @@ export default function RequirementsTimelineItem() {
                   </RequirementDescriptionLinksP>
                 );
               }
+            )}
+            {orderRequirementsVar?.requirementDescriptionLinks?.length ===
+              0 && (
+              <RequirementDescriptionLinksP>
+                {"No Links or files are provided."}
+              </RequirementDescriptionLinksP>
             )}
           </RequirementDescriptionBox>
         </RequirementBox>

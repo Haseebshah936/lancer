@@ -2,10 +2,14 @@ import { Avatar, Box, Button, Grid, Pagination } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { useRealmContext } from "../../db/RealmContext";
+import useCreateChat from "../../Hooks/useCreateChat";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 
 export default function OngoingProjects({ data }) {
+  const { user } = useRealmContext();
+  const { createChatRoom_Navigate } = useCreateChat();
   const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
@@ -86,6 +90,12 @@ export default function OngoingProjects({ data }) {
                         fontWeight: "700",
                         marginTop: "6px",
                       }}
+                      onClick={() => {
+                        // console.log("p", p);
+                        console.log("userId", user?._id);
+                        console.log("Project craeter ID", p?.creatorId?._id);
+                        createChatRoom_Navigate(user?._id, p?.creatorId?._id);
+                      }}
                     >
                       Chat
                     </Button>
@@ -97,7 +107,11 @@ export default function OngoingProjects({ data }) {
                         fontWeight: "700",
                         marginTop: "6px",
                       }}
-                      onClick={() => navigate(`/orderStatus`)}
+                      onClick={() =>
+                        navigate(`/orderStatus`, {
+                          state: { p: p },
+                        })
+                      }
                     >
                       View
                     </Button>
