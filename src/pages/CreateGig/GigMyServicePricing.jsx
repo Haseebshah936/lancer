@@ -78,9 +78,9 @@ export default function GigMyServicePricing({
   additionalFeatures,
   setAdditionalFeatures,
 }) {
-  // useEffect(() => {
-  //   console.log("additionalFeatures: ", additionalFeatures);
-  // }, [additionalFeatures]);
+  useEffect(() => {
+    console.log("Category: ", Category);
+  }, [Category]);
 
   return (
     <>

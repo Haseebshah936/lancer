@@ -62,7 +62,9 @@ import OrderStatus from "./pages/OrderStatus/OrderStatus";
 import PurchaseScreen from "./pages/PurchaseScreen";
 import CustomerSupport from "./pages/CustomerSupport";
 import OrderStatusTemp from "./pages/OrderStatus/OrderStatusTemp";
-import AddCategory from "./pages/AddCategory";
+import AddCategory from "./components/AddCategory";
+import AddSubCategory from "./components/AddSubCategory";
+import Meeting from "./pages/Meeting";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -124,6 +126,7 @@ function App(props) {
             <Route path="/signup" element={<Signup />} />
           </Route>
           <Route path="/AddCategory" element={<AddCategory />} />
+          <Route path="/AddSubCategory" element={<AddSubCategory />} />
           <Route path="/payments" element={<PurchaseScreen />} />
           <Route path="/customersupport" element={<CustomerSupport />} />
           <Route path="/portfolio/:id" element={<SellerPortfolio />} />
@@ -174,6 +177,7 @@ function App(props) {
           </Route>
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
+          <Route path="/meeting" element={<Meeting />} />
           {/* just temp haseeb bata donst worry */}
           <Route path="/uploadImage" element={<FileUpload />} />\
           {/* just temp haseeb bata donst worry */}
