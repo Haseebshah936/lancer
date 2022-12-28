@@ -24,11 +24,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import LoadingComp from "../LoadingComp/LoadingComp";
 import { requestMethod } from "../../requestMethod";
 import { toast } from "react-toastify";
+import Joi from "joi-browser";
 
 export default function SendRquestedRequiremnetsTimeLine({
   userName,
   recquirementId,
   projectId,
+  req,
+  setP,
 }) {
   const [requestVar, setRequestVar] = useState({
     userName,
@@ -37,12 +40,32 @@ export default function SendRquestedRequiremnetsTimeLine({
     recquirementId,
     projectId,
   });
+  console.log("req: " + req);
 
   const [uploading, setUploading] = useState(false);
   const [url, setUrl] = useState([]);
   const [linkVar, setLinkVar] = useState("");
   const [links, setLinks] = useState([]);
   const [requirementDescription, setRequirementDescription] = useState("");
+  const [errors, setErrors] = useState({});
+  const Schema = {
+    requirementDescription: Joi.string().required().label("Description"),
+  };
+  const validate = () => {
+    const result = Joi.validate({ requirementDescription }, Schema, {
+      abortEarly: false,
+    });
+    if (!result.error) {
+      setErrors({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setErrors(errors);
+    return errors;
+  };
 
   const processFile = async (e) => {
     setUploading(true);
@@ -346,43 +369,36 @@ export default function SendRquestedRequiremnetsTimeLine({
                   <Box display={"flex"} justifyContent={"flex-end"}>
                     <Button
                       onClick={() => {
-                        console.log(url);
-                      }}
-                      sx={{
-                        backgroundColor: colors.becomePartnerButtonGreen,
-                        color: "white",
-                        "&:hover": {
-                          backgroundColor: colors.becomePartnerButtonGreen,
-                          color: "white",
-                        },
-                        marginRight: "10px",
-                      }}
-                    >
-                      Already Sent
-                    </Button>
-                    <Button
-                      onClick={() => {
                         console.log({
-                          url,
+                          url: url.map((u) => u.url),
                           links,
                           requirementDescription,
                           recquirementId,
                         });
-                        requestMethod
-                          .put("project/provideRequirement/" + projectId, {
-                            url,
-                            links,
-                            requirementDescription,
-                            recquirementId,
-                          })
-                          .then((res) => {
-                            console.log(res);
-                            toast.success("Requirement Submitted");
-                            setRequirementDescription("");
-                            setLinks([]);
-                            setUrl([]);
-                            setLinkVar("");
-                          });
+                        const v = validate();
+                        if (v) {
+                          toast.error(
+                            "Kindly Add any requiremnet text or file"
+                          );
+                          console.log("Discription is required eorror");
+                        } else {
+                          requestMethod
+                            .put("project/provideRequirement/" + projectId, {
+                              files: url.map((u) => u.url),
+                              links,
+                              details: requirementDescription,
+                              requirementId: recquirementId,
+                            })
+                            .then((res) => {
+                              console.log("res", res.data);
+                              setP(res.data);
+                              toast.success("Requirement Submitted");
+                              setRequirementDescription("");
+                              setLinks([]);
+                              setUrl([]);
+                              setLinkVar("");
+                            });
+                        }
                       }}
                       sx={{
                         backgroundColor: colors.becomePartnerButtonGreen,

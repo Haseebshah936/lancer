@@ -47,7 +47,14 @@ export default function RequirementsTimelineItem({
           <p>&nbsp;&nbsp;</p>
           <TimeP>{orderRequirementsVar.time}</TimeP>
         </Box>
-        <RequirementBox>
+        <RequirementBox
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            overflowWrap: "word-break",
+          }}
+          maxWidth={{ xs: "100%", sm: "100%" }}
+        >
           <RequirementTitleBox>
             <RequirementP>REQUIREMENTS</RequirementP>
           </RequirementTitleBox>
@@ -55,13 +62,17 @@ export default function RequirementsTimelineItem({
             Please contact before place an order and provide every necessary
             info required.
             <RequirementDescriptionP>
-              {orderRequirementsVar?.requirementDescription}
+              <div style={{ display: "flex", wordBreak: "break-all" }}>
+                {orderRequirementsVar?.requirementDescription}
+              </div>
             </RequirementDescriptionP>
             {orderRequirementsVar?.requirementDescriptionLinks?.map(
               (link, index) => {
                 return (
                   <RequirementDescriptionLinksP key={index}>
-                    {link}
+                    <div style={{ display: "flex", wordBreak: "break-all" }}>
+                      {link}
+                    </div>
                   </RequirementDescriptionLinksP>
                 );
               }
@@ -116,6 +127,7 @@ const RequirementTitleBox = styled(Box)`
   padding-top: 10px;
   padding-bottom: 10px;
   display: flex;
+  word-break: break-all;
   align-items: center;
   padding-bottom: 10px;
   padding-top: 10px;
@@ -140,6 +152,8 @@ const RequirementDescriptionBox = styled(Box)`
 const RequirementDescriptionP = styled.p`
   font-size: 1.35rem;
   font-weight: 400;
+  display: flex;
+  overflow-wrap: break-word;
 `;
 const RequirementDescriptionLinksP = styled.p`
   font-size: 1.2rem;
