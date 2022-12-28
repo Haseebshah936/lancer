@@ -46,10 +46,14 @@ export default function OrderCountDown({ p, setP }) {
       <DeliverOrderComp
         deliverOrderPopValue={deliverOrderPopValue}
         setDeliverOrderPopValue={setDeliverOrderPopValue}
+        p={p}
+        setP={setP}
       ></DeliverOrderComp>
       <CancelOrderComp
         cancelOrderPopValue={cancelOrderPopValue}
         setCancelOrderPopValue={setCancelOrderPopValue}
+        p={p}
+        setP={setP}
       ></CancelOrderComp>
       <ExtendDeliverDateComp
         deadlineExtendedPopValue={deadlineExtendedPopValue}

@@ -30,6 +30,7 @@ import SendRquestedRequiremnetsTimeLine from "../../components/OrderStausComp/Se
 import { requestMethod } from "../../requestMethod";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ReuestedForDeadlineExtensionTimeLine from "../../components/OrderStausComp/ReuestedForDeadlineExtensionTimeLine";
+import ProjectDeiverdedTimeLine from "../../components/OrderStausComp/ProjectDeiverdedTimeLine";
 export default function OrderStatus() {
   const location = useLocation();
   const { user } = useRealmContext();
@@ -174,10 +175,32 @@ export default function OrderStatus() {
                   proj={p}
                 ></ReuestedForDeadlineExtensionTimeLine>
               ))}
-
               {/*  */}
               {/* if seller requested for the time extension ends here  */}
-
+              {/*  */}
+              {/* if freelancer has delivered teh project timeline starts here*/}
+              {p.state === "delivered" ? (
+                <div>
+                  {p.delivery.map((d) => (
+                    <ProjectDeiverdedTimeLine
+                      userName={p?.hired?.userId?.name}
+                      time={
+                        d.createdAt.substring(0, 10) +
+                        " " +
+                        d.createdAt.substring(11, 19)
+                      }
+                      requirementDescriptionLinks={[...d.links, ...d.files]}
+                      requirementDescription={d.details}
+                      state={d.state}
+                      p={p}
+                      setP={setP}
+                    ></ProjectDeiverdedTimeLine>
+                  ))}
+                </div>
+              ) : (
+                <div></div>
+              )}
+              {/* if freelancer has delivered teh project timeline ends here*/}
               <Grid contsiner>
                 <Grid item xs={12} marginTop={5} marginBottoms={5}>
                   S

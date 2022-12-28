@@ -1,23 +1,49 @@
 import React, { useState, useEffect } from "react";
-import { Box, Divider, Input, TextField } from "@mui/material";
+import { Box, Divider, Input, TextField, Grid, Chip } from "@mui/material";
 import styled from "styled-components";
 import axios from "axios";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
+import Joi from "joi-browser";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import colors from "../../utils/colors";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import LoadingComp from "../LoadingComp/LoadingComp";
+import { toast } from "react-toastify";
+import { requestMethod } from "../../requestMethod";
 
 export default function DeliverOrderComp({
   deliverOrderPopValue,
   setDeliverOrderPopValue,
+  p,
+  setP,
 }) {
   const [uploading, setUploading] = useState(false);
   const [url, setUrl] = useState([]);
+  const [text, setText] = useState("");
+  const [linkVar, setLinkVar] = useState("");
+  const [links, setLinks] = useState([]);
+
+  const [error, setError] = useState({});
+  const schema = {
+    text: Joi.string().min(20).required().label("Text"),
+  };
+  const validate = () => {
+    const result = Joi.validate({ text }, schema, { abortEarly: false });
+    if (!result.error) {
+      setError({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setError(errors);
+    return errors;
+  };
 
   const handleClickOpen = () => {
     setDeliverOrderPopValue(true);
@@ -140,15 +166,6 @@ export default function DeliverOrderComp({
           </DialogContentText>
         </DialogContent>
         <Box paddingLeft={"10px"} paddingRight={"10px"}>
-          <GreenBorderTextField
-            id="outlined-multiline-static"
-            label="Add Text/ Urls"
-            multiline
-            rows={4}
-            fullWidth
-            marginLeft={{ xs: 0, sm: 1 }}
-            marginRight={{ xs: 0, sm: 1 }}
-          />
           <Box className="d-flex flex-wrap">
             {url?.map((u, index) => (
               <Box
@@ -221,13 +238,121 @@ export default function DeliverOrderComp({
               ></input>
             </Button>
           </Box>
+          <Box my={1}>
+            <GreenBorderTextField
+              id="outlined-multiline-static"
+              label="Add Text"
+              value={text}
+              onChange={(e) => {
+                setText(e.target.value);
+              }}
+              multiline
+              rows={4}
+              fullWidth
+              marginLeft={{ xs: 0, sm: 1 }}
+              marginRight={{ xs: 0, sm: 1 }}
+            />
+          </Box>
+          <Box my={1}>
+            <Grid
+              container
+              display={"flex"}
+              alignItems={"center"}
+              justifyContent={"space-between"}
+            >
+              <Grid item xs={10.5}>
+                <GreenBorderTextField
+                  id="outlined-multiline-static"
+                  label="Add Links"
+                  fullWidth
+                  value={linkVar}
+                  onChange={(e) => {
+                    setLinkVar(e.target.value);
+                  }}
+                  marginLeft={{ xs: 0, sm: 1 }}
+                  marginRight={{ xs: 0, sm: 1 }}
+                />
+              </Grid>
+              <Grid
+                item
+                xs={1}
+                display={"flex"}
+                alignItems={"center"}
+                justifyContent={"center"}
+              >
+                <Button
+                  variant="contained"
+                  disabled={linkVar === ""}
+                  sx={{
+                    backgroundColor: colors.becomePartnerGreen,
+                    color: "white",
+                    "&:hover": {
+                      backgroundColor: colors.becomePartnerGreen,
+                    },
+                  }}
+                  onClick={() => {
+                    setLinks([...links, linkVar]);
+                    setLinkVar("");
+                  }}
+                >
+                  Add
+                </Button>
+              </Grid>
+            </Grid>
+            <Grid container className="d-flex justify-content-center">
+              {links?.map((l, index) => (
+                <Grid
+                  item
+                  xs={12}
+                  className="d-flex justify-content-center"
+                  my={0.5}
+                >
+                  <Chip
+                    label={l}
+                    variant={"outlined"}
+                    onDelete={() => {
+                      setLinks(links.filter((item) => item !== l));
+                    }}
+                    sx={{
+                      marginStart: "10px",
+                      marginEnd: "10px",
+                      maxWidth: "60ch",
+                    }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Box>
         </Box>
 
         <DialogActions>
           <Button
             onClick={() => {
-              console.log(url);
-              handleClose();
+              console.log({
+                details: text,
+                links: links,
+                files: url.map((u) => u.url),
+              });
+              const v = validate();
+              if (v) {
+                toast.error(error.text);
+              } else {
+                requestMethod
+                  .put("project/deliver/" + p._id, {
+                    details: text,
+                    links: links,
+                    files: url.map((u) => u.url),
+                  })
+                  .then((res) => {
+                    setP(res.data);
+                    toast.success("Delivered Successfully");
+                    handleClose();
+                  })
+                  .catch((err) => {
+                    toast.error("Something went wrong please try again");
+                  });
+              }
+              // handleClose();
             }}
             sx={{
               backgroundColor: colors.becomePartnerButtonGreen,
