@@ -158,6 +158,11 @@ function SellerPortfolio(props) {
     return response.data;
   };
 
+  const getCategory = async (id) => {
+    const response = await requestMethod.get("category/subCategory/" + id);
+    return response.data;
+  };
+
   useEffect(() => {
     console.log("Category Features: ", categoryFeatures);
     console.log("SubCategory Features: ", subCategoryFeatures);
@@ -165,17 +170,13 @@ function SellerPortfolio(props) {
 
   useEffect(() => {
     if (productData) {
-      getSubCategory(productData.category).then((object) => {
-        console.log(
-          "Category Features in Useeffect: ",
-          object.category.features
-        );
-        console.log("SubCategory Features Useeffect : ", object.features);
+      getSubCategory(productData.category).then((subCat) => {
+        setSubCategoryFeatures(subCat.features);
 
-        setCategoryFeatures(object.category.features);
-        setSubCategoryFeatures(object.features);
-
-        console.log("Product Data, ", productData);
+        getCategory(subCat.category._id).then((Cat) => {
+          setCategoryFeatures(Cat.features);
+          console.log("Response", Cat);
+        });
       });
     }
   }, [productData]);
