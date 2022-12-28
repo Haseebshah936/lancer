@@ -7,15 +7,33 @@ import DeliverOrderComp from "../OrderStausComp/DeliverOrderComp";
 import CancelOrderComp from "../OrderStausComp/CancelOrderComp";
 import ExtendDeliverDateComp from "../OrderStausComp/ExtendDeliverDateComp";
 
-export default function OrderCountDown() {
+export default function OrderCountDown({ p, setP }) {
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
   const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
     useState(false);
+  const calculatedTime = () => {
+    const updatedDate = new Date(
+      new Date(p.startedAt).getTime() + p.days * 24 * 60 * 60 * 1000
+    );
+    // req
+    // July 22, 2029 00:00:00
+    //have
+    // "Mon Jan 09 2023 20:40:52";
+    const month = updatedDate.toString().substring(4, 7);
+    const date = updatedDate.toString().substring(8, 10);
+    const year = updatedDate.toString().substring(11, 15);
+    const time = updatedDate.toString().substring(16, 24);
+    // console.log(
+    //   `month: "${month}" date: "${date}", year: "${year}" time: "${time}"`
+    // );
+    // console.log(`${month} ${date}, ${year} ${time}`);
+    return `${month} ${date}, ${year} ${time}`;
+  };
 
-  let dateToEndCountdownAt = "July 22, 2029 00:00:00";
-  const { days, hours, minutes, seconds } =
-    useReactCountdown(dateToEndCountdownAt);
+  const [remainingDate, setRemainingDate] = useState(calculatedTime());
+  // let dateToEndCountdownAt = calculatedTime();
+  const { days, hours, minutes, seconds } = useReactCountdown(remainingDate);
 
   return (
     <div
@@ -36,6 +54,8 @@ export default function OrderCountDown() {
       <ExtendDeliverDateComp
         deadlineExtendedPopValue={deadlineExtendedPopValue}
         setDeadlineExtendedPopValue={setDeadlineExtendedPopValue}
+        p={p}
+        setP={setP}
       ></ExtendDeliverDateComp>
 
       <Grid
