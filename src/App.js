@@ -64,6 +64,7 @@ import CustomerSupport from "./pages/CustomerSupport";
 import OrderStatusTemp from "./pages/OrderStatus/OrderStatusTemp";
 import AddCategory from "./components/AddCategory";
 import AddSubCategory from "./components/AddSubCategory";
+import Meeting from "./pages/Meeting";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -176,6 +177,7 @@ function App(props) {
           </Route>
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
+          <Route path="/meeting" element={<Meeting />} />
           {/* just temp haseeb bata donst worry */}
           <Route path="/uploadImage" element={<FileUpload />} />\
           {/* just temp haseeb bata donst worry */}

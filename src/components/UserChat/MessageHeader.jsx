@@ -26,10 +26,14 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "../../requestMethod";
 import { miniTablet, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
+import { useGoogleLogin } from "@react-oauth/google";
 import displayTime from "../../utils/DateAndTime/displayTime";
 import { handleError } from "../../utils/helperFunctions";
 import CreateMeeting from "../CreateMeeting";
 import GroupsModal from "../GroupsModal";
+import dayjs from "dayjs";
+import convertMiliSec from "../../utils/DateAndTime/TimeLeft";
+import { timeFormat } from "../../utils/DateAndTime/TimeFormat";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -52,6 +56,12 @@ function MessageHeader({
   const [toggle, setToggle] = useState(false);
   const [toggleMetting, setToggleMeeting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const date = dayjs(new Date());
+  const [details, setDetials] = useState({
+    date: date.format("YYYY-MM-DD"),
+    time: timeFormat(date.hour(), date.minute()),
+    description: "",
+  });
 
   const handleToggleMeeting = () => {
     setToggleMeeting(true);
@@ -81,13 +91,30 @@ function MessageHeader({
       });
   };
 
-  const handleMeetingCreation = (details) => {
+  const googleAuth = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: async ({ code }) => {
+      try {
+        const response = await requestMethod.post("meeting", {
+          code,
+          ...details,
+        });
+        console.log("Link ", response.data);
+        handleMeetingCreation(details.description, response.data);
+      } catch (error) {
+        handleError(error);
+      }
+    },
+    redirect_uri: "http://localhost:3000/home",
+  });
+
+  const handleMeetingCreation = (details, link) => {
     const msg = {
       userId: 1,
       userName: "Haseeb",
-      type: "meetingLink",
+      type: "meetingItem",
       data: {
-        uri: "https://meet.google.com/mgm-xttq-adf",
+        uri: link,
       },
       text: details || "Meeting Created",
     };
@@ -219,7 +246,12 @@ function MessageHeader({
         <CreateMeeting
           loading={loading}
           toggleClose={() => setToggleMeeting(false)}
-          onSubmit={(details) => handleMeetingCreation(details)}
+          meetingDetails={details}
+          setMeetingDetails={(details) => setDetials(details)}
+          onSubmit={(details) => {
+            setDetials(details);
+            googleAuth();
+          }}
         />
       </Modal>
     </Container>

@@ -35,23 +35,27 @@ function CustomMessageBox({
           marginLeft: position === "left" ? "1.5rem" : 0,
         }}
       >
-        {type !== "meetingLink" ? (
-          <MessageBox
-            position={position}
-            type={type}
-            title={title}
-            text={props?.text && <AutoLinkText text={props?.text} />}
-            data={props?.data}
-            {...props}
-            onDownload={() => handleDownload(props?.data?.uri)}
-            onMeetingLinkClick={() => handleDownload(props?.data?.uri)}
-            // onClick={() => handleDownload(props?.data?.uri)}
-          />
+        {type !== "meetingItem" ? (
+          <>
+            <MessageBox
+              position={position}
+              type={type}
+              title={title}
+              text={props?.text && <AutoLinkText text={props?.text} />}
+              data={props?.data}
+              {...props}
+              onDownload={() => handleDownload(props?.data?.uri)}
+              onMeetingLinkClick={() => handleDownload(props?.data?.uri)}
+              // onClick={() => handleDownload(props?.data?.uri)}
+            />
+            <Triangle position={position} />
+          </>
         ) : (
           <MeetingItem
             subject={props?.text}
+            title={title}
             {...props}
-            avatars={[{ src: avatar }]}
+            // avatars={[{ src: avatar }]}
             onMeetingClick={() => handleDownload(props?.data?.uri)}
             onShareClick={() => {
               toast.success("Meeting Link Copied");
@@ -59,7 +63,6 @@ function CustomMessageBox({
             }}
           />
         )}
-        <Triangle position={position} />
       </Wrapper>
     </Container>
   );
@@ -77,6 +80,7 @@ const Container = styled.div`
   margin-block: 2.5rem;
   margin-top: ${(props) => (props.inverted ? `2.5rem` : `0rem`)};
   margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
+  margin-right: ${(props) => (props.position === "right" ? "auto" : "1.5rem")};
 
   .rce-mbox-photo {
     display: flex;
