@@ -29,6 +29,9 @@ export function RealmAppProvider({ appId, children }) {
       .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
       .then((res) => {
         setUser(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
       });
   }, [currentUser]);
 

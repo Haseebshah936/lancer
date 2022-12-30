@@ -60,10 +60,10 @@ function Signup(props) {
       console.log(cred);
       const { code } = cred;
       // googleSignup(code);
-      const credentials = Realm.Credentials.google(code);
-      realmApp
-        .logIn(credentials)
-        .then((user) => alert(`Logged in with id: ${user.id}`));
+      // const credentials = Realm.Credentials.google(code);
+      // realmApp
+      //   .logIn(credentials)
+      //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
       try {
         const response = await axios.post(
