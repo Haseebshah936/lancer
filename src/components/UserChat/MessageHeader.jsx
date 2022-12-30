@@ -2,29 +2,19 @@ import {
   Add,
   ArrowBack,
   Call,
-  Circle,
   Event,
   FiberManualRecord,
   Videocam,
 } from "@mui/icons-material";
-import {
-  ButtonBase,
-  IconButton,
-  Modal,
-  StepButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import TouchRipple from "@mui/material/ButtonBase/TouchRipple";
+import { ButtonBase, IconButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import React from "react";
 import { useState } from "react";
-import { useEffect } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "../../requestMethod";
-import { miniTablet, mobile, tablet } from "../../responsive";
+import { miniTablet, mobile } from "../../responsive";
 import colors from "../../utils/colors";
 import { useGoogleLogin } from "@react-oauth/google";
 import displayTime from "../../utils/DateAndTime/displayTime";
@@ -32,8 +22,9 @@ import { handleError } from "../../utils/helperFunctions";
 import CreateMeeting from "../CreateMeeting";
 import GroupsModal from "../GroupsModal";
 import dayjs from "dayjs";
-import convertMiliSec from "../../utils/DateAndTime/TimeLeft";
 import { timeFormat } from "../../utils/DateAndTime/TimeFormat";
+import CustomModal from "../CustomModal";
+import { useRealmContext } from "../../db/RealmContext";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -47,8 +38,10 @@ function MessageHeader({
   temp = true,
   toggleDrawer = () => {},
   onMeetingClick = () => {},
+  id = "",
 }) {
   const today = new Date().getTime();
+  const { user } = useRealmContext();
   const dateToday = new Date(today).getDate();
   const monthToday = new Date(today).getMonth();
   const yearToday = new Date(today).getFullYear();
@@ -133,6 +126,20 @@ function MessageHeader({
     )
       return true;
   };
+
+  const createCall = async () => {
+    try {
+      const { data } = await requestMethod.post("call", {
+        chatroomId: id,
+        callerId: user._id,
+        receiverId: userId,
+        offer: null,
+      });
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   const handleTimeDisplay = () => {
     return isMatchToday(activeChatroomStatus?.isOnline)
       ? displayTime(
@@ -226,23 +233,13 @@ function MessageHeader({
           </Tooltip>
         )}
       </Box>
-      <Modal
-        open={toggle}
-        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      <CustomModal isVisible={toggle}>
         <GroupsModal
           toggleClose={handleClose}
           handleAddToGroup={handleAddToGroup}
         />
-      </Modal>
-      <Modal
-        open={toggleMetting}
-        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+      </CustomModal>
+      <CustomModal isVisible={toggleMetting}>
         <CreateMeeting
           loading={loading}
           toggleClose={() => setToggleMeeting(false)}
@@ -253,7 +250,7 @@ function MessageHeader({
             googleAuth();
           }}
         />
-      </Modal>
+      </CustomModal>
     </Container>
   );
 }

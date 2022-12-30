@@ -4,6 +4,7 @@ import {
   MeetingItem,
   MeetingLink,
   MessageBox,
+  SystemMessage,
 } from "react-chat-elements";
 import styled from "styled-components";
 import AutoLinkText from "react-autolink-text2";
@@ -24,33 +25,49 @@ function CustomMessageBox({
     // console.log("Download", e);
     window.open(e);
   };
-  return (
-    <Container position={position} inverted={inverted}>
-      {position === "left" && (
-        <Avatar src={avatar} alt="avatar" size="small" type="circle" />
-      )}
-      <Wrapper
-        style={{
-          marginRight: position === "right" ? "1.5rem" : 0,
-          marginLeft: position === "left" ? "1.5rem" : 0,
-        }}
-      >
-        {type !== "meetingItem" ? (
-          <>
-            <MessageBox
-              position={position}
-              type={type}
-              title={title}
-              text={props?.text && <AutoLinkText text={props?.text} />}
-              data={props?.data}
-              {...props}
-              onDownload={() => handleDownload(props?.data?.uri)}
-              onMeetingLinkClick={() => handleDownload(props?.data?.uri)}
-              // onClick={() => handleDownload(props?.data?.uri)}
-            />
-            <Triangle position={position} />
-          </>
-        ) : (
+
+  const MessageWrapper = ({ children }) => {
+    return (
+      <Container position={position} inverted={inverted}>
+        {children}
+      </Container>
+    );
+  };
+
+  const UniversalMessage = () => {
+    return (
+      <MessageWrapper>
+        {position === "left" && (
+          <CustomAvatar
+            position={position}
+            src={avatar}
+            alt="avatar"
+            size="small"
+            type="circle"
+          />
+        )}
+        <Wrapper position={position}>
+          <MessageBox
+            position={position}
+            type={type}
+            title={title}
+            text={props?.text && <AutoLinkText text={props?.text} />}
+            data={props?.data}
+            {...props}
+            onDownload={() => handleDownload(props?.data?.uri)}
+            onMeetingLinkClick={() => handleDownload(props?.data?.uri)}
+            // onClick={() => handleDownload(props?.data?.uri)}
+          />
+          <Triangle position={position} />
+        </Wrapper>
+      </MessageWrapper>
+    );
+  };
+
+  const MeetingMessage = () => {
+    return (
+      <MessageWrapper>
+        <Wrapper position={position}>
           <MeetingItem
             subject={props?.text}
             title={title}
@@ -62,10 +79,34 @@ function CustomMessageBox({
               navigator.clipboard.writeText(props?.data?.uri);
             }}
           />
-        )}
-      </Wrapper>
-    </Container>
-  );
+        </Wrapper>
+      </MessageWrapper>
+    );
+  };
+
+  const SystemMessageWrapper = () => {
+    if (position === "right") {
+      return null;
+    }
+    return (
+      <MessageWrapper>
+        <Wrapper>
+          <SystemMessage
+            text={`${props?.text} ${position === "left" ? title : ""}`}
+          />
+        </Wrapper>
+      </MessageWrapper>
+    );
+  };
+
+  switch (type) {
+    case "meetingItem":
+      return <MeetingMessage />;
+    case "system":
+      return <SystemMessageWrapper />;
+    default:
+      return <UniversalMessage />;
+  }
 }
 
 export default CustomMessageBox;
@@ -79,8 +120,6 @@ const Container = styled.div`
     props.inverted ? `rotateX(180deg)` : `rotateX(0deg)`};
   margin-block: 2.5rem;
   margin-top: ${(props) => (props.inverted ? `2.5rem` : `0rem`)};
-  margin-inline: ${(props) => (props.position === "right" ? "auto" : "1rem")};
-  margin-right: ${(props) => (props.position === "right" ? "auto" : "1.5rem")};
 
   .rce-mbox-photo {
     display: flex;
@@ -182,4 +221,9 @@ const Triangle = styled.div`
     0 100%
   );
   display: ${(props) => (props.position === "left" ? "block" : "none")};
+`;
+
+const CustomAvatar = styled(Avatar)`
+  margin-inline: ${(props) =>
+    props.position === "left" ? "1rem 1.5rem" : "0rem"};
 `;

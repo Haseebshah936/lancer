@@ -347,6 +347,7 @@ function Chat(props) {
             temp={active.id === location.state?.id}
             userId={active.participantId}
             toggleDrawer={() => toggleDrawer(true)}
+            id={active.id}
           />
           {!reRender && (
             <MessagesContainer

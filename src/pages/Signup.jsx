@@ -35,7 +35,7 @@ function Signup(props) {
   const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
-  const { signup, realmApp } = useRealmContext();
+  const { signup, realmApp, googleAuth: googleSignup } = useRealmContext();
 
   useEffect(() => {
     setOpen(false);
@@ -56,26 +56,28 @@ function Signup(props) {
 
   const googleAuth = useGoogleLogin({
     flow: "auth-code",
-    onSuccess: async ({ code }) => {
-      // console.log(code);
+    onSuccess: async (cred) => {
+      console.log(cred);
+      const { code } = cred;
+      googleSignup(code);
       // const credentials = Realm.Credentials.google(code);
       // realmApp
       //   .logIn(credentials)
       //   .then((user) => alert(`Logged in with id: ${user.id}`));
 
-      try {
-        const response = await axios.post(
-          "http://localhost:3003/api/auth/google/signup",
-          {
-            // http://localhost:3001/auth/google backend that will exchange the code
-            code,
-          }
-        );
-        const { email, password, ...rest } = response.data;
-        handleSignup(email, password, rest);
-      } catch (error) {
-        handleAuthError(error);
-      }
+      // try {
+      //   const response = await axios.post(
+      //     "http://localhost:3003/api/auth/google/signup",
+      //     {
+      //       // http://localhost:3001/auth/google backend that will exchange the code
+      //       code,
+      //     }
+      //   );
+      //   const { email, password, ...rest } = response.data;
+      //   handleSignup(email, password, rest);
+      // } catch (error) {
+      //   handleAuthError(error);
+      // }
     },
     redirect_uri: "http://localhost:3000/home",
   });
