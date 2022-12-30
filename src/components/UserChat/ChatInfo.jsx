@@ -3,7 +3,7 @@ import { ExitToApp, Report } from "@material-ui/icons";
 import { Logout } from "@mui/icons-material";
 import { Button, CircularProgress, Paper } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { memo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -19,6 +19,7 @@ import ProfileComponent from "../ProfileComponent";
 import MorePopper from "./MorePoper";
 
 function ChatInfo({ drawer, removeChatroom }) {
+  // console.log("Chat Info rerendered");
   const { activeChatroom: active, setActiveChatroom } = useCustomContext();
   const { user } = useRealmContext();
   const [description, setDescription] = useState({
@@ -318,7 +319,7 @@ function ChatInfo({ drawer, removeChatroom }) {
   );
 }
 
-export default ChatInfo;
+export default memo(ChatInfo);
 
 const Container = styled.div`
   display: flex;

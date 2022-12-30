@@ -65,7 +65,6 @@ function Chat(props) {
     activeChatroom: active,
     setActiveChatroom: setActive,
     setActiveChatroomStatus,
-    activeChatroomStatus,
   } = useCustomContext();
   const location = useLocation();
   const [loadingMore, setLoadingMore] = useState(false);
@@ -78,22 +77,29 @@ function Chat(props) {
 
   const [drawer, setDrawer] = useState(true);
 
-  const toggleDrawer = (state) => {
+  const toggleDrawer = useCallback((state) => {
     setDrawer(state);
-  };
+  }, [drawer]);
 
-  const handleToggle = () => {
+  const handleToggle = useCallback(() => {
     setToggle(true);
-  };
+  }, [toggle]);
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setToggle(false);
-  };
+  }, [toggle]);
 
   const handleBackClick = () => {
     setActive(false);
     setActiveChatroomStatus(false);
   };
+
+  const handleSetNewData = useCallback(
+    (data) => {
+      setNewData(data);
+    },
+    [newData]
+  );
 
   const getNewMessage = useCallback(
     (messageId, realmMessageObject) => {
@@ -184,6 +190,23 @@ function Chat(props) {
       });
   };
 
+  const onScrollHandle = useCallback(() => {
+    handleScroll(
+      scrollRef,
+      loadingMore,
+      setLoadingMore,
+      active,
+      user,
+      data,
+      newData,
+      setData
+    )
+  }, [data, newData, loadingMore, active, user]);
+
+  const onSendHandle = useCallback((message) => {
+    handleSend(message, user, active, setNewData)
+  }, [active, user, newData]);
+
   useEffect(() => {
     let breakAsyncIterator = false;
     if (user?._id && !called) {
@@ -261,6 +284,10 @@ function Chat(props) {
       setChatRoomsData((prev) => [location.state, ...prev]);
     }
   }, []);
+
+  // useEffect(() => {
+  //   console.log("Re render called");
+  // }, [reRender]);
 
   return (
     <Container>
@@ -350,30 +377,20 @@ function Chat(props) {
             id={active.id}
           />
           {!reRender && (
-            <MessagesContainer
+            <MessagesContainer   //* This is the main component which renders the messages
               scrollRef={scrollRef}
               data={data}
               active={active}
               newData={newData}
-              handleScroll={() =>
-                handleScroll(
-                  scrollRef,
-                  loadingMore,
-                  setLoadingMore,
-                  active,
-                  user,
-                  data,
-                  newData,
-                  setData
-                )
+              handleScroll={
+                onScrollHandle // Making it a callback function to avoid re-rendering
               }
               getNewMessage={getNewMessage}
-              setNewData={setNewData}
               reRender={reRender}
             />
           )}
           <ChatInput
-            onSend={(message) => handleSend(message, user, active, setNewData)}
+            onSend={onSendHandle} // Making it a callback function to avoid re-rendering
           />
           <RightDrawer drawer={drawer} toggleDrawer={toggleDrawer}>
             <ChatInfo

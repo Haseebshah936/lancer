@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { memo, useEffect } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
@@ -16,11 +16,8 @@ function MessagesContainer({
   scrollRef,
   active,
   getNewMessage,
-  setNewData,
-  reRender,
 }) {
   const { user, currentUser } = useRealmContext();
-
   useEffect(() => {
     let breakAsyncIterator = false; // Later used to exit async iterator
     (async () => {
@@ -44,6 +41,7 @@ function MessagesContainer({
       breakAsyncIterator = true; // Exit async iterator
     };
   }, []);
+
 
   return (
     <ChatContainer onScroll={handleScroll} ref={scrollRef}>
@@ -84,7 +82,7 @@ function MessagesContainer({
   );
 }
 
-export default MessagesContainer;
+export default memo(MessagesContainer);
 const ChatContainer = styled.div`
   overflow: scroll;
   transform: rotateX(180deg);

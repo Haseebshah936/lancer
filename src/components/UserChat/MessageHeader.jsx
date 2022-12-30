@@ -8,7 +8,7 @@ import {
 } from "@mui/icons-material";
 import { ButtonBase, IconButton, Tooltip, Typography } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
+import React, { memo } from "react";
 import { useState } from "react";
 import { Avatar } from "react-chat-elements";
 import styled from "styled-components";
@@ -255,7 +255,7 @@ function MessageHeader({
   );
 }
 
-export default MessageHeader;
+export default memo(MessageHeader);
 const Container = styled.div`
   display: flex;
   justify-content: space-between;

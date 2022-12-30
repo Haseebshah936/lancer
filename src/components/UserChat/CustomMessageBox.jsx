@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Avatar,
   MeetingItem,
@@ -109,7 +109,7 @@ function CustomMessageBox({
   }
 }
 
-export default CustomMessageBox;
+export default memo(CustomMessageBox);
 const Container = styled.div`
   display: flex;
   flex-grow: 1;
