@@ -20,6 +20,7 @@ import MarkunreadMailboxIcon from "@mui/icons-material/MarkunreadMailbox";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
 import { toast } from "react-toastify";
+import { handleError } from "../../utils/helperFunctions";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -245,7 +246,7 @@ export default function ProjectDeiverdedTimeLine({
                   }}
                   onClick={() => {
                     requestMethod
-                      .put("project/complete/" + p._id)
+                      .put("project/complete/" + p._id, { deliveryId })
                       .then((res) => {
                         setProjectDVar({
                           ...projectDVar,
@@ -254,9 +255,8 @@ export default function ProjectDeiverdedTimeLine({
                         toast.success("Project completed successfully");
                       })
                       .catch((err) => {
-                        toast.error(
-                          "Something went wrong please try again later"
-                        );
+                        console.log("err", err);
+                        handleError(err);
                       });
                   }}
                 >

@@ -31,6 +31,7 @@ import { requestMethod } from "../../requestMethod";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ReuestedForDeadlineExtensionTimeLine from "../../components/OrderStausComp/ReuestedForDeadlineExtensionTimeLine";
 import ProjectDeiverdedTimeLine from "../../components/OrderStausComp/ProjectDeiverdedTimeLine";
+import ShowReviewToFreelancerTimeline from "../../components/OrderStausComp/ShowReviewToFreelancerTimeline";
 export default function OrderStatus() {
   const location = useLocation();
   const { user } = useRealmContext();
@@ -199,6 +200,22 @@ export default function OrderStatus() {
               ))}
               {/* if freelancer has delivered teh project timeline ends here*/}
               {/*  */}
+              {/* if client has accepted the project timeline starts here # rating*/}
+              {p?.state === "completed" && user?._id === p?.creatorId?._id ? (
+                <div>
+                  {" "}
+                  <EmployerReviewTimeLine
+                    p={p}
+                    setP={setP}
+                  ></EmployerReviewTimeLine>
+                </div>
+              ) : (
+                <div>
+                  <ShowReviewToFreelancerTimeline></ShowReviewToFreelancerTimeline>
+                </div>
+              )}
+              {/* if client has accepted the project timeline ends here # rating*/}
+              {/*  */}
               {/* project progress last timeline starts here*/}
               {p?.state !== "completed" ? (
                 <LastTimeLine></LastTimeLine>
@@ -235,7 +252,11 @@ export default function OrderStatus() {
                   e
                 </Grid>
               </Grid>
-
+              {/* Static */}
+              <EmployerReviewTimeLine></EmployerReviewTimeLine>
+              {/* Freelancer Revire TimeLine start */}
+              <FreelancerReviewTimeLine></FreelancerReviewTimeLine>
+              {/* Freelancer Revire TimeLine Ends */}
               {/* Order Started */}
               <StatusChangeTimelineItem
                 Icon={RocketIcon}
