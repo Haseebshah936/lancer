@@ -71,7 +71,10 @@ export default function RequestForRequirements({ pID }) {
                       toast.success("Request for Requirements sent");
                     })
                     .catch((err) => {
-                      handleError(err);
+                      // handleError(err);
+                      toast.success(
+                        "Request for Requirements sent, wait for the seller to response"
+                      );
                     });
                 }}
               >

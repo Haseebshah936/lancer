@@ -42,6 +42,7 @@ export default function OrderStatus() {
       console.log("res.data", res.data);
     });
   }, []);
+
   const checkReqLenAndStateFun = () => {
     if (p?.requirenments?.length == 0) {
       return false;
@@ -134,7 +135,7 @@ export default function OrderStatus() {
                 <StatusChangeTimelineItem
                   Icon={RocketIcon}
                   data={{
-                    titleText: "Seller send the new requirements",
+                    titleText: "Empolyer send the new requirements",
                     time: "",
                   }}
                 ></StatusChangeTimelineItem>
@@ -179,28 +180,44 @@ export default function OrderStatus() {
               {/* if seller requested for the time extension ends here  */}
               {/*  */}
               {/* if freelancer has delivered teh project timeline starts here*/}
-              {p.state === "delivered" ? (
-                <div>
-                  {p.delivery.map((d) => (
-                    <ProjectDeiverdedTimeLine
-                      userName={p?.hired?.userId?.name}
-                      time={
-                        d.createdAt.substring(0, 10) +
-                        " " +
-                        d.createdAt.substring(11, 19)
-                      }
-                      requirementDescriptionLinks={[...d.links, ...d.files]}
-                      requirementDescription={d.details}
-                      state={d.state}
-                      p={p}
-                      setP={setP}
-                    ></ProjectDeiverdedTimeLine>
-                  ))}
-                </div>
-              ) : (
-                <div></div>
-              )}
+
+              {p.delivery.map((d) => (
+                <ProjectDeiverdedTimeLine
+                  userName={p?.hired?.userId?.name}
+                  time={
+                    d.createdAt.substring(0, 10) +
+                    " " +
+                    d.createdAt.substring(11, 19)
+                  }
+                  requirementDescriptionLinks={[...d.links, ...d.files]}
+                  requirementDescription={d.details}
+                  state={d.state}
+                  deliveryId={d._id}
+                  p={p}
+                  setP={setP}
+                ></ProjectDeiverdedTimeLine>
+              ))}
               {/* if freelancer has delivered teh project timeline ends here*/}
+              {/*  */}
+              {/* project progress last timeline starts here*/}
+              {p?.state !== "completed" ? (
+                <LastTimeLine></LastTimeLine>
+              ) : (
+                <div>
+                  <Grid
+                    container
+                    item
+                    xs={12}
+                    display={"flex"}
+                    justifyContent={"center"}
+                  >
+                    <Grid item xs={11.5}>
+                      <OrderCompletedComp></OrderCompletedComp>
+                    </Grid>
+                  </Grid>
+                </div>
+              )}
+              {/* project progress last timeline ends here*/}
               <Grid contsiner>
                 <Grid item xs={12} marginTop={5} marginBottoms={5}>
                   S
