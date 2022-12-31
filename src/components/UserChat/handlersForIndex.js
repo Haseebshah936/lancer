@@ -180,6 +180,7 @@ export const handleScroll = (
       )
       .then((res) => {
         setLoadingMore(false);
+        if(res.data.length === 0) setLoadingMore(false);
         setData((pre) => [...pre, ...res.data]);
       })
       .catch((err) => {

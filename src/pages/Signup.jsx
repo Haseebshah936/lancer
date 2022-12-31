@@ -35,7 +35,7 @@ function Signup(props) {
   const [loading, setLoading] = useState(false);
   const [check, setCheck] = useState(false);
   const { setOpen } = useCustomContext();
-  const { signup, realmApp } = useRealmContext();
+  const { signup, realmApp, googleAuth: googleSignup } = useRealmContext();
 
   useEffect(() => {
     setOpen(false);
@@ -56,8 +56,10 @@ function Signup(props) {
 
   const googleAuth = useGoogleLogin({
     flow: "auth-code",
-    onSuccess: async ({ code }) => {
-      // console.log(code);
+    onSuccess: async (cred) => {
+      console.log(cred);
+      const { code } = cred;
+      // googleSignup(code);
       // const credentials = Realm.Credentials.google(code);
       // realmApp
       //   .logIn(credentials)

@@ -1,7 +1,7 @@
 import { ArrowBack, Search } from "@mui/icons-material";
 import { IconButton, InputBase } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { ChatItem, ChatList } from "react-chat-elements";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
@@ -16,14 +16,8 @@ function ChatRooms({
   chatrooms = [],
   onRoomClick = () => {},
   onMuteClick = () => {},
-  onFilter = () => {},
   changeChatroomsData = () => {},
-  setChatRooms,
 }) {
-  const navigate = useNavigate();
-  const [status, setStatus] = useState(false);
-  const { currentUser } = useRealmContext();
-
   // getChatRooms()
   // .then(async (res) => {
   //   setChatRooms(res.data);
@@ -119,6 +113,8 @@ function ChatRooms({
   //   };
   // }, []);
 
+  // console.log("Custom room rerendered");
+
   return (
     <ChatRoomsContainer>
       {chatrooms.map((chatroom, i) => {
@@ -138,7 +134,7 @@ function ChatRooms({
   );
 }
 
-export default ChatRooms;
+export default memo(ChatRooms);
 
 const ChatRoomsContainer = styled.div`
   display: flex;

@@ -34,7 +34,6 @@ function ChatInput({ onSend, profilePic }) {
   const [attachments, setAttachments] = useState([]);
   const filePickerRef = useRef(null);
   const { user } = useRealmContext();
-
   // !NOTE Must add the following
   // Array of timeout listners
 

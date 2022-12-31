@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { ChatItem } from "react-chat-elements";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
@@ -19,9 +19,9 @@ function CustomChatItem({
   changeChatroomsData,
   index,
 }) {
+  // console.log("Custom Chat Item rerendered");
   const { currentUser, user } = useRealmContext();
-  const { activeChatroom, setActiveChatroom, setActiveChatroomStatus } =
-    useCustomContext();
+  const { setActiveChatroomStatus } = useCustomContext();
   const [isOnline, setIsOnline] = useState(
     new Date(chatroom.isOnline).getTime()
   );
@@ -172,7 +172,7 @@ function CustomChatItem({
   );
 }
 
-export default CustomChatItem;
+export default memo(CustomChatItem);
 
 const Container = styled.div`
   .rce-citem-avatar img {
