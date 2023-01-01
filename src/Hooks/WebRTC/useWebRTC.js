@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/helperFunctions";
 import { useCustomContext } from "../useCustomContext";
-import { createCall } from "./helperfunction";
+import { createCall, updateCallTime } from "./helperfunction";
 
 const servers = {
   iceServers: [
@@ -20,7 +20,6 @@ const servers = {
 const useWebRTC = () => {
   const { state, dispatch } = useCustomContext();
   const [message, setMessage] = useState("");
-  const [screenShare, setScreenShare] = useState(false);
   const dataChannel = useRef(null);
 
   // Constraints - will be used by getUserMedia() for customizing the audio and video
@@ -52,7 +51,7 @@ const useWebRTC = () => {
     try {
       const newConstraints = { ...constraints, video: type === "video" };
       const stream = await navigator.mediaDevices.getUserMedia(newConstraints);
-      const videoTracks = stream.getVideoTracks();
+      // const videoTracks = stream.getVideoTracks();
       const audioTracks = stream.getAudioTracks();
       /**
        * This is used to tell the browser that the audio is speech
@@ -80,6 +79,7 @@ const useWebRTC = () => {
         type: "SET_LOCAL_STREAM",
         payload: stream, // *Local Stream and assign it to cameraRef setting the video tag to muted. This will prevent the user from hearing his own voice.
       });
+      
       return stream;
       // Dispatching the local stream to the state
     } catch (error) {
@@ -263,26 +263,46 @@ const useWebRTC = () => {
       // *Fired when the connection state changes
       switch (pc.connectionState) {
         case "new": // *The connection is new
-          console.log("New");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "new",
+          })
           break;
         case "checking": // *The connection is being checked
-          console.log("Connecting…");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "checking",
+          })
           break;
         case "connected": // *The connection is connected
-          console.log("Online");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "connected",
+          })
           break;
         case "disconnected": // *The connection is disconnected
-          handleHangUp(pc);
-          console.log("Disconnecting…");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "disconnected",
+          });
           break;
         case "closed": // *The connection is closed
-          console.log("Offline");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "disconnected",
+          });
           break;
         case "failed": // *The connection failed
-          console.log("Error");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "disconnected",
+          })
           break;
         default:
-          console.log("Unknown");
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "Un",
+          })
           break;
       }
     };
@@ -321,13 +341,33 @@ const useWebRTC = () => {
     pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
     pc.onnegotiationneeded = (e) => handleNegotiation(e, pc); // *Fired when a negotiation is needed
     try{
-      return await createCall(
+      const data =  await createCall(
         type,
         chatroomId,
         callerId,
         receiverId,
         JSON.stringify(pc.localDescription)
       );
+      let interval;
+      interval = setInterval(async () => {
+        try {
+          console.log("Updating call time");
+          await updateCallTime(data._id);
+        } catch (error) {
+          console.log(error);
+          dispatch({
+            type: "SET_CONNECTION_STATE",
+            payload: "failed",
+          })
+          clearInterval(interval);
+          handleError(error);
+        }
+      }, 20000)
+      dispatch({
+        type: "SET_CALL_INTERVAL",
+        payload: interval
+      })
+      return data;
     }
     catch(err){
       handleHangUp(pc,stream);
@@ -470,7 +510,7 @@ const useWebRTC = () => {
       toast.error("Please stop screen share first");
       return;
     }
-    if (videoTracks.length > 0) {
+    if (state.cameraSharing) {
       // *If the video track is on, then it will be removed
       dispatch({
         type: "SET_CAMERA",
@@ -479,7 +519,10 @@ const useWebRTC = () => {
       removeVideoTrack();
     } else {
       // *If the video track is off, then it will be added
-
+      dispatch({
+        type: "SET_CAMERA",
+        payload: true,
+      });
       addVideoTrack();
     }
     dispatch({
@@ -506,10 +549,6 @@ const useWebRTC = () => {
     stream.getTracks().forEach((track) => {
       // *Adding the tracks to the local stream
       state.peerConnection?.addTrack(track, stream); // *Adding the track to the peer connection
-    });
-    dispatch({
-      type: "SET_CAMERA",
-      payload: true,
     });
     dispatch({
       type: "SET_LOCAL_STREAM",

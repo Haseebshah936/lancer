@@ -16,3 +16,11 @@ export const createCall = async (
   });
   return res.data;
 };
+
+export const updateCallTime = async (
+  callId
+) => {
+  const res = await requestMethod.put(`call/updateTime/${callId}`);
+  return res.data;
+};
+

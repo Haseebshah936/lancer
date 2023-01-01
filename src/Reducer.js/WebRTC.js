@@ -10,9 +10,11 @@ export const webRTCInitialState = {
   remoteAudioStream: null,
   muted: false,
   cameraSharing: false,
+  connectionState: "",
   offer: "",
   answer: "",
   messages: [],
+  callInterval: null,
 };
 
 export const webRTCReducer = (state = webRTCInitialState, action) => {
@@ -60,6 +62,11 @@ export const webRTCReducer = (state = webRTCInitialState, action) => {
     case "SET_CAMERA": {
       return { ...state, cameraSharing: action.payload };
     }
+    case "SET_CALL_INTERVAL": {
+      return { ...state, callInterval: action.payload };
+    }
+    case "SET_CONNECTION_STATE":
+      return { ...state, connectionState: action.payload };
     case "ADD_MESSAGE":
       return { ...state, messages: [action.payload, ...state.messages] };
     case "SET_SCREEN_SHARING": {
