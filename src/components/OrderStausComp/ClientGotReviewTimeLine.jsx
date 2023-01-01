@@ -19,12 +19,12 @@ import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
 import EventNoteIcon from "@mui/icons-material/EventNote";
 
-export default function FreelancerReviewTimeLine() {
+export default function ClientGotReviewTimeLine() {
   const [reviewVar, setReviewVar] = useState({
     userName: "Umer Abid",
     freelancerImageUrl:
       "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e",
-    titleText: "You gave rating & review to ",
+    titleText: "Freelancer gave you rating & review",
     time: "Nov 5, 3:49 PM",
     textFromFreelancer:
       "it was a great experience working with you.it was a great experience working with you.",

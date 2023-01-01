@@ -19,6 +19,9 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
 import StarsIcon from "@mui/icons-material/Stars";
+import { requestMethod } from "../../requestMethod";
+import { toast } from "react-toastify";
+import { handleError } from "./../../utils/helperFunctions";
 
 export default function EmployerReviewTimeLine({ p, setP }) {
   const [reviewVar, setReviewVar] = useState({
@@ -32,7 +35,7 @@ export default function EmployerReviewTimeLine({ p, setP }) {
   });
   const [errors, setErrors] = useState({});
   const Schema = {
-    comment: Joi.string().required().label("Comment"),
+    comment: Joi.string().required().min(10).label("Comment"),
   };
   const validate = () => {
     const result = Joi.validate({ comment: reviewVar.comment }, Schema, {
@@ -237,13 +240,31 @@ export default function EmployerReviewTimeLine({ p, setP }) {
                         height: "100%",
                       }}
                       onClick={() => {
-                        console.log("clicked", {
+                        const data = {
                           rating: reviewVar?.overAllRating,
                           comment: reviewVar?.comment,
                           sellerId: p?.hired?.userId?._id,
                           buyerId: p?.creatorId?._id,
-                          productId: p?._id,
-                        });
+                          projectId: p?._id,
+                          productId: p?.hired?.productId,
+                          sender: "seller",
+                        };
+                        const v = validate();
+                        if (v) {
+                          toast.error(v.comment);
+                        } else {
+                          requestMethod
+                            .post("review/", data)
+                            .then((res) => {
+                              // setP(res.data);
+                              toast.success("Review Submitted");
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                              handleError(err);
+                            });
+                          console.log("clicked", data);
+                        }
                       }}
                     >
                       Submit
