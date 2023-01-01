@@ -11,7 +11,7 @@ import { requestMethod } from "../requestMethod";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 
-function Meeting(props) {
+function Meeting1(props) {
   const googleAuth = useGoogleLogin({
     flow: "auth-code",
     onSuccess: async ({ code }) => {
@@ -41,7 +41,7 @@ function Meeting(props) {
   );
 }
 
-export default Meeting;
+export default Meeting1;
 
 const Container = styled.div`
   height: 100vh;

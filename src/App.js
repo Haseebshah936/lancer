@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import styled from "styled-components";
 import {
   BrowserRouter as Router,
@@ -65,6 +65,8 @@ import OrderStatusTemp from "./pages/OrderStatus/OrderStatusTemp";
 import AddCategory from "./components/AddCategory";
 import AddSubCategory from "./components/AddSubCategory";
 import Meeting from "./pages/Meeting";
+import Meeting1 from "./pages/Meeting1";
+import { webRTCInitialState, webRTCReducer } from "./Reducer.js/WebRTC";
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -81,6 +83,7 @@ function App(props) {
   const [terms, setTerms] = useState("");
   const [searchDataLoader, setSearchDataLoader] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState({});
+  const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -113,6 +116,8 @@ function App(props) {
         setEditGigStatus,
         gigToBeEditedData,
         setGigToBeEditedData,
+        state,
+        dispatch,
       }}
     >
       <Router>
@@ -142,6 +147,7 @@ function App(props) {
             </Route>
 
             <Route path="/chat" element={<Chat />} />
+            <Route path="/meeting" element={<Meeting />} />
             <Route path="/createGig" element={<CreateGig />} />
             <Route path="/editGig" element={<CreateGig />} />
 
@@ -177,7 +183,7 @@ function App(props) {
           </Route>
           <Route path="/profile/:id" element={<SellerProfile />} />
           <Route path="/temp" element={<TempPage />} />
-          <Route path="/meeting" element={<Meeting />} />
+          <Route path="/meeting1" element={<Meeting1 />} />
           {/* just temp haseeb bata donst worry */}
           <Route path="/uploadImage" element={<FileUpload />} />\
           {/* just temp haseeb bata donst worry */}
