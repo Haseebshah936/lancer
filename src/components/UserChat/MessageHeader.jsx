@@ -25,6 +25,10 @@ import dayjs from "dayjs";
 import { timeFormat } from "../../utils/DateAndTime/TimeFormat";
 import CustomModal from "../CustomModal";
 import { useRealmContext } from "../../db/RealmContext";
+import { servers } from "../../utils/VIdeoCall/servers";
+import useWebRTC from "../../Hooks/WebRTC/useWebRTC";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -33,8 +37,6 @@ function MessageHeader({
   status = true,
   isGroup = false,
   userId = "",
-  onClickCall = () => {},
-  onClickVideoCall = () => {},
   temp = true,
   toggleDrawer = () => {},
   onMeetingClick = () => {},
@@ -45,11 +47,14 @@ function MessageHeader({
   const dateToday = new Date(today).getDate();
   const monthToday = new Date(today).getMonth();
   const yearToday = new Date(today).getFullYear();
-  const { activeChatroomStatus } = useCustomContext();
+  const { activeChatroomStatus, setCall } = useCustomContext();
   const [toggle, setToggle] = useState(false);
   const [toggleMetting, setToggleMeeting] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { handleStartConnection, } = useWebRTC();
   const date = dayjs(new Date());
+  const navigate = useNavigate();
+
   const [details, setDetials] = useState({
     date: date.format("YYYY-MM-DD"),
     time: timeFormat(date.hour(), date.minute()),
@@ -127,17 +132,36 @@ function MessageHeader({
       return true;
   };
 
-  const createCall = async () => {
+  const createCall = async (type) => {
     try {
-      const { data } = await requestMethod.post("call", {
+      const pc = new RTCPeerConnection(servers);
+
+      const res = await requestMethod.post("call", {
         chatroomId: id,
         callerId: user._id,
         receiverId: userId,
         offer: null,
+        type,
       });
     } catch (error) {
       handleError(error);
     }
+  };
+
+  const handleVideoCall = () => {
+    handleStartConnection("video", id, user._id, userId)
+      .then(() => {
+        navigate("/meeting");
+      })
+      .catch((e) => {
+        handleError(e);
+      });
+  };
+
+  const handleAudioCall = () => {
+    handleStartConnection("audio", id, user._id, userId).catch((e) => {
+      handleError(e);
+    });
   };
 
   const handleTimeDisplay = () => {
@@ -209,10 +233,10 @@ function MessageHeader({
       <Box sx={{ display: "flex", alignItems: "center" }}>
         {!isGroup ? (
           <>
-            <IconButton onClick={onClickVideoCall}>
+            <IconButton onClick={handleVideoCall}>
               <Videocam fontSize="large" />
             </IconButton>
-            <IconButton onClick={onClickCall}>
+            <IconButton onClick={handleAudioCall}>
               <Call fontSize="large" />
             </IconButton>
           </>
