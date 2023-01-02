@@ -1,6 +1,9 @@
 import axios from "axios";
-import React from "react";
+import mongoose from "mongoose";
+import React, { useRef } from "react";
 import * as Realm from "realm-web";
+import { requestMethod } from "../requestMethod";
+import { watchCollection, watchCollectionForAll } from "./helperFunction";
 
 function createRealmApp(id) {
   return new Realm.App({ id });
@@ -22,18 +25,29 @@ export function RealmAppProvider({ appId, children }) {
   const [currentUser, setCurrentUser] = React.useState(realmApp.currentUser);
   const [user, setUser] = React.useState(null);
   // Wrap the base logIn function to save the logged in user in state
+  // console.log("No user", breakAsyncIterator1);
+  
+  
 
   React.useEffect(() => {
-    if (!currentUser) return setUser(null);
-    axios
-      .get("http://localhost:3003/api/user/" + currentUser._profile.data.email)
+    if (!currentUser) {
+      // breakAsyncIterator1.current = true;
+      // breakAsyncIterator2.current = true;
+      return setUser(null);
+    }
+    
+      requestMethod("user/" +currentUser._profile.data.email )
       .then((res) => {
         setUser(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
+      // breakAsyncIterator1.current = false;
+      // breakAsyncIterator2.current = false;
   }, [currentUser]);
+
+  
 
   const logIn = React.useCallback(
     async (email, password, rest) => {

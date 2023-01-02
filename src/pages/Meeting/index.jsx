@@ -9,7 +9,6 @@ import {
 } from "@mui/icons-material";
 import { IconButton } from "@mui/material";
 import React, { useEffect, useRef } from "react";
-import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useCustomContext } from "../../Hooks/useCustomContext";
@@ -25,7 +24,6 @@ function Meeting(props) {
     toggleAudio,
     toggleScreenShare,
     toggleCamera,
-    screenShare
   } = useWebRTC();
   const videoRef = useRef(null); // Incoming Video
   const cameraRef = useRef(null); // Outgoing Video
@@ -58,18 +56,55 @@ function Meeting(props) {
       // *If there is no local stream and remote stream, then it will return
       if (cameraRef.current) cameraRef.current.srcObject = null;
       if (videoRef.current) videoRef.current.srcObject = null;
-      navigate(-1);
-      return;
+    }
+    if(state.offer  && state.answer){
+      // navigate(-1);
     }
     // console.log(state.localStream.getTracks());
     // cameraRef.current.srcObject = state.localStream; // *Setting the local stream to the camera ref
     // videoRef.current.srcObject = state.remoteStream; // *Setting the remote stream to the video ref
-  }, [state]);
+  }, [state.offer, state.answer, state.localStream, state.remoteStream]);
+
+
+  useEffect(() => {
+    console.log(state.connectionState);
+    if (state.connectionState === "failed") {
+      clearInterval(state.interval);
+      handleHangUp();
+    }
+    else if(state.connectionState === "connected"){
+      clearInterval(state.interval);
+    }
+    // else if (state.connectionState === "disconnected") {
+    //   clearInterval(state.interval);
+    //   handleHangUp();
+    // }
+  }, [state.connectionState])
+
+
+  // useMemo(() => {
+  //   console.log(state.connectionState);
+  //   if(state.connectionState === "disconnected" ){
+  //     handleHangUp();
+  //   }
+  // }, [state.connectionState])
 
   return (
     <Container>
       <audio src="" ref={audioRef} autoPlay />
+      <VideoContainer>
+
       <Video src="" ref={videoRef} autoPlay />
+      {state.connectionState !== "connected" &&
+          <ConnectionStateText>
+              {
+                state.connectionState === "failed" ? "Disconnected": "Connecting..."
+              }
+          </ConnectionStateText>
+        }
+      </VideoContainer>
+      
+      
       <Camera src="" ref={cameraRef} autoPlay muted />
       <ButtonContainer>
         {!state.isInitiator && (
@@ -131,6 +166,7 @@ function Meeting(props) {
         <Button
           onClick={() => {
             handleHangUp();
+            navigate(-1);
           }}
         >
           <CallEnd
@@ -142,6 +178,7 @@ function Meeting(props) {
           />
         </Button>
       </ButtonContainer>
+       
     </Container>
   );
 }
@@ -158,9 +195,18 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Video = styled.video`
+const VideoContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
   height: calc(100vh - 10rem);
   width: 100%;
+  flex-direction: column;
+`
+
+const Video = styled.video`
+  flex: 1;
   object-fit: cover;
   transform: rotateY(180deg);
 `;
@@ -196,3 +242,10 @@ const Button = styled(IconButton)`
   }
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
 `;
+
+const ConnectionStateText = styled.p`
+  position: absolute;
+  font-size: 3rem;
+  color: ${colors.white};
+  z-index: 1000;
+`

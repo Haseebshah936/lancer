@@ -1,7 +1,9 @@
+import { servers } from "../utils/VIdeoCall/servers";
+
 export const webRTCInitialState = {
   localStream: null,
   remoteStream: null,
-  peerConnection: null,
+  peerConnection: new RTCPeerConnection(servers),
   dataChannel: null,
   isChannelReady: false,
   isInitiator: false,
@@ -10,9 +12,15 @@ export const webRTCInitialState = {
   remoteAudioStream: null,
   muted: false,
   cameraSharing: false,
+  connectionState: "",
   offer: "",
   answer: "",
   messages: [],
+  callId: "",
+  callInterval: null,
+  callerId: "",
+  chatroomId: "",
+  type: "video",
 };
 
 export const webRTCReducer = (state = webRTCInitialState, action) => {
@@ -60,6 +68,11 @@ export const webRTCReducer = (state = webRTCInitialState, action) => {
     case "SET_CAMERA": {
       return { ...state, cameraSharing: action.payload };
     }
+    case "SET_CALL_INTERVAL": {
+      return { ...state, callInterval: action.payload };
+    }
+    case "SET_CONNECTION_STATE":
+      return { ...state, connectionState: action.payload };
     case "ADD_MESSAGE":
       return { ...state, messages: [action.payload, ...state.messages] };
     case "SET_SCREEN_SHARING": {

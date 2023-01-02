@@ -18,7 +18,7 @@ import OrderCountDown from "../../components/OrderCountDownComp/OrderCountDown";
 import OrderStatusTimeLine from "../../components/OrderStausComp/OrderStatusTimeLine";
 import OrderJustStartedComp from "../../components/OrderStausComp/OrderJustStartedComp";
 import OrderCompletedComp from "../../components/OrderStausComp/OrderCompletedComp";
-import FreelancerReviewTimeLine from "../../components/OrderStausComp/FreelancerReviewTimeLine";
+import FreelancerGotReviewTimeLine from "../../components/OrderStausComp/FreelancerGotReviewTimeLine";
 import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
 import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
 import Footer from "../../components/Footer";
@@ -125,7 +125,7 @@ export default function OrderStatusTemp() {
               {/* Static */}
               <EmployerReviewTimeLine></EmployerReviewTimeLine>
               {/* Freelancer Revire TimeLine start */}
-              <FreelancerReviewTimeLine></FreelancerReviewTimeLine>
+              <FreelancerGotReviewTimeLine></FreelancerGotReviewTimeLine>
               {/* Freelancer Revire TimeLine Ends */}
 
               {/* Last Time Line */}

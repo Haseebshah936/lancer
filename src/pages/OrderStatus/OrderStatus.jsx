@@ -18,12 +18,12 @@ import OrderCountDown from "../../components/OrderCountDownComp/OrderCountDown";
 import OrderStatusTimeLine from "../../components/OrderStausComp/OrderStatusTimeLine";
 import OrderJustStartedComp from "../../components/OrderStausComp/OrderJustStartedComp";
 import OrderCompletedComp from "../../components/OrderStausComp/OrderCompletedComp";
-import FreelancerReviewTimeLine from "../../components/OrderStausComp/FreelancerReviewTimeLine";
+import FreelancerGotReviewTimeLine from "../../components/OrderStausComp/FreelancerGotReviewTimeLine";
 import LastTimeLine from "../../components/OrderStausComp/LastTimeLine";
-import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
+// import DeadlineUpdatedTimeLine from "../../components/OrderStausComp/DeadlineUpdatedTimeLine";
 import Footer from "../../components/Footer";
 import DeliverOrderComp from "../../components/OrderStausComp/DeliverOrderComp";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import RequestForRequirements from "../../components/OrderStausComp/RequestForRequirements";
 import { useRealmContext } from "../../db/RealmContext";
 import SendRquestedRequiremnetsTimeLine from "../../components/OrderStausComp/SendRquestedRequiremnetsTimeLine";
@@ -32,32 +32,61 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ReuestedForDeadlineExtensionTimeLine from "../../components/OrderStausComp/ReuestedForDeadlineExtensionTimeLine";
 import ProjectDeiverdedTimeLine from "../../components/OrderStausComp/ProjectDeiverdedTimeLine";
 import ShowReviewToFreelancerTimeline from "../../components/OrderStausComp/ShowReviewToFreelancerTimeline";
+import ClientGotReviewTimeLine from "../../components/OrderStausComp/ClientGotReviewTimeLine";
 export default function OrderStatus() {
+  const navigate = useNavigate();
   const location = useLocation();
   const { user } = useRealmContext();
   const [p, setP] = useState(location?.state?.p);
+  const [clinetsReview, setClinetsReview] = useState({});
+  const [freelancersReview, setFreelancersReview] = useState({});
   console.log("p", p);
   useEffect(() => {
-    requestMethod.get("project/" + p._id).then((res) => {
-      setP(res.data);
-      console.log("res.data", res.data);
-    });
+    requestMethod
+      .get("project/" + p._id)
+      .then((res) => {
+        setP(res.data);
+        console.log("res.data", res.data);
+      })
+      .catch((err) => {
+        // navigate("/");
+      });
   }, []);
-
-  const checkReqLenAndStateFun = () => {
-    if (p?.requirenments?.length == 0) {
-      return false;
-    } else {
-      if (
-        p?.requirenments[0]?.state &&
-        p?.requirenments[0]?.state === "pending"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+  useEffect(() => {
+    if (p.state === "completed") {
+      setTimeout(() => {
+        requestMethod
+          .get(`review/sellerReview/${p?.creatorId?._id}/${p?._id}`)
+          .then((res) => {
+            setFreelancersReview(res.data);
+            console.log("s rev", res.data);
+          })
+          .catch((err) => {
+            console.log("s err", err);
+          });
+      }, 200);
     }
-  };
+  }, []);
+  useEffect(() => {
+    if (p.state === "completed") {
+      setTimeout(() => {
+        requestMethod
+          .get(`review/buyerReview/${p?.hired?._id}/${p?._id}`)
+          .then((res) => {
+            setClinetsReview(res.data);
+            console.log("c rev", res.data);
+          })
+          .catch((err) => {
+            console.log("c err", err);
+          });
+      }, 200);
+    }
+  }, []);
+  useEffect(() => {
+    console.log("cc rev", clinetsReview);
+    console.log("ss rev", freelancersReview);
+  }, [clinetsReview, freelancersReview]);
+
   return (
     <div>
       <HeaderLoggedIn></HeaderLoggedIn>
@@ -95,7 +124,7 @@ export default function OrderStatus() {
               ></OrderPalcedTimelineItem>
               {/* Requiremnets send Timeline started*/}
               <RequirementsTimelineItem
-                userName={p.creatorId.name}
+                userName={p?.creatorId?.name}
                 time={
                   p.createdAt.substring(0, 10) +
                   " " +
@@ -200,21 +229,31 @@ export default function OrderStatus() {
               ))}
               {/* if freelancer has delivered teh project timeline ends here*/}
               {/*  */}
+              <FreelancerGotReviewTimeLine></FreelancerGotReviewTimeLine>
+              {/*  */}
+              {/*  */}
+              <ClientGotReviewTimeLine></ClientGotReviewTimeLine>
+              {/*  */}
               {/* if client has accepted the project timeline starts here # rating*/}
-              {p?.state === "completed" && user?._id === p?.creatorId?._id ? (
+              {p?.state === "completed" ? (
                 <div>
-                  {" "}
-                  <EmployerReviewTimeLine
-                    p={p}
-                    setP={setP}
-                  ></EmployerReviewTimeLine>
+                  {user?._id === p?.creatorId?._id ? (
+                    <EmployerReviewTimeLine
+                      p={p}
+                      setP={setP}
+                    ></EmployerReviewTimeLine>
+                  ) : (
+                    <ShowReviewToFreelancerTimeline
+                      p={p}
+                      setP={setP}
+                    ></ShowReviewToFreelancerTimeline>
+                  )}
                 </div>
               ) : (
-                <div>
-                  <ShowReviewToFreelancerTimeline></ShowReviewToFreelancerTimeline>
-                </div>
+                <div></div>
               )}
               {/* if client has accepted the project timeline ends here # rating*/}
+
               {/*  */}
               {/* project progress last timeline starts here*/}
               {p?.state !== "completed" ? (
@@ -253,55 +292,52 @@ export default function OrderStatus() {
                 </Grid>
               </Grid>
               {/* Static */}
-              <EmployerReviewTimeLine></EmployerReviewTimeLine>
-              {/* Freelancer Revire TimeLine start */}
-              <FreelancerReviewTimeLine></FreelancerReviewTimeLine>
-              {/* Freelancer Revire TimeLine Ends */}
+
               {/* Order Started */}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={RocketIcon}
                 data={{
                   titleText: "The Order Started",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Delivery Time updated timeline started */}
-              <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine>
+              {/* <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine> */}
               {/* Delivery Time updated timeline ended */}
 
               {/* Delivery Time updated staus change*/}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={AccessAlarmIcon}
                 data={{
                   titleText: "Your delivery date was updated to November 6",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Deliverred the product*/}
-              <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine>
+              {/* <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine> */}
               {/* Project submitted staus change*/}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={Inventory2Icon}
                 data={{
                   titleText: "Your delivery date was updated to November 6",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Employer Review TimeLine */}
               {/* Static */}
-              <EmployerReviewTimeLine></EmployerReviewTimeLine>
+              {/* <EmployerReviewTimeLine></EmployerReviewTimeLine> */}
               {/* Freelancer Revire TimeLine start */}
-              <FreelancerReviewTimeLine></FreelancerReviewTimeLine>
+              {/* <FreelancerReviewTimeLine></FreelancerReviewTimeLine> */}
               {/* Freelancer Revire TimeLine Ends */}
 
               {/* Last Time Line */}
-              <LastTimeLine></LastTimeLine>
+              {/* <LastTimeLine></LastTimeLine> */}
             </Timeline>
           </Timeline>
           {/* Order Just Started Comp End*/}
 
           {/* Order Completed Comp Started */}
-          <Grid
+          {/* <Grid
             container
             item
             xs={12}
@@ -311,56 +347,56 @@ export default function OrderStatus() {
             <Grid item xs={11.5}>
               <OrderCompletedComp></OrderCompletedComp>
             </Grid>
-          </Grid>
+          </Grid> */}
           {/* Order Completed Comp End */}
           <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
             <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
-              <OrderPalcedTimelineItem></OrderPalcedTimelineItem>
+              {/* <OrderPalcedTimelineItem></OrderPalcedTimelineItem> */}
               {/* Requiremnets send Timeline started*/}
-              <RequirementsTimelineItem></RequirementsTimelineItem>
+              {/* <RequirementsTimelineItem></RequirementsTimelineItem> */}
               {/* Requiremnets send Timeline Ends*/}
               {/* Request For for more requirements time line starts here */}
-              <RequestForRequirements pID={p?._id}></RequestForRequirements>
+              {/* <RequestForRequirements pID={p?._id}></RequestForRequirements> */}
               {/* Request For for more requirements time line ends here */}
               {/* Order Started */}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={RocketIcon}
                 data={{
                   titleText: "The Order Started",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Delivery Time updated timeline started */}
-              <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine>
+              {/* <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine> */}
               {/* Delivery Time updated timeline ended */}
 
               {/* Delivery Time updated staus change*/}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={AccessAlarmIcon}
                 data={{
                   titleText: "Your delivery date was updated to November 6",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Deliverred the product*/}
-              <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine>
+              {/* <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine> */}
               {/* Project submitted staus change*/}
-              <StatusChangeTimelineItem
+              {/* <StatusChangeTimelineItem
                 Icon={Inventory2Icon}
                 data={{
                   titleText: "Your delivery date was updated to November 6",
                   time: "Nov 5, 3:49 PM",
                 }}
-              ></StatusChangeTimelineItem>
+              ></StatusChangeTimelineItem> */}
               {/* Employer Review TimeLine */}
               {/* Static */}
-              <EmployerReviewTimeLine></EmployerReviewTimeLine>
+              {/* <EmployerReviewTimeLine></EmployerReviewTimeLine> */}
               {/* Freelancer Revire TimeLine start */}
-              <FreelancerReviewTimeLine></FreelancerReviewTimeLine>
+              {/* <FreelancerReviewTimeLine></FreelancerReviewTimeLine> */}
               {/* Freelancer Revire TimeLine Ends */}
 
               {/* Last Time Line */}
-              <LastTimeLine></LastTimeLine>
+              {/* <LastTimeLine></LastTimeLine> */}
             </Timeline>
           </Timeline>
         </Grid>

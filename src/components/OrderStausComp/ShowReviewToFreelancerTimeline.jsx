@@ -9,6 +9,7 @@ import {
   Rating,
   TextField,
 } from "@mui/material";
+import Joi from "joi-browser";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -17,21 +18,40 @@ import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import TimelineDot from "@mui/lab/TimelineDot";
 import colors from "../../utils/colors";
-import EventNoteIcon from "@mui/icons-material/EventNote";
+import StarsIcon from "@mui/icons-material/Stars";
+import { requestMethod } from "../../requestMethod";
+import { toast } from "react-toastify";
+import { handleError } from "./../../utils/helperFunctions";
 
-export default function ShowReviewToFreelancerTimeline() {
+export default function ShowReviewToFreelancerTimeline({ p, setP }) {
   const [reviewVar, setReviewVar] = useState({
-    userName: "Umer Abid",
-    titleText: "gave you a review",
-    time: "Nov 5, 3:49 PM",
-    textFromEmployer: "it was a great experience working with you.",
-
-    overAllRating: 4,
-    communicationRating: 4,
-    expertiseRating: 4,
-    professionalismRating: 4,
-    paymentRating: 4,
+    userName: p?.creatorId?.name,
+    titleText: "Give a review to ",
+    time: "",
+    textFromEmployer: "",
+    previousRating: p?.creatorId?.stars,
+    overAllRating: 5,
+    comment: "",
   });
+  const [errors, setErrors] = useState({});
+  const Schema = {
+    comment: Joi.string().required().min(10).label("Comment"),
+  };
+  const validate = () => {
+    const result = Joi.validate({ comment: reviewVar.comment }, Schema, {
+      abortEarly: false,
+    });
+    if (!result.error) {
+      setErrors({});
+      return null;
+    }
+    const errors = {};
+    for (let item of result.error.details) {
+      errors[item.path[0]] = item.message;
+    }
+    setErrors(errors);
+    return errors;
+  };
 
   return (
     <TimelineItem sx={{ paddingLeft: 0 }} style={{ paddingLeft: 0 }}>
@@ -44,57 +64,65 @@ export default function ShowReviewToFreelancerTimeline() {
             backgroundColor: colors.becomePartnerGreen,
           }}
         >
-          <EventNoteIcon fontSize="large" />
+          <StarsIcon fontSize="large" />
         </TimelineDot>
         <TimelineConnector sx={{ bgcolor: colors.becomePartnerGreen }} />
       </TimelineSeparator>
       <TimelineContent sx={{ py: "12px", px: 2 }}>
         <Box className="d-flex to-row">
-          <UserNameP>{reviewVar?.userName}</UserNameP>
           <p>&nbsp;&nbsp;</p>
           <TitleTextP>{reviewVar.titleText}</TitleTextP>
           <p>&nbsp;&nbsp;</p>
+          <UserNameP>{reviewVar?.userName}</UserNameP>
+
           <TimeP>{reviewVar?.time}</TimeP>
         </Box>
         <RequirementBox>
           <RequirementTitleBox>
             <RequirementP>
               <UserNameP>
-                {reviewVar.userName}
-                <ReviewP>'s&nbsp;Review</ReviewP>
+                {/* {reviewVar.userName} */}
+                <ReviewP>Review for the Client</ReviewP>
               </UserNameP>
             </RequirementP>
           </RequirementTitleBox>
           <RequirementDescriptionBox>
             <Grid container>
-              <Grid container item xs={12}>
+              <Grid
+                container
+                item
+                xs={12}
+                display={"flex"}
+                alignItems={"center"}
+              >
                 <Grid item xs={0.65} display={{ xs: "none", md: "block" }}>
                   <Avatar
                     alt="Remy Sharp"
-                    src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+                    src={
+                      p?.creatorId?.profilePic
+                        ? p?.creatorId?.profilePic
+                        : "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e"
+                    }
                     sx={{ width: 40, height: 40 }}
                   />
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={10} display={"flex"} alignItems={"center"}>
                   <RequirementP>
                     <UserNameP>
-                      <Box sx={{ xs: "none", md: "block" }}>
-                        &nbsp;&nbsp;&nbsp;
-                      </Box>
+                      &nbsp;&nbsp;&nbsp;
                       {reviewVar.userName}
-                      <ReviewP>'s&nbsp;Message&nbsp;&nbsp;</ReviewP>
+                      <ReviewP>&nbsp;&nbsp;&nbsp;</ReviewP>
                       <Rating
                         name="read-only"
-                        value={reviewVar.overAllRating}
+                        value={reviewVar.previousRating}
+                        readOnly
                       />
                     </UserNameP>
                   </RequirementP>
-                  <ReviewPNotBold>
-                    <Box sx={{ xs: "none", md: "block" }}>
-                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    </Box>
+                  {/* <ReviewPNotBold>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     {reviewVar.textFromEmployer}
-                  </ReviewPNotBold>
+                  </ReviewPNotBold> */}
                 </Grid>
                 {/* Rating Grid */}
                 <Grid container item xs={12} mt={2}>
@@ -107,19 +135,24 @@ export default function ShowReviewToFreelancerTimeline() {
                   >
                     <Grid item xs={5} sm={4}>
                       <RatingSubTitle>
-                        Communication with the Seller
+                        Rate your experience with this client
                       </RatingSubTitle>
                     </Grid>
                     <Grid item xs={5} sm={4}>
                       <Rating
                         name="read-only"
-                        value={reviewVar.communicationRating}
-                        readOnly
+                        value={reviewVar.overAllRating}
+                        onChange={(event, newValue) => {
+                          setReviewVar({
+                            ...reviewVar,
+                            overAllRating: newValue,
+                          });
+                        }}
                         size="large"
                       />
                     </Grid>
                   </RatingWithText>
-                  <RatingWithText
+                  {/* <RatingWithText
                     container
                     item
                     xs={12}
@@ -156,7 +189,7 @@ export default function ShowReviewToFreelancerTimeline() {
                         size="large"
                       />
                     </Grid>
-                  </RatingWithText>
+                  </RatingWithText> */}
                 </Grid>
                 {/* Rating to the employer */}
                 <Grid
@@ -171,9 +204,16 @@ export default function ShowReviewToFreelancerTimeline() {
                     <GreenBorderTextField
                       id="outlined-multiline-static"
                       fullWidth
-                      label="Write a Review for the employer"
+                      label="Write a Review for the Client"
                       multiline
                       rows={6}
+                      value={reviewVar.comment}
+                      onChange={(e) => {
+                        setReviewVar({
+                          ...reviewVar,
+                          comment: e.target.value,
+                        });
+                      }}
                     />
                   </Grid>
                 </Grid>
@@ -198,6 +238,33 @@ export default function ShowReviewToFreelancerTimeline() {
                         color: "white",
                         width: "100%",
                         height: "100%",
+                      }}
+                      onClick={() => {
+                        const data = {
+                          rating: reviewVar?.overAllRating,
+                          comment: reviewVar?.comment,
+                          sellerId: p?.hired?.userId?._id,
+                          buyerId: p?.creatorId?._id,
+                          projectId: p?._id,
+                          productId: p?.hired?.productId,
+                          sender: "client",
+                        };
+                        const v = validate();
+                        if (v) {
+                          toast.error(v.comment);
+                        } else {
+                          requestMethod
+                            .post("review/", data)
+                            .then((res) => {
+                              // setP(res.data);
+                              toast.success("Review Submitted");
+                            })
+                            .catch((err) => {
+                              console.log(err);
+                              handleError(err);
+                            });
+                          console.log("clicked", data);
+                        }
                       }}
                     >
                       Submit

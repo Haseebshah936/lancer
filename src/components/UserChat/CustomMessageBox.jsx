@@ -92,7 +92,8 @@ function CustomMessageBox({
       <MessageWrapper>
         <Wrapper>
           <SystemMessage
-            text={`${props?.text} ${position === "left" ? title : ""}`}
+            text={`${props?.text}`}
+            {...props}
           />
         </Wrapper>
       </MessageWrapper>
