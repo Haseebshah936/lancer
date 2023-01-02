@@ -39,10 +39,14 @@ function SellerProfileInfo({
   isSame = false,
   userId = "",
 }) {
-  const { user } = useRealmContext();
+  const { user, currentUser } = useRealmContext();
+  const { setOpen } = useCustomContext();
   // const { setChatrooms } = useCustomContext();
   const { createChatRoom_Navigate } = useCreateChat();
   const navigate = useNavigate();
+  const ToggleLoginModal = () => {
+    setOpen(true);
+  };
   // const createChatRoom = (userId) => {
   //   requestMethod
   //     .post("chatroom/createChatroom", {
@@ -66,9 +70,13 @@ function SellerProfileInfo({
 
           <Name
             onClick={() => {
-              if (userId) {
-                navigate(`/profile/${userId}`);
-              }
+              currentUser
+                ? // if(userId) {
+                  //   console.log("I am in");
+                  //   navigate(`/profile/${userId}`);
+                  // },
+                  navigate(`/profile/${userId}`)
+                : ToggleLoginModal();
             }}
             style={{ cursor: userId ? "pointer" : "" }}
           >

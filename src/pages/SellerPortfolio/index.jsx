@@ -32,6 +32,7 @@ import {
 } from "@mui/icons-material";
 import CartDrawer from "./CartDrawer";
 import { UserState } from "realm-web";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 const GigDiscription = ({ value, onChange, styles }) => {
   return (
@@ -110,6 +111,7 @@ function SellerPortfolio(props) {
   const descriptionRef = useRef();
   const [save, setSave] = useState(false);
   const { user } = useRealmContext();
+
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(true);
   const [loadMore, setLoadMore] = useState(true);
