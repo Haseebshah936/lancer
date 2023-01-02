@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import styled from "styled-components";
 import {
   BrowserRouter as Router,
   Navigate,
   Route,
   Routes,
+  useLocation,
   useNavigate,
 } from "react-router-dom";
 import * as Realm from "realm-web";
@@ -67,60 +68,96 @@ import AddSubCategory from "./components/AddSubCategory";
 import Meeting from "./pages/Meeting";
 import Meeting1 from "./pages/Meeting1";
 import { webRTCInitialState, webRTCReducer } from "./Reducer.js/WebRTC";
+import { watchCollection } from "./db/helperFunction";
+import useWebRTC from "./Hooks/WebRTC/useWebRTC";
+import mongoose from "mongoose";
 
-function App(props) {
-  const [open, setOpen] = useState(false);
-  const [activeChatroom, setActiveChatroom] = useState(false);
-  const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
-  const { chatrooms, setChatrooms } = useState([]);
-  const { currentUser, user } = useRealmContext();
-  const [activeProfile, setActiveProfile] = useState(false);
-  const [cartDrawer, setCartDrawer] = useState(false);
-  const [editGigStatus, setEditGigStatus] = useState(false);
-  const [gigToBeEditedData, setGigToBeEditedData] = useState({});
+const AppNavigation = ({
+  currentUser,
+  dispatch,
+  state,
+  user,
+}) => {
+  const breakAsyncIterator1 = useRef(true);
+  const breakAsyncIterator2 = useRef(true);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { handleAcceptAnswer} = useWebRTC();
 
-  const [searchData, setSearchData] = useState([]);
-  const [terms, setTerms] = useState("");
-  const [searchDataLoader, setSearchDataLoader] = useState(true);
-  const [selectedPlan, setSelectedPlan] = useState({});
-  const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
+  const handleIncomingCall = (change) => {
+    const { documentKey, fullDocument } = change;
+    dispatch({
+      type: "JOIN_CONNECTION",
+      payload: {
+        callId: fullDocument._id,
+        answer: fullDocument.offer,
+        receiverId: fullDocument.receiverId,
+        callerId: fullDocument.callerId,
+        chatroomId: fullDocument.chatroomId,
+        type: fullDocument.type,
+      }
+    })
+    if(location.pathname !== "/meeting")
+      navigate("/meeting");
+
+  }
+
+  const acceptCall = useCallback(
+    (change) => {
+      const { documentKey, fullDocument } = change;
+      console.log("Accept Call", fullDocument);
+      if(fullDocument.answer){
+        dispatch({
+          type: "JOIN_CONNECTION",
+          payload: {
+            answer: fullDocument.answer,
+          }
+        })
+        handleAcceptAnswer(fullDocument.answer)
+      }
+  }, [state])
 
   useEffect(() => {
-    setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
+    if (!currentUser) {
+      breakAsyncIterator1.current = true;
+      breakAsyncIterator2.current = true;
+      return;
+    }
+    breakAsyncIterator1.current = false;
+    breakAsyncIterator2.current = false;
   }, [currentUser]);
 
-  return (
-    <CustomContextProvider
-      value={{
-        selectedPlan,
-        setSelectedPlan,
-        cartDrawer,
-        setCartDrawer,
-        searchDataLoader,
-        setSearchDataLoader,
-        terms,
-        setTerms,
-        searchData,
-        setSearchData,
-        open,
-        setOpen,
-        activeChatroom,
-        setActiveChatroom,
-        chatrooms,
-        setChatrooms,
-        activeChatroomStatus,
-        setActiveChatroomStatus,
-        activeProfile,
-        setActiveProfile,
-        editGigStatus,
-        setEditGigStatus,
-        gigToBeEditedData,
-        setGigToBeEditedData,
-        state,
-        dispatch,
-      }}
-    >
-      <Router>
+  React.useEffect(() => {
+    if (!user) return;
+      console.log("User", user);
+      const filter1 = {
+        operationType: "insert",
+        filter:{
+          "fullDocument.receiverId": {
+            $eq: mongoose.Types.ObjectId(user._id),
+          },
+        },
+      };
+
+      const filter2 = {
+        operationType: "update",
+        filter:{
+          "fullDocument.callerId": {
+            $eq: mongoose.Types.ObjectId(user._id),
+          },
+        },
+      };
+
+      watchCollection(currentUser, "calls", filter1, breakAsyncIterator1.current, handleIncomingCall)
+      watchCollection(currentUser, "calls", filter2, breakAsyncIterator2.current, acceptCall)
+
+      return () => {
+        breakAsyncIterator1.current= true;
+        breakAsyncIterator2.current = true;
+      }
+  }, [user?._id]);
+
+  return(
         <Routes>
           <Route element={<AuthRoutes />}>
             <Route path="/home" element={<Landing />} />
@@ -190,6 +227,63 @@ function App(props) {
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>
+  )
+}
+
+function App(props) {
+  const [open, setOpen] = useState(false);
+  const [activeChatroom, setActiveChatroom] = useState(false);
+  const [activeChatroomStatus, setActiveChatroomStatus] = useState(false);
+  const { chatrooms, setChatrooms } = useState([]);
+  const { currentUser, user } = useRealmContext();
+  const [activeProfile, setActiveProfile] = useState(false);
+  const [cartDrawer, setCartDrawer] = useState(false);
+  const [editGigStatus, setEditGigStatus] = useState(false);
+  const [gigToBeEditedData, setGigToBeEditedData] = useState({});
+  const [searchData, setSearchData] = useState([]);
+  const [terms, setTerms] = useState("");
+  const [searchDataLoader, setSearchDataLoader] = useState(true);
+  const [selectedPlan, setSelectedPlan] = useState({});
+  const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
+  
+  useEffect(() => {
+    setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
+  }, [currentUser]);
+
+  
+  return (
+    <CustomContextProvider
+      value={{
+        selectedPlan,
+        setSelectedPlan,
+        cartDrawer,
+        setCartDrawer,
+        searchDataLoader,
+        setSearchDataLoader,
+        terms,
+        setTerms,
+        searchData,
+        setSearchData,
+        open,
+        setOpen,
+        activeChatroom,
+        setActiveChatroom,
+        chatrooms,
+        setChatrooms,
+        activeChatroomStatus,
+        setActiveChatroomStatus,
+        activeProfile,
+        setActiveProfile,
+        editGigStatus,
+        setEditGigStatus,
+        gigToBeEditedData,
+        setGigToBeEditedData,
+        state,
+        dispatch,
+      }}
+    >
+      <Router>
+        <AppNavigation dispatch={dispatch} state={state} user={user} currentUser=     {currentUser}/>
       </Router>
       <ToastContainer
         position="top-right"

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/helperFunctions";
 import { useCustomContext } from "../useCustomContext";
-import { createCall, updateCallTime } from "./helperfunction";
+import { acceptCall, createCall, updateCallTime } from "./helperfunction";
 
 const servers = {
   iceServers: [
@@ -21,11 +21,8 @@ const useWebRTC = () => {
   const { state, dispatch } = useCustomContext();
   const [message, setMessage] = useState("");
   const dataChannel = useRef(null);
+  const peerConnection = useRef(null);
 
-  // Constraints - will be used by getUserMedia() for customizing the audio and video
-  //TODO - Read More about MediaTrackConstraints and MediaTrackSettings
-  //LINK  - https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackConstraints
-  //LINK - https://developer.mozilla.org/en-US/docs/Web/API/MediaTrackSettings
   const constraints = {
     audio: {
       echoCancellation: true,
@@ -37,15 +34,6 @@ const useWebRTC = () => {
     video: true,
   };
 
-  /** ANCHOR
-   * *This function will be called when the user clicks on the "Start Call" button.
-   * *It is used to get user camera and microphone feed as a MediaStream object.
-   * *You can Customize the constraints object to customize the audio and video.
-   * *The MediaStream object is then looped over and indivudal tracks are added to the       RTCPeerConnection object.
-   * *These tracks are added to the RTCPeerConnection object using the addTrack() method.
-   * *Individual Tracks can be assigned to individual streams. As second parameter to addTrack() you can pass the stream object. addTrack(track, stream0, stream1, stream2, ...)
-   * *The track can also be sent without any stream. addTrack(track) as I did for screen share.
-   */
 
   const handleStartStream = async (pc, type) => {
     try {
@@ -100,14 +88,7 @@ const useWebRTC = () => {
     }
   };
 
-  /** ANCHOR -
-   * *useCallback is used to prevent the function from being recreated on every render
-   * *This function is used as a callback to send the offer to the other peer
-   * *It is called when a new track is added and onTrack event is fired
-   * *In this case it is called when user toggles the screen share or camera
-   * NOTE -
-   * *To have the same state and not an old state of the time when listner was added. As even listners can create a cache and cause bugs.
-   */
+  
   const sendSingle = useCallback(
     (signal) => {
       dataChannel.current.send(JSON.stringify(signal));
@@ -115,12 +96,7 @@ const useWebRTC = () => {
     [state.dataChannel]
   );
 
-  /** ANCHOR -
-   * *This function is a callback fired when a new message is received on the data channel
-   * *It is used to handle the offer and answer messages sent for negotiation
-   * *It is also used to add the received message to the chat
-   * *It is called through useCallBack to make sure the function has the same state and does not have an old state. Of the time when listner was added. As even listners can create a cache and cause bugs.
-   */
+  
 
   const messageChange = async (e, pc, dc) => {
     const msg = await JSON.parse(e.data);
@@ -157,16 +133,7 @@ const useWebRTC = () => {
     [state.dataChannel]
   );
 
-  /** ANCHOR -
-   * *This function is used to handle the negotiation needed event
-   * *It is called when the negotiationneeded event is fired
-   * *It is fired when a new track is added to the RTCPeerConnection object
-   * *Read the note in addTrack() docs for more info. Then the one below.
-   * LINK - https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/negotiationneeded_event
-   * *It is used to create an offer and set it as the local description
-   * *It is then sent to the other peer using the data channel
-   */
-
+  
   const handleNegotiation = (e, pc) => {
     console.log("negotiation needed", e, pc);
     pc.createOffer()
@@ -181,29 +148,13 @@ const useWebRTC = () => {
       });
   };
 
-  /** ANCHOR -
-   * *This function is used to handle the onTrack event
-   * *It is fired when a new track is added to the RTCPeerConnection object
-   * *It recieves MediaStream Objects array in the event object
-   * *The can have multiple streams and each stream can have multiple
-   */
-
+  
   const handleOnTrack = (e) => {
     if (e.streams && e.streams[0]) {
-      /**  NOTE
-       * *This 'if' is just used in the start of the connection in this use case as I am handling audio and video sepratly and not in the same stream. So later on when the video track is added to the RTCPeerConnection object the onTrack event is fired and the video track is added to the video element. But the audio track is already added to the audio element. So the if is used to prevent the audio track from being added to the video element.
-       */
-
       console.log("Streams", Object.values(e.streams[0].getTracks()));
       const audioTrack = e.streams[0].getAudioTracks()[0];
       const videoTrack = e.streams[0].getVideoTracks()?.[0];
-      /** REVIEW
-       * * Creating a new stream and adding the track to it. This is done to keep the audio track in a seprate stream and the video track in a seprate stream. This is done for a various reasons.
-       * *1. To be able to mute the audio track without muting the video track
-       * *2. To not keep the audio track away the video track. So the audio can be still shared even if the video is not shared or the camera is off or the screen is shared.
-       * *3 To be able to have full control over the audio and video tracks.
-       * *4 As audio track can be muted and unmuted without the need to create a new stream. By setting the enabled property of the audio track to true or false. This is possible with the video track as well. But the camera resource is not released when the video track is disabled. So it is better to remove the stream when the video track is disabled. And add a new stream when the video track is enabled.
-       */
+      
       const inboundAudioStream = new MediaStream();
       inboundAudioStream.addTrack(audioTrack);
       if (videoTrack) {
@@ -214,19 +165,14 @@ const useWebRTC = () => {
           payload: inboundVideoStream,
         });
       }
-      /** NOTE -
-       * *Setting the remote stream to the video stream. This stream is later added to the video element in the useEffect hook below.
-       */
-
+      
       // audioRef.current.srcObject = inboundAudioStream;
       dispatch({
         type: "SET_REMOTE_AUDIO_STREAM",
         payload: inboundAudioStream,
       });
     } else {
-      /**  NOTE -
-       * *If the stream is not present in the event object. Then the track is added to a new stream and the stream is set as the remote stream. This is the MediaDevices.getUserMedia() stream.(Screen share or camera stream)
-       */
+      
       let inboundStream = new MediaStream();
       inboundStream.addTrack(e.track);
       dispatch({
@@ -243,13 +189,7 @@ const useWebRTC = () => {
     // }
   };
 
-  /** ANCHOR -
-   * *This method will be called when the user clicks on the "Start Call" button
-   * *It will crate a new RTCPeerConnection
-   * *It will create a new RTCDataChannel
-   * *It will call the handleStartStream() method to get the user's audio and video
-   * *It will add event listeners to the RTCPeerConnection for track addition, negotiation, and data channel
-   */
+  
 
   const handleStartConnection = async (
     type,
@@ -257,7 +197,10 @@ const useWebRTC = () => {
     callerId,
     receiverId
   ) => {
-    const pc = new RTCPeerConnection(servers);
+    // const pc = new RTCPeerConnection(servers);
+    const pc = state.peerConnection
+
+    peerConnection.current = pc;
     const stream = await handleStartStream(pc, type); // *get user's audio and video
     pc.onconnectionstatechange = (e) => {
       // *Fired when the connection state changes
@@ -333,6 +276,10 @@ const useWebRTC = () => {
           dataChannel: dc,
           offer: JSON.stringify(pc.localDescription), // *The local description is the offer
           isInitiator: true,
+          callerId,
+          receiverId,
+          chatroomId,
+          type,
         },
       });
     };
@@ -376,30 +323,54 @@ const useWebRTC = () => {
   };
 
   const handleJoinConnection = async () => {
-    if (!state.peerConnection) {
-      const pc = new RTCPeerConnection(servers);
-      await handleStartStream(pc);
+      console.log("No peer connection");
+      // const pc = new RTCPeerConnection(servers);
+      const pc = state.peerConnection
+      const stream = await handleStartStream(pc, state.type);
       pc.onconnectionstatechange = (e) => {
+        // *Fired when the connection state changes
         switch (pc.connectionState) {
-          case "new":
-          case "checking":
-            console.log("Connecting…");
+          case "new": // *The connection is new
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "new",
+            })
             break;
-          case "connected":
-            console.log("Online");
+          case "checking": // *The connection is being checked
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "checking",
+            })
             break;
-          case "disconnected":
-            handleHangUp(pc);
-            console.log("Disconnecting…");
+          case "connected": // *The connection is connected
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "connected",
+            })
             break;
-          case "closed":
-            console.log("Offline");
+          case "disconnected": // *The connection is disconnected
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "disconnected",
+            });
             break;
-          case "failed":
-            console.log("Error");
+          case "closed": // *The connection is closed
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "disconnected",
+            });
+            break;
+          case "failed": // *The connection failed
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "disconnected",
+            })
             break;
           default:
-            console.log("Unknown");
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "Un",
+            })
             break;
         }
       };
@@ -427,33 +398,66 @@ const useWebRTC = () => {
         if (e.candidate) {
           // console.log("candidate", e.candidate);
         }
+        dispatch({
+          // *Dispatching the peer connection to the reducer with the answer
+          type: "JOIN_CONNECTION",
+          payload: {
+            peerConnection: pc,
+            offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
+            isInitiator: false,
+          },
+        });
       };
       pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
-
       pc.onnegotiationneeded = (e) => handleNegotiation(e, pc);
 
       const offer = JSON.parse(state.answer);
       await pc.setRemoteDescription(offer); // *Setting the remote description to the offer
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer); // *Setting the local description to the answer
-      dispatch({
-        // *Dispatching the peer connection to the reducer with the answer
-        type: "JOIN_CONNECTION",
-        payload: {
-          peerConnection: pc,
-          offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
-          isInitiator: false,
-        },
-      });
-    } else {
-      const pc = state.peerConnection; // *Getting the peer connection from the reducer
-      await pc.setRemoteDescription(JSON.parse(state.answer)); // *Setting the remote description to the offer
-      dispatch({
-        type: "SET_IS_STARTED",
-        payload: true,
-      });
-    }
+      
+      try{
+        const data =  await acceptCall(
+          state.callId,
+          JSON.stringify(pc.localDescription)
+        );
+        return data;
+      }
+      catch(err){
+        handleHangUp(pc,stream);
+        throw (err);
+      }
   };
+
+  const handleAcceptAnswer =  useCallback((answer) => {
+    (async () => {
+      const pc = state.peerConnection; // *Getting the peer connection from the reducer
+      console.log(pc);
+      await pc.setRemoteDescription(JSON.parse(answer)); // *Setting the remote description to the offer
+      dispatch({
+          type: "JOIN_CONNECTION",
+          payload: {
+            isStarted: true,
+            answer
+          },
+      });
+    })()
+  }, [state])
+
+  // const handleAcceptAnswer = async (answer) => {
+  //   console.log("Accepting answer", answer);
+  //   // const pc = state.peerConnection; // *Getting the peer connection from the reducer
+  //   // console.log(pc);
+  //   let pc = peerConnection.current;
+  //   await pc.setRemoteDescription(JSON.parse(answer)); // *Setting the remote description to the offer
+  //   dispatch({
+  //       type: "JOIN_CONNECTION",
+  //       payload: {
+  //         isStarted: true,
+  //         answer
+  //       },
+  //   });
+  // }
 
   // *Sending a message
   const handleSendMessage = () => {
@@ -640,38 +644,6 @@ const useWebRTC = () => {
     // addScreenVideoTrack();
   };
 
-  // useEffect(() => {
-  //   if (state.localStream === null && state.remoteStream === null) {
-  //     // *If there is no local stream and remote stream, then it will return
-  //     if (cameraRef.current) cameraRef.current.srcObject = null;
-  //     if (videoRef.current) videoRef.current.srcObject = null;
-  //     return;
-  //   }
-  //   console.log(state.localStream.getTracks());
-  //   cameraRef.current.srcObject = state.localStream; // *Setting the local stream to the camera ref
-  //   videoRef.current.srcObject = state.remoteStream; // *Setting the remote stream to the video ref
-  // }, [state]);
-
-  // useEffect(() => {
-  //   if (state.dataChannel) {
-
-  //   }
-  // }, [state.dataChannel]);
-
-  // useLayoutEffect(() => {
-  //   if (videoRef.current) {
-  //     const video = videoRef.current.getBoundingClientRect();
-  //     videoRef.current.style.height = `${video.width * 0.6}px`;
-  //     videoRef.current.style.maxHeight = `${video.width * 0.6}px`;
-  //     window.addEventListener("resize", () => {
-  //       if (!videoRef.current) return;
-  //       const video = videoRef.current.getBoundingClientRect();
-  //       videoRef.current.style.height = `${video.width * 0.6}px`;
-  //       videoRef.current.style.maxHeight = `${video.width * 0.6}px`;
-  //     });
-  //   }
-  // }, [videoRef.current]);
-
   return {
     message,
     setMessage,
@@ -679,6 +651,7 @@ const useWebRTC = () => {
     handleHangUp,
     handleJoinConnection,
     handleSendMessage,
+    handleAcceptAnswer,
     toggleAudio,
     toggleCamera,
     addVideoTrack,

@@ -51,18 +51,19 @@ function Meeting(props) {
   }, [state.remoteAudioStream]);
 
   useEffect(() => {
-    // console.log(state);
+    console.log(state);
     if (state.localStream === null && state.remoteStream === null) {
       // *If there is no local stream and remote stream, then it will return
       if (cameraRef.current) cameraRef.current.srcObject = null;
       if (videoRef.current) videoRef.current.srcObject = null;
-      navigate(-1);
-      return;
+    }
+    if(state.offer  && state.answer){
+      // navigate(-1);
     }
     // console.log(state.localStream.getTracks());
     // cameraRef.current.srcObject = state.localStream; // *Setting the local stream to the camera ref
     // videoRef.current.srcObject = state.remoteStream; // *Setting the remote stream to the video ref
-  }, [state]);
+  }, [state.offer, state.answer, state.localStream, state.remoteStream]);
 
 
   useEffect(() => {
@@ -71,6 +72,13 @@ function Meeting(props) {
       clearInterval(state.interval);
       handleHangUp();
     }
+    else if(state.connectionState === "connected"){
+      clearInterval(state.interval);
+    }
+    // else if (state.connectionState === "disconnected") {
+    //   clearInterval(state.interval);
+    //   handleHangUp();
+    // }
   }, [state.connectionState])
 
 
@@ -158,6 +166,7 @@ function Meeting(props) {
         <Button
           onClick={() => {
             handleHangUp();
+            navigate(-1);
           }}
         >
           <CallEnd

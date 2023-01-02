@@ -25,7 +25,6 @@ export const getChatRoomMessages = (
     .get(`message/${chatRoomId}/${id}`)
     .then((res) => {
       setData(res.data);
-      console.log(res.data);
       setNewData([]);
       setReRender(false);
     })

@@ -1,7 +1,9 @@
+import { servers } from "../utils/VIdeoCall/servers";
+
 export const webRTCInitialState = {
   localStream: null,
   remoteStream: null,
-  peerConnection: null,
+  peerConnection: new RTCPeerConnection(servers),
   dataChannel: null,
   isChannelReady: false,
   isInitiator: false,
@@ -14,7 +16,11 @@ export const webRTCInitialState = {
   offer: "",
   answer: "",
   messages: [],
+  callId: "",
   callInterval: null,
+  callerId: "",
+  chatroomId: "",
+  type: "video",
 };
 
 export const webRTCReducer = (state = webRTCInitialState, action) => {

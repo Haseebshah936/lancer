@@ -24,3 +24,10 @@ export const updateCallTime = async (
   return res.data;
 };
 
+export const acceptCall = async (callId, answer) => {
+  const res = await requestMethod.put(`call/acceptCall/${callId}`, {
+    answer,
+  });
+  return res.data;
+};
+
