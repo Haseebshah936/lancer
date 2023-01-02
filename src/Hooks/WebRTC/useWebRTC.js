@@ -283,10 +283,10 @@ const useWebRTC = () => {
         },
       });
     };
-    const offer = await pc.createOffer(); // *Creating an offer
-    await pc.setLocalDescription(offer); // *Setting the local description to the offer
     pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
     pc.onnegotiationneeded = (e) => handleNegotiation(e, pc); // *Fired when a negotiation is needed
+    const offer = await pc.createOffer(); // *Creating an offer
+    await pc.setLocalDescription(offer); // *Setting the local description to the offer
     try{
       const data =  await createCall(
         type,
