@@ -16,6 +16,7 @@ import ExtrasCard from "./ExtrasCard";
 import MainCard from "./MainCard";
 import OrderSummary from "./OrderSummary";
 import { useNavigate } from "react-router-dom";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function CartDrawer({
   gigQuantity,
@@ -26,7 +27,14 @@ export default function CartDrawer({
   // title = "",
   // image = "",
 }) {
-  const { setCartDrawer, cartDrawer, selectedPlan } = useCustomContext();
+  const { setCartDrawer, cartDrawer, selectedPlan, setOpen } =
+    useCustomContext();
+  const { currentUser } = useRealmContext();
+
+  const ToggleLoginModal = () => {
+    setOpen(true);
+  };
+
   const [checkArr, setCheckArr] = useState([]);
   const [orderState, setOrderState] = useState({
     title: "",
@@ -42,13 +50,13 @@ export default function CartDrawer({
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    console.log("Checked Array", checkArr);
-  }, [checkArr]);
+  // useEffect(() => {
+  //   console.log("Checked Array", checkArr);
+  // }, [checkArr]);
 
-  useEffect(() => {
-    console.log("Order State", orderState);
-  }, [orderState]);
+  // useEffect(() => {
+  //   console.log("Order State", orderState);
+  // }, [orderState]);
 
   useEffect(() => {
     setOrderState({
@@ -103,6 +111,11 @@ export default function CartDrawer({
       console?.log("Extras Array", ExtraArr);
     }
   }, [Extras]);
+
+  // useEffect(() => {
+  //   console.log("User: ", user);
+  //   console.log("currentUser: ", currentUser);
+  // }, [user, currentUser]);
 
   return (
     <>
@@ -221,9 +234,11 @@ export default function CartDrawer({
               }}
               text={`Continue ($${total})`}
               onClick={() => {
-                navigate(`/payments`, {
-                  state: orderState,
-                });
+                currentUser
+                  ? navigate(`/payments`, {
+                      state: orderState,
+                    })
+                  : ToggleLoginModal();
               }}
             />
             <Typography variant="h6">You won't be charged yet</Typography>
