@@ -427,6 +427,15 @@ export default function AddSubCategory() {
                 createSubCategory().then((data) => {
                   console.log("Data", data);
                   toast.success("Category Created Successfully");
+                  setSubCategory({
+                    title: "",
+                    category: "",
+                    features: [],
+                    additionalFeatures: [],
+                  });
+                  setFeature({ title: "", type: "" });
+                  setAdditionalFeature({ title: "", type: "" });
+                  setCategory({ title: "" });
                 });
               }}
             />

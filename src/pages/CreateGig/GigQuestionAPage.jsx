@@ -30,6 +30,7 @@ export default function GigQuestionAPage({
   var schema = {
     title: Joi.string().required().label("Title is Required"),
     discription: Joi.string().required().label("Discription is Required"),
+    _id: Joi.string(),
   };
 
   const validate = () => {
@@ -162,7 +163,7 @@ export default function GigQuestionAPage({
                 onClick={() => {
                   const v = validate();
                   if (v) {
-                    // console.log("error is there");
+                    console.log("error is there", errors);
                   } else {
                     // console.log("Adding");
                     setQuestionArr([...questionArr, question]);

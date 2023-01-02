@@ -377,6 +377,13 @@ export default function AddCategory() {
                 createCategory().then((data) => {
                   console.log("Data", data);
                   toast.success("Category Created Successfully");
+                  setCategory({
+                    title: "",
+                    features: [],
+                    additionalFeatures: [],
+                  });
+                  setFeature({ title: "", type: "" });
+                  setAdditionalFeature({ title: "", type: "" });
                 });
               }}
             />
