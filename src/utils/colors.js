@@ -5,7 +5,8 @@ const colors = {
   inputBorderNotFocused: "#0c0c0c4d",
   borderGreen: "#00726c", // used for gradient bordered Button
   primaryGreen: "#43856b", // used for gradient buttons
-  textGreen: "#045c4a", // used for text on landing page
+  textGreen: "#045c4a",
+  textGreenHover: "#8fa9a4", // used for text on landing page
   twitterBlue: "#55ACEE",
   facebookBlue: "#3178F1",
   googleRed: "rgba(229,61,55,1)",

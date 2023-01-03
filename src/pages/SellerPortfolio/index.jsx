@@ -297,7 +297,7 @@ function SellerPortfolio(props) {
                     container
                     mobile={3}
                     className="border"
-                    sx={{ backgroundColor: "#F5F5F5" }}
+                    sx={{ backgroundColor: "#FAFAFA" }}
                   ></Grid>
                   <Grid
                     item
@@ -310,7 +310,7 @@ function SellerPortfolio(props) {
                     <Box
                       className="border-bottom"
                       sx={{
-                        backgroundColor: "#F5F5F5",
+                        backgroundColor: "#FAFAFA",
                         width: "100%",
                         justifyContent: "center",
                         alignItems: " center",
@@ -382,7 +382,7 @@ function SellerPortfolio(props) {
                         width: "100%",
                         justifyContent: "center",
                         alignItems: " center",
-                        backgroundColor: "#F5F5F5",
+                        backgroundColor: "#FAFAFA",
                         display: "flex",
                       }}
                     >
@@ -445,7 +445,7 @@ function SellerPortfolio(props) {
                       sx={{
                         width: "100%",
                         justifyContent: "center",
-                        backgroundColor: "#F5F5F5",
+                        backgroundColor: "#FAFAFA",
                         alignItems: " center",
                         display: "flex",
                       }}
@@ -507,7 +507,7 @@ function SellerPortfolio(props) {
                             justifyContent="flex-start"
                             mobile={3}
                             className="border"
-                            sx={{ backgroundColor: "#F5F5F5" }}
+                            sx={{ backgroundColor: "#FAFAFA" }}
                           >
                             <Typography variant="h6" sx={{ pl: 1 }}>
                               {feature.title}
@@ -645,7 +645,7 @@ function SellerPortfolio(props) {
                             className="border"
                             alignItems="center"
                             justifyContent="flex-start"
-                            sx={{ backgroundColor: "#F5F5F5" }}
+                            sx={{ backgroundColor: "#FAFAFA" }}
                           >
                             <Typography variant="h6" sx={{ pl: 1 }}>
                               {feature.title}
@@ -747,7 +747,7 @@ function SellerPortfolio(props) {
                       className="border"
                       alignItems="center"
                       justifyContent="flex-start"
-                      sx={{ backgroundColor: "#F5F5F5" }}
+                      sx={{ backgroundColor: "#FAFAFA" }}
                     >
                       <Typography variant="h6" sx={{ pl: 1 }}>
                         Price

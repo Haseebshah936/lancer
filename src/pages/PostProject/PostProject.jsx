@@ -12,6 +12,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { requestMethod } from "./../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
+import styled from "styled-components";
 
 export default function PostProject() {
   const navigate = useNavigate();
@@ -330,6 +331,16 @@ export default function PostProject() {
                 >
                   <TextField
                     fullWidth
+                    sx={{
+                      "& label.Mui-focused": {
+                        color: colors.textGreen,
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: colors.textGreen,
+                        },
+                      },
+                    }}
                     id="outlined-basic"
                     variant="outlined"
                     placeholder={"Enter Experties"}
@@ -347,6 +358,10 @@ export default function PostProject() {
                 >
                   <Button
                     variant="contained"
+                    sx={{
+                      backgroundColor: colors.textGreen,
+                      ":hover": { backgroundColor: colors.textGreen },
+                    }}
                     disabled={expertiesVar === ""}
                     onClick={() => {
                       setPostProjectData({
@@ -378,7 +393,7 @@ export default function PostProject() {
               <div style={{ display: "flex", flexWrap: "wrap" }}>
                 {postProjectData.experties.map((experties) => (
                   <Chip
-                    className="ms-3"
+                    className="ms-3 my-3"
                     onClick={() => {
                       setPostProjectData({
                         ...postProjectData,
@@ -420,6 +435,7 @@ export default function PostProject() {
                   <input
                     type="file"
                     className="form-control pt-3 pb-3"
+                    style={{}}
                     multiple={true}
                     onChange={(e) => {
                       processFile(e);
@@ -480,6 +496,16 @@ export default function PostProject() {
                 >
                   <TextField
                     fullWidth
+                    sx={{
+                      "& label.Mui-focused": {
+                        color: colors.textGreen,
+                      },
+                      "& .MuiOutlinedInput-root": {
+                        "&.Mui-focused fieldset": {
+                          borderColor: colors.textGreen,
+                        },
+                      },
+                    }}
                     id="outlined-basic"
                     variant="outlined"
                     placeholder={"Enter Link"}
@@ -497,6 +523,10 @@ export default function PostProject() {
                 >
                   <Button
                     variant="contained"
+                    sx={{
+                      backgroundColor: colors.textGreen,
+                      ":hover": { backgroundColor: colors.textGreen },
+                    }}
                     disabled={linkVar === ""}
                     onClick={() => {
                       setPostProjectData({
@@ -560,6 +590,16 @@ export default function PostProject() {
             <Grid item xs={11.4}>
               <TextField
                 fullWidth
+                sx={{
+                  "& label.Mui-focused": {
+                    color: colors.textGreen,
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: colors.textGreen,
+                    },
+                  },
+                }}
                 id="outlined-multiline-static"
                 multiline
                 rows={6}
@@ -587,7 +627,7 @@ export default function PostProject() {
                 variant="contained"
                 size="large"
                 style={{
-                  backgroundColor: colors.becomePartnerGreen,
+                  backgroundColor: colors.textGreen,
                   color: "white",
                 }}
                 onClick={() => {
@@ -618,3 +658,10 @@ export default function PostProject() {
     </div>
   );
 }
+
+const FormInput = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;

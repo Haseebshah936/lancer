@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Box, Grid, Tab, Tabs } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 
@@ -8,6 +8,7 @@ import colors from "../../utils/colors";
 import Sidebar from "../ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
 import Dashboard from "../../components/SellerDashboardRenders/Dashboard";
+import { useRealmContext } from "../../db/RealmContext";
 
 export default function EDashboard() {
   const [value, setValue] = React.useState(0);
@@ -40,7 +41,7 @@ export default function EDashboard() {
           >
             <Grid container spacing={2}>
               <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
-                <Sidebar />=
+                <Sidebar />
               </Grid>
 
               <Grid
