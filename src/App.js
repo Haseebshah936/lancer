@@ -31,7 +31,7 @@ import Chat from "./pages/Chat";
 import PrivateRoutes from "./Routes/PrivateRoutes";
 import { useRealmContext } from "./db/RealmContext";
 import AuthRoutes from "./Routes/AuthRoutes";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 //EmployerSide
 import EDashborad from "./pages/EDashboard/EDashboard";
@@ -86,36 +86,52 @@ const AppNavigation = ({
 
   const handleIncomingCall = (change) => {
     const { documentKey, fullDocument } = change;
-    dispatch({
-      type: "JOIN_CONNECTION",
-      payload: {
-        callId: fullDocument._id,
-        answer: fullDocument.offer,
-        receiverId: fullDocument.receiverId,
-        callerId: fullDocument.callerId,
-        chatroomId: fullDocument.chatroomId,
-        type: fullDocument.type,
-      }
-    })
-    if(location.pathname !== "/meeting")
-      navigate("/meeting");
-
+    console.log("Incoming Call", fullDocument);
+    if(fullDocument.state === "pending")
+    {
+      dispatch({
+        type: "JOIN_CONNECTION",
+        payload: {
+          callId: fullDocument._id,
+          answer: fullDocument.offer,
+          receiverId: fullDocument.receiverId,
+          callerId: fullDocument.callerId,
+          chatroomId: fullDocument.chatroomId,
+          type: fullDocument.type,
+        }
+      })
+      if(location.pathname !== "/meeting")
+        navigate("/meeting");
+    }
+    if(fullDocument.state === "ended"){
+      // dispatch({
+      //   type: "SET_CONNECTION_STATE",
+      //   payload: "failed"
+      // })
+    }
   }
 
   const acceptCall = useCallback(
     (change) => {
       const { documentKey, fullDocument } = change;
       console.log("Accept Call", fullDocument);
-      if(fullDocument.answer){
+      if(fullDocument.answer && fullDocument.state !== "ended"){
+        console.log("Accept Call", fullDocument);
         dispatch({
           type: "JOIN_CONNECTION",
           payload: {
             answer: fullDocument.answer,
           }
         })
-        handleAcceptAnswer(fullDocument.answer)
+        handleAcceptAnswer(state.peerConnection, fullDocument.answer)
       }
-  }, [state])
+      if(fullDocument.state === "ended"){
+        dispatch({
+          type: "SET_CONNECTION_STATE",
+          payload: "failed"
+        })
+      }
+  }, [state.peerConnection])
 
   useEffect(() => {
     if (!currentUser) {

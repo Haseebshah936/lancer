@@ -3,7 +3,7 @@ import { servers } from "../utils/VIdeoCall/servers";
 export const webRTCInitialState = {
   localStream: null,
   remoteStream: null,
-  peerConnection: new RTCPeerConnection(servers),
+  peerConnection: null,
   dataChannel: null,
   isChannelReady: false,
   isInitiator: false,
@@ -26,6 +26,7 @@ export const webRTCInitialState = {
 export const webRTCReducer = (state = webRTCInitialState, action) => {
   switch (action.type) {
     case "START_CONNECTION": {
+      // console.log("START_CONNECTION", action.payload);
       return {
         ...state,
         ...action.payload,
@@ -33,6 +34,7 @@ export const webRTCReducer = (state = webRTCInitialState, action) => {
       };
     }
     case "JOIN_CONNECTION": {
+      // console.log("JOIN_CONNECTION", action.payload);
       return {
         ...state,
         ...action.payload,
@@ -72,6 +74,7 @@ export const webRTCReducer = (state = webRTCInitialState, action) => {
       return { ...state, callInterval: action.payload };
     }
     case "SET_CONNECTION_STATE":
+      console.log("SET_CONNECTION_STATE", action.payload);
       return { ...state, connectionState: action.payload };
     case "ADD_MESSAGE":
       return { ...state, messages: [action.payload, ...state.messages] };

@@ -2,7 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { handleError } from "../../utils/helperFunctions";
 import { useCustomContext } from "../useCustomContext";
-import { acceptCall, createCall, updateCallTime } from "./helperfunction";
+import {
+  acceptCall,
+  createCall,
+  endCall,
+  updateCallTime,
+} from "./helperfunction";
 
 const servers = {
   iceServers: [
@@ -34,7 +39,6 @@ const useWebRTC = () => {
     video: true,
   };
 
-
   const handleStartStream = async (pc, type) => {
     try {
       const newConstraints = { ...constraints, video: type === "video" };
@@ -58,7 +62,7 @@ const useWebRTC = () => {
           type: "SET_CAMERA",
           payload: true,
         });
-      } 
+      }
       stream.getTracks().forEach((track) => {
         //LINK - https://developer.mozilla.org/en-US/docs/Web/API/RTCPeerConnection/addTrack
         pc.addTrack(track, stream);
@@ -67,7 +71,7 @@ const useWebRTC = () => {
         type: "SET_LOCAL_STREAM",
         payload: stream, // *Local Stream and assign it to cameraRef setting the video tag to muted. This will prevent the user from hearing his own voice.
       });
-      
+
       return stream;
       // Dispatching the local stream to the state
     } catch (error) {
@@ -88,15 +92,12 @@ const useWebRTC = () => {
     }
   };
 
-  
   const sendSingle = useCallback(
     (signal) => {
       dataChannel.current.send(JSON.stringify(signal));
     },
     [state.dataChannel]
   );
-
-  
 
   const messageChange = async (e, pc, dc) => {
     const msg = await JSON.parse(e.data);
@@ -133,7 +134,6 @@ const useWebRTC = () => {
     [state.dataChannel]
   );
 
-  
   const handleNegotiation = (e, pc) => {
     console.log("negotiation needed", e, pc);
     pc.createOffer()
@@ -148,13 +148,12 @@ const useWebRTC = () => {
       });
   };
 
-  
   const handleOnTrack = (e) => {
     if (e.streams && e.streams[0]) {
       console.log("Streams", Object.values(e.streams[0].getTracks()));
       const audioTrack = e.streams[0].getAudioTracks()[0];
       const videoTrack = e.streams[0].getVideoTracks()?.[0];
-      
+
       const inboundAudioStream = new MediaStream();
       inboundAudioStream.addTrack(audioTrack);
       if (videoTrack) {
@@ -165,14 +164,13 @@ const useWebRTC = () => {
           payload: inboundVideoStream,
         });
       }
-      
+
       // audioRef.current.srcObject = inboundAudioStream;
       dispatch({
         type: "SET_REMOTE_AUDIO_STREAM",
         payload: inboundAudioStream,
       });
     } else {
-      
       let inboundStream = new MediaStream();
       inboundStream.addTrack(e.track);
       dispatch({
@@ -189,16 +187,14 @@ const useWebRTC = () => {
     // }
   };
 
-  
-
   const handleStartConnection = async (
     type,
     chatroomId,
     callerId,
     receiverId
   ) => {
-    // const pc = new RTCPeerConnection(servers);
-    const pc = state.peerConnection
+    const pc = new RTCPeerConnection(servers);
+    // const pc = state.peerConnection
 
     peerConnection.current = pc;
     const stream = await handleStartStream(pc, type); // *get user's audio and video
@@ -209,19 +205,19 @@ const useWebRTC = () => {
           dispatch({
             type: "SET_CONNECTION_STATE",
             payload: "new",
-          })
+          });
           break;
         case "checking": // *The connection is being checked
           dispatch({
             type: "SET_CONNECTION_STATE",
             payload: "checking",
-          })
+          });
           break;
         case "connected": // *The connection is connected
           dispatch({
             type: "SET_CONNECTION_STATE",
             payload: "connected",
-          })
+          });
           break;
         case "disconnected": // *The connection is disconnected
           dispatch({
@@ -239,13 +235,13 @@ const useWebRTC = () => {
           dispatch({
             type: "SET_CONNECTION_STATE",
             payload: "disconnected",
-          })
+          });
           break;
         default:
           dispatch({
             type: "SET_CONNECTION_STATE",
-            payload: "Un",
-          })
+            payload: "Unknown",
+          });
           break;
       }
     };
@@ -268,7 +264,34 @@ const useWebRTC = () => {
       if (e.candidate) {
         // console.log("candidate", e.candidate);
       }
-       
+
+      // dispatch({
+      //   type: "START_CONNECTION",
+      //   payload: {
+      //     peerConnection: pc,
+      //     dataChannel: dc,
+      //     offer: JSON.stringify(pc.localDescription), // *The local description is the offer
+      //     isInitiator: true,
+      //     callerId,
+      //     receiverId,
+      //     chatroomId,
+      //     type,
+      //   },
+      // });
+    };
+    pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
+    pc.onnegotiationneeded = (e) => handleNegotiation(e, pc); // *Fired when a negotiation is needed
+    const offer = await pc.createOffer(); // *Creating an offer
+    await pc.setLocalDescription(offer); // *Setting the local description to the offer
+    // console.log("Testing ",JSON.stringify(pc.localDescription).length());
+    try {
+      const data = await createCall(
+        type,
+        chatroomId,
+        callerId,
+        receiverId,
+        JSON.stringify(pc.localDescription)
+      );
       dispatch({
         type: "START_CONNECTION",
         payload: {
@@ -280,52 +303,40 @@ const useWebRTC = () => {
           receiverId,
           chatroomId,
           type,
+          callId: data._id,
         },
       });
-    };
-    pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
-    pc.onnegotiationneeded = (e) => handleNegotiation(e, pc); // *Fired when a negotiation is needed
-    const offer = await pc.createOffer(); // *Creating an offer
-    await pc.setLocalDescription(offer); // *Setting the local description to the offer
-    try{
-      const data =  await createCall(
-        type,
-        chatroomId,
-        callerId,
-        receiverId,
-        JSON.stringify(pc.localDescription)
-      );
-      let interval;
-      interval = setInterval(async () => {
-        try {
-          console.log("Updating call time");
-          await updateCallTime(data._id);
-        } catch (error) {
-          console.log(error);
-          dispatch({
-            type: "SET_CONNECTION_STATE",
-            payload: "failed",
-          })
-          clearInterval(interval);
-          handleError(error);
-        }
-      }, 20000)
-      dispatch({
-        type: "SET_CALL_INTERVAL",
-        payload: interval
-      })
+      // let interval;
+      // interval = setInterval(async () => {
+      //   try {
+      //     console.log("Updating call time");
+      //     await updateCallTime(data._id);
+      //   } catch (error) {
+      //     console.log(error);
+      //     dispatch({
+      //       type: "SET_CONNECTION_STATE",
+      //       payload: "failed",
+      //     })
+      //     clearInterval(interval);
+      //     handleError(error);
+      //   }
+      // }, 20000)
+      // dispatch({
+      //   type: "SET_CALL_INTERVAL",
+      //   payload: interval
+      // })
       return data;
-    }
-    catch(err){
-      handleHangUp(pc,stream);
-      throw (err);
+    } catch (err) {
+      handleHangUp(pc, stream);
+      throw err;
     }
   };
 
   const handleJoinConnection = async () => {
+    if (!state.peerConnection) {
       console.log("No peer connection");
-      // const pc = new RTCPeerConnection(servers);
-      const pc = state.peerConnection
+      const pc = new RTCPeerConnection(servers);
+      // const pc = state.peerConnection
       const stream = await handleStartStream(pc, state.type);
       pc.onconnectionstatechange = (e) => {
         // *Fired when the connection state changes
@@ -334,19 +345,19 @@ const useWebRTC = () => {
             dispatch({
               type: "SET_CONNECTION_STATE",
               payload: "new",
-            })
+            });
             break;
           case "checking": // *The connection is being checked
             dispatch({
               type: "SET_CONNECTION_STATE",
               payload: "checking",
-            })
+            });
             break;
           case "connected": // *The connection is connected
             dispatch({
               type: "SET_CONNECTION_STATE",
               payload: "connected",
-            })
+            });
             break;
           case "disconnected": // *The connection is disconnected
             dispatch({
@@ -364,13 +375,13 @@ const useWebRTC = () => {
             dispatch({
               type: "SET_CONNECTION_STATE",
               payload: "disconnected",
-            })
+            });
             break;
           default:
             dispatch({
               type: "SET_CONNECTION_STATE",
-              payload: "Un",
-            })
+              payload: "Unknown",
+            });
             break;
         }
       };
@@ -398,15 +409,6 @@ const useWebRTC = () => {
         if (e.candidate) {
           // console.log("candidate", e.candidate);
         }
-        dispatch({
-          // *Dispatching the peer connection to the reducer with the answer
-          type: "JOIN_CONNECTION",
-          payload: {
-            peerConnection: pc,
-            offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
-            isInitiator: false,
-          },
-        });
       };
       pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
       pc.onnegotiationneeded = (e) => handleNegotiation(e, pc);
@@ -415,34 +417,51 @@ const useWebRTC = () => {
       await pc.setRemoteDescription(offer); // *Setting the remote description to the offer
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer); // *Setting the local description to the answer
-      
-      try{
-        const data =  await acceptCall(
+      dispatch({
+        // *Dispatching the peer connection to the reducer with the answer
+        type: "JOIN_CONNECTION",
+        payload: {
+          peerConnection: pc,
+          offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
+          isInitiator: false,
+        },
+      });
+      try {
+        const data = await acceptCall(
           state.callId,
           JSON.stringify(pc.localDescription)
         );
         return data;
+      } catch (err) {
+        handleHangUp(pc, stream);
+        throw err;
       }
-      catch(err){
-        handleHangUp(pc,stream);
-        throw (err);
-      }
+    } else {
+      const pc = state.peerConnection; // *Getting the peer connection from the reducer
+      console.log(pc);
+      await pc.setRemoteDescription(JSON.parse(state.answer)); // *Setting the remote description to the offer
+      dispatch({
+        type: "JOIN_CONNECTION",
+        payload: {
+          isStarted: true,
+        },
+      });
+    }
   };
 
-  const handleAcceptAnswer =  useCallback((answer) => {
+  const handleAcceptAnswer = (pc, answer) => {
     (async () => {
-      const pc = state.peerConnection; // *Getting the peer connection from the reducer
       console.log(pc);
       await pc.setRemoteDescription(JSON.parse(answer)); // *Setting the remote description to the offer
       dispatch({
-          type: "JOIN_CONNECTION",
-          payload: {
-            isStarted: true,
-            answer
-          },
+        type: "JOIN_CONNECTION",
+        payload: {
+          isStarted: true,
+          answer,
+        },
       });
-    })()
-  }, [state])
+    })();
+  };
 
   // const handleAcceptAnswer = async (answer) => {
   //   console.log("Accepting answer", answer);
@@ -478,23 +497,20 @@ const useWebRTC = () => {
     setMessage("");
   };
 
-  const handleHangUp = (pc, stream) => {
+  const handleHangUp = async (pc, stream) => {
     dataChannel.current?.close(); // *Closing the data channel
     dataChannel.current = null; // *Setting the data channel to null
     if (!pc) pc?.close(); // *Closing the peer connection
     else state.peerConnection?.close(); // *Closing the peer connection
-    if(stream)
+    if (stream)
       stream.getTracks().forEach((track) => {
         track.stop();
       });
-    else
+    else if (state.offer)
       state.localStream.getTracks().forEach((track) => {
-          // *Stopping the local stream
-          track.stop();
-        });
-    dispatch({
-      type: "RESET",
-    });
+        // *Stopping the local stream
+        track.stop();
+      });
   };
 
   const toggleAudio = () => {

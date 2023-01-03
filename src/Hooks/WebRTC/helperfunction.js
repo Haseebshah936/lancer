@@ -31,3 +31,11 @@ export const acceptCall = async (callId, answer) => {
   return res.data;
 };
 
+export const endCall = async (callId) => {
+  console.log("callId", callId);
+  let res = {
+    data: {}
+  };
+  // res = await requestMethod.put(`call/endCall/${callId}`);
+  return res.data;
+};
