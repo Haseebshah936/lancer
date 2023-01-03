@@ -17,13 +17,14 @@ function Footer(props) {
       <Left>
         <Logo>Lancer</Logo>
         <Desc>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-          Voluptatibus, facilis vero. Deserunt blanditiis culpa dolores
-          reprehenderit quaerat consequuntur ratione, similique quas dignissimos
-          quia tenetur eaque rerum ducimus fugiat enim quod. Repellat rerum
-          aspernatur quae beatae deleniti sed itaque similique veniam fugiat ab
-          veritatis sit nihil, quod et eos officiis omnis ea sequi iure
-          accusamus, nobis sunt illum tempore animi. Eos.
+          Our freelance marketplace connects talented professionals with
+          businesses and individuals looking for their expertise. Whether you're
+          a graphic designer, writer, or developer, you can find opportunities
+          to showcase your skills and grow your career. Our platform is easy to
+          use, and we offer a range of tools to help you find the perfect fit
+          for your talent and experience. Whether you're just starting out or an
+          experienced professional, we welcome you to join our community and
+          take control of your working life.
         </Desc>
         <SocialContainer>
           <SocialIcon
@@ -53,7 +54,7 @@ function Footer(props) {
             <NavLink to="/about">About</NavLink>
           </ListItem>
           <ListItem>
-          <NavLink to="/contactus">Contact&nbsp;Us</NavLink>
+            <NavLink to="/contactus">Contact&nbsp;Us</NavLink>
           </ListItem>
           {/* <ListItem>
             <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink>
@@ -63,7 +64,8 @@ function Footer(props) {
       <Right>
         <Title>Contact</Title>
         <ContactItem>
-          <Room style={{ marginRight: "1rem", fontSize: "2rem" }} />25 COMSATS LAHORE
+          <Room style={{ marginRight: "1rem", fontSize: "2rem" }} />
+          25 COMSATS LAHORE
         </ContactItem>
         <ContactItem>
           <Phone style={{ marginRight: "1rem", fontSize: "2rem" }} />
@@ -123,7 +125,7 @@ const SocialIcon = styled.a`
   }
 `;
 const Center = styled.div`
-  flex: .5;
+  flex: 0.5;
   padding: 2rem;
   ${mobile({
     display: "none",
