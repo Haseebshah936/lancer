@@ -1,6 +1,7 @@
 import {
   Call,
   CallEnd,
+  ContentCopy,
   Mic,
   MicOff,
   ScreenShare,
@@ -15,6 +16,8 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 import useWebRTC from "../../Hooks/WebRTC/useWebRTC";
 import { miniMobile, mobile, tablet } from "../../responsive";
 import colors from "../../utils/colors";
+import {toast} from 'react-toastify';
+import { endCall } from "../../Hooks/WebRTC/helperfunction";
 
 function Meeting(props) {
   const { state, dispatch } = useCustomContext();
@@ -67,10 +70,19 @@ function Meeting(props) {
 
 
   useEffect(() => {
-    console.log(state.connectionState);
+    // if(state.offer === "" && state.answer === "") return
     if (state.connectionState === "failed") {
       clearInterval(state.interval);
-      handleHangUp();
+      if(state.offer || state.answer)
+        endCall(state.callId).then(() => {
+          handleHangUp();
+          navigate(-1);
+          dispatch({
+            type: "RESET",
+          });
+        }).catch((err) => {
+          console.log(err);
+        })
     }
     else if(state.connectionState === "connected"){
       clearInterval(state.interval);
@@ -89,6 +101,11 @@ function Meeting(props) {
   //   }
   // }, [state.connectionState])
 
+  useEffect(() => {
+    console.log("Offer", state.offer.length);
+    console.log("Answer", state.answer.length);
+  }, [state.offer, state.answer])
+
   return (
     <Container>
       <audio src="" ref={audioRef} autoPlay />
@@ -96,11 +113,46 @@ function Meeting(props) {
 
       <Video src="" ref={videoRef} autoPlay />
       {state.connectionState !== "connected" &&
-          <ConnectionStateText>
-              {
-                state.connectionState === "failed" ? "Disconnected": "Connecting..."
-              }
-          </ConnectionStateText>
+          // <ConnectionStateText>
+          //     {
+          //       state.connectionState === "failed" ? "Disconnected": "Connecting..."
+          //     }
+          // </ConnectionStateText>
+          <VideoJoinContainer>
+              <Text>Offer</Text>
+              <VideoJoinSource>
+                <JoinSource disabled value={state.offer} onChange={() => {}} />
+                <Button
+                  onClick={() => {
+                    toast.success("Offer copied to clipboard");
+                    navigator.clipboard.writeText(state.offer);
+                  }}
+                >
+                  <ContentCopy />
+                </Button>
+              </VideoJoinSource>
+              <Text>Answer</Text>
+              <VideoJoinSource>
+                <JoinSource
+                  value={state.answer}
+                  onChange={(e) => {
+                    dispatch({
+                      type: "SET_ANSWER",
+                      payload: {
+                        answer: e.target.value,
+                      },
+                    });
+                  }}
+                />
+                <Button onClick={handleJoinConnection}>
+                  <Call
+                    sx={{
+                      color: "green",
+                    }}
+                  />
+                </Button>
+              </VideoJoinSource>
+            </VideoJoinContainer>
         }
       </VideoContainer>
       
@@ -165,8 +217,10 @@ function Meeting(props) {
         </Button>
         <Button
           onClick={() => {
-            handleHangUp();
-            navigate(-1);
+            dispatch({
+              type: "SET_CONNECTION_STATE",
+              payload: "failed",
+            })
           }}
         >
           <CallEnd
@@ -207,8 +261,10 @@ const VideoContainer = styled.div`
 
 const Video = styled.video`
   flex: 1;
-  object-fit: cover;
+  object-fit: contain;
   transform: rotateY(180deg);
+  height: 100%;
+  width: 100%;
 `;
 
 const Camera = styled.video`
@@ -249,3 +305,41 @@ const ConnectionStateText = styled.p`
   color: ${colors.white};
   z-index: 1000;
 `
+
+const VideoJoinContainer = styled.div`
+display: flex;
+flex-direction: column;
+align-items: center;
+row-gap: 1rem;
+position: absolute;
+
+`;
+
+const Text = styled.h5`
+color: black;
+font-size: 1.2rem;
+align-self: flex-start;
+text-transform: capitalize;
+`;
+
+const VideoJoinSource = styled.div`
+display: flex;
+align-items: center;
+justify-content: space-between;
+column-gap: 1rem;
+background-color: white;
+width: 30rem;
+padding: 0.5rem;
+padding-left: 1rem;
+`;
+const Offer = styled.p`
+font-size: 1.4rem;
+flex: 1;
+overflow-x: hidden;
+overflow-y: scroll;
+/* white-space: nowrap; */
+`;
+const JoinSource = styled.input`
+font-size: 1.4rem;
+flex: 1;
+`;
