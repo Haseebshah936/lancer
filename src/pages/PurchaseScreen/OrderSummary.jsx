@@ -30,7 +30,7 @@ export default function OrderSummary({
   setErrors,
   method,
 }) {
-  const { currentUser } = useRealmContext();
+  const { user } = useRealmContext();
   const navigate = useNavigate();
 
   const CardSchema = {
@@ -39,15 +39,17 @@ export default function OrderSummary({
     // expiry: Joi.date().greater("now").required().label("Expiration Date"),
     expiry: Joi.string(),
     cvc: Joi.string().length(3).required().label("CVC/Security Code"),
-    issuer: Joi.string(),
+    // issuer: Joi.string(),
     focused: Joi.string(),
   };
 
   const Validate = () => {
     // const tempCard = { ...Card, expiry: `00-${Card.expiry.replace("/", "-")}` };
-    console.log(" currentUser.id", currentUser.id);
+    console.log(" currentUser.id", user);
 
-    const result = Joi.validate(Card, CardSchema, {
+    const { issuer, ...card } = Card;
+
+    const result = Joi.validate(card, CardSchema, {
       abortEarly: false,
     });
     console.log("Errors Result: ", result);
@@ -58,7 +60,7 @@ export default function OrderSummary({
       const Project = {
         title: order.title,
         freelancerId: order.freelancerId,
-        employerId: currentUser.id,
+        employerId: user._id,
         amount: order.total,
         paymentMethod: method,
         productId: order.gigID,

@@ -77,7 +77,7 @@ const OrderDetailName = styled(Typography)({
   color: "#838383",
 });
 
-const OngoingOrdersWidget = () => {
+const OngoingOrdersWidget = ({ title = "Ongoing Orders" }) => {
   return (
     <>
       <Paper
@@ -92,7 +92,7 @@ const OngoingOrdersWidget = () => {
         }}
       >
         <HeaderrWrapper>
-          <CardHeading>Ongoing Orders</CardHeading>
+          <CardHeading>{title}</CardHeading>
           <CustomFilledButton
             title={"View All"}
             style={{ margin: "5px 0px 0px 0px" }}

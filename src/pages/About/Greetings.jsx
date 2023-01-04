@@ -12,26 +12,23 @@ function Greetings(props) {
         <TextContainer>
           <Heading>Greetings {"&"} Welcome</Heading>
           <Tagline>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Maiores
-            dolore praesentium earum quam, alias laudantium nobis nihil dolorem
-            ea, neque totam. Dicta et aliquam exercitationem quam. Debitis
-            officiis impedit nisi, in nihil aut enim odio non reiciendis
-            veritatis. Beatae facere laboriosam sed accusantium provident
-            repellendus enim magnam dolor quia animi facilis, praesentium eum
-            perspiciatis dicta recusandae veniam minus similique quisquam
-            voluptatum reiciendis nisi corrupti nam aperiam! Eum rem adipisci
-            magnam ipsam corporis voluptatum beatae hic minus. Earum error
-            distinctio odio, aspernatur doloribus vero nisi accusantium natus
-            doloremque culpa eaque sint sed laudantium quam amet. Sapiente ab
-            dolorem impedit. Praesentium, quibusdam?
+            Welcome to our freelance platform! We are a team of dedicated
+            professionals who have come together to create a space where
+            talented freelancers can connect with clients looking for their
+            services. Our platform is designed to make it easy for freelancers
+            to showcase their skills and experience, and for clients to find the
+            perfect match for their project needs. We believe that everyone has
+            unique talents and skills to offer, and our goal is to help
+            freelancers put those talents to work in a way that is convenient
+            and rewarding.
           </Tagline>
           <Tagline>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ad qui
-            voluptatem quod modi adipisci esse officia atque distinctio itaque
-            eveniet commodi, aliquid iste perferendis saepe eligendi beatae ab
-            ratione molestiae earum eum sit. Mollitia, vitae at repudiandae
-            maxime animi natus rem quibusdam praesentium hic non impedit sit ad
-            neque fugiat.
+            We are constantly working to improve and expand our platform, and we
+            are always looking for ways to make it easier for freelancers and
+            clients to connect and collaborate. If you have any feedback or
+            suggestions, we would love to hear from you! Thank you for choosing
+            our platform, and we look forward to helping you succeed in your
+            freelance endeavors.
           </Tagline>
         </TextContainer>
         <ImageContainer
