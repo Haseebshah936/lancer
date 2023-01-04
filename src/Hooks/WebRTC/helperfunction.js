@@ -7,19 +7,31 @@ export const createCall = async (
   receiverId,
   offer
 ) => {
-  const res = await requestMethod.post("call", {
-    chatroomId,
-    callerId,
-    receiverId,
-    offer,
-    type,
+  // const res = await requestMethod.post("call", {
+  //   chatroomId,
+  //   callerId,
+  //   receiverId,
+  //   offer,
+  //   type,
+  // });
+  const res = await fetch("http://localhost:3003/api/call/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      chatroomId,
+      callerId,
+      receiverId,
+      offer,
+      type,
+    }),
   });
-  return res.data;
+  const json = await res.json();
+  return json;
 };
 
-export const updateCallTime = async (
-  callId
-) => {
+export const updateCallTime = async (callId) => {
   const res = await requestMethod.put(`call/updateTime/${callId}`);
   return res.data;
 };
@@ -34,7 +46,7 @@ export const acceptCall = async (callId, answer) => {
 export const endCall = async (callId) => {
   console.log("callId", callId);
   let res = {
-    data: {}
+    data: {},
   };
   // res = await requestMethod.put(`call/endCall/${callId}`);
   return res.data;
