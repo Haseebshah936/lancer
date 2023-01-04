@@ -82,6 +82,11 @@ function Head({
           setSearchData(response.data);
           setSearchDataLoader(false);
           navigate("/search");
+          const newUser = await axios.put(
+            `http://localhost:3003/api/user/updateRecentSearches/${user._id}`,
+            { recentSearch: search }
+          );
+          setUser(newUser.data);
         } catch (error) {
           console.log(error);
         }
@@ -97,11 +102,6 @@ function Head({
           setSearchData(response.data);
           setSearchDataLoader(false);
           navigate("/search");
-          const newUser = await axios.put(
-            `http://localhost:3003/api/user/updateRecentSearches/${user._id}`,
-            { recentSearch: search }
-          );
-          setUser(newUser.data);
         } catch (error) {
           console.log(error);
         }
@@ -244,7 +244,7 @@ function Head({
                 </p>
               )}
             </Link>
-            <NavLink to="/contactus">Your&nbsp;Orders</NavLink>
+
             {activeProfile === "seller" ? null : (
               <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}

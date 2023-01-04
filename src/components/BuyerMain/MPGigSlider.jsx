@@ -2,15 +2,40 @@ import Button from "@mui/material/Button";
 import styled from "styled-components";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import React from "react";
 import PortfolioCard from "../PortfolioCard";
 import colors from "../../utils/colors";
 import { mobile } from "../../responsive";
 import { teamImg } from "../../assets";
+import { useRealmContext } from "../../db/RealmContext";
+import axios from "axios";
+import { CircularProgress } from "@mui/material";
 
 const MPGigSlider = () => {
-  const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
+  const { user } = useRealmContext();
+  const [Gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const search = user?.recentSearches[user?.recentSearches.length - 1];
+    console.log("Search ", search);
+    if (search) {
+      (async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3003/api/product/getProductBySearch/${search}`
+          );
+          setLoading(false);
+          setGigs(response.data.slice(0, 9));
+          console.log("Gigs", Gigs);
+        } catch (error) {
+          console.log("Error", error);
+        }
+      })();
+    }
+  }, [user]);
+
   const ref = useRef();
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
@@ -20,7 +45,7 @@ const MPGigSlider = () => {
   return (
     <Container>
       <HeadingContainer>
-        <Heading>Most Popular in Web Development</Heading>
+        <Heading>Recent Searches</Heading>
       </HeadingContainer>
       <BuyerListContainer>
         <ButtonContainer>
@@ -47,23 +72,33 @@ const MPGigSlider = () => {
           </Button>
         </ButtonContainer>
         <BuyerContainer ref={ref}>
-          {a.map((c) => (
-            <div ref={GigRef}>
-              <PortfolioCard
-                count={c}
-                GigImage={teamImg}
-                Avatar={
-                  "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-                }
-                SellerName={"Muhammad Haseeb"}
-                SellerLevel={"Level Rana Seller"}
-                GigTitle={"I will assassinate Talha and Umer with pressure"}
-                SellerRating={"5.0"}
-                GigReviewsTotal={"33"}
-                GigStartPrice={"$50"}
-              />
-            </div>
-          ))}
+          {loading ? (
+            <CircularProgress
+              sx={{
+                "&.MuiCircularProgress-root": {
+                  color: colors.textGreen,
+                },
+              }}
+            />
+          ) : (
+            Gigs.map((c) => (
+              <div ref={GigRef}>
+                <PortfolioCard
+                  count={c}
+                  GigImage={c?.images[0]}
+                  Avatar={c?.owner?._id?.profilePic}
+                  SellerName={c?.owner?._id?.name}
+                  SellerLevel={c?.owner?._id?.badge}
+                  GigTitle={c?.title}
+                  SellerRating={c?.owner?._id?.seller?.rating}
+                  GigReviewsTotal={c?.owner?._id?.seller?.reviews}
+                  GigStartPrice={c?.cost}
+                  ownerId={c?.owner?._id?._id}
+                  productId={c?._id}
+                />
+              </div>
+            ))
+          )}
         </BuyerContainer>
         <ButtonContainer>
           <Button

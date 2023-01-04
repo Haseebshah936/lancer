@@ -149,11 +149,6 @@ const FilterAccordions = ({ toggleFiltersDraw = () => {} }) => {
               </FilterText>
             ))
           )}
-
-          <FilterText>
-            {" "}
-            <Link style={{ color: colors.textGreen }}>View All Categories</Link>
-          </FilterText>
         </AccordionDetails>
       </Accordion>
       <Accordion

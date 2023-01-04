@@ -82,7 +82,7 @@ const BuyerMain = () => {
       <TopSlider />
       <MPGigSlider />
       <GigsYML />
-      <GigsRPS />
+      {/* <GigsRPS /> */}
       <BottomSlider />
       <Footer />
     </>

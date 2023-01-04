@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import styled from "styled-components";
@@ -6,52 +6,82 @@ import PortfolioCard from "../PortfolioCard";
 import { teamImg } from "../../assets";
 import { mobile } from "../../responsive";
 import PortfolioCardMobile from "../PortfolioCardMobile";
+import axios from "axios";
+import { CircularProgress } from "@mui/material";
+import colors from "../../utils/colors";
 
 const GigsYML = () => {
-  const a = [1, 2, 3, 4, 5, 6];
+  const [Gigs, setGigs] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const response = await axios.get(`http://localhost:3003/api/product/`);
+
+        // console.log("Search Response", response.data);
+        setLoading(false);
+        setGigs(response.data.slice(0, 10));
+        console.log("Gigs", Gigs);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
+
   return (
     <Container>
       <HeadingContainer>
         <Heading>Gigs You may like</Heading>
       </HeadingContainer>
       <Box sx={{ flexGrow: 1 }}>
-        <Grid container rowSpacing={3}>
-          {a.map((c) => (
-            <Grid item lg={2} md={3} sm={4} sx={{ mr: { lg: 5 } }}>
-              <Laptop>
-                <PortfolioCard
-                  count={c}
-                  GigImage={teamImg}
-                  Avatar={
-                    "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-                  }
-                  SellerName={"Muhammad Haseeb"}
-                  SellerLevel={"Level Rana Seller"}
-                  GigTitle={"I will assassinate Talha and Umer with pressure"}
-                  SellerRating={"5.0"}
-                  GigReviewsTotal={"33"}
-                  GigStartPrice={"$50"}
-                />
-              </Laptop>
+        {loading ? (
+          <CircularProgress
+            sx={{
+              "&.MuiCircularProgress-root": {
+                color: colors.textGreen,
+              },
+            }}
+          />
+        ) : (
+          <Grid container rowSpacing={3}>
+            {Gigs.map((c) => (
+              <Grid item lg={2} md={3} sm={4} sx={{ mr: { lg: 5 } }}>
+                <Laptop>
+                  <PortfolioCard
+                    count={c}
+                    GigImage={c?.images[0]}
+                    Avatar={c?.owner?._id?.profilePic}
+                    SellerName={c?.owner?._id?.name}
+                    SellerLevel={c?.owner?._id?.badge}
+                    GigTitle={c?.title}
+                    SellerRating={c?.owner?._id?.seller?.rating}
+                    GigReviewsTotal={c?.owner?._id?.seller?.reviews}
+                    GigStartPrice={c?.cost}
+                    ownerId={c?.owner?._id?._id}
+                    productId={c?._id}
+                  />
+                </Laptop>
 
-              <Mobile>
-                <PortfolioCardMobile
-                  count={c}
-                  GigImage={teamImg}
-                  Avatar={
-                    "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg"
-                  }
-                  SellerName={"Muhammad Haseeb"}
-                  SellerLevel={"Level Rana Seller"}
-                  GigTitle={"I will assassinate Talha and Umer with pressure"}
-                  SellerRating={"5.0"}
-                  GigReviewsTotal={"33"}
-                  GigStartPrice={"$50"}
-                />
-              </Mobile>
-            </Grid>
-          ))}
-        </Grid>
+                <Mobile>
+                  <PortfolioCardMobile
+                    count={c}
+                    GigImage={c?.images[0]}
+                    Avatar={c?.owner?._id?.profilePic}
+                    SellerName={c?.owner?._id?.name}
+                    SellerLevel={c?.owner?._id?.badge}
+                    GigTitle={c?.title}
+                    SellerRating={c?.owner?._id?.seller?.rating}
+                    GigReviewsTotal={c?.owner?._id?.seller?.reviews}
+                    GigStartPrice={c?.cost}
+                    ownerId={c?.owner?._id?._id}
+                    productId={c?._id}
+                  />
+                </Mobile>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Box>
     </Container>
   );
