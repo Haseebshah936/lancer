@@ -12,6 +12,8 @@ function useCreateChat(props) {
      * @param {String} creatorId - The id of the user who is creating the chat room => user._id
      * @param {String} participantId - The id of the user who is the participant in the chatroom
      */
+    console.log("creatorId", creatorId);
+    console.log("participantId", participantId);
     requestMethod
       .post("chatroom/createChatroom", {
         participantId,

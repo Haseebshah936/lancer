@@ -290,8 +290,10 @@ const useWebRTC = () => {
         chatroomId,
         callerId,
         receiverId,
-        JSON.stringify(pc.localDescription)
+        JSON.stringify(pc.localDescription).toString()
       );
+      console.log(pc.localDescription);
+      console.log(JSON.parse(JSON.stringify(pc.localDescription).toString()));
       dispatch({
         type: "START_CONNECTION",
         payload: {

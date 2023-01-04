@@ -94,7 +94,10 @@ export default function OngoingProjects({ data }) {
                         // console.log("p", p);
                         console.log("userId", user?._id);
                         console.log("Project craeter ID", p?.creatorId?._id);
-                        createChatRoom_Navigate(user?._id, p?.creatorId?._id);
+                        createChatRoom_Navigate(
+                          p?.creatorId?._id,
+                          p?.hired?.userId
+                        );
                       }}
                     >
                       Chat
