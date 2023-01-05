@@ -107,6 +107,7 @@ const NotificationList = ({ anchor, CloseList }) => {
               minWidth: "350px",
               maxWidth: "350px",
               borderColor: colors.textGreen,
+              borderWidth: "2px",
             }}
           >
             <div

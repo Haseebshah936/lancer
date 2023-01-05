@@ -64,6 +64,7 @@ const MessageList = ({ anchor, CloseList }) => {
               margin: "auto",
               maxWidth: "40rem",
               borderColor: colors.textGreen,
+              borderWidth: "2px",
             }}
           >
             <ChatList className="chat-list" dataSource={chats} />

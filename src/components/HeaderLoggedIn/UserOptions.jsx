@@ -45,7 +45,9 @@ const UserOptions = ({ anchor, CloseList }) => {
               margin: "auto",
               minWidth: "150px",
               maxWidth: "150px",
+
               borderColor: colors.textGreen,
+              borderWidth: "2px",
             }}
           >
             <div
@@ -68,6 +70,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                   sx={{
                     ":hover": { color: `${colors.textGreen} !important` },
                     pb: 1,
+                    fontWeight: "bold",
                   }}
                 >
                   Profile
@@ -86,6 +89,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                     sx={{
                       ":hover": { color: `${colors.textGreen} !important` },
                       pb: 1,
+                      fontWeight: "bold",
                     }}
                   >
                     Post a Request
@@ -107,6 +111,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                   sx={{
                     ":hover": { color: `${colors.textGreen} !important` },
                     pb: 1,
+                    fontWeight: "bold",
                   }}
                 >
                   Settings
@@ -125,6 +130,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                   sx={{
                     ":hover": { color: `${colors.textGreen} !important` },
                     pb: 1,
+                    fontWeight: "bold",
                   }}
                 >
                   Payments
@@ -208,6 +214,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                   sx={{
                     ":hover": { color: `${colors.textGreen} !important` },
                     pb: 1,
+                    fontWeight: "bold",
                   }}
                 >
                   Help & Support
@@ -221,6 +228,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                 sx={{
                   cursor: "pointer",
                   ":hover": { color: `${colors.textGreen} !important` },
+                  fontWeight: "bold",
                 }}
               >
                 Logout
