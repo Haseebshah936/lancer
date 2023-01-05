@@ -3,46 +3,6 @@ import * as styled2 from "styled-components";
 import colors from "../../utils/colors";
 import CustomFilledButton from "../CustomFilledButton";
 
-const Orders = [
-  {
-    id: 1,
-    name: "React JS Web App",
-    summary:
-      "I want to you to redesign my react web app and make it responsive, with extra designs",
-    type: "Milestone",
-    price: "$600",
-    Location: "UK",
-    Deadline: "10 days left",
-  },
-  {
-    id: 2,
-    name: "React Native App",
-    summary: "I want to you to redesign my react Native app",
-    type: "Milestone",
-    price: "$600",
-    Location: "UK",
-    Deadline: "10 days left",
-  },
-  {
-    id: 3,
-    name: "Amazon Dropshipping",
-    summary: "I want to you to product hunt for me and manage my store",
-    type: "Milestone",
-    price: "$600",
-    Location: "UK",
-    Deadline: "10 days left",
-  },
-  {
-    id: 4,
-    name: "Wordpress Website build",
-    summary:
-      "I want to you to make a woocommerce store for me and add products to it",
-    type: "Milestone",
-    price: "$600",
-    Location: "UK",
-    Deadline: "10 days left",
-  },
-];
 const CardHeading = styled(Typography)({
   color: colors.black,
   fontWeight: "500",
@@ -77,7 +37,49 @@ const OrderDetailName = styled(Typography)({
   color: "#838383",
 });
 
-const OngoingOrdersWidget = ({ title = "Ongoing Orders" }) => {
+const OngoingOrdersWidget = ({
+  title = "Ongoing Orders",
+  Orders = [
+    {
+      id: 1,
+      name: "React JS Web App",
+      summary:
+        "I want to you to redesign my react web app and make it responsive, with extra designs",
+      type: "Milestone",
+      price: "$600",
+      Location: "UK",
+      Deadline: "10 days left",
+    },
+    {
+      id: 2,
+      name: "React Native App",
+      summary: "I want to you to redesign my react Native app",
+      type: "Milestone",
+      price: "$600",
+      Location: "UK",
+      Deadline: "10 days left",
+    },
+    {
+      id: 3,
+      name: "Amazon Dropshipping",
+      summary: "I want to you to product hunt for me and manage my store",
+      type: "Milestone",
+      price: "$600",
+      Location: "UK",
+      Deadline: "10 days left",
+    },
+    {
+      id: 4,
+      name: "Wordpress Website build",
+      summary:
+        "I want to you to make a woocommerce store for me and add products to it",
+      type: "Milestone",
+      price: "$600",
+      Location: "UK",
+      Deadline: "10 days left",
+    },
+  ],
+}) => {
   return (
     <>
       <Paper
@@ -107,24 +109,19 @@ const OngoingOrdersWidget = ({ title = "Ongoing Orders" }) => {
             <Grid
               container
               spacing={2}
-              direction="row"
-              justifyContent="center"
+              justifyContent="flex-start"
               alignItems="flex-start"
               sx={{ pt: 1 }}
             >
-              <Grid item mobile={3}>
+              <Grid item mobile={4}>
                 <OrderDetailType>Order Type</OrderDetailType>
                 <OrderDetailName>{order.type}</OrderDetailName>
               </Grid>
-              <Grid item mobile={3}>
+              <Grid item mobile={4}>
                 <OrderDetailType>Project Price</OrderDetailType>
                 <OrderDetailName>{order.price}</OrderDetailName>
               </Grid>
-              <Grid item mobile={3}>
-                <OrderDetailType>Location</OrderDetailType>
-                <OrderDetailName>{order.Location}</OrderDetailName>
-              </Grid>
-              <Grid item mobile={3}>
+              <Grid item mobile={4}>
                 <OrderDetailType>Deadline</OrderDetailType>
                 <OrderDetailName>{order.Deadline}</OrderDetailName>
               </Grid>

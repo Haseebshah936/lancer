@@ -11,46 +11,6 @@ import { tablet } from "../../responsive";
 import colors from "../../utils/colors";
 import CustomFilledButton from "../CustomFilledButton";
 
-const Orders = [
-  {
-    id: 1,
-    Title:
-      "I want some customization and installation on I want some customization and installation on wordpress want some customization and installation on wordpressI want some customization and installation on wordpress ",
-    DateCompleted: "October 5, 2021",
-    ProfileName: "Haseeb Iqbal",
-    AmmountEarned: "$100",
-    ProfileURL:
-      "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
-  },
-  {
-    id: 2,
-    Title: "I want simple Joomla 4 component development",
-    DateCompleted: "October 12, 2021",
-    ProfileName: "Haseeb Iqbal",
-    AmmountEarned: "$300",
-    ProfileURL:
-      "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
-  },
-  {
-    id: 3,
-    Title: "I want migrate Wordpress website",
-    DateCompleted: "October 30, 2021",
-    ProfileName: "Haseeb Iqbal",
-    AmmountEarned: "$200",
-    ProfileURL:
-      "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
-  },
-  {
-    id: 4,
-    Title: "I want Landing Page Redesign / Sales Page Redesign",
-    DateCompleted: "October 5, 2021",
-    ProfileName: "Haseeb Iqbal",
-    AmmountEarned: "$500",
-    ProfileURL:
-      "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
-  },
-];
-
 const CardHeading = styled(Typography)({
   color: colors.black,
   fontWeight: "500",
@@ -86,7 +46,47 @@ const AmmountEarned = styled(Typography)({
   fontSize: "2.0rem",
 });
 
-const PastOrdersWidget = () => {
+const PastOrdersWidget = ({
+  Orders = [
+    {
+      id: 1,
+      Title:
+        "I want some customization and installation on I want some customization and installation on wordpress want some customization and installation on wordpressI want some customization and installation on wordpress ",
+      DateCompleted: "October 5, 2021",
+      ProfileName: "Haseeb Iqbal",
+      AmmountEarned: "$100",
+      ProfileURL:
+        "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
+    },
+    {
+      id: 2,
+      Title: "I want simple Joomla 4 component development",
+      DateCompleted: "October 12, 2021",
+      ProfileName: "Haseeb Iqbal",
+      AmmountEarned: "$300",
+      ProfileURL:
+        "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
+    },
+    {
+      id: 3,
+      Title: "I want migrate Wordpress website",
+      DateCompleted: "October 30, 2021",
+      ProfileName: "Haseeb Iqbal",
+      AmmountEarned: "$200",
+      ProfileURL:
+        "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
+    },
+    {
+      id: 4,
+      Title: "I want Landing Page Redesign / Sales Page Redesign",
+      DateCompleted: "October 5, 2021",
+      ProfileName: "Haseeb Iqbal",
+      AmmountEarned: "$500",
+      ProfileURL:
+        "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
+    },
+  ],
+}) => {
   return (
     <>
       <Paper
