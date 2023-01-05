@@ -7,7 +7,15 @@ import {
   matchRoutes,
   useLocation,
 } from "react-router-dom";
-import { Avatar, Badge, Button, IconButton, Box } from "@mui/material";
+import {
+  Avatar,
+  Badge,
+  Button,
+  IconButton,
+  Box,
+  Chip,
+  Typography,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import colors from "../../utils/colors";
 import logo from "../../assets/logo.png";
@@ -248,6 +256,7 @@ function Head({
             {activeProfile === "seller" ? null : (
               <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}
+
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
           </SubContainer>
           <ButtonContainer>
@@ -318,6 +327,27 @@ function Head({
                 src={user?.profilePic}
               ></Avatar>
             </IconButton>
+
+            {activeProfile === "seller" ? (
+              <Chip
+                sx={{
+                  "@media (max-width: 786px)": {
+                    display: "none",
+                  },
+                  color: colors.textGreen,
+                  borderColor: colors.textGreen,
+                  borderWidth: "2px",
+
+                  "& .MuiChip-label": {
+                    paddingInline: "10px",
+                    fontSize: "1.3rem",
+                    fontWeight: "bold",
+                  },
+                }}
+                label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
+                variant="outlined"
+              />
+            ) : null}
           </ButtonContainer>
         </Wrapper>
       </Container>

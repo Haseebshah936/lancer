@@ -7,9 +7,10 @@ import ListItem from "@mui/material/ListItem";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CloseIcon from "@mui/icons-material/Close";
-import { Avatar, IconButton, Typography } from "@mui/material";
+import { Avatar, Chip, IconButton, Typography } from "@mui/material";
 import { useRealmContext } from "../../db/RealmContext";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import colors from "../../utils/colors";
 
 export default function ResponsiveDrawer({
   toggleDrawer = () => {},
@@ -92,6 +93,7 @@ export default function ResponsiveDrawer({
                     aria-label="avatar"
                     src={user?.profilePic}
                   ></Avatar>
+
                   <Typography
                     variant="subtitle1"
                     sx={{ pl: "5px", fontWeight: "bold", lineHeight: "normal" }}
@@ -99,9 +101,27 @@ export default function ResponsiveDrawer({
                     {user?.name}
                   </Typography>
                 </ProfileHeader>
+                {activeProfile === "seller" ? (
+                  <Chip
+                    sx={{
+                      color: colors.textGreen,
+                      borderColor: colors.textGreen,
+                      mt: 1,
+                      borderWidth: "2px",
+
+                      "& .MuiChip-label": {
+                        paddingInline: "10px",
+                        fontSize: "1.3rem",
+                        fontWeight: "bold",
+                      },
+                    }}
+                    label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
+                    variant="outlined"
+                  />
+                ) : null}
 
                 <Link
-                  style={{ marginTop: "20px" }}
+                  style={{ marginTop: "15px" }}
                   to={
                     user?.seller
                       ? activeProfile === "seller"
