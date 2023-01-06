@@ -10,22 +10,30 @@ import { mobile } from "../../responsive";
 import { teamImg } from "../../assets";
 import { useRealmContext } from "../../db/RealmContext";
 import axios from "axios";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Typography } from "@mui/material";
 
 const MPGigSlider = () => {
   const { user } = useRealmContext();
   const [Gigs, setGigs] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [hide, setHide] = useState(false);
+
+  useEffect(() => {
+    console.log("hide", hide);
+  }, [hide]);
 
   useEffect(() => {
     const search = user?.recentSearches[user?.recentSearches.length - 1];
     console.log("Search ", search);
-    if (search) {
+    if (search === undefined) {
+      setHide(true);
+    } else {
       (async () => {
         try {
           const response = await axios.get(
             `http://localhost:3003/api/product/getProductBySearch/${search}`
           );
+          setHide(false);
           setLoading(false);
           setGigs(response.data.slice(0, 9));
           console.log("Gigs", Gigs);
@@ -43,125 +51,131 @@ const MPGigSlider = () => {
   const GigRef = useRef();
 
   return (
-    <Container>
-      <HeadingContainer>
-        <Heading>Recent Searches</Heading>
-      </HeadingContainer>
-      <BuyerListContainer>
-        <ButtonContainer>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: "2rem",
-              color: "black",
-              borderColor: "#0000009e",
-              "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "#0000009e",
-              },
-              marginRight: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              textTransform: "capitalize",
-              minWidth: "1rem",
-            }}
-            onClick={() => scroll(-GigRef.current.offsetWidth)}
-          >
-            <ArrowBackIcon fontSize="medium" />
-          </Button>
-        </ButtonContainer>
-        <BuyerContainer ref={ref}>
-          {loading ? (
-            <CircularProgress
-              sx={{
-                "&.MuiCircularProgress-root": {
-                  color: colors.textGreen,
-                },
-              }}
-            />
-          ) : (
-            Gigs.map((c) => (
-              <div ref={GigRef}>
-                <PortfolioCard
-                  count={c}
-                  GigImage={c?.images[0]}
-                  Avatar={c?.owner?._id?.profilePic}
-                  SellerName={c?.owner?._id?.name}
-                  SellerLevel={c?.owner?._id?.badge}
-                  GigTitle={c?.title}
-                  SellerRating={c?.owner?._id?.seller?.rating}
-                  GigReviewsTotal={c?.owner?._id?.seller?.reviews}
-                  GigStartPrice={c?.cost}
-                  ownerId={c?.owner?._id?._id}
-                  productId={c?._id}
+    <>
+      {hide === false && (
+        <Container>
+          <HeadingContainer>
+            <Heading>Recent Searches</Heading>
+          </HeadingContainer>
+          <BuyerListContainer>
+            <ButtonContainer>
+              <Button
+                variant="outlined"
+                sx={{
+                  borderRadius: "2rem",
+                  color: "black",
+                  borderColor: "#0000009e",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    borderColor: "#0000009e",
+                  },
+                  marginRight: "1.5rem",
+                  fontSize: "1rem",
+                  padding: ".7rem 2rem",
+                  minWidth: "1rem",
+                  textTransform: "capitalize",
+                  minWidth: "1rem",
+                }}
+                onClick={() => scroll(-GigRef.current.offsetWidth)}
+              >
+                <ArrowBackIcon fontSize="medium" />
+              </Button>
+            </ButtonContainer>
+
+            <BuyerContainer ref={ref}>
+              {loading ? (
+                <CircularProgress
+                  sx={{
+                    "&.MuiCircularProgress-root": {
+                      color: colors.textGreen,
+                    },
+                  }}
                 />
-              </div>
-            ))
-          )}
-        </BuyerContainer>
-        <ButtonContainer>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: "2rem",
-              color: "white",
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              background:
-                " linear-gradient(130deg, #172f33, #43856b) border-box",
-              textTransform: "capitalize",
-            }}
-            onClick={() => scroll(GigRef.current.offsetWidth)}
-          >
-            <ArrowForwardIcon fontSize="medium" />
-          </Button>
-        </ButtonContainer>
-        <MobileButtonContainer>
-          <Button
-            variant="contained"
-            sx={{
-              borderRadius: "2rem",
-              color: "white",
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
-              marginTop: "5rem",
-              textTransform: "capitalize",
-            }}
-            onClick={() => scroll(GigRef.current.offsetWidth)}
-          >
-            <ArrowForwardIcon fontSize="medium" />
-          </Button>
-          <Button
-            variant="outlined"
-            sx={{
-              borderRadius: "2rem",
-              color: "black",
-              borderColor: "#0000009e",
-              "&:hover": {
-                backgroundColor: "transparent",
-                borderColor: "#0000009e",
-              },
-              marginLeft: "1.5rem",
-              fontSize: "1rem",
-              padding: ".7rem 2rem",
-              minWidth: "1rem",
-              textTransform: "capitalize",
-              minWidth: "1rem",
-              marginTop: "1rem",
-            }}
-            onClick={() => scroll(-GigRef.current.offsetWidth)}
-          >
-            <ArrowBackIcon fontSize="medium" />
-          </Button>
-        </MobileButtonContainer>
-      </BuyerListContainer>
-    </Container>
+              ) : (
+                Gigs.map((c) => (
+                  <div ref={GigRef}>
+                    <PortfolioCard
+                      count={c}
+                      GigImage={c?.images[0]}
+                      Avatar={c?.owner?._id?.profilePic}
+                      SellerName={c?.owner?._id?.name}
+                      SellerLevel={c?.owner?._id?.badge}
+                      GigTitle={c?.title}
+                      SellerRating={c?.owner?._id?.seller?.rating}
+                      GigReviewsTotal={c?.owner?._id?.seller?.reviews}
+                      GigStartPrice={c?.cost}
+                      ownerId={c?.owner?._id?._id}
+                      productId={c?._id}
+                    />
+                  </div>
+                ))
+              )}
+            </BuyerContainer>
+
+            <ButtonContainer>
+              <Button
+                variant="contained"
+                sx={{
+                  borderRadius: "2rem",
+                  color: "white",
+                  marginLeft: "1.5rem",
+                  fontSize: "1rem",
+                  padding: ".7rem 2rem",
+                  minWidth: "1rem",
+                  background:
+                    " linear-gradient(130deg, #172f33, #43856b) border-box",
+                  textTransform: "capitalize",
+                }}
+                onClick={() => scroll(GigRef.current.offsetWidth)}
+              >
+                <ArrowForwardIcon fontSize="medium" />
+              </Button>
+            </ButtonContainer>
+            <MobileButtonContainer>
+              <Button
+                variant="contained"
+                sx={{
+                  borderRadius: "2rem",
+                  color: "white",
+                  marginLeft: "1.5rem",
+                  fontSize: "1rem",
+                  padding: ".7rem 2rem",
+                  minWidth: "1rem",
+                  background: ` linear-gradient(130deg, #172f33, ${colors.primaryGreen}) border-box`,
+                  marginTop: "5rem",
+                  textTransform: "capitalize",
+                }}
+                onClick={() => scroll(GigRef.current.offsetWidth)}
+              >
+                <ArrowForwardIcon fontSize="medium" />
+              </Button>
+              <Button
+                variant="outlined"
+                sx={{
+                  borderRadius: "2rem",
+                  color: "black",
+                  borderColor: "#0000009e",
+                  "&:hover": {
+                    backgroundColor: "transparent",
+                    borderColor: "#0000009e",
+                  },
+                  marginLeft: "1.5rem",
+                  fontSize: "1rem",
+                  padding: ".7rem 2rem",
+                  minWidth: "1rem",
+                  textTransform: "capitalize",
+                  minWidth: "1rem",
+                  marginTop: "1rem",
+                }}
+                onClick={() => scroll(-GigRef.current.offsetWidth)}
+              >
+                <ArrowBackIcon fontSize="medium" />
+              </Button>
+            </MobileButtonContainer>
+          </BuyerListContainer>
+        </Container>
+      )}
+    </>
   );
 };
 
