@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import styled from "styled-components";
 import {
   BrowserRouter as Router,
@@ -71,24 +77,19 @@ import { webRTCInitialState, webRTCReducer } from "./Reducer.js/WebRTC";
 import { watchCollection } from "./db/helperFunction";
 import useWebRTC from "./Hooks/WebRTC/useWebRTC";
 import mongoose from "mongoose";
+import Banned from "./pages/Banned";
 
-const AppNavigation = ({
-  currentUser,
-  dispatch,
-  state,
-  user,
-}) => {
+const AppNavigation = ({ currentUser, dispatch, state, user }) => {
   const breakAsyncIterator1 = useRef(true);
   const breakAsyncIterator2 = useRef(true);
   const navigate = useNavigate();
   const location = useLocation();
-  const { handleAcceptAnswer} = useWebRTC();
+  const { handleAcceptAnswer } = useWebRTC();
 
   const handleIncomingCall = (change) => {
     const { documentKey, fullDocument } = change;
     console.log("Incoming Call", fullDocument);
-    if(fullDocument.state === "pending")
-    {
+    if (fullDocument.state === "pending") {
       dispatch({
         type: "JOIN_CONNECTION",
         payload: {
@@ -98,40 +99,41 @@ const AppNavigation = ({
           callerId: fullDocument.callerId,
           chatroomId: fullDocument.chatroomId,
           type: fullDocument.type,
-        }
-      })
-      if(location.pathname !== "/meeting")
-        navigate("/meeting");
+        },
+      });
+      if (location.pathname !== "/meeting") navigate("/meeting");
     }
-    if(fullDocument.state === "ended"){
+    if (fullDocument.state === "ended") {
       // dispatch({
       //   type: "SET_CONNECTION_STATE",
       //   payload: "failed"
       // })
     }
-  }
+  };
 
   const acceptCall = useCallback(
     (change) => {
       const { documentKey, fullDocument } = change;
       console.log("Accept Call", fullDocument);
-      if(fullDocument.answer && fullDocument.state !== "ended"){
+      if (fullDocument.answer && fullDocument.state !== "ended") {
         console.log("Accept Call", fullDocument);
         dispatch({
           type: "JOIN_CONNECTION",
           payload: {
             answer: fullDocument.answer,
-          }
-        })
-        handleAcceptAnswer(state.peerConnection, fullDocument.answer)
+          },
+        });
+        handleAcceptAnswer(state.peerConnection, fullDocument.answer);
       }
-      if(fullDocument.state === "ended"){
+      if (fullDocument.state === "ended") {
         dispatch({
           type: "SET_CONNECTION_STATE",
-          payload: "failed"
-        })
+          payload: "failed",
+        });
       }
-  }, [state.peerConnection])
+    },
+    [state.peerConnection]
+  );
 
   useEffect(() => {
     if (!currentUser) {
@@ -145,106 +147,115 @@ const AppNavigation = ({
 
   React.useEffect(() => {
     if (!user) return;
-      console.log("User", user);
-      const filter1 = {
-        operationType: "insert",
-        filter:{
-          "fullDocument.receiverId": {
-            $eq: mongoose.Types.ObjectId(user._id),
-          },
+    console.log("User", user);
+    const filter1 = {
+      operationType: "insert",
+      filter: {
+        "fullDocument.receiverId": {
+          $eq: mongoose.Types.ObjectId(user._id),
         },
-      };
+      },
+    };
 
-      const filter2 = {
-        operationType: "update",
-        filter:{
-          "fullDocument.callerId": {
-            $eq: mongoose.Types.ObjectId(user._id),
-          },
+    const filter2 = {
+      operationType: "update",
+      filter: {
+        "fullDocument.callerId": {
+          $eq: mongoose.Types.ObjectId(user._id),
         },
-      };
+      },
+    };
 
-      watchCollection(currentUser, "calls", filter1, breakAsyncIterator1.current, handleIncomingCall)
-      watchCollection(currentUser, "calls", filter2, breakAsyncIterator2.current, acceptCall)
+    watchCollection(
+      currentUser,
+      "calls",
+      filter1,
+      breakAsyncIterator1.current,
+      handleIncomingCall
+    );
+    watchCollection(
+      currentUser,
+      "calls",
+      filter2,
+      breakAsyncIterator2.current,
+      acceptCall
+    );
 
-      return () => {
-        breakAsyncIterator1.current= true;
-        breakAsyncIterator2.current = true;
-      }
+    return () => {
+      breakAsyncIterator1.current = true;
+      breakAsyncIterator2.current = true;
+    };
   }, [user?._id]);
 
-  return(
-        <Routes>
-          <Route element={<AuthRoutes />}>
-            <Route path="/home" element={<Landing />} />
-            <Route path="/about" element={<About />} />
+  return (
+    <Routes>
+      <Route element={<AuthRoutes />}>
+        <Route path="/home" element={<Landing />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/banned" element={<Banned />} />
+        <Route path="/contactus" element={<ContactUs />} />
+        <Route path="/ranking" element={<Ranking />} />
+        <Route path="/signup" element={<Signup />} />
+      </Route>
+      <Route path="/AddCategory" element={<AddCategory />} />
+      <Route path="/AddSubCategory" element={<AddSubCategory />} />
+      <Route path="/payments" element={<PurchaseScreen />} />
+      <Route path="/customersupport" element={<CustomerSupport />} />
+      <Route path="/portfolio/:id" element={<SellerPortfolio />} />
+      <Route path="/Search" element={<SearchResults />} />
+      <Route element={<PrivateRoutes />}>
+        <Route path="/orderStatus" element={<OrderStatus />} />
+        <Route path="/orderStatus/temp" element={<OrderStatusTemp />} />
 
-            <Route path="/contactus" element={<ContactUs />} />
-            <Route path="/ranking" element={<Ranking />} />
-            <Route path="/signup" element={<Signup />} />
-          </Route>
-          <Route path="/AddCategory" element={<AddCategory />} />
-          <Route path="/AddSubCategory" element={<AddSubCategory />} />
-          <Route path="/payments" element={<PurchaseScreen />} />
-          <Route path="/customersupport" element={<CustomerSupport />} />
-          <Route path="/portfolio/:id" element={<SellerPortfolio />} />
-          <Route path="/Search" element={<SearchResults />} />
-          <Route element={<PrivateRoutes />}>
-            <Route path="/orderStatus" element={<OrderStatus />} />
-            <Route path="/orderStatus/temp" element={<OrderStatusTemp />} />
+        <Route path="/buyermain" element={<BuyerMain />} />
+        <Route path="/sellerdashboard" element={<SellerDashboard />}>
+          <Route path="favourites" element={<Favourites />} />
+          <Route index element={<Dashboard />} />
+        </Route>
 
-            <Route path="/buyermain" element={<BuyerMain />} />
-            <Route path="/sellerdashboard" element={<SellerDashboard />}>
-              <Route path="favourites" element={<Favourites />} />
-              <Route index element={<Dashboard />} />
-            </Route>
+        <Route path="/chat" element={<Chat />} />
+        <Route path="/meeting" element={<Meeting />} />
+        <Route path="/createGig" element={<CreateGig />} />
+        <Route path="/editGig" element={<CreateGig />} />
 
-            <Route path="/chat" element={<Chat />} />
-            <Route path="/meeting" element={<Meeting />} />
-            <Route path="/createGig" element={<CreateGig />} />
-            <Route path="/editGig" element={<CreateGig />} />
+        <Route
+          path="/becomeSeller"
+          element={<PInfoPersonalDetailsAndSkills />}
+        />
+        <Route path="/cprofile" element={<CompleteProfile />}></Route>
+        <Route path="/pexperience" element={<PInfoExperienceAndEducation />} />
 
-            <Route
-              path="/becomeSeller"
-              element={<PInfoPersonalDetailsAndSkills />}
-            />
-            <Route path="/cprofile" element={<CompleteProfile />}></Route>
-            <Route
-              path="/pexperience"
-              element={<PInfoExperienceAndEducation />}
-            />
+        <Route path="/postProject" element={<PostProject />} />
+        <Route path="/e/dashboard" element={<EDashborad />} />
+        <Route path="/e/projects" element={<EProjects />} />
+        <Route path="/e/favourites" element={<EFavourites />} />
+        <Route path="/e/reviews" element={<EReviews />} />
+        <Route path="/e/messages" element={<EMessages />} />
+        <Route path="/e/teams" element={<ETeams />} />
+        <Route path="/e/payments" element={<EPayments />} />
+        <Route path="/e/settings" element={<ESettings />} />
 
-            <Route path="/postProject" element={<PostProject />} />
-            <Route path="/e/dashboard" element={<EDashborad />} />
-            <Route path="/e/projects" element={<EProjects />} />
-            <Route path="/e/favourites" element={<EFavourites />} />
-            <Route path="/e/reviews" element={<EReviews />} />
-            <Route path="/e/messages" element={<EMessages />} />
-            <Route path="/e/teams" element={<ETeams />} />
-            <Route path="/e/payments" element={<EPayments />} />
-            <Route path="/e/settings" element={<ESettings />} />
-
-            <Route path="/f/dashboard" element={<FDashboard />} />
-            <Route path="/f/gigs" element={<FGigs />} />
-            <Route path="/f/projects" element={<FProjects />} />
-            <Route path="/f/favourites" element={<Favourites />} />
-            <Route path="/f/reviews" element={<FReviews />} />
-            <Route path="/f/messages" element={<FMessages />} />
-            <Route path="/f/teams" element={<FTeams />} />
-            <Route path="/f/payments" element={<FPayments />} />
-            <Route path="/f/settings" element={<FSettings />} />
-          </Route>
-          <Route path="/profile/:id" element={<SellerProfile />} />
-          <Route path="/temp" element={<TempPage />} />
-          <Route path="/meeting1" element={<Meeting1 />} />
-          {/* just temp haseeb bata donst worry */}
-          <Route path="/uploadImage" element={<FileUpload />} />\
-          {/* just temp haseeb bata donst worry */}
-          <Route path="/" element={<Navigate to="/home" replace />} />
-          <Route path="*" element={<Navigate to="/home" replace />} />
-        </Routes>
-  )
-}
+        <Route path="/f/dashboard" element={<FDashboard />} />
+        <Route path="/f/gigs" element={<FGigs />} />
+        <Route path="/f/projects" element={<FProjects />} />
+        <Route path="/f/favourites" element={<Favourites />} />
+        <Route path="/f/reviews" element={<FReviews />} />
+        <Route path="/f/messages" element={<FMessages />} />
+        <Route path="/f/teams" element={<FTeams />} />
+        <Route path="/f/payments" element={<FPayments />} />
+        <Route path="/f/settings" element={<FSettings />} />
+      </Route>
+      <Route path="/profile/:id" element={<SellerProfile />} />
+      <Route path="/temp" element={<TempPage />} />
+      <Route path="/meeting1" element={<Meeting1 />} />
+      {/* just temp haseeb bata donst worry */}
+      <Route path="/uploadImage" element={<FileUpload />} />\
+      {/* just temp haseeb bata donst worry */}
+      <Route path="/" element={<Navigate to="/home" replace />} />
+      <Route path="*" element={<Navigate to="/home" replace />} />
+    </Routes>
+  );
+};
 
 function App(props) {
   const [open, setOpen] = useState(false);
@@ -261,12 +272,11 @@ function App(props) {
   const [searchDataLoader, setSearchDataLoader] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
-  
+
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
   }, [currentUser]);
 
-  
   return (
     <CustomContextProvider
       value={{
@@ -299,7 +309,12 @@ function App(props) {
       }}
     >
       <Router>
-        <AppNavigation dispatch={dispatch} state={state} user={user} currentUser=     {currentUser}/>
+        <AppNavigation
+          dispatch={dispatch}
+          state={state}
+          user={user}
+          currentUser={currentUser}
+        />
       </Router>
       <ToastContainer
         position="top-right"

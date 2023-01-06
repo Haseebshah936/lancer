@@ -8,6 +8,7 @@ import checkmark from "./checkmark.gif";
 import tick from "./tick.json";
 import jazz from "./jazz.png";
 import EasyPaisa from "./EasyPaisa.png";
+import banned from "./banned.svg";
 export {
   jazz,
   EasyPaisa,
@@ -19,4 +20,5 @@ export {
   thumbsup,
   checkmark,
   tick,
+  banned,
 };
