@@ -11,13 +11,17 @@ import NotificationList from "./NotificationList";
 import UserOptions from "./UserOptions";
 import { useRealmContext } from "../../db/RealmContext";
 import axios from "axios";
+import { Logout } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+import { useLayoutEffect } from "react";
 
 function Header({ setloader }) {
   const [state, setState] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [anchor2, setAnchor2] = useState(null);
   const [anchor3, setAnchor3] = useState(null);
-  const { user } = useRealmContext();
+  const { user, logOut } = useRealmContext();
+  const navigate = useNavigate();
 
   const toggleMessage = (event) => {
     setAnchor(event.currentTarget);
@@ -59,6 +63,10 @@ function Header({ setloader }) {
 
   useEffect(() => {
     let interval;
+    if (user?.state === "banned") {
+      navigate("/banned");
+      logOut();
+    }
     if (user?._id) {
       (async () => {
         try {
