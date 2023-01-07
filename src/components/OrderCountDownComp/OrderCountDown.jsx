@@ -6,12 +6,14 @@ import colors from "../../utils/colors";
 import DeliverOrderComp from "../OrderStausComp/DeliverOrderComp";
 import CancelOrderComp from "../OrderStausComp/CancelOrderComp";
 import ExtendDeliverDateComp from "../OrderStausComp/ExtendDeliverDateComp";
+import CreateDisputeComp from "../OrderStausComp/CreateDisputeComp";
 
 export default function OrderCountDown({ p, setP }) {
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
   const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
     useState(false);
+  const [createDisputePopValue, setCreateDisputePopValue] = useState(false);
   const calculatedTime = () => {
     const updatedDate = new Date(
       new Date(p.startedAt).getTime() + p.days * 24 * 60 * 60 * 1000
@@ -61,6 +63,12 @@ export default function OrderCountDown({ p, setP }) {
         p={p}
         setP={setP}
       ></ExtendDeliverDateComp>
+      <CreateDisputeComp
+        setCreateDisputePopValue={setCreateDisputePopValue}
+        createDisputePopValue={createDisputePopValue}
+        setP={setP}
+        p={p}
+      ></CreateDisputeComp>
 
       <Grid
         container
@@ -142,6 +150,24 @@ export default function OrderCountDown({ p, setP }) {
             onClick={() => setCancelOrderPopValue(true)}
           >
             Cancel Order
+          </Button>
+        </Grid>
+        <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: colors.becomePartnerGreen,
+              color: colors.white,
+              "&:hover": {
+                backgroundColor: colors.becomePartnerGreen,
+                color: colors.white,
+              },
+              minWidth: "135px",
+              maxWidth: "135px",
+            }}
+            onClick={() => setCreateDisputePopValue(true)}
+          >
+            Create Dispute
           </Button>
         </Grid>
       </Grid>
