@@ -229,10 +229,10 @@ export default function OrderStatus() {
               ))}
               {/* if freelancer has delivered teh project timeline ends here*/}
               {/*  */}
-              <FreelancerGotReviewTimeLine></FreelancerGotReviewTimeLine>
+              {/* <FreelancerGotReviewTimeLine></FreelancerGotReviewTimeLine> */}
               {/*  */}
               {/*  */}
-              <ClientGotReviewTimeLine></ClientGotReviewTimeLine>
+              {/* <ClientGotReviewTimeLine></ClientGotReviewTimeLine> */}
               {/*  */}
               {/* if client has accepted the project timeline starts here # rating*/}
               {p?.state === "completed" ? (
