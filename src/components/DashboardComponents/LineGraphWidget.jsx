@@ -21,66 +21,66 @@ import {
 } from "@mui/material";
 import colors from "../../utils/colors";
 import * as styled2 from "styled-components";
+import { requestMethod } from "../../requestMethod";
 
-const data = [
-  {
-    name: "Jan",
-    views: 100,
-  },
-  {
-    name: "Feb",
-    views: 150,
-  },
-  {
-    name: "Mar",
-    views: 200,
-  },
-  {
-    name: "Apr",
-    views: 250,
-  },
-  {
-    name: "May",
-    views: 200,
-  },
-  {
-    name: "Jun",
-    views: 250,
-  },
-  {
-    name: "Jul",
-    views: 200,
-  },
-  {
-    name: "Aug",
-    views: 200,
-  },
-  {
-    name: "Sep",
-    views: 200,
-  },
-  {
-    name: "Oct",
-    views: 200,
-  },
-  {
-    name: "Nov",
-    views: 300,
-  },
-  {
-    name: "Dec",
-    views: 350,
-  },
-];
-
-const CardHeading = styled(Typography)({
-  color: colors.black,
-  fontWeight: "500",
-  fontSize: "1.8rem",
-});
-
-const LineGraphWidget = () => {
+const LineGraphWidget = ({
+  data = [
+    {
+      name: "Jan",
+      views: 100,
+    },
+    {
+      name: "Feb",
+      views: 150,
+    },
+    {
+      name: "Mar",
+      views: 200,
+    },
+    {
+      name: "Apr",
+      views: 250,
+    },
+    {
+      name: "May",
+      views: 200,
+    },
+    {
+      name: "Jun",
+      views: 250,
+    },
+    {
+      name: "Jul",
+      views: 200,
+    },
+    {
+      name: "Aug",
+      views: 200,
+    },
+    {
+      name: "Sep",
+      views: 200,
+    },
+    {
+      name: "Oct",
+      views: 200,
+    },
+    {
+      name: "Nov",
+      views: 300,
+    },
+    {
+      name: "Dec",
+      views: 350,
+    },
+  ],
+}) => {
   const [Months, setMonths] = React.useState("");
+
+  const getViewsYearly = async (id) => {
+    const response = await requestMethod.get(`/view/user/` + id);
+    return response.data;
+  };
 
   const handleChange = (event) => {
     setMonths(event.target.value);
@@ -144,3 +144,9 @@ const HeaderWrapper = styled2.default.div`
   align-items:center;
   padding-bottom:15px;
 `;
+
+const CardHeading = styled(Typography)({
+  color: colors.black,
+  fontWeight: "500",
+  fontSize: "1.8rem",
+});

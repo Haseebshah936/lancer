@@ -18,6 +18,7 @@ import SellerProfileTabs from "./SellerProfileTabs";
 
 function SellerProfile(props) {
   const { user, currentUser } = useRealmContext();
+
   const queryParams = useParams();
   const [userData, setUserData] = useState(null);
   const { activeProfile } = useCustomContext();
@@ -36,6 +37,15 @@ function SellerProfile(props) {
   const [showProductsTab, setShowProductsTab] = useState(false);
   // eslint-disable-next-line no-restricted-globals
   //console.log("Query Params", queryParams);
+
+  const setView = async (user, profile) => {
+    const response = await requestMethod.post("view", {
+      userId: profile,
+      viewerId: user,
+    });
+    return response.data;
+  };
+
   const getUserData = async () => {
     const response = await requestMethod.get(`/user/getUser/${queryParams.id}`);
     return response.data;
@@ -231,6 +241,30 @@ function SellerProfile(props) {
           : true
         : false
     );
+  }, [userData]);
+
+  useEffect(() => {
+    if (userData && activeProfile === "seller" && user) {
+      console.log("User from view", user);
+      console.log("UserData from view", userData);
+      console.log("Active Profile from view", activeProfile);
+
+      // setView(user?._id, userData?.seller._id).then((response) => {
+      //   console.log("Created View", response);
+      // });
+    } else if (userData && activeProfile !== "seller" && user) {
+      console.log("User from view", user);
+      console.log("UserData from view", userData);
+      console.log("Active Profile from view", activeProfile);
+
+      // setView(user?._id, userData?._id).then((response) => {
+      //   console.log("Created View", response);
+      // });
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    console.log("UserData, ", userData);
   }, [userData]);
 
   return (

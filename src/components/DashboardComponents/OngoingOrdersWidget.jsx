@@ -1,7 +1,116 @@
-import { Paper, Typography, styled, Grid, Divider } from "@mui/material";
+import {
+  Paper,
+  Typography,
+  styled,
+  Grid,
+  Divider,
+  CircularProgress,
+} from "@mui/material";
+import { useEffect } from "react";
 import * as styled2 from "styled-components";
 import colors from "../../utils/colors";
 import CustomFilledButton from "../CustomFilledButton";
+
+const OngoingOrdersWidget = ({
+  title = "Ongoing Orders",
+  ongoingOrders,
+  loader,
+}) => {
+  useEffect(() => {
+    console.log("Ongoing Orders", ongoingOrders);
+  }, [ongoingOrders]);
+
+  return (
+    <>
+      <Paper
+        elevation={2}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-start",
+          p: 2,
+          margin: "auto",
+          maxWidth: "100%",
+        }}
+      >
+        <HeaderrWrapper>
+          <CardHeading>{title}</CardHeading>
+          <CustomFilledButton
+            title={"View All"}
+            style={{ margin: "5px 0px 0px 0px" }}
+          ></CustomFilledButton>
+        </HeaderrWrapper>
+        <Divider sx={{ mx: -2, mb: 2 }} />
+
+        {loader ? (
+          <CircularProgress
+            sx={{
+              "&.MuiCircularProgress-root": {
+                color: colors.textGreen,
+              },
+              alignSelf: "center",
+            }}
+          />
+        ) : ongoingOrders ? (
+          ongoingOrders.map((order) => (
+            <OrderWrapper>
+              <OrderName>{order.title}</OrderName>
+
+              <Grid
+                container
+                spacing={2}
+                justifyContent="flex-start"
+                alignItems="flex-start"
+                sx={{ pt: 1 }}
+              >
+                <Grid item mobile={4}>
+                  <OrderDetailType>Order Type</OrderDetailType>
+                  <OrderDetailName>{order.pricingType}</OrderDetailName>
+                </Grid>
+                <Grid item mobile={4}>
+                  <OrderDetailType>Project Price</OrderDetailType>
+                  <OrderDetailName>${order.budget}</OrderDetailName>
+                </Grid>
+                <Grid item mobile={4}>
+                  <OrderDetailType>Deadline</OrderDetailType>
+
+                  {order.days <= 3 ? (
+                    <OrderDetailName sx={{ color: "red" }}>
+                      {order.days} days
+                    </OrderDetailName>
+                  ) : (
+                    <OrderDetailName>{order.days} days</OrderDetailName>
+                  )}
+                </Grid>
+              </Grid>
+            </OrderWrapper>
+          ))
+        ) : (
+          <CardHeading sx={{ color: "black", fontWeight: "bold" }}>
+            No Ongoing Orders Yet
+          </CardHeading>
+        )}
+      </Paper>
+    </>
+  );
+};
+
+export default OngoingOrdersWidget;
+
+const HeaderrWrapper = styled2.default.div`
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  align-items:center;
+  padding-bottom:15px;
+`;
+
+const OrderWrapper = styled2.default.div`
+  display: flex;
+  flex-direction: column;
+  padding-bottom:30px;
+  
+`;
 
 const CardHeading = styled(Typography)({
   color: colors.black,
@@ -36,116 +145,3 @@ const OrderDetailName = styled(Typography)({
   fontSize: "1.2rem",
   color: "#838383",
 });
-
-const OngoingOrdersWidget = ({
-  title = "Ongoing Orders",
-  Orders = [
-    {
-      id: 1,
-      name: "React JS Web App",
-      summary:
-        "I want to you to redesign my react web app and make it responsive, with extra designs",
-      type: "Milestone",
-      price: "$600",
-      Location: "UK",
-      Deadline: "10 days left",
-    },
-    {
-      id: 2,
-      name: "React Native App",
-      summary: "I want to you to redesign my react Native app",
-      type: "Milestone",
-      price: "$600",
-      Location: "UK",
-      Deadline: "10 days left",
-    },
-    {
-      id: 3,
-      name: "Amazon Dropshipping",
-      summary: "I want to you to product hunt for me and manage my store",
-      type: "Milestone",
-      price: "$600",
-      Location: "UK",
-      Deadline: "10 days left",
-    },
-    {
-      id: 4,
-      name: "Wordpress Website build",
-      summary:
-        "I want to you to make a woocommerce store for me and add products to it",
-      type: "Milestone",
-      price: "$600",
-      Location: "UK",
-      Deadline: "10 days left",
-    },
-  ],
-}) => {
-  return (
-    <>
-      <Paper
-        elevation={2}
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
-          p: 2,
-          margin: "auto",
-          maxWidth: "100%",
-        }}
-      >
-        <HeaderrWrapper>
-          <CardHeading>{title}</CardHeading>
-          <CustomFilledButton
-            title={"View All"}
-            style={{ margin: "5px 0px 0px 0px" }}
-          ></CustomFilledButton>
-        </HeaderrWrapper>
-        <Divider sx={{ mx: -2, mb: 2 }} />
-
-        {Orders.map((order) => (
-          <OrderWrapper>
-            <OrderName>{order.name}</OrderName>
-            <OrderSummary variant="subtitle1">{order.summary}</OrderSummary>
-            <Grid
-              container
-              spacing={2}
-              justifyContent="flex-start"
-              alignItems="flex-start"
-              sx={{ pt: 1 }}
-            >
-              <Grid item mobile={4}>
-                <OrderDetailType>Order Type</OrderDetailType>
-                <OrderDetailName>{order.type}</OrderDetailName>
-              </Grid>
-              <Grid item mobile={4}>
-                <OrderDetailType>Project Price</OrderDetailType>
-                <OrderDetailName>{order.price}</OrderDetailName>
-              </Grid>
-              <Grid item mobile={4}>
-                <OrderDetailType>Deadline</OrderDetailType>
-                <OrderDetailName>{order.Deadline}</OrderDetailName>
-              </Grid>
-            </Grid>
-          </OrderWrapper>
-        ))}
-      </Paper>
-    </>
-  );
-};
-
-export default OngoingOrdersWidget;
-
-const HeaderrWrapper = styled2.default.div`
-  display: flex;
-  flex-direction: row;
-  justify-content:space-between;
-  align-items:center;
-  padding-bottom:15px;
-`;
-
-const OrderWrapper = styled2.default.div`
-  display: flex;
-  flex-direction: column;
-  padding-bottom:30px;
-  
-`;

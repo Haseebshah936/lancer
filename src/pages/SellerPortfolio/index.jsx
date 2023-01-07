@@ -165,10 +165,18 @@ function SellerPortfolio(props) {
     return response.data;
   };
 
-  useEffect(() => {
-    console.log("Category Features: ", categoryFeatures);
-    console.log("SubCategory Features: ", subCategoryFeatures);
-  }, [categoryFeatures, subCategoryFeatures]);
+  const setView = async (user, product) => {
+    const response = await requestMethod.post("view", {
+      viewerId: user,
+      productId: product,
+    });
+    return response.data;
+  };
+
+  // useEffect(() => {
+  //   console.log("Category Features: ", categoryFeatures);
+  //   console.log("SubCategory Features: ", subCategoryFeatures);
+  // }, [categoryFeatures, subCategoryFeatures]);
 
   useEffect(() => {
     if (productData) {
@@ -250,6 +258,19 @@ function SellerPortfolio(props) {
       setIsSameUser(false);
     }
   }, [user, sellerData]);
+
+  useEffect(() => {
+    if (productData && user) {
+      setView(user._id, productData._id).then((response) => {
+        console.log("Response", response);
+      });
+    }
+  }, [productData]);
+
+  useEffect(() => {
+    console.log("User: ", user);
+    console.log("product Data: ", productData);
+  }, [productData, user]);
 
   return (
     <>

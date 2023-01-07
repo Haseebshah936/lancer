@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Grid, Tab, Tabs } from "@mui/material";
 import Styled from "styled-components";
 // import Header from "../../components/Header";
@@ -9,7 +9,31 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import FSideBar from "../../pages/FSideBar/FSideBar";
 import SellerDashboard from "../SellerDashboard";
 import Dashboard from "../../components/SellerDashboardRenders/Dashboard";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
 export default function FDashboard() {
+  const { user } = useRealmContext();
+  const [ongoingOrders, setOngoingOrders] = useState([]);
+  const [loader, setLoader] = useState(true);
+
+  const getOngoingOrders = async (id) => {
+    const response = await requestMethod.get("project/seller/onGoing/" + id);
+    return response.data;
+  };
+
+  useEffect(() => {
+    if (user) {
+      getOngoingOrders(user._id).then((data) => {
+        setOngoingOrders(data);
+        setLoader(false);
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    console.log("User", user);
+  }, [user]);
+
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -47,7 +71,7 @@ export default function FDashboard() {
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Dashboard />
+                <Dashboard ongoingData={ongoingOrders} loader={loader} />
               </Grid>
             </Grid>
           </ThemeProvider>

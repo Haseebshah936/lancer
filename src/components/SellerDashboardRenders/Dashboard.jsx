@@ -6,7 +6,7 @@ import OngoingOrdersWidget from "../DashboardComponents/OngoingOrdersWidget";
 import PastOrdersWidget from "../DashboardComponents/PastOrdersWidget";
 import RadialChartWidget from "../DashboardComponents/RadialChartWidget";
 import StatCardWidget from "../DashboardComponents/StatCardWidget";
-const Dashboard = () => {
+const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
 
   useEffect(() => {
@@ -78,7 +78,7 @@ const Dashboard = () => {
         </Grid>
 
         <Grid item rowSpacing={2} mobile={12}>
-          <OngoingOrdersWidget />
+          <OngoingOrdersWidget ongoingOrders={ongoingData} loader={loader} />
         </Grid>
         <Grid item rowSpacing={2} mobile={12}>
           <PastOrdersWidget />
