@@ -7,8 +7,11 @@ import DeliverOrderComp from "../OrderStausComp/DeliverOrderComp";
 import CancelOrderComp from "../OrderStausComp/CancelOrderComp";
 import ExtendDeliverDateComp from "../OrderStausComp/ExtendDeliverDateComp";
 import CreateDisputeComp from "../OrderStausComp/CreateDisputeComp";
+import { requestMethod } from "../../requestMethod";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function OrderCountDown({ p, setP }) {
+  const { activeProfile } = useCustomContext();
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
   const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
@@ -36,6 +39,19 @@ export default function OrderCountDown({ p, setP }) {
   const [remainingDate, setRemainingDate] = useState(calculatedTime());
   // let dateToEndCountdownAt = calculatedTime();
   const { days, hours, minutes, seconds } = useReactCountdown(remainingDate);
+
+  const startProject = async (id) => {
+    const response = await requestMethod.put("project/start/" + id, {
+      details: "started",
+    });
+    return response.data;
+  };
+
+  const handleStart = () => {
+    startProject(p._id).then((data) => {
+      console.log("Data ", data);
+    });
+  };
 
   return (
     <div
@@ -170,6 +186,32 @@ export default function OrderCountDown({ p, setP }) {
             Create Dispute
           </Button>
         </Grid>
+        {activeProfile === "seller" && (
+          <Grid
+            item
+            xs={12}
+            display={"flex"}
+            justifyContent={"center"}
+            mt={0.5}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: colors.becomePartnerGreen,
+                color: colors.white,
+                "&:hover": {
+                  backgroundColor: colors.becomePartnerGreen,
+                  color: colors.white,
+                },
+                minWidth: "135px",
+                maxWidth: "135px",
+              }}
+              onClick={handleStart}
+            >
+              Start Project
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </div>
   );
