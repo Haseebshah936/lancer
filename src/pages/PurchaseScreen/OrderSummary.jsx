@@ -202,7 +202,7 @@ export default function OrderSummary({
               style={{ display: "flex", flexDirection: "row", flex: 1 }}
             >
               {order?.extraFeatures?.map((feature) => {
-                if (feature.checked) {
+                if (feature?.checked) {
                   return (
                     <Grid
                       container

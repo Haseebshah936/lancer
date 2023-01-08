@@ -50,9 +50,9 @@ export default function CartDrawer({
   const [total, setTotal] = useState(0);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   console.log("Checked Array", checkArr);
-  // }, [checkArr]);
+  useEffect(() => {
+    console.log("Total ", total);
+  }, [total]);
 
   // useEffect(() => {
   //   console.log("Order State", orderState);
@@ -76,16 +76,18 @@ export default function CartDrawer({
 
   useEffect(() => {
     setTotal(selectedPlan.cost);
-    console.log("Total", total);
+    // console.log("Total", total);
   }, [selectedPlan]);
 
   useEffect(() => {
+    console.log("I am in");
     checkArr?.map((item) => {
       if (item?.checked) {
         console.log("Cost", item?.cost);
         console?.log("quantity", item?.quantity);
 
         let t = selectedPlan?.cost * gigQuantity + item?.cost * item?.quantity;
+
         setTotal(t);
       } else {
         setTotal(selectedPlan?.cost * gigQuantity);
@@ -112,10 +114,9 @@ export default function CartDrawer({
     }
   }, [Extras]);
 
-  // useEffect(() => {
-  //   console.log("User: ", user);
-  //   console.log("currentUser: ", currentUser);
-  // }, [user, currentUser]);
+  useEffect(() => {
+    console.log("CHECK ARR", checkArr);
+  }, [checkArr]);
 
   return (
     <>
