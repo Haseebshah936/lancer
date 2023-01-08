@@ -183,36 +183,37 @@ function Head({
           <Link to="/">
             <Image src={logo} />
           </Link>
-
-          <SearchContainer>
-            <div style={{ width: "10%" }}>
-              <IconButton onClick={() => handleSubmit(terms)}>
-                <SearchOutlined sx={{ fontSize: "2rem" }} />
-              </IconButton>
-            </div>
-            <form
-              style={{ width: "90%" }}
-              onSubmit={(e) => {
-                handleSubmit(terms);
-                e.preventDefault();
-              }}
-            >
-              {" "}
-              <InputField
-                value={terms}
-                styles={{
-                  width: "100%",
-                  backgroundColor: "transparent",
-                  paddingLeft: "10px",
+          {activeProfile !== "seller" && (
+            <SearchContainer>
+              <div style={{ width: "10%" }}>
+                <IconButton onClick={() => handleSubmit(terms)}>
+                  <SearchOutlined sx={{ fontSize: "2rem" }} />
+                </IconButton>
+              </div>
+              <form
+                style={{ width: "90%" }}
+                onSubmit={(e) => {
+                  handleSubmit(terms);
+                  e.preventDefault();
                 }}
-                placeholder={"What Services do you want?"}
-                type="text"
-                onChange={(e) => {
-                  handleChange(e.target.value);
-                }}
-              />
-            </form>
-          </SearchContainer>
+              >
+                {" "}
+                <InputField
+                  value={terms}
+                  styles={{
+                    width: "100%",
+                    backgroundColor: "transparent",
+                    paddingLeft: "10px",
+                  }}
+                  placeholder={"What Services do you want?"}
+                  type="text"
+                  onChange={(e) => {
+                    handleChange(e.target.value);
+                  }}
+                />
+              </form>
+            </SearchContainer>
+          )}
         </Menucontainer>
         <Wrapper>
           <SubContainer>
