@@ -32,9 +32,9 @@ const useWebRTC = () => {
     audio: {
       echoCancellation: true,
       noiseSuppression: true,
-      autoGainControl: true,
-      sampleRate: 24000,
-      sampleSize: 24,
+      autoGainControl: false,
+      // sampleRate: 48000,
+      // sampleSize: 16,
     },
     video: true,
   };
@@ -260,7 +260,7 @@ const useWebRTC = () => {
 
     //NOTE - Always use the onicecandidate event to get the local description. The local description is the offer in this case.
 
-    pc.onicecandidate = (e) => {
+    pc.onicecandidate = async (e) => {
       if (e.candidate) {
         // console.log("candidate", e.candidate);
       }
@@ -278,60 +278,171 @@ const useWebRTC = () => {
       //     type,
       //   },
       // });
+      // try {
+      //   const data = await createCall(
+      //     type,
+      //     chatroomId,
+      //     callerId,
+      //     receiverId,
+      //     JSON.stringify(pc.localDescription).toString()
+      //   );
+      //   console.log(pc.localDescription);
+      //   console.log(JSON.parse(JSON.stringify(pc.localDescription).toString()));
+      //   dispatch({
+      //     type: "START_CONNECTION",
+      //     payload: {
+      //       peerConnection: pc,
+      //       dataChannel: dc,
+      //       offer: JSON.stringify(pc.localDescription), // *The local description is the offer
+      //       isInitiator: true,
+      //       callerId,
+      //       receiverId,
+      //       chatroomId,
+      //       type,
+      //       callId: data._id,
+      //     },
+      //   });
+      //   // let interval;
+      //   // interval = setInterval(async () => {
+      //   //   try {
+      //   //     console.log("Updating call time");
+      //   //     await updateCallTime(data._id);
+      //   //   } catch (error) {
+      //   //     console.log(error);
+      //   //     dispatch({
+      //   //       type: "SET_CONNECTION_STATE",
+      //   //       payload: "failed",
+      //   //     })
+      //   //     clearInterval(interval);
+      //   //     handleError(error);
+      //   //   }
+      //   // }, 20000)
+      //   // dispatch({
+      //   //   type: "SET_CALL_INTERVAL",
+      //   //   payload: interval
+      //   // })
+      //   return data;
+      // } catch (err) {
+      //   handleHangUp(pc, stream);
+      //   throw err;
+      // }
     };
     pc.ontrack = (e) => handleOnTrack(e); // *Fired when a track is added to the RTCPeerConnection
     pc.onnegotiationneeded = (e) => handleNegotiation(e, pc); // *Fired when a negotiation is needed
     const offer = await pc.createOffer(); // *Creating an offer
     await pc.setLocalDescription(offer); // *Setting the local description to the offer
     // console.log("Testing ",JSON.stringify(pc.localDescription).length());
-    try {
-      const data = await createCall(
-        type,
-        chatroomId,
-        callerId,
-        receiverId,
-        JSON.stringify(pc.localDescription).toString()
-      );
-      console.log(pc.localDescription);
-      console.log(JSON.parse(JSON.stringify(pc.localDescription).toString()));
-      dispatch({
-        type: "START_CONNECTION",
-        payload: {
-          peerConnection: pc,
-          dataChannel: dc,
-          offer: JSON.stringify(pc.localDescription), // *The local description is the offer
-          isInitiator: true,
-          callerId,
-          receiverId,
-          chatroomId,
-          type,
-          callId: data._id,
-        },
-      });
-      // let interval;
-      // interval = setInterval(async () => {
-      //   try {
-      //     console.log("Updating call time");
-      //     await updateCallTime(data._id);
-      //   } catch (error) {
-      //     console.log(error);
-      //     dispatch({
-      //       type: "SET_CONNECTION_STATE",
-      //       payload: "failed",
-      //     })
-      //     clearInterval(interval);
-      //     handleError(error);
-      //   }
-      // }, 20000)
-      // dispatch({
-      //   type: "SET_CALL_INTERVAL",
-      //   payload: interval
-      // })
-      return data;
-    } catch (err) {
-      handleHangUp(pc, stream);
-      throw err;
-    }
+    // setTimeout(async () => {
+    //   try {
+    //     const data = await createCall(
+    //       type,
+    //       chatroomId,
+    //       callerId,
+    //       receiverId,
+    //       JSON.stringify(pc.localDescription).toString()
+    //     );
+    //     console.log(pc.localDescription);
+    //     console.log(JSON.stringify(pc.localDescription).length);
+    //     dispatch({
+    //       type: "START_CONNECTION",
+    //       payload: {
+    //         peerConnection: pc,
+    //         dataChannel: dc,
+    //         offer: JSON.stringify(pc.localDescription), // *The local description is the offer
+    //         isInitiator: true,
+    //         callerId,
+    //         receiverId,
+    //         chatroomId,
+    //         type,
+    //         callId: data._id,
+    //       },
+    //     });
+    //     // let interval;
+    //     // interval = setInterval(async () => {
+    //     //   try {
+    //     //     console.log("Updating call time");
+    //     //     await updateCallTime(data._id);
+    //     //   } catch (error) {
+    //     //     console.log(error);
+    //     //     dispatch({
+    //     //       type: "SET_CONNECTION_STATE",
+    //     //       payload: "failed",
+    //     //     })
+    //     //     clearInterval(interval);
+    //     //     handleError(error);
+    //     //   }
+    //     // }, 20000)
+    //     // dispatch({
+    //     //   type: "SET_CALL_INTERVAL",
+    //     //   payload: interval
+    //     // })
+    //     return data;
+    //   } catch (err) {
+    //     handleHangUp(pc, stream);
+    //     throw err;
+    //   }
+    // }, 3000);
+    pc.onicegatheringstatechange = async (e) => {
+      // *Fired when the gathering state changes
+      switch (pc.iceGatheringState) {
+        case "new": // *The gathering state is new
+          console.log("new");
+          break;
+        case "gathering": // *The gathering state is gathering
+          console.log("gathering");
+          break;
+        case "complete": // *The gathering state is complete
+          try {
+            const data = await createCall(
+              type,
+              chatroomId,
+              callerId,
+              receiverId,
+              JSON.stringify(pc.localDescription).toString()
+            );
+            console.log(pc.localDescription);
+            console.log(JSON.stringify(pc.localDescription).length);
+            dispatch({
+              type: "START_CONNECTION",
+              payload: {
+                peerConnection: pc,
+                dataChannel: dc,
+                offer: JSON.stringify(pc.localDescription), // *The local description is the offer
+                isInitiator: true,
+                callerId,
+                receiverId,
+                chatroomId,
+                type,
+                callId: data._id,
+              },
+            });
+            // let interval;
+            // interval = setInterval(async () => {
+            //   try {
+            //     console.log("Updating call time");
+            //     await updateCallTime(data._id);
+            //   } catch (error) {
+            //     console.log(error);
+            //     dispatch({
+            //       type: "SET_CONNECTION_STATE",
+            //       payload: "failed",
+            //     })
+            //     clearInterval(interval);
+            //     handleError(error);
+            //   }
+            // }, 20000)
+            // dispatch({
+            //   type: "SET_CALL_INTERVAL",
+            //   payload: interval
+            // })
+            return data;
+          } catch (err) {
+            handleHangUp(pc, stream);
+            throw err;
+          }
+          break;
+      }
+    };
   };
 
   const handleJoinConnection = async () => {
@@ -453,8 +564,7 @@ const useWebRTC = () => {
 
   const handleAcceptAnswer = (pc, answer) => {
     (async () => {
-      console.log(pc);
-      await pc.setRemoteDescription(JSON.parse(answer)); // *Setting the remote description to the offer
+      if (pc) await pc.setRemoteDescription(JSON.parse(answer)); // *Setting the remote description to the offer
       dispatch({
         type: "JOIN_CONNECTION",
         payload: {

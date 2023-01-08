@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useMemo,
   useReducer,
   useRef,
   useState,
@@ -85,6 +86,8 @@ const AppNavigation = ({ currentUser, dispatch, state, user }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const { handleAcceptAnswer } = useWebRTC();
+  const stateRef = React.useRef();
+  stateRef.current = useMemo(() => state, [state]);
 
   const handleIncomingCall = (change) => {
     const { documentKey, fullDocument } = change;
@@ -104,36 +107,33 @@ const AppNavigation = ({ currentUser, dispatch, state, user }) => {
       if (location.pathname !== "/meeting") navigate("/meeting");
     }
     if (fullDocument.state === "ended") {
-      // dispatch({
-      //   type: "SET_CONNECTION_STATE",
-      //   payload: "failed"
-      // })
+      dispatch({
+        type: "SET_CONNECTION_STATE",
+        payload: "failed",
+      });
     }
   };
 
-  const acceptCall = useCallback(
-    (change) => {
-      const { documentKey, fullDocument } = change;
+  const acceptCall = (change) => {
+    const { documentKey, fullDocument } = change;
+    console.log("Accept Call", fullDocument);
+    if (fullDocument.answer && fullDocument.state !== "ended") {
       console.log("Accept Call", fullDocument);
-      if (fullDocument.answer && fullDocument.state !== "ended") {
-        console.log("Accept Call", fullDocument);
-        dispatch({
-          type: "JOIN_CONNECTION",
-          payload: {
-            answer: fullDocument.answer,
-          },
-        });
-        handleAcceptAnswer(state.peerConnection, fullDocument.answer);
-      }
-      if (fullDocument.state === "ended") {
-        dispatch({
-          type: "SET_CONNECTION_STATE",
-          payload: "failed",
-        });
-      }
-    },
-    [state.peerConnection]
-  );
+      dispatch({
+        type: "JOIN_CONNECTION",
+        payload: {
+          answer: fullDocument.answer,
+        },
+      });
+      handleAcceptAnswer(stateRef.current.peerConnection, fullDocument.answer);
+    }
+    if (fullDocument.state === "ended") {
+      dispatch({
+        type: "SET_CONNECTION_STATE",
+        payload: "failed",
+      });
+    }
+  };
 
   useEffect(() => {
     if (!currentUser) {
@@ -173,6 +173,7 @@ const AppNavigation = ({ currentUser, dispatch, state, user }) => {
       breakAsyncIterator1.current,
       handleIncomingCall
     );
+
     watchCollection(
       currentUser,
       "calls",

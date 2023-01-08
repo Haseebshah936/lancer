@@ -45,9 +45,9 @@ export const acceptCall = async (callId, answer) => {
 
 export const endCall = async (callId) => {
   console.log("callId", callId);
-  let res = {
-    data: {},
-  };
-  // res = await requestMethod.put(`call/endCall/${callId}`);
+  // let res = {
+  //   data: {},
+  // };
+  const res = await requestMethod.put(`call/endCall/${callId}`);
   return res.data;
 };
