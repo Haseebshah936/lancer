@@ -530,25 +530,38 @@ const useWebRTC = () => {
       await pc.setRemoteDescription(offer); // *Setting the remote description to the offer
       const answer = await pc.createAnswer();
       await pc.setLocalDescription(answer); // *Setting the local description to the answer
-      dispatch({
-        // *Dispatching the peer connection to the reducer with the answer
-        type: "JOIN_CONNECTION",
-        payload: {
-          peerConnection: pc,
-          offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
-          isInitiator: false,
-        },
-      });
-      try {
-        const data = await acceptCall(
-          state.callId,
-          JSON.stringify(pc.localDescription)
-        );
-        return data;
-      } catch (err) {
-        handleHangUp(pc, stream);
-        throw err;
-      }
+      pc.onicegatheringstatechange = async (e) => {
+        // *Fired when the gathering state changes
+        switch (pc.iceGatheringState) {
+          case "new": // *The gathering state is new
+            console.log("new");
+            break;
+          case "gathering": // *The gathering state is gathering
+            console.log("gathering");
+            break;
+          case "complete": // *The gathering state is complete
+            dispatch({
+              // *Dispatching the peer connection to the reducer with the answer
+              type: "JOIN_CONNECTION",
+              payload: {
+                peerConnection: pc,
+                offer: JSON.stringify(pc.localDescription), // *The local description is the answer for the other and local description for this peer user in this case
+                isInitiator: false,
+              },
+            });
+            try {
+              const data = await acceptCall(
+                state.callId,
+                JSON.stringify(pc.localDescription)
+              );
+              return data;
+            } catch (err) {
+              handleHangUp(pc, stream);
+              throw err;
+            }
+            break;
+        }
+      };
     } else {
       const pc = state.peerConnection; // *Getting the peer connection from the reducer
       console.log(pc);
