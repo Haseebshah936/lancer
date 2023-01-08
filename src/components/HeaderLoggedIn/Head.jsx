@@ -298,22 +298,25 @@ function Head({
                 />
               </Badge>
             </IconButton>
-            <IconButton
-              onClick={() => setSearchVisible((prev) => !prev)}
-              sx={{
-                display: "none",
-                " @media (max-width: 700px)": {
-                  display: "flex",
-                },
-              }}
-            >
-              <SearchOutlinedIcon
-                style={{
-                  color: colors.textGreen,
+            {activeProfile !== "seller" && (
+              <IconButton
+                onClick={() => setSearchVisible((prev) => !prev)}
+                sx={{
+                  display: "none",
+                  " @media (max-width: 700px)": {
+                    display: "flex",
+                  },
                 }}
-                fontSize="large"
-              />
-            </IconButton>
+              >
+                <SearchOutlinedIcon
+                  style={{
+                    color: colors.textGreen,
+                  }}
+                  fontSize="large"
+                />
+              </IconButton>
+            )}
+
             <IconButton>
               <Avatar
                 onClick={toggleUserOptions}
