@@ -105,6 +105,7 @@ export default function CartDrawer({
             quantity: 0,
             checked: false,
             cost: item?.cost,
+            quantityBased: item?.quantity === 0 ? false : true
           };
         }
       });

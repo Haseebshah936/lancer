@@ -199,7 +199,7 @@ export default function OrderSummary({
           <Grid container mobile={12}>
             <CustomList
               sx={{ py: 0 }}
-              style={{ display: "flex", flexDirection: "row", flex: 1 }}
+              style={{ display: "flex", flexDirection: "column", flex: 1 }}
             >
               {order?.extraFeatures?.map((feature) => {
                 if (feature?.checked) {
