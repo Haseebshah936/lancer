@@ -1,11 +1,14 @@
 {
   "folders": [
-	{
-		"path": "."
-	},
-	{
-		"path": "../../Node/lancer"
-	}
-],
+    {
+      "path": "."
+    },
+    {
+      "path": "../../Node/lancer"
+    },
+    {
+      "path": "../lanceradminpanel"
+    }
+  ],
   "settings": {}
 }
