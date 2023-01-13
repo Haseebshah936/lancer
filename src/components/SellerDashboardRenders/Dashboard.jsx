@@ -1,7 +1,8 @@
-import { Grid, Button } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import { Grid } from "@mui/material";
+import React, { useEffect } from "react";
 import { useRealmContext } from "../../db/RealmContext";
-import colors from "../../utils/colors";
+import { requestMethod } from "../../requestMethod";
+import { handleError } from "../../utils/helperFunctions";
 import LineGraphWidget from "../DashboardComponents/LineGraphWidget";
 import OngoingOrdersWidget from "../DashboardComponents/OngoingOrdersWidget";
 import PastOrdersWidget from "../DashboardComponents/PastOrdersWidget";
@@ -13,11 +14,25 @@ import { requestMethod } from "../../requestMethod";
 import ContactCSDialouge from "./ContactCSDialouge";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
-  const [open, setOpen] = React.useState(false);
-  const [cOpen, setCOpen] = React.useState(false);
+  const [views, setViews] = useState([]);
+  const location = useLocation();
+  const path = location.pathname.split("/");
 
+  const getViews = async (id) => {
+    try {
+      const res = await requestMethod.get(
+        `view/user/${path[1] === "f" ? "seller" : "buyer"}/${id}`
+      );
+      const data = res.data;
+      setViews(data);
+    } catch (error) {
+      handleError(error);
+    }
+  };
   useEffect(() => {
-    console.log("User", user);
+    if (user) {
+      getViews(user._id);
+    }
   }, [user]);
 
   return (
@@ -115,7 +130,7 @@ const Dashboard = ({ ongoingData, loader }) => {
             tablet={12}
             mobile={12}
           >
-            <LineGraphWidget />
+            <LineGraphWidget data={views} />
           </Grid>
           <Grid
             item

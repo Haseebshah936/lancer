@@ -83,7 +83,7 @@ export default function ExtrasCard({
             />
           </Header>
           <Description>Add this extra to your order.</Description>
-          {checkArr[id]?.checked ? (
+          { (checkArr[id]?.checked && checkArr[id]?.quantityBased)  ? (
             <>
               {" "}
               <Divider sx={{ my: 2 }} />

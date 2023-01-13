@@ -243,6 +243,16 @@ function SellerProfile(props) {
     );
   }, [userData]);
 
+  const createView = async (userId, viewerId, product) => {
+    const response = await requestMethod.post("view", {
+      userId,
+      viewerId,
+      productId: product,
+      viewer: activeProfile === "seller" ? "seller" : "buyer",
+    });
+    return response.data;
+  };
+
   useEffect(() => {
     if (userData && activeProfile === "seller" && user) {
       console.log("User from view", user);
@@ -266,6 +276,15 @@ function SellerProfile(props) {
   useEffect(() => {
     console.log("UserData, ", userData);
   }, [userData]);
+
+  useEffect(() => {
+    if (userData && user) {
+      if (user?._id === userData?._id) return;
+      createView(userData._id, user?._id, userData._id).then((response) => {
+        console.log("Response", response);
+      });
+    }
+  }, [userData, user]);
 
   return (
     <Wrapper>

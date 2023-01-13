@@ -106,7 +106,7 @@ function SellerPortfolio(props) {
   const [premiumPlan, setPremiumPlan] = useState({});
   const [categoryFeatures, setCategoryFeatures] = useState([]);
   const [subCategoryFeatures, setSubCategoryFeatures] = useState([]);
-
+  const { activeProfile } = useCustomContext();
   const [productMedia, setProductMedia] = useState([]);
   const descriptionRef = useRef();
   const [save, setSave] = useState(false);
@@ -165,9 +165,10 @@ function SellerPortfolio(props) {
     return response.data;
   };
 
-  const setView = async (user, product) => {
+  const createView = async (userId, viewerId, product) => {
     const response = await requestMethod.post("view", {
-      viewerId: user,
+      userId,
+      viewerId,
       productId: product,
     });
     return response.data;
@@ -260,12 +261,15 @@ function SellerPortfolio(props) {
   }, [user, sellerData]);
 
   useEffect(() => {
-    if (productData && user) {
-      setView(user._id, productData._id).then((response) => {
-        console.log("Response", response);
-      });
+    if (productData && sellerData) {
+      if (user?._id === sellerData?._id) return;
+      createView(sellerData._id, user?._id, productData._id).then(
+        (response) => {
+          console.log("Response", response);
+        }
+      );
     }
-  }, [productData]);
+  }, [productData, user]);
 
   useEffect(() => {
     console.log("User: ", user);

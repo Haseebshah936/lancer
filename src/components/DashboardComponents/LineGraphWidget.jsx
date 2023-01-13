@@ -27,51 +27,51 @@ const LineGraphWidget = ({
   data = [
     {
       name: "Jan",
-      views: 100,
+      views: 0,
     },
     {
       name: "Feb",
-      views: 150,
+      views: 0,
     },
     {
       name: "Mar",
-      views: 200,
+      views: 0,
     },
     {
       name: "Apr",
-      views: 250,
+      views: 0,
     },
     {
       name: "May",
-      views: 200,
+      views: 0,
     },
     {
       name: "Jun",
-      views: 250,
+      views: 0,
     },
     {
       name: "Jul",
-      views: 200,
+      views: 0,
     },
     {
       name: "Aug",
-      views: 200,
+      views: 0,
     },
     {
       name: "Sep",
-      views: 200,
+      views: 0,
     },
     {
       name: "Oct",
-      views: 200,
+      views: 0,
     },
     {
       name: "Nov",
-      views: 300,
+      views: 0,
     },
     {
       name: "Dec",
-      views: 350,
+      views: 0,
     },
   ],
 }) => {
