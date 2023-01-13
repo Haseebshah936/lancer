@@ -1,5 +1,6 @@
-import { Grid } from "@mui/material";
-import React, { useEffect } from "react";
+import { Grid, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
 import { handleError } from "../../utils/helperFunctions";
@@ -10,8 +11,8 @@ import RadialChartWidget from "../DashboardComponents/RadialChartWidget";
 import StatCardWidget from "../DashboardComponents/StatCardWidget";
 import AptitudeDialouge from "./AptitudeDialouge";
 import { UserState } from "realm-web";
-import { requestMethod } from "../../requestMethod";
 import ContactCSDialouge from "./ContactCSDialouge";
+import colors from "../../utils/colors";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
   const [views, setViews] = useState([]);
@@ -34,6 +35,8 @@ const Dashboard = ({ ongoingData, loader }) => {
       getViews(user._id);
     }
   }, [user]);
+  const [open, setOpen] = useState(false);
+  const [cOpen, setCOpen] = useState(false);
 
   return (
     <>
