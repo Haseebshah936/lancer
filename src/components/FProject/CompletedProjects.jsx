@@ -77,8 +77,8 @@ export default function CompletedProjects({ data }) {
           >
             <Button
               variant="contained"
-              style={{
-                width: "12rem",
+              sx={{
+                width: { xs: "12rem", md: "10rem" },
                 height: "30px",
                 backgroundColor: colors.becomePartnerGreen,
                 fontWeight: "700",

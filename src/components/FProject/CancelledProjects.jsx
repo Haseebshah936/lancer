@@ -68,7 +68,7 @@ export default function CancelledProjects({ data }) {
           <Grid
             item
             xs={12}
-            md={2}
+            lg={2}
             display="flex"
             alignItems={"center"}
             justifyContent="center"
@@ -78,7 +78,7 @@ export default function CancelledProjects({ data }) {
             <Button
               variant="contained"
               style={{
-                width: "12rem",
+                width: { xs: "12rem", md: "7rem" },
                 height: "30px",
                 backgroundColor: colors.becomePartnerGreen,
                 fontWeight: "700",

@@ -423,6 +423,7 @@ export default function AvalibleProjects({ data }) {
           )}
         </Grid>
       </Grid>
+
       <Grid container mt={1} display={"flex"} justifyContent={"center"}>
         <Grid item xs={11} display="flex" justifyContent="center">
           <GreenButton
@@ -569,7 +570,14 @@ export default function AvalibleProjects({ data }) {
                 </CenterDiv>
               </Grid>
               {/* Third Box */}
-              <Grid item xs={5} sm={2.5}>
+              <Grid
+                item
+                xs={0}
+                sm={2}
+                md={0}
+                display={{ xs: "flex", sm: "none" }}
+              ></Grid>
+              <Grid item xs={5} sm={6} md={2.5} display={"flex"}>
                 <CenterDiv>
                   {/* Send Perposal */}
                   <div

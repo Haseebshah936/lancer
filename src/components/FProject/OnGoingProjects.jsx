@@ -39,12 +39,18 @@ export default function OnGoingProjects({ data }) {
           display="flex"
           flexDirection={{ xs: "column", md: "row" }}
         >
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <Grid Container>
               <Grid item xs={12}>
                 <UserNameP>{p.eUserName}</UserNameP>
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  overflowWrap: "break-word",
+                }}
+              >
                 <TitleP>{p.title}</TitleP>
               </Grid>
               <Grid item xs={12}>

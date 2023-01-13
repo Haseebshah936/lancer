@@ -183,7 +183,7 @@ export default function PendingProjects({ data }) {
               {/* First Box */}
               <Grid
                 item
-                xs={7}
+                xs={5.5}
                 width={"100%"}
                 paddingTop={2}
                 paddingLeft={1}
@@ -215,7 +215,7 @@ export default function PendingProjects({ data }) {
                 </CenterDiv>
               </Grid>
               {/* Third Box */}
-              <Grid item xs={5} sm={2.5}>
+              <Grid item xs={5} sm={4}>
                 <CenterDiv>
                   <Button
                     variant="contained"

@@ -122,10 +122,10 @@ export default function EProjects() {
                       //   textColor={colors.borderGreen}
                       //   indicatorColor={colors.becomePartnerGreen}
                     >
-                      <Tab
+                      {/* <Tab
                         label="All Projects"
                         style={{ color: colors.black, fontWeight: "bold" }}
-                      />
+                      /> */}
                       <Tab
                         label="Pending Projects"
                         style={{ color: colors.black, fontWeight: "bold" }}
@@ -146,25 +146,25 @@ export default function EProjects() {
                   </Box>
                   <Grid container>
                     <Grid item xs={12} display="flex" justifyContent={"center"}>
-                      {value === 0 && (
+                      {/* {value === 0 && (
                         <AllProjects data={allProject}></AllProjects>
-                      )}
-                      {value === 1 && (
+                      )} */}
+                      {value === 0 && (
                         <PendingProjects
                           data={pendingProjects}
                         ></PendingProjects>
                       )}
-                      {value === 2 && (
+                      {value === 1 && (
                         <OngoingProjects
                           data={ongoingProjects}
                         ></OngoingProjects>
                       )}
-                      {value === 3 && (
+                      {value === 2 && (
                         <CompletedProjects
                           data={allProject}
                         ></CompletedProjects>
                       )}
-                      {value === 4 && (
+                      {value === 3 && (
                         <CancelledProjects
                           data={allProject}
                         ></CancelledProjects>
