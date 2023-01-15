@@ -28,6 +28,7 @@ import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import { handleError } from "./../../utils/helperFunctions";
 import { useNavigate } from "react-router-dom";
+import noproject from "../../utils/noproject.png";
 
 export default function AvalibleProjects({ data }) {
   const navigate = useNavigate();
@@ -697,14 +698,31 @@ export default function AvalibleProjects({ data }) {
       </Drawer>
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Perposal Avalible</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -777,4 +795,8 @@ const GreenButton = styled(Button)`
     background-color: ${colors.becomePartnerButtonGreen};
     color: white;
   }
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;

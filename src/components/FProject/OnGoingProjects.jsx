@@ -6,6 +6,7 @@ import colors from "../../utils/colors";
 import { useNavigate } from "react-router-dom";
 import { useRealmContext } from "../../db/RealmContext";
 import useCreateChat from "../../Hooks/useCreateChat";
+import noproject from "../../utils/noproject.png";
 
 export default function OnGoingProjects({ data }) {
   const { user } = useRealmContext();
@@ -126,14 +127,31 @@ export default function OnGoingProjects({ data }) {
       ))}
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Ongoing Projects</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -184,4 +202,8 @@ const ProjectAcceptaceDateP = styled.p`
   font-weight: 500;
   line-height: 20px;
   margin: 0px 0px 0px;
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;

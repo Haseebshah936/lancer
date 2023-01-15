@@ -4,6 +4,7 @@ import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 import { requestMethod } from "./../../requestMethod";
+import noproject from "../../utils/noproject.png";
 
 export default function PendingProjects({ data }) {
   const [perposalAgainstProjectById, setPerposalAgainstProjectById] = useState(
@@ -261,16 +262,34 @@ export default function PendingProjects({ data }) {
           </Grid>
         </Grid>
       ))}
+
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Pending Projects</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -346,4 +365,8 @@ const DialogP = styled.p`
 `;
 const DialogPSmall = styled.p`
   font-size: 1.2rem;
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;

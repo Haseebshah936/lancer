@@ -6,6 +6,7 @@ import { useRealmContext } from "../../db/RealmContext";
 import useCreateChat from "../../Hooks/useCreateChat";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
+import noproject from "../../utils/noproject.png";
 
 export default function OngoingProjects({ data }) {
   const { user } = useRealmContext();
@@ -74,7 +75,7 @@ export default function OngoingProjects({ data }) {
                 </CenterDiv>
               </Grid>
               {/* Third Box */}
-              <Grid item xs={5} sm={2.5}>
+              <Grid item xs={5} sm={3.5} md={2.5}>
                 <CenterDiv>
                   <div
                     style={{
@@ -180,14 +181,31 @@ export default function OngoingProjects({ data }) {
       ))}
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Ongoing Projects</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -227,4 +245,8 @@ const PerposalsNo = styled.p`
   font-size: 3rem;
   font-weight: bold;
   color: ${colors.becomePartnerGreen};
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;
