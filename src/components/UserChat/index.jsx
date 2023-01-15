@@ -368,11 +368,7 @@ function Chat(props) {
       {active && (
         <MessageContainer active={active}>
           <MessageHeader
-            uri={
-              active.title === "Customer Support"
-                ? customerSupport
-                : active.avatar
-            }
+            uri={active.isCustomerSupport ? customerSupport : active.avatar}
             name={active.title}
             status={active.isOnline}
             isGroup={active.isGroup}
