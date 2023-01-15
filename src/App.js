@@ -273,6 +273,7 @@ function App(props) {
   const [searchDataLoader, setSearchDataLoader] = useState(true);
   const [selectedPlan, setSelectedPlan] = useState({});
   const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
+  const [userFavorites, setUserFavorites] = useState([]);
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -281,6 +282,8 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        userFavorites,
+        setUserFavorites,
         selectedPlan,
         setSelectedPlan,
         cartDrawer,

@@ -56,7 +56,7 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
                 <GradeSharpIcon sx={{ color: colors.gold, paddingRight: 0 }} />
                 <MiniWrapper>
                   <p style={{ color: colors.gold, marginBottom: "0px" }}>
-                    {props.SellerRating}
+                    {props.SellerRating.toFixed(1)}
                   </p>
                   <p style={{ marginLeft: "2px", marginBottom: "0px" }}>
                     ({props.GigReviewsTotal})

@@ -19,6 +19,10 @@ import { Link, NavLink } from "react-router-dom";
 import Snackbar from "@mui/material/Snackbar";
 import Slide from "@mui/material/Slide";
 import MuiAlert from "@mui/material/Alert";
+import { requestMethod } from "../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -38,7 +42,11 @@ const PortfolioCard = ({
   styles,
   ...props
 }) => {
-  const [open, setOpen] = React.useState(false);
+  const { user } = useRealmContext();
+  const [checked, setChecked] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const [favid, setfavid] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -51,6 +59,59 @@ const PortfolioCard = ({
 
     setOpen(false);
   };
+
+  const checkFavourite = async (user, favuser, product) => {
+    const response = await requestMethod.get(
+      "favorite/user/" + user + "/" + product + "/" + favuser
+    );
+    return response.data;
+  };
+
+  const createFavourite = async (user, favuser, product) => {
+    const response = await requestMethod.post("favorite", {
+      userId: user,
+      productId: product,
+      favoriteUserId: favuser,
+    });
+    return response.data;
+  };
+
+  const deleteFavourite = async (id) => {
+    const response = await requestMethod.delete("favorite/" + id);
+    return response.data;
+  };
+
+  const handleChange = (check) => {
+    if (check) {
+      createFavourite(user._id, ownerId, productId).then((res) => {
+        console.log("Saved state", res);
+        setChecked(true);
+        setfavid(res._id);
+      });
+    } else {
+      deleteFavourite(favid).then((res) => {
+        console.log("Unsaved state", res);
+        setChecked(false);
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log("Use effect");
+
+    if (user && productId) {
+      checkFavourite(user._id, ownerId, productId).then((res) => {
+        console.log("Resp", res);
+        if (res) {
+          setChecked(true);
+          setfavid(res._id);
+        } else {
+          setChecked(false);
+        }
+      });
+    }
+  }, [productId, user]);
+
   return (
     <>
       <Card
@@ -132,7 +193,7 @@ const PortfolioCard = ({
             <GradeSharpIcon sx={{ color: colors.gold, paddingRight: 0 }} />
             <MiniWrapper>
               <p style={{ color: colors.gold, marginBottom: "0px" }}>
-                {props.SellerRating}
+                {props.SellerRating.toFixed(1)}
               </p>
               <p style={{ marginLeft: "2px", marginBottom: "0px" }}>
                 ({props.GigReviewsTotal})
@@ -143,14 +204,18 @@ const PortfolioCard = ({
         <CardActions
           disableSpacing
           sx={{
-            paddingTop: "0px",
+            paddingTop: "10px",
             display: "flex",
             marginRight: "1rem",
             flexGrow: 1,
           }}
         >
-          {/* <Tooltip title="Save To Favourites" placement="bottom">
+          <Tooltip title="Save To Favourites" placement="bottom">
             <Checkbox
+              checked={checked}
+              onChange={(e) => {
+                handleChange(e.target.checked);
+              }}
               {...label}
               icon={
                 <FavoriteBorderOutlinedIcon
@@ -163,7 +228,7 @@ const PortfolioCard = ({
                 />
               }
             />
-          </Tooltip> */}
+          </Tooltip>
           <MiniWrapper2>
             <p
               style={{
@@ -201,7 +266,7 @@ const PortfolioCard = ({
               backgroundColor: colors.white,
             }}
           >
-            Added to List
+            Added to Favourites
           </Alert>
         </Snackbar>
       </Card>
