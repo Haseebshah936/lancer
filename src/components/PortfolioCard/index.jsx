@@ -23,6 +23,7 @@ import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import { useState } from "react";
 import { useEffect } from "react";
+import { CheckOutlined } from "@material-ui/icons";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -44,20 +45,33 @@ const PortfolioCard = ({
 }) => {
   const { user } = useRealmContext();
   const [checked, setChecked] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openFavSnack, setOpenFavSnack] = useState(false);
+  const [openUnSaveSnack, setOpenUnSaveSnack] = useState(false);
 
   const [favid, setfavid] = useState("");
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleOpenFavSnack = () => {
+    setOpenFavSnack(true);
   };
 
-  const handleClose = (event, reason) => {
+  const handleOpenUnSaveSnack = () => {
+    setOpenUnSaveSnack(true);
+  };
+
+  const closeUnSaveSnack = (event, reason) => {
     if (reason === "clickaway") {
       return;
     }
 
-    setOpen(false);
+    setOpenUnSaveSnack(false);
+  };
+
+  const closeFavSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenFavSnack(false);
   };
 
   const checkFavourite = async (user, favuser, product) => {
@@ -87,11 +101,13 @@ const PortfolioCard = ({
         console.log("Saved state", res);
         setChecked(true);
         setfavid(res._id);
+        handleOpenFavSnack();
       });
     } else {
       deleteFavourite(favid).then((res) => {
         console.log("Unsaved state", res);
         setChecked(false);
+        handleOpenUnSaveSnack();
       });
     }
   };
@@ -111,6 +127,14 @@ const PortfolioCard = ({
       });
     }
   }, [productId, user]);
+
+  // useEffect(() => {
+  //   if (checked) {
+  //     handleOpenFavSnack();
+  //   } else if (!checked) {
+  //     // handleOpenUnSaveSnack();
+  //   }
+  // }, [checked]);
 
   return (
     <>
@@ -252,9 +276,14 @@ const PortfolioCard = ({
             </p>
           </MiniWrapper2>
         </CardActions>
-        <Snackbar open={open} autoHideDuration={5000} onClose={handleClose}>
+        <Snackbar
+          open={openFavSnack}
+          autoHideDuration={2000}
+          onClose={closeFavSnack}
+        >
           <Alert
-            onClose={handleClose}
+            onClose={closeFavSnack}
+            icon={<CheckOutlined fontSize="inherit" />}
             severity="success"
             sx={{
               width: "30rem",
@@ -264,9 +293,34 @@ const PortfolioCard = ({
               color: colors.textGreen,
               fontSize: "1.5rem",
               backgroundColor: colors.white,
+              border: `1px solid ${colors.textGreen}`,
             }}
           >
             Added to Favourites
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          open={openUnSaveSnack}
+          autoHideDuration={2000}
+          onClose={closeUnSaveSnack}
+        >
+          <Alert
+            icon={<CheckOutlined fontSize="inherit" />}
+            onClose={closeUnSaveSnack}
+            severity="error"
+            sx={{
+              width: "30rem",
+              "@media (max-width: 550px)": {
+                width: "100%",
+              },
+              color: "red",
+              fontSize: "1.5rem",
+              backgroundColor: colors.white,
+              border: "1px solid red",
+            }}
+          >
+            Removed from Favourites
           </Alert>
         </Snackbar>
       </Card>
