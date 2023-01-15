@@ -9,6 +9,7 @@ import tick from "./tick.json";
 import jazz from "./jazz.png";
 import EasyPaisa from "./EasyPaisa.png";
 import banned from "./banned.svg";
+import customerSupport from "./customerSupport.png";
 export {
   jazz,
   EasyPaisa,
@@ -21,4 +22,5 @@ export {
   checkmark,
   tick,
   banned,
+  customerSupport,
 };

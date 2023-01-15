@@ -6,6 +6,7 @@ import colors from "../../utils/colors";
 import { useNavigate } from "react-router-dom";
 import { useRealmContext } from "../../db/RealmContext";
 import useCreateChat from "../../Hooks/useCreateChat";
+import noproject from "../../utils/noproject.png";
 
 export default function OnGoingProjects({ data }) {
   const { user } = useRealmContext();
@@ -39,12 +40,18 @@ export default function OnGoingProjects({ data }) {
           display="flex"
           flexDirection={{ xs: "column", md: "row" }}
         >
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={5}>
             <Grid Container>
               <Grid item xs={12}>
                 <UserNameP>{p.eUserName}</UserNameP>
               </Grid>
-              <Grid item xs={12}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  overflowWrap: "break-word",
+                }}
+              >
                 <TitleP>{p.title}</TitleP>
               </Grid>
               <Grid item xs={12}>
@@ -120,14 +127,31 @@ export default function OnGoingProjects({ data }) {
       ))}
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Ongoing Projects</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -178,4 +202,8 @@ const ProjectAcceptaceDateP = styled.p`
   font-weight: 500;
   line-height: 20px;
   margin: 0px 0px 0px;
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;

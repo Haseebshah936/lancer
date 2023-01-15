@@ -21,46 +21,68 @@ import ESideBar from "../../pages/ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
 import { requestMethod } from "./../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
+import LoadingComp from "../../components/LoadingComp/LoadingComp";
 
 export default function EProjects() {
   const { user } = useRealmContext();
   const [drawerValue, setDrawerValue] = useState(false);
+  const [loadingValue, setLoadingValue] = useState(false);
 
   const [value, setValue] = React.useState(0);
   const [pendingProjects, setPendingProjects] = useState([]);
   const [ongoingProjects, setOngoingProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [cancelledProjects, setCancelledProjects] = useState([]);
+  const completedProjectsFun = async () => {
+    setLoadingValue(true);
+    await requestMethod
+      .get(`project/creator/completed/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setCompletedProjects(res.data);
+      });
+    setLoadingValue(false);
+  };
   const onGoingProjectFun = async () => {
+    setLoadingValue(true);
     await requestMethod
       .get(`project/creator/onGoing/${user?._id}`)
       .then((res) => {
         console.log(res.data);
         setOngoingProjects(res.data);
       });
+    setLoadingValue(false);
   };
   useEffect(() => {
     onGoingProjectFun();
   }, []);
 
   const pendingProjectsFun = async () => {
-    const res = await requestMethod
+    setLoadingValue(true);
+    await requestMethod
       .get(`project/creator/pending/${user?._id}`)
       .then((res) => {
         console.log(res.data);
         setPendingProjects(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
       });
+    setLoadingValue(false);
   };
   useEffect(() => {
     pendingProjectsFun();
   }, []);
 
   const handleChange = (event, newValue) => {
-    pendingProjectsFun();
-    onGoingProjectFun();
-    setTimeout(() => {
-      setValue(newValue);
-    }, 700);
+    if (newValue === 0) {
+      pendingProjectsFun();
+    } else if (newValue === 1) {
+      onGoingProjectFun();
+    } else if (newValue === 2) {
+      completedProjectsFun();
+    }
+    setValue(newValue);
   };
   return (
     <div style={{ width: "100vw" }}>
@@ -122,10 +144,10 @@ export default function EProjects() {
                       //   textColor={colors.borderGreen}
                       //   indicatorColor={colors.becomePartnerGreen}
                     >
-                      <Tab
+                      {/* <Tab
                         label="All Projects"
                         style={{ color: colors.black, fontWeight: "bold" }}
-                      />
+                      /> */}
                       <Tab
                         label="Pending Projects"
                         style={{ color: colors.black, fontWeight: "bold" }}
@@ -146,25 +168,35 @@ export default function EProjects() {
                   </Box>
                   <Grid container>
                     <Grid item xs={12} display="flex" justifyContent={"center"}>
-                      {value === 0 && (
+                      {/* {value === 0 && (
                         <AllProjects data={allProject}></AllProjects>
-                      )}
-                      {value === 1 && (
-                        <PendingProjects
-                          data={pendingProjects}
-                        ></PendingProjects>
-                      )}
-                      {value === 2 && (
-                        <OngoingProjects
-                          data={ongoingProjects}
-                        ></OngoingProjects>
-                      )}
+                      )} */}
+                      {value === 0 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <PendingProjects
+                            data={pendingProjects}
+                          ></PendingProjects>
+                        ))}
+                      {value === 1 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <OngoingProjects
+                            data={ongoingProjects}
+                          ></OngoingProjects>
+                        ))}
+                      {value === 2 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <CompletedProjects
+                            data={completedProjects}
+                          ></CompletedProjects>
+                        ))}
+
                       {value === 3 && (
-                        <CompletedProjects
-                          data={allProject}
-                        ></CompletedProjects>
-                      )}
-                      {value === 4 && (
                         <CancelledProjects
                           data={allProject}
                         ></CancelledProjects>

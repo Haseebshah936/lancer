@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Box, Avatar, Button, Pagination, Drawer } from "@mui/material";
+import noproject from "../../utils/noproject.png";
 
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -133,14 +134,31 @@ export default function MyPerposals({ data }) {
       ))}
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Perposal</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -181,4 +199,8 @@ const DialogP = styled.p`
 `;
 const DialogPSmall = styled.p`
   font-size: 1.2rem;
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;

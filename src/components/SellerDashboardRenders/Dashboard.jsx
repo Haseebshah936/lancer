@@ -1,6 +1,5 @@
-import { Grid } from "@mui/material";
-import React, { useEffect } from "react";
-import { useState } from "react";
+import { Grid, Button } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
@@ -10,6 +9,10 @@ import OngoingOrdersWidget from "../DashboardComponents/OngoingOrdersWidget";
 import PastOrdersWidget from "../DashboardComponents/PastOrdersWidget";
 import RadialChartWidget from "../DashboardComponents/RadialChartWidget";
 import StatCardWidget from "../DashboardComponents/StatCardWidget";
+import AptitudeDialouge from "./AptitudeDialouge";
+import { UserState } from "realm-web";
+import ContactCSDialouge from "./ContactCSDialouge";
+import colors from "../../utils/colors";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
   const [views, setViews] = useState([]);
@@ -32,9 +35,56 @@ const Dashboard = ({ ongoingData, loader }) => {
       getViews(user._id);
     }
   }, [user]);
+  const [open, setOpen] = useState(false);
+  const [cOpen, setCOpen] = useState(false);
+
   return (
     <>
       {" "}
+      <AptitudeDialouge setOpen={setOpen} open={open}></AptitudeDialouge>
+      <ContactCSDialouge cOpen={cOpen} setCOpen={setCOpen}></ContactCSDialouge>
+      <Grid
+        container
+        display={"flex"}
+        justifyContent={{ xs: "center", sm: "flex-start" }}
+      >
+        <Grid item my={1} xs={12}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: colors.becomePartnerButtonGreen,
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.becomePartnerButtonGreen,
+                color: "white",
+              },
+            }}
+            onClick={() => {
+              setOpen(true);
+            }}
+          >
+            Apply for Aptitude Test
+          </Button>
+        </Grid>
+        <Grid item my={1} xs={12}>
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: colors.becomePartnerButtonGreen,
+              color: "white",
+              "&:hover": {
+                backgroundColor: colors.becomePartnerButtonGreen,
+                color: "white",
+              },
+            }}
+            onClick={() => {
+              setCOpen(true);
+            }}
+          >
+            Contact Customer Support
+          </Button>
+        </Grid>
+      </Grid>
       <Grid
         item
         container

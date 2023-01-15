@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import usePagination from "../FProject/Pagination";
 import styled from "styled-components";
 import colors from "../../utils/colors";
+import noproject from "../../utils/noproject.png";
 
 export default function CancelledProjects({ data }) {
   const [projects, setProjects] = useState([]);
@@ -68,7 +69,7 @@ export default function CancelledProjects({ data }) {
           <Grid
             item
             xs={12}
-            md={2}
+            lg={2}
             display="flex"
             alignItems={"center"}
             justifyContent="center"
@@ -78,7 +79,7 @@ export default function CancelledProjects({ data }) {
             <Button
               variant="contained"
               style={{
-                width: "12rem",
+                width: { xs: "12rem", md: "7rem" },
                 height: "30px",
                 backgroundColor: colors.becomePartnerGreen,
                 fontWeight: "700",
@@ -91,14 +92,31 @@ export default function CancelledProjects({ data }) {
       ))}
       <Grid container>
         <Grid item xs={12} display="flex" justifyContent="center">
-          <Pagination
-            count={count}
-            size="large"
-            page={page}
-            variant="outlined"
-            // color={colors.becomePartnerGreen}
-            onChange={handleChange}
-          />
+          {data.length !== 0 ? (
+            <Pagination
+              count={count}
+              size="large"
+              page={page}
+              variant="outlined"
+              // color={colors.becomePartnerGreen}
+              onChange={handleChange}
+            />
+          ) : (
+            <Box
+              display={"flex"}
+              justifyContent={"center"}
+              alignItems={"center"}
+              height={"300px"}
+              flexDirection={"column"}
+            >
+              <NoProjectP>No Cancelled Projects</NoProjectP>
+              <Box
+                component={"img"}
+                src={noproject}
+                width={{ xs: "120px" }}
+              ></Box>
+            </Box>
+          )}
         </Grid>
       </Grid>
     </div>
@@ -150,4 +168,8 @@ const ProjectCompleteP = styled.p`
   font-weight: bold;
   line-height: 20px;
   margin: 0px 0px 0px;
+`;
+const NoProjectP = styled.p`
+  font-size: 2.6rem;
+  font-weight: bold;
 `;
