@@ -29,8 +29,6 @@ const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
-
 const CustomCardHeader = styled(CardHeader)({
   a: { textDecoration: "none" },
   "a:hover": { color: colors.black },
@@ -127,14 +125,6 @@ const PortfolioCard = ({
       });
     }
   }, [productId, user]);
-
-  // useEffect(() => {
-  //   if (checked) {
-  //     handleOpenFavSnack();
-  //   } else if (!checked) {
-  //     // handleOpenUnSaveSnack();
-  //   }
-  // }, [checked]);
 
   return (
     <>
@@ -240,7 +230,6 @@ const PortfolioCard = ({
               onChange={(e) => {
                 handleChange(e.target.checked);
               }}
-              {...label}
               icon={
                 <FavoriteBorderOutlinedIcon
                   sx={{ color: colors.googleRed, fontSize: "2rem!important" }}

@@ -2,36 +2,160 @@ import {
   Avatar,
   CardHeader,
   CardMedia,
+  Checkbox,
   Grid,
   Paper,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
-import { StyleOutlined } from "@material-ui/icons";
+import {
+  FavoriteBorderOutlined,
+  FavoriteOutlined,
+  StyleOutlined,
+} from "@material-ui/icons";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
 const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
+  const { user } = useRealmContext();
+  const [checked, setChecked] = useState(false);
+  const [openFavSnack, setOpenFavSnack] = useState(false);
+  const [openUnSaveSnack, setOpenUnSaveSnack] = useState(false);
+
+  const [favid, setfavid] = useState("");
+
+  const handleOpenFavSnack = () => {
+    setOpenFavSnack(true);
+  };
+
+  const handleOpenUnSaveSnack = () => {
+    setOpenUnSaveSnack(true);
+  };
+
+  const closeUnSaveSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenUnSaveSnack(false);
+  };
+
+  const closeFavSnack = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpenFavSnack(false);
+  };
+
+  const checkFavourite = async (user, favuser, product) => {
+    const response = await requestMethod.get(
+      "favorite/user/" + user + "/" + product + "/" + favuser
+    );
+    return response.data;
+  };
+
+  const createFavourite = async (user, favuser, product) => {
+    const response = await requestMethod.post("favorite", {
+      userId: user,
+      productId: product,
+      favoriteUserId: favuser,
+    });
+    return response.data;
+  };
+
+  const deleteFavourite = async (id) => {
+    const response = await requestMethod.delete("favorite/" + id);
+    return response.data;
+  };
+
+  const handleChange = (check) => {
+    if (check) {
+      createFavourite(user._id, ownerId, productId).then((res) => {
+        console.log("Saved state", res);
+        setChecked(true);
+        setfavid(res._id);
+        handleOpenFavSnack();
+      });
+    } else {
+      deleteFavourite(favid).then((res) => {
+        console.log("Unsaved state", res);
+        setChecked(false);
+        handleOpenUnSaveSnack();
+      });
+    }
+  };
+
+  useEffect(() => {
+    console.log("Use effect");
+
+    if (user && productId) {
+      checkFavourite(user._id, ownerId, productId).then((res) => {
+        console.log("Resp", res);
+        if (res) {
+          setChecked(true);
+          setfavid(res._id);
+        } else {
+          setChecked(false);
+        }
+      });
+    }
+  }, [productId, user]);
+
   return (
     <>
       <Paper elevation={2} sx={{ pr: 1 }}>
         <Grid sx={{ width: "100%" }}>
           <Grid container direction="row" columnSpacing={1}>
             <Grid item mobile={5}>
-              <CardMedia
-                component="img"
-                sizes="contain"
-                border="1px"
-                style={{
-                  cursor: "pointer",
-                  height: "83px",
-                  borderRadius: "15px",
-                  borderColor: "#ADAFB2",
-                }}
-                image={props.GigImage}
-                alt="Gig Image"
-              />
+              <MediaContainer>
+                <CardMedia
+                  component="img"
+                  sizes="contain"
+                  border="1px"
+                  style={{
+                    cursor: "pointer",
+                    height: "83px",
+                    borderRadius: "15px",
+                    borderColor: "#ADAFB2",
+                  }}
+                  image={props.GigImage}
+                  alt="Gig Image"
+                />
+
+                <LikeContainer>
+                  <Checkbox
+                    checked={checked}
+                    onChange={(e) => {
+                      handleChange(e.target.checked);
+                    }}
+                    icon={
+                      <FavoriteBorderOutlined
+                        sx={{
+                          color: colors.googleRed,
+
+                          "& .MuiSvgIcon-root": {
+                            fontSize: "2.5rem",
+                          },
+                        }}
+                      />
+                    }
+                    checkedIcon={
+                      <FavoriteOutlined
+                        sx={{
+                          color: `${colors.googleRed} !important`,
+                          "& .MuiSvgIcon-root": {
+                            fontSize: "2.5rem",
+                          },
+                        }}
+                      />
+                    }
+                  />
+                </LikeContainer>
+              </MediaContainer>
             </Grid>
             <Grid
               item
@@ -161,4 +285,15 @@ const ProfileContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
+`;
+
+const MediaContainer = styled.div`
+  display: inline-block;
+  position: relative;
+`;
+
+const LikeContainer = styled.div`
+  position: absolute;
+  top: 1px;
+  right: 1px;
 `;
