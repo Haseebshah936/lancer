@@ -51,6 +51,7 @@ import {
 } from "./handlersForIndex";
 import RightDrawer from "./RightDrawer";
 import ChatInfo from "./ChatInfo";
+import { customerSupport } from "../../assets";
 
 function Chat(props) {
   const messageRef = useRef();
@@ -77,9 +78,12 @@ function Chat(props) {
 
   const [drawer, setDrawer] = useState(true);
 
-  const toggleDrawer = useCallback((state) => {
-    setDrawer(state);
-  }, [drawer]);
+  const toggleDrawer = useCallback(
+    (state) => {
+      setDrawer(state);
+    },
+    [drawer]
+  );
 
   const handleToggle = useCallback(() => {
     setToggle(true);
@@ -200,12 +204,15 @@ function Chat(props) {
       data,
       newData,
       setData
-    )
+    );
   }, [data, newData, loadingMore, active, user]);
 
-  const onSendHandle = useCallback((message) => {
-    handleSend(message, user, active, setNewData)
-  }, [active, user, newData]);
+  const onSendHandle = useCallback(
+    (message) => {
+      handleSend(message, user, active, setNewData);
+    },
+    [active, user, newData]
+  );
 
   useEffect(() => {
     let breakAsyncIterator = false;
@@ -361,7 +368,11 @@ function Chat(props) {
       {active && (
         <MessageContainer active={active}>
           <MessageHeader
-            uri={active.avatar}
+            uri={
+              active.title === "Customer Support"
+                ? customerSupport
+                : active.avatar
+            }
             name={active.title}
             status={active.isOnline}
             isGroup={active.isGroup}
@@ -377,7 +388,7 @@ function Chat(props) {
             id={active.id}
           />
           {!reRender && (
-            <MessagesContainer   //* This is the main component which renders the messages
+            <MessagesContainer //* This is the main component which renders the messages
               scrollRef={scrollRef}
               data={data}
               active={active}

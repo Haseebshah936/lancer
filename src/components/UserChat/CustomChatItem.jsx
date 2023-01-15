@@ -10,6 +10,7 @@ import { useRef } from "react";
 import { InsertDriveFile } from "@mui/icons-material";
 import { watchCollection } from "../../db/helperFunction";
 import { requestMethod } from "../../requestMethod";
+import { customerSupport } from "../../assets";
 
 function CustomChatItem({
   chatroom,
@@ -157,6 +158,11 @@ function CustomChatItem({
           onClick(chatroom);
         }}
         {...chatroom}
+        avatar={
+          chatroom.title === "Customer Support"
+            ? customerSupport
+            : chatroom.avatar
+        }
         onClickMute={() => onClickMute(chatroom, chatroom.muted)}
         statusColor={status ? colors.lightGreen : colors.gray}
         showMute={true}
