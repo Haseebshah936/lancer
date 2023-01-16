@@ -63,6 +63,8 @@ function Head({
   toggleMessage,
   toggleNotification,
   toggleUserOptions,
+  notifications,
+  chats,
 }) {
   // const currentPathDashboard = useCurrentPath([{ path: "/f/dashboard" }]);
 
@@ -271,14 +273,22 @@ function Head({
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} variant="dot" color="error">
-                {" "}
+              {chats.length !== 0 ? (
+                <Badge badgeContent={4} variant="dot" color="error">
+                  {" "}
+                  <MailOutlineIcon
+                    onClick={toggleMessage}
+                    sx={{ color: colors.textGreen }}
+                    fontSize="large"
+                  />
+                </Badge>
+              ) : (
                 <MailOutlineIcon
                   onClick={toggleMessage}
                   sx={{ color: colors.textGreen }}
                   fontSize="large"
                 />
-              </Badge>
+              )}
             </IconButton>
             <IconButton
               sx={{
@@ -290,13 +300,21 @@ function Head({
               aria-label="show 4 new mails"
               color="inherit"
             >
-              <Badge badgeContent={4} variant="dot" color="error">
+              {notifications.length !== 0 ? (
+                <Badge badgeContent={4} variant="dot" color="error">
+                  <NotificationsOutlinedIcon
+                    onClick={toggleNotification}
+                    sx={{ color: colors.textGreen }}
+                    fontSize="large"
+                  />
+                </Badge>
+              ) : (
                 <NotificationsOutlinedIcon
                   onClick={toggleNotification}
                   sx={{ color: colors.textGreen }}
                   fontSize="large"
                 />
-              </Badge>
+              )}
             </IconButton>
             {activeProfile !== "seller" && (
               <IconButton

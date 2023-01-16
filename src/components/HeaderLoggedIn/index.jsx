@@ -14,14 +14,27 @@ import axios from "axios";
 import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect } from "react";
+import { requestMethod } from "../../requestMethod";
 
 function Header({ setloader }) {
   const [state, setState] = useState(false);
   const [anchor, setAnchor] = useState(null);
   const [anchor2, setAnchor2] = useState(null);
   const [anchor3, setAnchor3] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [chats, setChats] = useState([]);
   const { user, logOut } = useRealmContext();
   const navigate = useNavigate();
+
+  const getNotifications = async (id) => {
+    const response = await requestMethod.get("notification/user/" + id);
+    return response.data;
+  };
+
+  const getChats = async (id) => {
+    const response = await requestMethod.get("messages/user/" + id);
+    return response.data;
+  };
 
   const toggleMessage = (event) => {
     setAnchor(event.currentTarget);
@@ -90,6 +103,27 @@ function Header({ setloader }) {
           }
         })();
       }, 30000);
+
+      getNotifications(user._id).then((res) => {
+        setNotifications(res);
+      });
+
+      getChats(user._id).then((res) => {
+        const newChats = res.splice(0, 4).map((chat) => {
+          return {
+            avatar: chat.senderId.profilePic,
+            alt: chat.senderId.name,
+            title: chat.senderId.name,
+            subtitle: chat.description,
+            date: new Date(chat.createdAt),
+            onClick: () => {
+              navigate("/chat");
+            },
+          };
+        });
+
+        setChats(newChats);
+      });
     }
     return () => {
       clearInterval(interval);
@@ -105,14 +139,20 @@ function Header({ setloader }) {
         toggleNotification={toggleNotification}
         toggleUserOptions={toggleUserOptions}
         setloader={setloader}
+        chats={chats}
+        notifications={notifications}
       />
       <ResponsiveDrawer
         state={state}
         toggleLogin={handleToggle}
         toggleDrawer={toggleDrawer}
       />
-      <MessageList anchor={anchor} CloseList={CloseList} />
-      <NotificationList anchor={anchor2} CloseList={CloseList2} />
+      <MessageList anchor={anchor} CloseList={CloseList} chats={chats} />
+      <NotificationList
+        anchor={anchor2}
+        CloseList={CloseList2}
+        notifications={notifications}
+      />
       <UserOptions anchor={anchor3} CloseList={CloseList3} />
 
       <Modal

@@ -22,34 +22,8 @@ import { requestMethod } from "../../requestMethod";
 const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
   const { user } = useRealmContext();
   const [checked, setChecked] = useState(false);
-  const [openFavSnack, setOpenFavSnack] = useState(false);
-  const [openUnSaveSnack, setOpenUnSaveSnack] = useState(false);
 
   const [favid, setfavid] = useState("");
-
-  const handleOpenFavSnack = () => {
-    setOpenFavSnack(true);
-  };
-
-  const handleOpenUnSaveSnack = () => {
-    setOpenUnSaveSnack(true);
-  };
-
-  const closeUnSaveSnack = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenUnSaveSnack(false);
-  };
-
-  const closeFavSnack = (event, reason) => {
-    if (reason === "clickaway") {
-      return;
-    }
-
-    setOpenFavSnack(false);
-  };
 
   const checkFavourite = async (user, favuser, product) => {
     const response = await requestMethod.get(
@@ -78,13 +52,11 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
         console.log("Saved state", res);
         setChecked(true);
         setfavid(res._id);
-        handleOpenFavSnack();
       });
     } else {
       deleteFavourite(favid).then((res) => {
         console.log("Unsaved state", res);
         setChecked(false);
-        handleOpenUnSaveSnack();
       });
     }
   };
