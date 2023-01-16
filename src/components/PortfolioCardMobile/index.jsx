@@ -12,13 +12,10 @@ import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import GradeSharpIcon from "@mui/icons-material/GradeSharp";
-import {
-  FavoriteBorderOutlined,
-  FavoriteOutlined,
-  StyleOutlined,
-} from "@material-ui/icons";
+
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
+import { FavoriteBorderOutlined, FavoriteOutlined } from "@mui/icons-material";
 const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
   const { user } = useRealmContext();
   const [checked, setChecked] = useState(false);
@@ -88,9 +85,10 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
                   component="img"
                   sizes="contain"
                   border="1px"
-                  style={{
+                  sx={{
                     cursor: "pointer",
-                    height: "83px",
+                    height: "85px",
+                    width: "145px",
                     borderRadius: "15px",
                     borderColor: "#ADAFB2",
                   }}
@@ -105,23 +103,19 @@ const PortfolioCardMobile = ({ productId, ownerId, ...props }) => {
                       handleChange(e.target.checked);
                     }}
                     icon={
-                      <FavoriteBorderOutlined
+                      <FavoriteOutlined
                         sx={{
-                          color: colors.googleRed,
-
-                          "& .MuiSvgIcon-root": {
-                            fontSize: "2.5rem",
-                          },
+                          stroke: "white",
+                          fill: "rgb(122 125 133 / 68%)",
+                          fontSize: "2.0rem",
                         }}
                       />
                     }
                     checkedIcon={
                       <FavoriteOutlined
                         sx={{
-                          color: `${colors.googleRed} !important`,
-                          "& .MuiSvgIcon-root": {
-                            fontSize: "2.5rem",
-                          },
+                          color: colors.googleRed,
+                          fontSize: "2.0rem",
                         }}
                       />
                     }
