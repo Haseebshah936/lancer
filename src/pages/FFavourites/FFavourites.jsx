@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
   Button,
+  CircularProgress,
   createTheme,
   Grid,
   Tab,
@@ -16,7 +17,29 @@ import colors from "../../utils/colors";
 import FSideBar from "../../pages/FSideBar/FSideBar";
 import { favData } from "../../utils/dummyData";
 import StarIcon from "@mui/icons-material/Star";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
+import PortfolioCard from "../../components/PortfolioCard";
+import PortfolioCardMobile from "../../components/PortfolioCardMobile";
+import { mobile } from "../../responsive";
 export default function FFavourites() {
+  const { user } = useRealmContext();
+  const [fav, setFav] = useState([]);
+  const [loader, setLoader] = useState(true);
+
+  const getFavorites = async (id) => {
+    const response = await requestMethod.get("favorite/user/" + id);
+    return response.data;
+  };
+  useEffect(() => {
+    if (user) {
+      getFavorites(user._id).then((res) => {
+        console.log("Favs: ", res);
+        setFav(res);
+        setLoader(false);
+      });
+    }
+  }, [user]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -65,141 +88,182 @@ export default function FFavourites() {
                   </Grid>
                   <Grid item mobile={12}>
                     <Grid container>
-                      {favData.map((per, index) => (
+                      {loader ? (
                         <Grid
                           item
-                          boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
-                          my={0.5}
-                          mobile={12}
-                          tablet={6}
-                          laptop={4}
-                          desktop={3}
-                          display={"flex"}
-                          justifyContent={"center"}
-                          flexDirection={"column"}
-                          className="rounded"
+                          container
+                          justifyContent="center"
+                          alignItems="center"
+                          sx={{ height: "50vh" }}
                         >
-                          <Grid container>
-                            <Grid item xs={3}></Grid>
-                            <Grid
-                              item
-                              xs={6}
-                              display={"flex"}
-                              justifyContent={"center"}
-                            >
-                              <Avatar
-                                alt="Remy Sharp"
-                                src={per.userImg}
-                                sx={{ width: 56, height: 56 }}
-                              />
-                            </Grid>
-                            <Grid
-                              item
-                              xs={3}
-                              mt={2}
-                              display={"flex"}
-                              justifyContent={"center"}
-                            >
-                              <StarIcon
-                                style={{
-                                  color: colors.becomePartnerGreen,
-                                  fontSize: "22px",
-                                }}
-                              />
-                            </Grid>
-                          </Grid>
-                          <UsernnameP className="text-center">
-                            {per.userName}
-                          </UsernnameP>
-                          <OtherTextP className="text-center">
-                            {per.mainSkill}
-                          </OtherTextP>
-                          <OtherTextP className="text-center">
-                            {per.location}
-                          </OtherTextP>
-                          <Grid item xs={12}>
-                            <Grid container>
-                              <Grid
-                                item
-                                display={"flex"}
-                                justifyContent={"center"}
-                                xs={12}
-                              >
-                                <SkillBox className="text-center">
-                                  {per.skill[0]}
-                                </SkillBox>
-                              </Grid>
-                              <Grid
-                                item
-                                display={"flex"}
-                                justifyContent={"center"}
-                                xs={12}
-                              >
-                                <SkillBox className="text-center">
-                                  {per.skill[1]}
-                                </SkillBox>
-                              </Grid>
-                              <Grid
-                                item
-                                xs={12}
-                                display={"flex"}
-                                justifyContent={"center"}
-                              >
-                                <SkillBox className="text-center">
-                                  {per.skill[2]}
-                                </SkillBox>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item xs={12}>
-                            <OtherTextLargeP className="text-center">
-                              ${per.sBudget}-${per.eBudget}
-                            </OtherTextLargeP>
-                          </Grid>
-                          <Grid item xs={!2}>
-                            <Grid container>
-                              <Grid item xs={4}>
-                                <OtherTextP className="text-center">
-                                  Expiry
-                                </OtherTextP>
-                                <OtherTextP className="text-center">
-                                  {per.willExpireIn} Days Left
-                                </OtherTextP>
-                              </Grid>
-                              <Grid item xs={4}>
-                                <OtherTextP className="text-center">
-                                  Perposals
-                                </OtherTextP>
-                                <OtherTextP className="text-center">
-                                  {per.perposals}
-                                </OtherTextP>
-                              </Grid>
-                              <Grid item xs={4}>
-                                <OtherTextP className="text-center">
-                                  Job Type
-                                </OtherTextP>
-                                <OtherTextP className="text-center">
-                                  {per.jobType}
-                                </OtherTextP>
-                              </Grid>
-                            </Grid>
-                          </Grid>
-                          <Grid item xs={12} margin={"5px"}>
-                            <Button
-                              fullWidth
-                              variant="centained"
-                              style={{
-                                backgroundColor:
-                                  colors.becomePartnerButtonGreen,
-                                color: colors.white,
-                                marginTop: "10px",
-                              }}
-                            >
-                              View Profile
-                            </Button>
-                          </Grid>
+                          <CircularProgress
+                            sx={{
+                              "&.MuiCircularProgress-root": {
+                                color: colors.textGreen,
+                              },
+                            }}
+                          />
                         </Grid>
-                      ))}
+                      ) : (
+                        fav.map((c, index) => (
+                          <Grid item>
+                            <Laptop>
+                              <PortfolioCard
+                                count={c}
+                                GigImage={c?.productId?.images[0]}
+                                Avatar={c?.favoriteUserId?.profilePic}
+                                SellerName={c?.favoriteUserId?.name}
+                                SellerLevel={c?.favoriteUserId?.badge}
+                                GigTitle={c?.productId?.title}
+                                SellerRating={c?.favoriteUserId?.seller?.rating}
+                                GigReviewsTotal={
+                                  c?.favoriteUserId?.seller?.reviews
+                                }
+                                GigStartPrice={c?.productId?.cost}
+                                ownerId={c?.favoriteUserId?._id}
+                                productId={c?.productId?._id}
+                              />
+                            </Laptop>
+
+                            <Mobile>
+                              <PortfolioCardMobile
+                                count={c}
+                                GigImage={c?.productId?.images[0]}
+                                Avatar={c?.favoriteUserId?.profilePic}
+                                SellerName={c?.favoriteUserId?.name}
+                                SellerLevel={c?.favoriteUserId?.badge}
+                                GigTitle={c?.productId?.title}
+                                SellerRating={c?.favoriteUserId?.seller?.rating}
+                                GigReviewsTotal={
+                                  c?.favoriteUserId?.seller?.reviews
+                                }
+                                GigStartPrice={c?.productId?.cost}
+                                ownerId={c?.favoriteUserId?._id}
+                                productId={c?.productId?._id}
+                              />
+                            </Mobile>
+                          </Grid>
+                        ))
+                      )}
+                      {/* {favData.map((per, index) => (
+                          <Grid
+                            item
+                            boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
+                            my={0.5}
+                            mobile={12}
+                            tablet={6}
+                            laptop={4}
+                            desktop={3}
+                            display={"flex"}
+                            justifyContent={"center"}
+                            flexDirection={"column"}
+                            className="rounded"
+                          >
+                            <Grid container>
+                              <Grid item xs={3}></Grid>
+                              <Grid
+                                item
+                                xs={6}
+                                display={"flex"}
+                                justifyContent={"center"}
+                              >
+                                <Avatar
+                                  alt="Remy Sharp"
+                                  src={per.userImg}
+                                  sx={{ width: 56, height: 56 }}
+                                />
+                              </Grid>
+                              <Grid
+                                item
+                                xs={3}
+                                mt={2}
+                                display={"flex"}
+                                justifyContent={"center"}
+                              >
+                                <StarIcon
+                                  style={{
+                                    color: colors.becomePartnerGreen,
+                                    fontSize: "22px",
+                                  }}
+                                />
+                              </Grid>
+                            </Grid>
+                            <UsernnameP className="text-center">
+                              {per.userName}
+                            </UsernnameP>
+                            <OtherTextP className="text-center">
+                              {per.mainSkill}
+                            </OtherTextP>
+                            <OtherTextP className="text-center">
+                              {per.location}
+                            </OtherTextP>
+                            <Grid
+                              item
+                              xs={12}
+                              display={"flex"}
+                              justifyContent={"center"}
+                              alignItems={"center"}
+                              my={0.5}
+                            >
+                              <Rating name="read-only" value={4} readOnly />
+                              4.5 (12)
+                            </Grid>
+                            <Grid item xs={12}>
+                              <Grid container>
+                                <Grid
+                                  item
+                                  display={"flex"}
+                                  justifyContent={"center"}
+                                  xs={12}
+                                >
+                                  <SkillBox className="text-center">
+                                    {per.skill[0]}
+                                  </SkillBox>
+                                </Grid>
+                                <Grid
+                                  item
+                                  display={"flex"}
+                                  justifyContent={"center"}
+                                  xs={12}
+                                >
+                                  <SkillBox className="text-center">
+                                    {per.skill[1]}
+                                  </SkillBox>
+                                </Grid>
+                                <Grid
+                                  item
+                                  xs={12}
+                                  display={"flex"}
+                                  justifyContent={"center"}
+                                >
+                                  <SkillBox className="text-center">
+                                    {per.skill[2]}
+                                  </SkillBox>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <OtherTextLargeP className="text-center">
+                                ${per.sBudget * 0.2} Hourly
+                              </OtherTextLargeP>
+                            </Grid>
+
+                            <Grid item xs={12} margin={"5px"}>
+                              <Button
+                                fullWidth
+                                variant="centained"
+                                style={{
+                                  backgroundColor:
+                                    colors.becomePartnerButtonGreen,
+                                  color: colors.white,
+                                  marginTop: "10px",
+                                }}
+                              >
+                                View Profile
+                              </Button>
+                            </Grid>
+                          </Grid>
+                        ))} */}
                     </Grid>
                   </Grid>
                 </Grid>
@@ -249,4 +313,12 @@ const SkillBox = Styled(Box)`
 
 const Container = Styled.div`
   margin-inline: 7%;
+`;
+const Mobile = Styled.div`
+  display: none;
+  ${mobile({ display: "initial" })}
+`;
+
+const Laptop = Styled.div`
+  ${mobile({ display: "none" })}
 `;

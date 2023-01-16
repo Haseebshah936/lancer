@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Grid,
@@ -9,6 +9,7 @@ import {
   Rating,
   ThemeProvider,
   createTheme,
+  CircularProgress,
 } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
@@ -17,13 +18,37 @@ import ESideBar from "../../pages/ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
 import { favData } from "../../utils/dummyData";
 import StarIcon from "@mui/icons-material/Star";
+import { requestMethod } from "../../requestMethod";
+import { useRealmContext } from "../../db/RealmContext";
+import PortfolioCard from "../../components/PortfolioCard";
+import PortfolioCardMobile from "../../components/PortfolioCardMobile";
+import { mobile } from "../../responsive";
 
 export default function EFavourites() {
-  const [value, setValue] = React.useState(0);
+  const { user } = useRealmContext();
+  const [value, setValue] = useState(0);
+  const [fav, setFav] = useState([]);
+  const [loader, setLoader] = useState(true);
+
+  const getFavorites = async (id) => {
+    const response = await requestMethod.get("favorite/user/" + id);
+    return response.data;
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (user) {
+      getFavorites(user._id).then((res) => {
+        console.log("Favs: ", res);
+        setFav(res);
+        setLoader(false);
+      });
+    }
+  }, [user]);
+
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -66,7 +91,68 @@ export default function EFavourites() {
                   <Grid container>
                     <Grid item xs={11.5}>
                       <Grid container>
-                        {favData.map((per, index) => (
+                        {loader ? (
+                          <Grid
+                            item
+                            container
+                            justifyContent="center"
+                            alignItems="center"
+                            sx={{ height: "50vh" }}
+                          >
+                            <CircularProgress
+                              sx={{
+                                "&.MuiCircularProgress-root": {
+                                  color: colors.textGreen,
+                                },
+                              }}
+                            />
+                          </Grid>
+                        ) : (
+                          fav.map((c, index) => (
+                            <Grid item>
+                              <Laptop>
+                                <PortfolioCard
+                                  count={c}
+                                  GigImage={c?.productId?.images[0]}
+                                  Avatar={c?.favoriteUserId?.profilePic}
+                                  SellerName={c?.favoriteUserId?.name}
+                                  SellerLevel={c?.favoriteUserId?.badge}
+                                  GigTitle={c?.productId?.title}
+                                  SellerRating={
+                                    c?.favoriteUserId?.seller?.rating
+                                  }
+                                  GigReviewsTotal={
+                                    c?.favoriteUserId?.seller?.reviews
+                                  }
+                                  GigStartPrice={c?.productId?.cost}
+                                  ownerId={c?.favoriteUserId?._id}
+                                  productId={c?.productId?._id}
+                                />
+                              </Laptop>
+
+                              <Mobile>
+                                <PortfolioCardMobile
+                                  count={c}
+                                  GigImage={c?.productId?.images[0]}
+                                  Avatar={c?.favoriteUserId?.profilePic}
+                                  SellerName={c?.favoriteUserId?.name}
+                                  SellerLevel={c?.favoriteUserId?.badge}
+                                  GigTitle={c?.productId?.title}
+                                  SellerRating={
+                                    c?.favoriteUserId?.seller?.rating
+                                  }
+                                  GigReviewsTotal={
+                                    c?.favoriteUserId?.seller?.reviews
+                                  }
+                                  GigStartPrice={c?.productId?.cost}
+                                  ownerId={c?.favoriteUserId?._id}
+                                  productId={c?.productId?._id}
+                                />
+                              </Mobile>
+                            </Grid>
+                          ))
+                        )}
+                        {/* {favData.map((per, index) => (
                           <Grid
                             item
                             boxShadow="rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px"
@@ -184,7 +270,7 @@ export default function EFavourites() {
                               </Button>
                             </Grid>
                           </Grid>
-                        ))}
+                        ))} */}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -238,4 +324,13 @@ const SkillBox = Styled(Box)`
 
 const Container = Styled.div`
   margin-inline: 7%;
+`;
+
+const Mobile = Styled.div`
+  display: none;
+  ${mobile({ display: "initial" })}
+`;
+
+const Laptop = Styled.div`
+  ${mobile({ display: "none" })}
 `;
