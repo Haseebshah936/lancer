@@ -3,11 +3,18 @@ import React from "react";
 // import styled from "styled-components";
 import colors from "../../utils/colors";
 
-export default function Card({ title, Icon, description }) {
+export default function Card({
+  title,
+  Icon,
+  description,
+  onClick = () => {},
+  style,
+}) {
   return (
     <>
       <Paper
         elevation={2}
+        onClick={onClick}
         sx={{
           display: "flex",
           flexDirection: "column",
@@ -17,6 +24,7 @@ export default function Card({ title, Icon, description }) {
           my: { mobile: 2, laptop: 0 },
           minWidth: "350px",
           borderRadius: "15px",
+          ...style,
           //   border: `2px solid ${colors.textGreen}`,
         }}
       >

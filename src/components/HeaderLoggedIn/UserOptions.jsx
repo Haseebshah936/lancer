@@ -203,7 +203,7 @@ const UserOptions = ({ anchor, CloseList }) => {
                 </ButtonBase>
               </Link>*/}
               <Link
-                to="/chat/1"
+                to="/customersupport"
                 style={{
                   textDecoration: "none",
                   color: colors.black,

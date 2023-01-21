@@ -4,6 +4,7 @@ import {
   MenuBookOutlined,
   PeopleOutlined,
   QuestionAnswerOutlined,
+  Report,
   SearchOutlined,
 } from "@mui/icons-material";
 import {
@@ -17,6 +18,7 @@ import {
 import React, { useState } from "react";
 import styled from "styled-components";
 import Card from "../../components/CustomerSupport/Card";
+import ReportModal from "../../components/CustomerSupport/ReportModal";
 import Footer from "../../components/Footer";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
 import colors from "../../utils/colors";
@@ -50,12 +52,21 @@ const InputField = ({
 
 export default function CustomerSupport() {
   const [terms, setTerms] = useState("");
+  const [toggle, setToggle] = useState(false);
 
   const handleChange = (e) => {
     setTerms(e);
   };
 
   const handleSubmit = (search) => {};
+
+  const handleOpenReport = () => {
+    setToggle(true);
+  };
+
+  const handleCloseReport = () => {
+    setToggle(false);
+  };
 
   return (
     <>
@@ -158,7 +169,7 @@ export default function CustomerSupport() {
             >
               <Card
                 title={"Guides"}
-                description={"How to do's for using the platform"}
+                description={"How to do's for using Lancer"}
                 Icon={
                   <MenuBookOutlined
                     sx={{ fontSize: "10rem", color: colors.textGreen }}
@@ -167,7 +178,7 @@ export default function CustomerSupport() {
               />
               <Card
                 title={"FAQ"}
-                description={"Questions and answers about the platform"}
+                description={"Questions and answers about Lancer"}
                 Icon={
                   <QuestionAnswerOutlined
                     sx={{ fontSize: "10rem", color: colors.textGreen }}
@@ -175,16 +186,17 @@ export default function CustomerSupport() {
                 }
               />
               <Card
-                title={"Community"}
-                description={"Everything to learn about our community"}
+                onClick={handleOpenReport}
+                style={{ cursor: "pointer" }}
+                title={"Report"}
+                description={"Do you want to Report a person?"}
                 Icon={
-                  <PeopleOutlined
-                    sx={{ fontSize: "10rem", color: colors.textGreen }}
-                  />
+                  <Report sx={{ fontSize: "10rem", color: colors.textGreen }} />
                 }
               />
             </Grid>
           </Grid>
+          <ReportModal toggleClose={handleCloseReport} toggle={toggle} />
           <Grid
             item
             container
@@ -204,9 +216,7 @@ export default function CustomerSupport() {
             alignItems="center"
           >
             <SubTitle>
-              Getting Started Getting Started Getting Started Getting Started
-              Getting Started Getting Started Getting Started Getting Started
-              Getting Started
+              Some quick Frequently Asked Questions to get you started
             </SubTitle>
           </Grid>
 
