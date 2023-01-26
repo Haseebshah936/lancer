@@ -210,12 +210,14 @@ export default function EProjects() {
                             data={completedProjects}
                           ></CompletedProjects>
                         ))}
-
-                      {value === 3 && (
-                        <CancelledProjects
-                          data={cancelledProjects}
-                        ></CancelledProjects>
-                      )}
+                      {value === 3 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <CancelledProjects
+                            data={cancelledProjects}
+                          ></CancelledProjects>
+                        ))}
                     </Grid>
                   </Grid>
                 </Grid>

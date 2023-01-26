@@ -4,8 +4,10 @@ import usePagination from "../FProject/Pagination";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import noproject from "../../utils/noproject.png";
+import { useNavigate } from "react-router-dom";
 
 export default function CompletedProjects({ data }) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
@@ -82,8 +84,13 @@ export default function CompletedProjects({ data }) {
                 width: { xs: "12rem", md: "10rem" },
                 height: "30px",
                 backgroundColor: colors.becomePartnerGreen,
+                "&:hover": {
+                  backgroundColor: colors.becomePartnerGreen,
+                },
+                color: "white",
                 fontWeight: "700",
               }}
+              onClick={() => navigate(`/orderStatus`, { state: { p: p } })}
             >
               View&nbsp;Details
             </Button>

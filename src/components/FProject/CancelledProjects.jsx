@@ -5,8 +5,10 @@ import styled from "styled-components";
 import colors from "../../utils/colors";
 import noproject from "../../utils/noproject.png";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function CancelledProjects({ data }) {
+  const navigate = useNavigate();
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
@@ -78,9 +80,7 @@ export default function CancelledProjects({ data }) {
             my={{ xs: 2, md: 0 }}
           >
             <Button
-              onClick={() => {
-                toast.error("Project was Cancelled");
-              }}
+              onClick={() => navigate(`/orderStatus`, { state: { p: p } })}
               variant="contained"
               style={{
                 width: { xs: "12rem", md: "7rem" },
@@ -89,7 +89,7 @@ export default function CancelledProjects({ data }) {
                 fontWeight: "700",
               }}
             >
-              Cancelled&nbsp;Project
+              View Details
             </Button>
           </Grid>
         </Grid>

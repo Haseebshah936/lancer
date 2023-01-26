@@ -5,7 +5,7 @@ import colors from "../../utils/colors";
 import { Grid } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 
-export default function OrderCompletedComp() {
+export default function OrderCancelledLastTimeLine() {
   const navigate = useNavigate();
   return (
     <div
@@ -15,11 +15,10 @@ export default function OrderCompletedComp() {
       }}
     >
       <OuterBox>
-        <MainTitle>Order Completed Congratulation!</MainTitle>
+        <MainTitle>Order Was Cancelled</MainTitle>
         <MainText>
-          You have completed the order. Now you can wait for the employer
-          review. In the meantime you can browse other orders thet are avalible.
-          Good Luck!.
+          Order was cancelled by the administrator due to the conflict between
+          empoyer and the freelancer. We wish you good luck in the future.
         </MainText>
         <Box>
           <CustomButton

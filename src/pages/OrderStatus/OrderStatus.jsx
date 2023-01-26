@@ -33,6 +33,7 @@ import ReuestedForDeadlineExtensionTimeLine from "../../components/OrderStausCom
 import ProjectDeiverdedTimeLine from "../../components/OrderStausComp/ProjectDeiverdedTimeLine";
 import ShowReviewToFreelancerTimeline from "../../components/OrderStausComp/ShowReviewToFreelancerTimeline";
 import ClientGotReviewTimeLine from "../../components/OrderStausComp/ClientGotReviewTimeLine";
+import OrderCancelledLastTimeLine from "../../components/OrderStausComp/OrderCancelledLastTimeLine";
 export default function OrderStatus() {
   const navigate = useNavigate();
   const location = useLocation();
@@ -257,7 +258,17 @@ export default function OrderStatus() {
               {/*  */}
               {/* project progress last timeline starts here*/}
               {p?.state !== "completed" ? (
-                <LastTimeLine></LastTimeLine>
+                <div>
+                  {p?.state === "cancelled" ? (
+                    <div>
+                      <OrderCancelledLastTimeLine></OrderCancelledLastTimeLine>
+                    </div>
+                  ) : (
+                    <div>
+                      <LastTimeLine></LastTimeLine>
+                    </div>
+                  )}
+                </div>
               ) : (
                 <div>
                   <Grid
@@ -274,129 +285,8 @@ export default function OrderStatus() {
                 </div>
               )}
               {/* project progress last timeline ends here*/}
-              <Grid contsiner>
-                <Grid item xs={12} marginTop={5} marginBottoms={5}>
-                  S
-                </Grid>
-                <Grid item xs={12} marginTop={5} marginBottoms={5}>
-                  p
-                </Grid>
-                <Grid item xs={12} marginTop={5} marginBottoms={5}>
-                  a
-                </Grid>
-                <Grid item xs={12} marginTop={5} marginBottoms={5}>
-                  c
-                </Grid>
-                <Grid item xs={12} marginTop={5} marginBottoms={5}>
-                  e
-                </Grid>
-              </Grid>
+
               {/* Static */}
-
-              {/* Order Started */}
-              {/* <StatusChangeTimelineItem
-                Icon={RocketIcon}
-                data={{
-                  titleText: "The Order Started",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Delivery Time updated timeline started */}
-              {/* <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine> */}
-              {/* Delivery Time updated timeline ended */}
-
-              {/* Delivery Time updated staus change*/}
-              {/* <StatusChangeTimelineItem
-                Icon={AccessAlarmIcon}
-                data={{
-                  titleText: "Your delivery date was updated to November 6",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Deliverred the product*/}
-              {/* <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine> */}
-              {/* Project submitted staus change*/}
-              {/* <StatusChangeTimelineItem
-                Icon={Inventory2Icon}
-                data={{
-                  titleText: "Your delivery date was updated to November 6",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Employer Review TimeLine */}
-              {/* Static */}
-              {/* <EmployerReviewTimeLine></EmployerReviewTimeLine> */}
-              {/* Freelancer Revire TimeLine start */}
-              {/* <FreelancerReviewTimeLine></FreelancerReviewTimeLine> */}
-              {/* Freelancer Revire TimeLine Ends */}
-
-              {/* Last Time Line */}
-              {/* <LastTimeLine></LastTimeLine> */}
-            </Timeline>
-          </Timeline>
-          {/* Order Just Started Comp End*/}
-
-          {/* Order Completed Comp Started */}
-          {/* <Grid
-            container
-            item
-            xs={12}
-            display={"flex"}
-            justifyContent={"center"}
-          >
-            <Grid item xs={11.5}>
-              <OrderCompletedComp></OrderCompletedComp>
-            </Grid>
-          </Grid> */}
-          {/* Order Completed Comp End */}
-          <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
-            <Timeline sx={{ paddingLeft: "4px", paddingRight: 0 }}>
-              {/* <OrderPalcedTimelineItem></OrderPalcedTimelineItem> */}
-              {/* Requiremnets send Timeline started*/}
-              {/* <RequirementsTimelineItem></RequirementsTimelineItem> */}
-              {/* Requiremnets send Timeline Ends*/}
-              {/* Request For for more requirements time line starts here */}
-              {/* <RequestForRequirements pID={p?._id}></RequestForRequirements> */}
-              {/* Request For for more requirements time line ends here */}
-              {/* Order Started */}
-              {/* <StatusChangeTimelineItem
-                Icon={RocketIcon}
-                data={{
-                  titleText: "The Order Started",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Delivery Time updated timeline started */}
-              {/* <DeadlineUpdatedTimeLine></DeadlineUpdatedTimeLine> */}
-              {/* Delivery Time updated timeline ended */}
-
-              {/* Delivery Time updated staus change*/}
-              {/* <StatusChangeTimelineItem
-                Icon={AccessAlarmIcon}
-                data={{
-                  titleText: "Your delivery date was updated to November 6",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Deliverred the product*/}
-              {/* <DeliveredTheOrderTimeLine></DeliveredTheOrderTimeLine> */}
-              {/* Project submitted staus change*/}
-              {/* <StatusChangeTimelineItem
-                Icon={Inventory2Icon}
-                data={{
-                  titleText: "Your delivery date was updated to November 6",
-                  time: "Nov 5, 3:49 PM",
-                }}
-              ></StatusChangeTimelineItem> */}
-              {/* Employer Review TimeLine */}
-              {/* Static */}
-              {/* <EmployerReviewTimeLine></EmployerReviewTimeLine> */}
-              {/* Freelancer Revire TimeLine start */}
-              {/* <FreelancerReviewTimeLine></FreelancerReviewTimeLine> */}
-              {/* Freelancer Revire TimeLine Ends */}
-
-              {/* Last Time Line */}
-              {/* <LastTimeLine></LastTimeLine> */}
             </Timeline>
           </Timeline>
         </Grid>

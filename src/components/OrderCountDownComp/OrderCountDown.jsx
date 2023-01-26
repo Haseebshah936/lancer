@@ -12,6 +12,12 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function OrderCountDown({ p, setP }) {
   const { activeProfile } = useCustomContext();
+  const [cTime, setCtime] = useState({
+    days: 0,
+    hours: 0,
+    minutes: 0,
+    seconds: 0,
+  });
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
   const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
@@ -38,7 +44,30 @@ export default function OrderCountDown({ p, setP }) {
 
   const [remainingDate, setRemainingDate] = useState(calculatedTime());
   // let dateToEndCountdownAt = calculatedTime();
-  const { days, hours, minutes, seconds } = useReactCountdown(remainingDate);
+  // const { days, hours, minutes, seconds } = useReactCountdown(remainingDate);
+  //
+  //
+  const updatedDate = new Date(
+    new Date(p.startedAt).getTime() + p.days * 24 * 60 * 60 * 1000
+  );
+
+  // Set the date we're counting down to
+  var countDownDate = new Date(updatedDate).getTime();
+  var x = setInterval(function () {
+    // Get today's date and time
+    var now = new Date().getTime();
+
+    // Find the distance between now and the count down date
+    var distance = countDownDate - now;
+
+    // Time calculations for days, hours, minutes and seconds
+    setCtime({
+      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+      seconds: Math.floor((distance % (1000 * 60)) / 1000),
+    });
+  }, 1000);
 
   const startProject = async (id) => {
     const response = await requestMethod.put("project/start/" + id, {
@@ -97,41 +126,23 @@ export default function OrderCountDown({ p, setP }) {
         </Grid>
         <Grid container item xs={12} display={"flex"} justifyContent={"center"}>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{days} </TimerP>
+            <TimerP>{cTime.days} </TimerP>
             <TimeP>Days</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{hours} </TimerP>
+            <TimerP>{cTime.hours} </TimerP>
             <TimeP>Hours</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{minutes} </TimerP>
+            <TimerP>{cTime.minutes} </TimerP>
             <TimeP>min</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{seconds}</TimerP>
+            <TimerP>{cTime.seconds}</TimerP>
             <TimeP>sec</TimeP>
           </TimerGrid>
         </Grid>
         {/* Buttons */}
-        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: colors.becomePartnerGreen,
-              color: colors.white,
-              "&:hover": {
-                backgroundColor: colors.becomePartnerGreen,
-                color: colors.white,
-              },
-              minWidth: "135px",
-              maxWidth: "135px",
-            }}
-            onClick={() => setDeliverOrderPopValue(true)}
-          >
-            Deliver
-          </Button>
-        </Grid>
         <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
           <Button
             variant="contained"
@@ -147,10 +158,62 @@ export default function OrderCountDown({ p, setP }) {
             }}
             onClick={() => setDeadlineExtendedPopValue(true)}
           >
-            Extend Time
+            Message
           </Button>
         </Grid>
-        <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
+        {activeProfile === "seller" && (
+          <Grid
+            item
+            xs={12}
+            display={"flex"}
+            justifyContent={"center"}
+            mt={0.5}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: colors.becomePartnerGreen,
+                color: colors.white,
+                "&:hover": {
+                  backgroundColor: colors.becomePartnerGreen,
+                  color: colors.white,
+                },
+                minWidth: "135px",
+                maxWidth: "135px",
+              }}
+              onClick={() => setDeliverOrderPopValue(true)}
+            >
+              Deliver
+            </Button>
+          </Grid>
+        )}
+        {activeProfile === "seller" && (
+          <Grid
+            item
+            xs={12}
+            display={"flex"}
+            justifyContent={"center"}
+            mt={0.5}
+          >
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: colors.becomePartnerGreen,
+                color: colors.white,
+                "&:hover": {
+                  backgroundColor: colors.becomePartnerGreen,
+                  color: colors.white,
+                },
+                minWidth: "135px",
+                maxWidth: "135px",
+              }}
+              onClick={() => setDeadlineExtendedPopValue(true)}
+            >
+              Extend Time
+            </Button>
+          </Grid>
+        )}
+        {/* <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
           <Button
             variant="contained"
             sx={{
@@ -167,7 +230,7 @@ export default function OrderCountDown({ p, setP }) {
           >
             Cancel Order
           </Button>
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
           <Button
             variant="contained"
@@ -186,7 +249,7 @@ export default function OrderCountDown({ p, setP }) {
             Create Dispute
           </Button>
         </Grid>
-        {activeProfile === "seller" && (
+        {/* {activeProfile === "seller" && (
           <Grid
             item
             xs={12}
@@ -211,7 +274,7 @@ export default function OrderCountDown({ p, setP }) {
               Start Project
             </Button>
           </Grid>
-        )}
+        )} */}
       </Grid>
     </div>
   );

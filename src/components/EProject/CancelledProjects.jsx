@@ -4,8 +4,11 @@ import styled from "styled-components";
 import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 import noproject from "../../utils/noproject.png";
+import { useNavigate } from "react-router-dom";
 
 export default function CancelledProjects({ data }) {
+  const navigate = useNavigate();
+
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
@@ -70,11 +73,21 @@ export default function CancelledProjects({ data }) {
               {/* Third Box */}
               <Grid item xs={5} sm={2.5}>
                 <CenterDiv>
-                  <TitleP
-                    style={{ color: colors.googleRed, fontWeight: "bold" }}
+                  <Button
+                    variant="contained"
+                    style={{
+                      width: { xs: "12rem", md: "8rem" },
+                      backgroundColor: colors.becomePartnerGreen,
+                      fontWeight: "700",
+                    }}
+                    onClick={() =>
+                      navigate(`/orderStatus`, {
+                        state: { p: p },
+                      })
+                    }
                   >
-                    Cancelled
-                  </TitleP>
+                    Details
+                  </Button>
                 </CenterDiv>
               </Grid>
             </Grid>
