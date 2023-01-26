@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useReactCountdown } from "use-react-countdown";
+import React, { useState, useEffect } from "react";
 import { Grid, Button, Divider } from "@mui/material";
 import styled from "styled-components";
 import colors from "../../utils/colors";
@@ -9,10 +8,12 @@ import ExtendDeliverDateComp from "../OrderStausComp/ExtendDeliverDateComp";
 import CreateDisputeComp from "../OrderStausComp/CreateDisputeComp";
 import { requestMethod } from "../../requestMethod";
 import { useCustomContext } from "../../Hooks/useCustomContext";
+import { toast } from "react-toastify";
+import { handleError } from "./../../utils/helperFunctions";
 
 export default function OrderCountDown({ p, setP }) {
   const { activeProfile } = useCustomContext();
-  const [cTime, setCtime] = useState({
+  const [oTime, setOTime] = useState({
     days: 0,
     hours: 0,
     minutes: 0,
@@ -23,6 +24,37 @@ export default function OrderCountDown({ p, setP }) {
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
     useState(false);
   const [createDisputePopValue, setCreateDisputePopValue] = useState(false);
+
+  useEffect(() => {
+    var tDays = p.days;
+    p?.extension.forEach((e) => {
+      if (e.state === "accepted") tDays += e.days;
+    });
+    const updatedDate = new Date(
+      new Date(p.startedAt).getTime() + tDays * 24 * 60 * 60 * 1000
+    );
+    var countDownDate = new Date(updatedDate).getTime();
+
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+      // Get today's date and time
+      var now = new Date().getTime();
+
+      // Find the distance between now and the count down date
+      var distance = countDownDate - now;
+
+      // Time calculations for days, hours, minutes and seconds
+      setOTime({
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000),
+      });
+    }, 1000);
+  }, []);
+
   const calculatedTime = () => {
     const updatedDate = new Date(
       new Date(p.startedAt).getTime() + p.days * 24 * 60 * 60 * 1000
@@ -42,44 +74,22 @@ export default function OrderCountDown({ p, setP }) {
     return `${month} ${date}, ${year} ${time}`;
   };
 
-  const [remainingDate, setRemainingDate] = useState(calculatedTime());
-  // let dateToEndCountdownAt = calculatedTime();
-  // const { days, hours, minutes, seconds } = useReactCountdown(remainingDate);
-  //
-  //
-  const updatedDate = new Date(
-    new Date(p.startedAt).getTime() + p.days * 24 * 60 * 60 * 1000
-  );
-
-  // Set the date we're counting down to
-  var countDownDate = new Date(updatedDate).getTime();
-  var x = setInterval(function () {
-    // Get today's date and time
-    var now = new Date().getTime();
-
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now;
-
-    // Time calculations for days, hours, minutes and seconds
-    setCtime({
-      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((distance % (1000 * 60)) / 1000),
-    });
-  }, 1000);
-
   const startProject = async (id) => {
-    const response = await requestMethod.put("project/start/" + id, {
-      details: "started",
-    });
+    const response = await requestMethod
+      .put("project/start/" + id, {
+        details: "started",
+      })
+      .then((res) => {
+        toast.success("Project Started Successfully");
+      })
+      .catch((err) => {
+        handleError(err);
+      });
     return response.data;
   };
 
   const handleStart = () => {
-    startProject(p._id).then((data) => {
-      console.log("Data ", data);
-    });
+    startProject(p?._id);
   };
 
   return (
@@ -126,24 +136,25 @@ export default function OrderCountDown({ p, setP }) {
         </Grid>
         <Grid container item xs={12} display={"flex"} justifyContent={"center"}>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{cTime.days} </TimerP>
+            <TimerP>{oTime.days} </TimerP>
             <TimeP>Days</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{cTime.hours} </TimerP>
+            <TimerP>{oTime.hours} </TimerP>
             <TimeP>Hours</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{cTime.minutes} </TimerP>
+            <TimerP>{oTime.minutes} </TimerP>
             <TimeP>min</TimeP>
           </TimerGrid>
           <TimerGrid item xs={2} display={"flex"} flexDirection={"column"}>
-            <TimerP>{cTime.seconds}</TimerP>
+            <TimerP>{oTime.seconds}</TimerP>
             <TimeP>sec</TimeP>
           </TimerGrid>
         </Grid>
         {/* Buttons */}
-        <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
+
+        <Grid item xs={12} display={"flex"} justifyContent={"center"}>
           <Button
             variant="contained"
             sx={{
@@ -156,19 +167,13 @@ export default function OrderCountDown({ p, setP }) {
               minWidth: "135px",
               maxWidth: "135px",
             }}
-            onClick={() => setDeadlineExtendedPopValue(true)}
           >
             Message
           </Button>
         </Grid>
+
         {activeProfile === "seller" && (
-          <Grid
-            item
-            xs={12}
-            display={"flex"}
-            justifyContent={"center"}
-            mt={0.5}
-          >
+          <Grid item xs={12} display={"flex"} justifyContent={"center"}>
             <Button
               variant="contained"
               sx={{
@@ -213,24 +218,6 @@ export default function OrderCountDown({ p, setP }) {
             </Button>
           </Grid>
         )}
-        {/* <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
-          <Button
-            variant="contained"
-            sx={{
-              backgroundColor: colors.becomePartnerGreen,
-              color: colors.white,
-              "&:hover": {
-                backgroundColor: colors.becomePartnerGreen,
-                color: colors.white,
-              },
-              minWidth: "135px",
-              maxWidth: "135px",
-            }}
-            onClick={() => setCancelOrderPopValue(true)}
-          >
-            Cancel Order
-          </Button>
-        </Grid> */}
         <Grid item xs={12} display={"flex"} justifyContent={"center"} mt={0.5}>
           <Button
             variant="contained"
