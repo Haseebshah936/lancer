@@ -70,6 +70,19 @@ export default function EProjects() {
       });
     setLoadingValue(false);
   };
+  const allCancelledProjectsFun = async () => {
+    setLoadingValue(true);
+    await requestMethod
+      .get(`project/creator/cancelled/${user?._id}`)
+      .then((res) => {
+        console.log(res.data);
+        setCancelledProjects(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    setLoadingValue(false);
+  };
   useEffect(() => {
     pendingProjectsFun();
   }, []);
@@ -81,6 +94,8 @@ export default function EProjects() {
       onGoingProjectFun();
     } else if (newValue === 2) {
       completedProjectsFun();
+    } else if (newValue === 3) {
+      allCancelledProjectsFun();
     }
     setValue(newValue);
   };
@@ -198,7 +213,7 @@ export default function EProjects() {
 
                       {value === 3 && (
                         <CancelledProjects
-                          data={allProject}
+                          data={cancelledProjects}
                         ></CancelledProjects>
                       )}
                     </Grid>

@@ -10,8 +10,8 @@ export default function CancelledProjects({ data }) {
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
 
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -90,27 +90,11 @@ export default function CancelledProjects({ data }) {
           >
             {/* Project Completed */}
             <CenterDiv>
-              <Button
-                variant="contained"
-                style={{
-                  width: "12rem",
-                  backgroundColor: colors.becomePartnerGreen,
-                  fontWeight: "700",
-                }}
-              >
-                Repost
-              </Button>
-              <Button
-                variant="contained"
-                style={{
-                  marginTop: "10px",
-                  width: "12rem",
-                  backgroundColor: colors.googleRed,
-                  fontWeight: "700",
-                }}
-              >
-                Delete
-              </Button>
+              <Avatar
+                alt="Remy Sharp"
+                src={p?.hired?.userId?.profilePic}
+                sx={{ width: 56, height: 56 }}
+              />
             </CenterDiv>
           </Grid>
         </Grid>
