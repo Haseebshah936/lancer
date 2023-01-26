@@ -10,8 +10,8 @@ export default function CompletedProjects({ data }) {
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
 
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -53,14 +53,14 @@ export default function CompletedProjects({ data }) {
           </Grid>
           <Grid item xs={12} md={4} display="flex" alignItems={"center"}>
             <Box display="flex" flexDirection={"row"} alignItems="center">
-              <Avatar src={p.eImageURL}></Avatar>
+              <Avatar src={p?.creatorId?.profilePic}></Avatar>
               <Box display="flex" flexDirection={"column"}>
-                <UserNameP className="ps-3">{p.eUserName}</UserNameP>
-                <DateP className="ps-3">{p.eJoiningDate}</DateP>
+                <UserNameP className="ps-3">{p?.creatorId?.name}</UserNameP>
+                <DateP className="ps-3">Days: {p.days}</DateP>
                 <Rating
                   className="ps-2"
                   name="read-only"
-                  value={p.eRating}
+                  value={p?.creatorId?.stars}
                   readOnly
                 />
               </Box>

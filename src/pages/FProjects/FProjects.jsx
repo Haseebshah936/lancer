@@ -32,6 +32,8 @@ export default function FProjects() {
   const [allAvalibleProjects, setAllAvalibleProjects] = React.useState([]);
   const [myPerposals, setMyPerposals] = React.useState([]);
   const [ongoingProjects, setOngoingProjects] = useState([]);
+  const [completedProjects, setCompletedProjects] = useState([]);
+  const [cancelledProjects, setCancelledProjects] = useState([]);
   const allAvalibleProjectsFun = async () => {
     setLoadingValue(true);
     await requestMethod.get(`project/pending/${user?._id}`).then((res) => {
@@ -87,6 +89,28 @@ export default function FProjects() {
         console.log("err in catching all projects", err);
       });
   };
+  const allCancelledProjects = async () => {
+    const res = await requestMethod
+      .get("project/seller/cancelled/" + user?._id)
+      .then((res) => {
+        console.log(res.data);
+        setCancelledProjects(res.data);
+      })
+      .catch((err) => {
+        console.log("err in catching cancelled projects", err);
+      });
+  };
+  const allCompletedProjects = async () => {
+    const res = await requestMethod
+      .get("project/seller/completed/" + user?._id)
+      .then((res) => {
+        console.log(res.data);
+        setCompletedProjects(res.data);
+      })
+      .catch((err) => {
+        console.log("err in catching completed projects", err);
+      });
+  };
   useEffect(() => {
     setValue(value);
     console.log("value", value);
@@ -112,6 +136,10 @@ export default function FProjects() {
       allMyPerposalsFun();
     } else if (newValue === 2) {
       allOngoingProjectsFun();
+    } else if (newValue === 3) {
+      allCompletedProjects();
+    } else if (newValue === 4) {
+      allCancelledProjects();
     }
     // allMyPerposalsFun();
     // allAvalibleProjectsFun();
@@ -230,16 +258,26 @@ export default function FProjects() {
                             data={ongoingProjects}
                           ></OnGoingProjects>
                         ))}
-                      {value === 3 && (
-                        <CompletedProjects
-                          data={allProject}
-                        ></CompletedProjects>
-                      )}
-                      {value === 4 && (
-                        <CancelledProjects
-                          data={allProject}
-                        ></CancelledProjects>
-                      )}
+                      {/*  */}
+                      {value === 3 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <CompletedProjects
+                            data={completedProjects}
+                          ></CompletedProjects>
+                        ))}
+                      {/*  */}
+                      {/*  */}
+                      {value === 4 &&
+                        (loadingValue ? (
+                          <LoadingComp></LoadingComp>
+                        ) : (
+                          <CancelledProjects
+                            data={cancelledProjects}
+                          ></CancelledProjects>
+                        ))}
+                      {/*  */}
                     </Grid>
                   </Grid>
                 </Grid>

@@ -4,14 +4,15 @@ import usePagination from "../FProject/Pagination";
 import styled from "styled-components";
 import colors from "../../utils/colors";
 import noproject from "../../utils/noproject.png";
+import { toast } from "react-toastify";
 
 export default function CancelledProjects({ data }) {
   const [projects, setProjects] = useState([]);
   const [page, setPage] = useState(1);
   const PER_PAGE = 5;
 
-  const count = Math.ceil(projects.length / PER_PAGE);
-  const _DATA = usePagination(projects, PER_PAGE);
+  const count = Math.ceil(data.length / PER_PAGE);
+  const _DATA = usePagination(data, PER_PAGE);
 
   const handleChange = (e, p) => {
     setPage(p);
@@ -53,14 +54,14 @@ export default function CancelledProjects({ data }) {
           </Grid>
           <Grid item xs={12} md={4} display="flex" alignItems={"center"}>
             <Box display="flex" flexDirection={"row"} alignItems="center">
-              <Avatar src={p.eImageURL}></Avatar>
+              <Avatar src={p?.creatorId?.profilePic}></Avatar>
               <Box display="flex" flexDirection={"column"}>
-                <UserNameP className="ps-3">{p.eUserName}</UserNameP>
-                <DateP className="ps-3">{p.eJoiningDate}</DateP>
+                <UserNameP className="ps-3">{p?.creatorId?.name}</UserNameP>
+                <DateP className="ps-3">Days: {p.days}</DateP>
                 <Rating
                   className="ps-2"
                   name="read-only"
-                  value={p.eRating}
+                  value={p?.creatorId?.stars}
                   readOnly
                 />
               </Box>
@@ -77,6 +78,9 @@ export default function CancelledProjects({ data }) {
             my={{ xs: 2, md: 0 }}
           >
             <Button
+              onClick={() => {
+                toast.error("Project was Cancelled");
+              }}
               variant="contained"
               style={{
                 width: { xs: "12rem", md: "7rem" },
@@ -85,7 +89,7 @@ export default function CancelledProjects({ data }) {
                 fontWeight: "700",
               }}
             >
-              Romove&nbsp;Project
+              Cancelled&nbsp;Project
             </Button>
           </Grid>
         </Grid>
