@@ -1,3 +1,4 @@
+import axios from "axios";
 import { requestMethod } from "../../requestMethod";
 import { handleError } from "../../utils/helperFunctions";
 import { handleMessageCreation } from "./HelperFunctions";
@@ -92,6 +93,30 @@ export const handleSend = (message, user, active, setNewData) => {
       }
       handleError(err);
     });
+  axios
+    .post("http://mumerabid.pythonanywhere.com/nlp", {
+      text: message?.text ? message?.text : "",
+      id: active.id,
+    })
+    .then((res) => {
+      console.log(res.data);
+      if (
+        res.data.spam_pre === "true" ||
+        res.data.curse_pre === "true" ||
+        res.data.isNumbers === "true" ||
+        res.data.isEmails === "true" ||
+        res.data.isUrls === "true"
+      ) {
+        requestMethod.post("customerSupport/spam", {
+          chatroomId: active.id,
+          disputeReason: "Chat reason " + message?.text ? message?.text : "",
+          creatorId: user._id,
+        });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
 
 export const handleMuteChatRoom = (
@@ -180,7 +205,7 @@ export const handleScroll = (
       )
       .then((res) => {
         setLoadingMore(false);
-        if(res.data.length === 0) setLoadingMore(false);
+        if (res.data.length === 0) setLoadingMore(false);
         setData((pre) => [...pre, ...res.data]);
       })
       .catch((err) => {
