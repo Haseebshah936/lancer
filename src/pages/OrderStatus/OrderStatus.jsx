@@ -55,38 +55,34 @@ export default function OrderStatus() {
   }, []);
   useEffect(() => {
     if (p.state === "completed") {
-      setTimeout(() => {
-        requestMethod
-          .get(`review/sellerReview/${p?.creatorId?._id}/${p?._id}`)
-          .then((res) => {
-            setFreelancersReview(res.data);
-            console.log("s rev", res.data);
-          })
-          .catch((err) => {
-            console.log("s err", err);
-          });
-      }, 200);
+      requestMethod
+        .get(`review/sellerReviewByProjectId/${p?._id}`)
+        .then((res) => {
+          setFreelancersReview(res.data);
+          console.log("s rev", res.data);
+        })
+        .catch((err) => {
+          console.log("s err", err);
+        });
     }
   }, []);
   useEffect(() => {
     if (p.state === "completed") {
-      setTimeout(() => {
-        requestMethod
-          .get(`review/buyerReview/${p?.hired?._id}/${p?._id}`)
-          .then((res) => {
-            setClinetsReview(res.data);
-            console.log("c rev", res.data);
-          })
-          .catch((err) => {
-            console.log("c err", err);
-          });
-      }, 200);
+      requestMethod
+        .get(`review/buyerReviewByProjectId/${p?._id}`)
+        .then((res) => {
+          setClinetsReview(res.data);
+          console.log("c rev", res.data);
+        })
+        .catch((err) => {
+          console.log("c err", err);
+        });
     }
   }, []);
-  useEffect(() => {
-    console.log("cc rev", clinetsReview);
-    console.log("ss rev", freelancersReview);
-  }, [clinetsReview, freelancersReview]);
+  // useEffect(() => {
+  //   console.log("cc rev", clinetsReview);
+  //   console.log("ss rev", freelancersReview);
+  // }, [clinetsReview, freelancersReview]);
 
   return (
     <div>
