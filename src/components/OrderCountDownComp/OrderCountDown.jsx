@@ -25,31 +25,50 @@ export default function OrderCountDown({ p, setP }) {
     useState(false);
   const [createDisputePopValue, setCreateDisputePopValue] = useState(false);
 
-  var tDays = p.days;
-  p?.extension.forEach((e) => {
-    if (e.state === "accepted") tDays += e.days;
-  });
-  const updatedDate = new Date(
-    new Date(p.startedAt).getTime() + tDays * 24 * 60 * 60 * 1000
-  );
-  var countDownDate = new Date(updatedDate).getTime();
+  // var tDays = p.days;
+  // console.log("Order Countdown ", p.days);
+  // p?.extension.forEach((e) => {
+  //   if (e.state === "accepted") tDays += e.days;
+  // });
+  // const updatedDate = new Date(
+  //   new Date(p.startedAt).getTime() + tDays * 24 * 60 * 60 * 1000
+  // );
+  // var countDownDate = new Date(updatedDate).getTime();
 
-  // Update the count down every 1 second
-  var x = setInterval(function () {
-    // Get today's date and time
-    var now = new Date().getTime();
+  // // Update the count down every 1 second
+  // var x = setInterval(function () {
+  //   // Get today's date and time
+  //   var now = new Date().getTime();
 
-    // Find the distance between now and the count down date
-    var distance = countDownDate - now;
+  //   // Find the distance between now and the count down date
+  //   var distance = countDownDate - now;
 
-    // Time calculations for days, hours, minutes and seconds
-    setOTime({
-      days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-      minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-      seconds: Math.floor((distance % (1000 * 60)) / 1000),
-    });
-  }, 1000);
+  //   // Time calculations for days, hours, minutes and seconds
+  //   setOTime({
+  //     days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+  //     hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+  //     minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+  //     seconds: Math.floor((distance % (1000 * 60)) / 1000),
+  //   });
+  // }, 1000);
+
+  useEffect(() => {
+    if (!p.completionDate || p.state !== "onGoing") return;
+    const interval = setInterval(() => {
+      const orderEndDate = new Date(p.completionDate).getTime();
+      const now = new Date().getTime();
+      const timeLeft = orderEndDate - now;
+      setOTime({
+        days: Math.floor(timeLeft / (1000 * 60 * 60 * 24)),
+        hours: Math.floor(
+          (timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        ),
+        minutes: Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((timeLeft % (1000 * 60)) / 1000),
+      });
+    }, 1000);
+    return () => clearInterval(interval);
+  }, [p.completionDate]);
 
   const calculatedTime = () => {
     const updatedDate = new Date(
@@ -168,32 +187,44 @@ export default function OrderCountDown({ p, setP }) {
           </Button>
         </Grid>
 
-        {activeProfile === "seller" && (
-          <Grid
-            item
-            xs={12}
-            display={"flex"}
-            justifyContent={"center"}
-            mt={0.5}
-          >
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: colors.becomePartnerGreen,
-                color: colors.white,
-                "&:hover": {
+        {activeProfile === "seller" &&
+          p.state != "completed" &&
+          p.state != "cancelled" && (
+            <Grid
+              item
+              xs={12}
+              display={"flex"}
+              justifyContent={"center"}
+              mt={0.5}
+            >
+              <Button
+                variant="contained"
+                sx={{
                   backgroundColor: colors.becomePartnerGreen,
                   color: colors.white,
-                },
-                minWidth: "135px",
-                maxWidth: "135px",
-              }}
-              onClick={() => setDeliverOrderPopValue(true)}
-            >
-              Deliver
-            </Button>
-          </Grid>
-        )}
+                  "&:hover": {
+                    backgroundColor: colors.becomePartnerGreen,
+                    color: colors.white,
+                  },
+                  minWidth: "135px",
+                  maxWidth: "135px",
+                }}
+                onClick={() => {
+                  if (p.state === "requirementGathering") {
+                    handleStart();
+                  } else {
+                    setDeliverOrderPopValue(true);
+                  }
+                }}
+              >
+                {p.state === "requirementGathering"
+                  ? "Start Order"
+                  : p.state === "delivered"
+                  ? "Deliver Again"
+                  : "Deliver Order"}
+              </Button>
+            </Grid>
+          )}
         {activeProfile === "seller" && (
           <Grid
             item

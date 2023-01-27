@@ -30,7 +30,7 @@ export default function EmployerReviewTimeLine({ p, setP }) {
     time: "",
     textFromEmployer: "",
     previousRating: p?.hired?.userId?.stars,
-    overAllRating: 5,
+    overAllRating: 0,
     comment: "",
   });
   const [errors, setErrors] = useState({});

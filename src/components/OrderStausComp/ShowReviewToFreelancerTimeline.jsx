@@ -30,7 +30,7 @@ export default function ShowReviewToFreelancerTimeline({ p, setP }) {
     time: "",
     textFromEmployer: "",
     previousRating: p?.creatorId?.stars,
-    overAllRating: 5,
+    overAllRating: 0,
     comment: "",
   });
   const [errors, setErrors] = useState({});

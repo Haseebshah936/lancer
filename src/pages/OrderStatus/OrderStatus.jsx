@@ -143,6 +143,8 @@ export default function OrderStatus() {
               {/*  */}
               {/* If requirements are requested compoenent starts here */}
               {user?._id === p?.creatorId?._id &&
+              p.state !== "completed" &&
+              p.state !== "cancelled" &&
               p?.requirenments[0]?.state === "pending" ? (
                 <SendRquestedRequiremnetsTimeLine
                   userName={p?.hired?.userId?.name}
