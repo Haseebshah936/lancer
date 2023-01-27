@@ -79,6 +79,13 @@ import { watchCollection } from "./db/helperFunction";
 import useWebRTC from "./Hooks/WebRTC/useWebRTC";
 import mongoose from "mongoose";
 import Banned from "./pages/Banned";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+// import realmData from "./realm.json";
+const stripePromise = loadStripe(
+  "pk_test_51JgDf0HHulWCxCO2rvJaz2Jxm1yUfy52n9weCoqxnXDH4jVVrjyu4UewmnhBGJSYamZhTvwx8JRkaKPq4w4ZwRdn00gD4wZNAX"
+);
 
 const AppNavigation = ({ currentUser, dispatch, state, user }) => {
   const breakAsyncIterator1 = useRef(true);
@@ -275,6 +282,11 @@ function App(props) {
   const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
   const [userFavorites, setUserFavorites] = useState([]);
 
+  const options = {
+    // passing the client secret obtained from the server
+    clientSecret:
+      "sk_test_51JgDf0HHulWCxCO2kNiKxyPfuGnO56w1zqEIlVUYFyPBExEk2xRxuIwzezz73kfH1gFYaqQKV2QZdVf3zGVu8LPy00LxSgIpcR",
+  };
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
   }, [currentUser]);

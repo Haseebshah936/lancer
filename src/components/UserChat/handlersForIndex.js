@@ -99,7 +99,6 @@ export const handleSend = (message, user, active, setNewData) => {
       id: active.id,
     })
     .then((res) => {
-      console.log(res.data);
       if (
         res.data.spam_pre === "true" ||
         res.data.curse_pre === "true" ||
