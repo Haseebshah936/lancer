@@ -30,10 +30,39 @@ export default function OrderStatusTimeLine({ p }) {
       "cancelled",
       "completed",
     ];
-    const statusIndex = statusArr.indexOf(p?.state);
-    const statusArr2 = statusArr.slice(0, statusIndex + 1);
-    // console.log("statusArr2", statusArr2);
-    setOrderStatus(statusArr2);
+    if (p?.state === " requirementGathering") {
+      setOrderStatus(["requirementGathering"]);
+    } else if (p?.state === "onGoing") {
+      setOrderStatus(["requirementGathering", "onGoing"]);
+    } else if (p?.state === "delivered") {
+      setOrderStatus(["requirementGathering", "onGoing", "delivered"]);
+    } else if (p?.state === "revision") {
+      setOrderStatus([
+        "requirementGathering",
+        "onGoing",
+        "delivered",
+        "revision",
+      ]);
+    } else if (p?.state === "extended") {
+      setOrderStatus([
+        "requirementGathering",
+        "onGoing",
+        "delivered",
+        "revision",
+        "extended",
+      ]);
+    } else if (p?.state === "disputed") {
+      setOrderStatus(["requirementGathering", "onGoing", "disputed"]);
+    } else if (p?.state === "cancelled") {
+      setOrderStatus(["requirementGathering", "disputed", "cancelled"]);
+    } else if (p?.state === "completed") {
+      setOrderStatus([
+        "requirementGathering",
+        "onGoing",
+        "delivered",
+        "completed",
+      ]);
+    }
   }, [orderStatus]);
   return (
     <div
