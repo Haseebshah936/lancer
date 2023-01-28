@@ -60,24 +60,19 @@ function Checkout({ togglePaymentModal, project }) {
         redirect: "if_required",
       })
       .then((res) => {
-        requestMethod
-          .post("invoice/invoiceAndProject ", project)
-          .then(() => {
-            toast.success("Order Placed Successfully");
-            navigate("/home");
-            setLoading(false);
-          })
-          .catch((err) => {
-            console.log(err);
-            handleError(err);
-            setLoading(false);
-
-            // navigate("/home");
-          });
+        if (res.error) {
+          throw res.error.message;
+        }
+        requestMethod.post("invoice/invoiceAndProject ", project).then(() => {
+          toast.success("Order Placed Successfully");
+          navigate("/home");
+          setLoading(false);
+        });
       })
       .catch((err) => {
         console.log(err);
-        handleError(err);
+        toast.error(err);
+        setLoading(false);
       });
 
     if (error) {
