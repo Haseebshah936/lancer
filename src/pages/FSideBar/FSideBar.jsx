@@ -20,6 +20,7 @@ import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import PaidOutlinedIcon from "@mui/icons-material/PaidOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { mobile } from "../../responsive";
 import { Link, NavLink } from "react-router-dom";
 import { useRealmContext } from "../../db/RealmContext";
@@ -137,7 +138,7 @@ const FSidebar = () => {
               <NavLink to="/f/Gigs">
                 <CustomListItem disablePadding>
                   <ListItemIcon>
-                    <MessageOutlinedIcon
+                    <AutoAwesomeIcon
                       sx={{
                         color: colors.textGreen,
                         fontSize: "2.2rem",
@@ -145,7 +146,7 @@ const FSidebar = () => {
                       }}
                     />
                   </ListItemIcon>
-                  <CustomListText primary="Gigs" disableTypography={true} />
+                  <CustomListText primary="Products" disableTypography={true} />
                 </CustomListItem>
               </NavLink>
               <Link to="/f/projects">

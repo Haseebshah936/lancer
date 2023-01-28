@@ -135,7 +135,14 @@ export default function OrderStatus() {
               {/* Request For for more requirements time line starts here */}
               {user?._id !== p.creatorId._id &&
               p?.requirenments[0]?.state === "pending" ? (
-                <RequestForRequirements pID={p?._id}></RequestForRequirements>
+                <div>
+                  {p.state === "pending" ||
+                  p.state === "requirementGathering" ? (
+                    <RequestForRequirements
+                      pID={p?._id}
+                    ></RequestForRequirements>
+                  ) : null}
+                </div>
               ) : (
                 <div></div>
               )}
@@ -309,7 +316,7 @@ export default function OrderStatus() {
           >
             <Box>
               <OrderCountDown p={p} setP={setP}></OrderCountDown>
-              <OrderStatusTimeLine></OrderStatusTimeLine>
+              <OrderStatusTimeLine p={p}></OrderStatusTimeLine>
             </Box>
           </Grid>
           <Grid xs={11} mt={0.7}></Grid>

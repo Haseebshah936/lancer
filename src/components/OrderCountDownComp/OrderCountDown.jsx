@@ -95,6 +95,15 @@ export default function OrderCountDown({ p, setP }) {
         details: "started",
       })
       .then((res) => {
+        requestMethod
+          .get("project/" + p._id)
+          .then((res) => {
+            setP(res.data);
+            console.log("res.data", res.data);
+          })
+          .catch((err) => {
+            // navigate("/");
+          });
         toast.success("Project Started Successfully");
       })
       .catch((err) => {

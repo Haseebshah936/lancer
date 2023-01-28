@@ -23,10 +23,10 @@ export default function PendingProjects({ data }) {
     _DATA.jump(p);
   };
   const acceptPerposalFun = async (id) => {
+    drawerState(false);
     await requestMethod.put(`proposal/accept/${id}`).then((res) => {
       console.log(res.data);
     });
-    drawerState(false);
   };
 
   const perposalsAgainstProjectByIdFun = async (id) => {

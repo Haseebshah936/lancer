@@ -39,6 +39,7 @@ import CustomFilledButton from "./../../components/CustomFilledButton/index";
 import { useNavigate } from "react-router-dom";
 import GigMorePopper from "./GigMorePopper";
 import { ToastContainer, toast } from "react-toastify";
+import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import "react-toastify/dist/ReactToastify.css";
 
 export default function FGigs() {
@@ -111,12 +112,12 @@ export default function FGigs() {
                 >
                   {gigs.find((gig) => gig.state === "live") ? (
                     <Box>
-                      <TitleP>Active Gigs</TitleP>
+                      <TitleP>Active Products</TitleP>
                     </Box>
                   ) : null}
                   <Box>
                     <CustomFilledButton
-                      title={"Create Gigs"}
+                      title={"Create Product"}
                       style={{ marginTop: "0px" }}
                       onClick={() => navigate("/createGig")}
                     />
@@ -241,7 +242,7 @@ export default function FGigs() {
                 >
                   {gigs.find((gig) => gig.state !== "live") ? (
                     <Box>
-                      <TitleP>Paused Gigs</TitleP>
+                      <TitleP>Paused Products</TitleP>
                     </Box>
                   ) : null}
                 </Grid>

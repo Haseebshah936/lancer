@@ -112,7 +112,6 @@ export default function ProjectDeiverdedTimeLine({
               ></GreenBorderTextField>
             </Grid>
           </Grid>
-
           <Button
             variant={"contained"}
             sx={{
@@ -213,7 +212,8 @@ export default function ProjectDeiverdedTimeLine({
             )}
           </RequirementDescriptionBox>
         </RequirementBox>
-        {p.state === "onGoing" && (
+        {/* "delivered", */}
+        {p?.state === "delivered" && (
           <Grid container>
             <Grid item xs={12} display={"flex"} justifyContent={"flex-end"}>
               {user?._id === p?.creatorId?._id &&

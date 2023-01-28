@@ -7,16 +7,34 @@ import VerifiedIcon from "@mui/icons-material/Verified";
 
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import DeliverOrderComp from "./DeliverOrderComp";
+import { requestMethod } from "../../requestMethod";
 
-export default function OrderStatusTimeLine() {
-  const [orderStatus, setOrderStatus] = React.useState({
-    gigImageLink:
-      "https://media.graphassets.com/resize=fit:clip,height:523,/output=format:webp/blgTs2rjTDOmunPXgHoT",
-    gigTitle: "I will do data entry work, copy paste work, excel work",
-    employerUserName: "John Doe",
-    deliveryDate: "Nov 6, 2021",
-    price: "100",
-  });
+export default function OrderStatusTimeLine({ p }) {
+  const [orderStatus, setOrderStatus] = useState([]);
+
+  const [productDetails, setProductDetails] = useState({});
+  React.useEffect(() => {
+    requestMethod.get("product/" + p?.hired?.productId).then((res) => {
+      setProductDetails(res.data);
+    });
+  }, []);
+  React.useEffect(() => {
+    var statusArr = [
+      "pending",
+      "requirementGathering",
+      "onGoing",
+      "delivered",
+      "revision",
+      "extended",
+      "disputed",
+      "cancelled",
+      "completed",
+    ];
+    const statusIndex = statusArr.indexOf(p?.state);
+    const statusArr2 = statusArr.slice(0, statusIndex + 1);
+    // console.log("statusArr2", statusArr2);
+    setOrderStatus(statusArr2);
+  }, [orderStatus]);
   return (
     <div
       style={{
@@ -24,17 +42,18 @@ export default function OrderStatusTimeLine() {
         padding: "10px",
         borderRadius: "7px",
         marginTop: "10px",
+        overflow: "hidden",
       }}
     >
       <Grid container>
         <Grid item display={"flex"} justifyContent={"center"} xs={12} mb={0.7}>
-          <TimeTile>Time Left to deliver</TimeTile>
+          <TimeTile>Order Details</TimeTile>
         </Grid>
         <Grid container item xs={12}>
           <Grid item xs={4}>
             <Box
               component="img"
-              src={orderStatus?.gigImageLink}
+              src={productDetails?.images}
               alt="order"
               sx={{
                 width: "100%",
@@ -47,7 +66,7 @@ export default function OrderStatusTimeLine() {
           </Grid>
           <Grid container item xs={8} mb={1}>
             <Grid item xs={12} p={0.4}>
-              <GigTitle>{orderStatus?.gigTitle}</GigTitle>
+              <GigTitle>{productDetails?.title}</GigTitle>
             </Grid>
           </Grid>
           <Grid container item xs={12} p={1}>
@@ -55,66 +74,44 @@ export default function OrderStatusTimeLine() {
               <SubTitle>Ordered By</SubTitle>
             </SubTitleGrid>
             <Grid item xs={6}>
-              <UserNameP>{orderStatus.employerUserName}</UserNameP>
+              <UserNameP>{p?.creatorId?.name}</UserNameP>
             </Grid>
           </Grid>
           <Grid container item xs={12} p={1}>
             <SubTitleGrid item xs={6}>
-              <SubTitle>Delivery Date</SubTitle>
+              <SubTitle>Order Startted At</SubTitle>
             </SubTitleGrid>
             <Grid item xs={6}>
-              <TextP>{orderStatus.deliveryDate}</TextP>
+              <TextP>{p?.createdAt.substring(0, 10)}</TextP>
             </Grid>
           </Grid>
           <Grid container item xs={12} p={1}>
-            <SubTitleGrid item xs={6}>
-              <SubTitle>Total Price</SubTitle>
+            <SubTitleGrid item xs={12}>
+              <SubTitle>Requirement gathering Stage</SubTitle>
             </SubTitleGrid>
-            <Grid item xs={6}>
-              <TextP>{orderStatus.price}</TextP>
-            </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            xs={12}
-            display={"flex"}
-            justifyContent={"center"}
-          >
-            <Grid item xs={5}>
-              <VerifiedIcon
-                sx={{
-                  height: "25px",
-                  width: "25px",
-                  color: colors.becomePartnerGreen,
-                }}
-              ></VerifiedIcon>
+          {orderStatus?.map((item, index) => (
+            <Grid
+              item
+              container
+              xs={12}
+              display={"flex"}
+              justifyContent={"center"}
+            >
+              <Grid item xs={3}>
+                <VerifiedIcon
+                  sx={{
+                    height: "25px",
+                    width: "25px",
+                    color: colors.becomePartnerGreen,
+                  }}
+                ></VerifiedIcon>
+              </Grid>
+              <Grid item xs={8} display={"flex"} alignItems={"center"}>
+                <TextP>{item}</TextP>
+              </Grid>
             </Grid>
-            <Grid item xs={5} display={"flex"} alignItems={"center"}>
-              <TextP>Step 1</TextP>
-            </Grid>
-          </Grid>
-          <Grid
-            item
-            container
-            xs={12}
-            display={"flex"}
-            justifyContent={"center"}
-            mt={1}
-          >
-            <Grid item xs={5}>
-              <RadioButtonUncheckedIcon
-                sx={{
-                  height: "25px",
-                  width: "25px",
-                  color: colors.becomePartnerGreen,
-                }}
-              ></RadioButtonUncheckedIcon>
-            </Grid>
-            <Grid item xs={5} display={"flex"} alignItems={"center"}>
-              <TextP>Step 2</TextP>
-            </Grid>
-          </Grid>
+          ))}
         </Grid>
       </Grid>
     </div>
