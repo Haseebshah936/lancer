@@ -10,6 +10,7 @@ import {
   ThemeProvider,
   createTheme,
   CircularProgress,
+  Typography,
 } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
@@ -23,12 +24,14 @@ import { useRealmContext } from "../../db/RealmContext";
 import PortfolioCard from "../../components/PortfolioCard";
 import PortfolioCardMobile from "../../components/PortfolioCardMobile";
 import { mobile } from "../../responsive";
+import { FavoriteBorderOutlined } from "@mui/icons-material";
 
 export default function EFavourites() {
   const { user } = useRealmContext();
   const [value, setValue] = useState(0);
   const [fav, setFav] = useState([]);
   const [loader, setLoader] = useState(true);
+  // const [favFound, setFavFound] = useState(false);
 
   const getFavorites = async (id) => {
     const response = await requestMethod.get("favorite/user/" + id);
@@ -107,7 +110,7 @@ export default function EFavourites() {
                               }}
                             />
                           </Grid>
-                        ) : (
+                        ) : fav.length > 0 ? (
                           fav.map((c, index) => (
                             <Grid item>
                               <Laptop>
@@ -151,6 +154,22 @@ export default function EFavourites() {
                               </Mobile>
                             </Grid>
                           ))
+                        ) : (
+                          <Grid
+                            item
+                            container
+                            justifyContent="center"
+                            alignItems="center"
+                            direction="column"
+                            my={2}
+                          >
+                            <Typography variant="h2">
+                              No favorites found
+                            </Typography>
+                            <FavoriteBorderOutlined
+                              sx={{ fontSize: "10rem" }}
+                            />
+                          </Grid>
                         )}
                         {/* {favData.map((per, index) => (
                           <Grid

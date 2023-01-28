@@ -278,7 +278,7 @@ function Head({
                   setCustomerOpen(true);
                 }}
               >
-                Customer&nbsp;Support
+                Contact&nbsp;Support
               </Link>
             ) : null}
 
