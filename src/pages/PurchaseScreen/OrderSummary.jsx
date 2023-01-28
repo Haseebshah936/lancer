@@ -46,15 +46,17 @@ export default function OrderSummary({
   const [clientSecret, setClientSecret] = React.useState("");
   const { setOrder } = useCustomContext();
   const [project, setProject] = React.useState({});
+  console.log("Order", order);
 
   useEffect(() => {
-    const { gigID, planName, freelancerId, extraFeatures } = order;
+    const { gigID, planName, freelancerId, extraFeatures, proposalId } = order;
     console.log({
       productId: gigID,
       extras: extraFeatures,
       packageSelected: planName,
       freelancerId,
       employerId: user._id,
+      proposalId,
     });
     setOrderDetails({
       productId: gigID,
@@ -62,6 +64,7 @@ export default function OrderSummary({
       packageSelected: planName,
       freelancerId,
       employerId: user._id,
+      proposalId,
     });
   }, []);
 
@@ -140,16 +143,17 @@ export default function OrderSummary({
     // creditCard
     try {
       let res;
-      res = await requestMethod.post("invoice/prjectIntent", orderDetails);
-      const { client_secret: clientSecret, id } = res.data;
-      if (clientSecret) {
-        setTogglePayment(true);
-        setClientSecret(clientSecret);
-      }
       if (method === "creditCard") {
+        res = await requestMethod.post("invoice/prjectIntent", orderDetails);
+        const { client_secret: clientSecret, id } = res.data;
+        if (clientSecret) {
+          setTogglePayment(true);
+          setClientSecret(clientSecret);
+        }
         setProject({
           title: order.title,
           freelancerId: order.freelancerId,
+          proposalId: order?.proposalId,
           employerId: user._id,
           amount: order.total,
           paymentMethod: method,
@@ -217,33 +221,35 @@ export default function OrderSummary({
         </Grid>
         <Divider sx={{ my: 2 }} />
 
-        <Grid item container direction="row" justifyContent="space-between">
-          <Grid item mobile={8}>
-            {" "}
-            <Typography
-              sx={{
-                fontSize: "1.7rem",
-                fontWeight: "bold",
-                color: "#62646a",
-              }}
+        {order?.planName && (
+          <Grid item container direction="row" justifyContent="space-between">
+            <Grid item mobile={8}>
+              {" "}
+              <Typography
+                sx={{
+                  fontSize: "1.7rem",
+                  fontWeight: "bold",
+                  color: "#62646a",
+                }}
+              >
+                {order?.gigQuantity > 1
+                  ? order?.planName + " (X" + order?.gigQuantity + ")"
+                  : order?.planName}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              container
+              mobile={4}
+              direction="row"
+              justifyContent="flex-end"
             >
-              {order?.gigQuantity > 1
-                ? order?.planName + " (X" + order?.gigQuantity + ")"
-                : order?.planName}
-            </Typography>
+              <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
+                ${order?.planCost * order?.gigQuantity}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            mobile={4}
-            direction="row"
-            justifyContent="flex-end"
-          >
-            <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
-              ${order?.planCost * order?.gigQuantity}
-            </Typography>
-          </Grid>
-        </Grid>
+        )}
         <Grid item container mobile={12} sx={{ pt: 1 }}>
           <CustomList sx={{ py: 0 }}>
             {order?.features?.map((feature) => {

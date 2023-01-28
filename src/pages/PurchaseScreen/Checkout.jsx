@@ -63,11 +63,21 @@ function Checkout({ togglePaymentModal, project }) {
         if (res.error) {
           throw res.error.message;
         }
-        requestMethod.post("invoice/invoiceAndProject ", project).then(() => {
-          toast.success("Order Placed Successfully");
-          navigate("/home");
-          setLoading(false);
-        });
+        if (project.proposalId) {
+          requestMethod
+            .put(`proposal/accept/${project.proposalId}`)
+            .then((res) => {
+              toast.success("Order Placed Successfully");
+              navigate("/home");
+              setLoading(false);
+            });
+        } else {
+          requestMethod.post("invoice/invoiceAndProject ", project).then(() => {
+            toast.success("Order Placed Successfully");
+            navigate("/home");
+            setLoading(false);
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

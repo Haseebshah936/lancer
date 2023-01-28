@@ -5,6 +5,7 @@ import colors from "../../utils/colors";
 import usePagination from "./Pagination";
 import { requestMethod } from "./../../requestMethod";
 import noproject from "../../utils/noproject.png";
+import { useNavigate } from "react-router-dom";
 
 export default function PendingProjects({ data }) {
   const [perposalAgainstProjectById, setPerposalAgainstProjectById] = useState(
@@ -13,20 +14,38 @@ export default function PendingProjects({ data }) {
   const [drawerState, setDrawerState] = useState(false);
   const [pProjects, setPProjects] = useState([]);
   const [page, setPage] = useState(1);
+  const navigate = useNavigate();
   const PER_PAGE = 5;
 
   const count = Math.ceil(data.length / PER_PAGE);
   const _DATA = usePagination(data, PER_PAGE);
-
+  console.log(data);
   const handleChange = (e, p) => {
     setPage(p);
     _DATA.jump(p);
   };
-  const acceptPerposalFun = async (id) => {
-    drawerState(false);
-    await requestMethod.put(`proposal/accept/${id}`).then((res) => {
-      console.log(res.data);
+  const acceptPerposalFun = async (proposal) => {
+    // await requestMethod.put(`proposal/accept/${id}`).then((res) => {
+    //   console.log(res.data);
+    // });
+    console.log(proposal);
+    navigate("/payments", {
+      state: {
+        title: proposal.productId.title,
+        description: data.description,
+        gigID: proposal.productId._id,
+        image: proposal.productId.images[0],
+        proposalId: proposal._id,
+        amount: proposal.budget,
+        total: proposal.budget,
+        days: proposal.duration,
+        delivery: proposal.duration,
+        planName: "",
+        freelancerId: proposal.creatorId._id,
+        extraFeatures: [],
+      },
     });
+    setDrawerState(false);
   };
 
   const perposalsAgainstProjectByIdFun = async (id) => {
@@ -130,7 +149,7 @@ export default function PendingProjects({ data }) {
                     },
                   }}
                   onClick={() => {
-                    acceptPerposalFun(p._id);
+                    acceptPerposalFun(p);
                   }}
                 >
                   {"Accept"}
