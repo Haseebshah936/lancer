@@ -158,6 +158,7 @@ function CustomChatItem({
           onClick(chatroom);
         }}
         {...chatroom}
+        title={chatroom.isCustomerSupport ? "Customer Support" : chatroom.title}
         avatar={chatroom.isCustomerSupport ? customerSupport : chatroom.avatar}
         onClickMute={() => onClickMute(chatroom, chatroom.muted)}
         statusColor={status ? colors.lightGreen : colors.gray}

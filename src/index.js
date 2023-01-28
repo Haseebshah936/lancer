@@ -7,7 +7,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { CloudinaryContext } from "cloudinary-react";
 import { RealmAppProvider } from "./db/RealmContext";
 import { createTheme, ThemeProvider } from "@mui/material";
-// import realmData from "./realm.json";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

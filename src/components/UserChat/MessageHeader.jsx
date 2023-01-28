@@ -29,6 +29,7 @@ import { servers } from "../../utils/VIdeoCall/servers";
 import useWebRTC from "../../Hooks/WebRTC/useWebRTC";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { customerSupport } from "../../assets";
 
 function MessageHeader({
   onBackClick = () => {},
@@ -47,11 +48,11 @@ function MessageHeader({
   const dateToday = new Date(today).getDate();
   const monthToday = new Date(today).getMonth();
   const yearToday = new Date(today).getFullYear();
-  const { activeChatroomStatus, setCall } = useCustomContext();
+  const { activeChatroom, activeChatroomStatus, setCall } = useCustomContext();
   const [toggle, setToggle] = useState(false);
   const [toggleMetting, setToggleMeeting] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { handleStartConnection, } = useWebRTC();
+  const { handleStartConnection } = useWebRTC();
   const date = dayjs(new Date());
   const navigate = useNavigate();
 
@@ -180,7 +181,12 @@ function MessageHeader({
         <IconButtonCustom onClick={onBackClick}>
           <ArrowBack fontSize="medium" />
         </IconButtonCustom>
-        <Avatar src={uri} alt="avatar" size="small" type="circle" />
+        <Avatar
+          src={activeChatroom?.isCustomerSupport ? customerSupport : uri}
+          alt="avatar"
+          size="small"
+          type="circle"
+        />
         <Box
           display={"flex"}
           flexDirection={"column"}
@@ -195,10 +201,12 @@ function MessageHeader({
               },
             }}
             LinkComponent={"h5"}
-            onClick={toggleDrawer}
+            onClick={() => {
+              if (!activeChatroom?.isCustomerSupport) toggleDrawer();
+            }}
           >
             <Typography variant="h5" sx={{ cursor: "pointer" }}>
-              {name}
+              {activeChatroom?.isCustomerSupport ? "Customer Support" : name}
             </Typography>
           </ButtonBase>
           {!isGroup && !temp && (
@@ -241,7 +249,10 @@ function MessageHeader({
             </IconButton>
           </>
         ) : (
-          <IconButton onClick={handleToggleMeeting}>
+          <IconButton
+            disabled={activeChatroom?.isCustomerSupport}
+            onClick={handleToggleMeeting}
+          >
             <Event fontSize="large" />
           </IconButton>
         )}
