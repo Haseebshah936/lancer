@@ -388,7 +388,7 @@ function Head({
                   fontWeight: "bold",
                 },
               }}
-              label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
+              label={`$${user?.currentBalance ? user?.currentBalance : 0}`}
               variant="outlined"
             />
             {/* ) : null} */}
