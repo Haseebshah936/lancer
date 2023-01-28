@@ -9,6 +9,7 @@ import {
   Tab,
   Tabs,
   ThemeProvider,
+  Typography,
 } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
@@ -22,6 +23,7 @@ import { requestMethod } from "../../requestMethod";
 import PortfolioCard from "../../components/PortfolioCard";
 import PortfolioCardMobile from "../../components/PortfolioCardMobile";
 import { mobile } from "../../responsive";
+import { FavoriteBorderOutlined } from "@mui/icons-material";
 export default function FFavourites() {
   const { user } = useRealmContext();
   const [fav, setFav] = useState([]);
@@ -104,7 +106,7 @@ export default function FFavourites() {
                             }}
                           />
                         </Grid>
-                      ) : (
+                      ) : fav.length > 0 ? (
                         fav.map((c, index) => (
                           <Grid item>
                             <Laptop>
@@ -144,6 +146,20 @@ export default function FFavourites() {
                             </Mobile>
                           </Grid>
                         ))
+                      ) : (
+                        <Grid
+                          item
+                          container
+                          justifyContent="center"
+                          alignItems="center"
+                          direction="column"
+                          my={2}
+                        >
+                          <Typography variant="h2">
+                            No favorites found
+                          </Typography>
+                          <FavoriteBorderOutlined sx={{ fontSize: "10rem" }} />
+                        </Grid>
                       )}
                       {/* {favData.map((per, index) => (
                           <Grid
