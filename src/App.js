@@ -274,6 +274,8 @@ function App(props) {
   const [selectedPlan, setSelectedPlan] = useState({});
   const [state, dispatch] = useReducer(webRTCReducer, webRTCInitialState);
   const [userFavorites, setUserFavorites] = useState([]);
+  const [aptitudeOpen, setAptitudeOpen] = useState(false);
+  const [customerOpen, setCustomerOpen] = useState(false);
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
@@ -282,6 +284,10 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        customerOpen,
+        setCustomerOpen,
+        aptitudeOpen,
+        setAptitudeOpen,
         userFavorites,
         setUserFavorites,
         selectedPlan,

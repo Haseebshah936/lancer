@@ -19,6 +19,7 @@ import Joi from "joi-browser";
 import { toast } from "react-toastify";
 import { useRealmContext } from "../../db/RealmContext";
 import { handleError } from "../../utils/helperFunctions";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function AptitudeDialouge({ setOpen, open }) {
   const { user } = useRealmContext();
@@ -27,6 +28,7 @@ export default function AptitudeDialouge({ setOpen, open }) {
   const [categoryValue, setCategoryValue] = useState("");
   const [subCategoryValue, setSubCategoryValue] = useState("");
   const [reasonVar, setReasonVar] = useState("");
+  const { aptitudeOpen, setAptitudeOpen } = useCustomContext();
 
   const handleChangeCate = (event) => {
     setCategoryValue(event.target.value);
@@ -37,11 +39,11 @@ export default function AptitudeDialouge({ setOpen, open }) {
   };
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setAptitudeOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setAptitudeOpen(false);
     setCategoryValue("");
     setSubCategoryValue("");
     setReasonVar("");
@@ -90,7 +92,7 @@ export default function AptitudeDialouge({ setOpen, open }) {
   return (
     <div>
       <Dialog
-        open={open}
+        open={aptitudeOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

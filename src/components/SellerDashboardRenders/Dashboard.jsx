@@ -13,8 +13,10 @@ import AptitudeDialouge from "./AptitudeDialouge";
 import { UserState } from "realm-web";
 import ContactCSDialouge from "./ContactCSDialouge";
 import colors from "../../utils/colors";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
+
   const [views, setViews] = useState([]);
   const location = useLocation();
   const path = location.pathname.split("/");
@@ -35,15 +37,13 @@ const Dashboard = ({ ongoingData, loader }) => {
       getViews(user._id);
     }
   }, [user]);
-  const [open, setOpen] = useState(false);
-  const [cOpen, setCOpen] = useState(false);
 
   return (
     <>
       {" "}
-      <AptitudeDialouge setOpen={setOpen} open={open}></AptitudeDialouge>
-      <ContactCSDialouge cOpen={cOpen} setCOpen={setCOpen}></ContactCSDialouge>
-      <Grid
+      <AptitudeDialouge />
+      <ContactCSDialouge />
+      {/* <Grid
         container
         display={"flex"}
         justifyContent={{ xs: "center", sm: "flex-start" }}
@@ -84,7 +84,7 @@ const Dashboard = ({ ongoingData, loader }) => {
             Contact Customer Support
           </Button>
         </Grid>
-      </Grid>
+      </Grid> */}
       <Grid
         item
         container

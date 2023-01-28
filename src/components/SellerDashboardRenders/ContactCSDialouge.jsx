@@ -14,11 +14,15 @@ import { toast } from "react-toastify";
 import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import { handleError } from "../../utils/helperFunctions";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 
 export default function ContactCSDialouge({ setCOpen, cOpen }) {
   const { user } = useRealmContext();
   const [reasonVar, setReasonVar] = useState("");
   const [errrors, setErrors] = useState({});
+
+  const { customerOpen, setCustomerOpen } = useCustomContext();
+
   const Schama = {
     reasonVar: Joi.string().required().min(10).label("Reason"),
   };
@@ -39,18 +43,18 @@ export default function ContactCSDialouge({ setCOpen, cOpen }) {
   };
 
   const handleClickOpen = () => {
-    setCOpen(true);
+    setCustomerOpen(true);
   };
 
   const handleClose = () => {
-    setCOpen(false);
+    setCustomerOpen(false);
     setReasonVar("");
   };
 
   return (
     <div>
       <Dialog
-        open={cOpen}
+        open={customerOpen}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"

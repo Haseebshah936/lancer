@@ -78,6 +78,8 @@ function Head({
     terms,
     setTerms,
     setSearchDataLoader,
+    setAptitudeOpen,
+    setCustomerOpen,
   } = useCustomContext();
 
   const handleSubmit = (search) => {
@@ -260,6 +262,26 @@ function Head({
               <NavLink to="/e/dashboard">Dashboard</NavLink>
             )}
 
+            {activeProfile === "seller" ? (
+              <Link
+                onClick={() => {
+                  setAptitudeOpen(true);
+                }}
+              >
+                Aptitude&nbsp;Test
+              </Link>
+            ) : null}
+
+            {activeProfile === "seller" ? (
+              <Link
+                onClick={() => {
+                  setCustomerOpen(true);
+                }}
+              >
+                Customer&nbsp;Support
+              </Link>
+            ) : null}
+
             {/* <NavLink to="/howitwork">How&nbsp;it&nbsp;Works</NavLink> */}
           </SubContainer>
           <ButtonContainer>
@@ -350,26 +372,26 @@ function Head({
               ></Avatar>
             </IconButton>
 
-            {activeProfile === "seller" ? (
-              <Chip
-                sx={{
-                  "@media (max-width: 786px)": {
-                    display: "none",
-                  },
-                  color: colors.textGreen,
-                  borderColor: colors.textGreen,
-                  borderWidth: "2px",
+            {/* {activeProfile === "seller" ? ( */}
+            <Chip
+              sx={{
+                "@media (max-width: 786px)": {
+                  display: "none",
+                },
+                color: colors.textGreen,
+                borderColor: colors.textGreen,
+                borderWidth: "2px",
 
-                  "& .MuiChip-label": {
-                    paddingInline: "10px",
-                    fontSize: "1.3rem",
-                    fontWeight: "bold",
-                  },
-                }}
-                label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
-                variant="outlined"
-              />
-            ) : null}
+                "& .MuiChip-label": {
+                  paddingInline: "10px",
+                  fontSize: "1.3rem",
+                  fontWeight: "bold",
+                },
+              }}
+              label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
+              variant="outlined"
+            />
+            {/* ) : null} */}
           </ButtonContainer>
         </Wrapper>
       </Container>
