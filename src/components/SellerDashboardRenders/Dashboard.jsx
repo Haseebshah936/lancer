@@ -165,7 +165,8 @@ const Dashboard = ({ ongoingData, loader }) => {
                 ? "No Cancelled Orders"
                 : cancelledOrdersCount
             }
-            link={activeProfile === "seller" ? "/f/reviews" : "/e/reviews"}
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 4 : 3}
           />
         </Grid>
         <Grid item container columnSpacing={2} rowSpacing={2}>
