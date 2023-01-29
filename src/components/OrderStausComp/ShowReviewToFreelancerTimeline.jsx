@@ -247,7 +247,7 @@ export default function ShowReviewToFreelancerTimeline({ p, setP }) {
                           buyerId: p?.creatorId?._id,
                           projectId: p?._id,
                           productId: p?.hired?.productId,
-                          sender: "client",
+                          sender: "seller",
                         };
                         const v = validate();
                         if (v) {

@@ -247,7 +247,7 @@ export default function EmployerReviewTimeLine({ p, setP }) {
                           buyerId: p?.creatorId?._id,
                           projectId: p?._id,
                           productId: p?.hired?.productId,
-                          sender: "seller",
+                          sender: "client",
                         };
                         const v = validate();
                         if (v) {

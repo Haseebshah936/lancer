@@ -53,7 +53,13 @@ export default function OrderCountDown({ p, setP }) {
   // }, 1000);
 
   useEffect(() => {
-    if (!p.completionDate || p.state !== "onGoing") return;
+    if (
+      !p.completionDate ||
+      p.state === "requirementGathering" ||
+      p.state === "cancelled" ||
+      p.state === "cancelled"
+    )
+      return;
     const interval = setInterval(() => {
       const orderEndDate = new Date(p.completionDate).getTime();
       const now = new Date().getTime();
