@@ -82,6 +82,7 @@ import Banned from "./pages/Banned";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentStatus from "./pages/PaymentStatus";
+import { regSw, subscribe } from "./registerSW";
 
 // import realmData from "./realm.json";
 const stripePromise = loadStripe(
@@ -288,10 +289,27 @@ function App(props) {
   const [searchPagination, setSearchPagination] = useState(1);
   const [pageCount, setpageCount] = useState(1);
   const [order, setOrder] = useState({});
-
+  const [serviceWorkerReg, setServiceWorkerReg] = useState(null);
+  async function registerAndSubscribe() {
+    try {
+      const serviceWorkerReg = await regSw();
+      console.log("service worker registered");
+      setServiceWorkerReg(serviceWorkerReg);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
   }, [currentUser]);
+
+  useEffect(() => {
+    registerAndSubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (user) subscribe(serviceWorkerReg, user._id);
+  }, [user]);
 
   return (
     <CustomContextProvider
