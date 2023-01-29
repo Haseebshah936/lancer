@@ -15,6 +15,8 @@ import { Logout } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useLayoutEffect } from "react";
 import { requestMethod } from "../../requestMethod";
+import AptitudeDialouge from "../SellerDashboardRenders/AptitudeDialouge";
+import ContactCSDialouge from "../SellerDashboardRenders/ContactCSDialouge";
 
 function Header({ setloader }) {
   const [state, setState] = useState(false);
@@ -22,6 +24,7 @@ function Header({ setloader }) {
   const [anchor2, setAnchor2] = useState(null);
   const [anchor3, setAnchor3] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const [nIndicator, setNIndicator] = useState(false);
   const [chats, setChats] = useState([]);
   const { user, logOut } = useRealmContext();
   const navigate = useNavigate();
@@ -108,6 +111,9 @@ function Header({ setloader }) {
 
       getNotifications(user._id).then((res) => {
         setNotifications(res);
+        if (notifications.length > 0) {
+          setNIndicator(true);
+        }
       });
 
       getChats(user._id).then((res) => {
@@ -142,17 +148,21 @@ function Header({ setloader }) {
         setloader={setloader}
         chats={chats}
         notifications={notifications}
+        nIndicator={nIndicator}
       />
       <ResponsiveDrawer
         state={state}
         toggleLogin={handleToggle}
         toggleDrawer={toggleDrawer}
       />
+      <AptitudeDialouge />
+      <ContactCSDialouge />
       <MessageList anchor={anchor} CloseList={CloseList} chats={chats} />
       <NotificationList
         anchor={anchor2}
         CloseList={CloseList2}
         notifications={notifications}
+        setNIndicator={setNIndicator}
       />
       <UserOptions anchor={anchor3} CloseList={CloseList3} />
 

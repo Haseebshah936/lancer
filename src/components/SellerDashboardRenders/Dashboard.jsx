@@ -83,8 +83,6 @@ const Dashboard = ({
   return (
     <>
       {" "}
-      <AptitudeDialouge />
-      <ContactCSDialouge />
       {/* <Grid
         container
         display={"flex"}

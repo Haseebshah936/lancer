@@ -53,46 +53,28 @@ export default function FDashboard() {
 
       <Container>
         <Box sx={{ flexGrow: 1, pt: 1, pb: 1 }}>
-          <ThemeProvider
-            theme={createTheme({
-              breakpoints: {
-                values: {
-                  laptop: 1024,
-                  tablet: 640,
-                  mobile: 0,
-                  desktop: 1280,
-                  xs: 0,
-                  sm: 600,
-                  md: 900,
-                  lg: 1200,
-                  xl: 1536,
-                },
-              },
-            })}
-          >
-            <Grid container spacing={2}>
-              <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
-                <FSideBar></FSideBar>
-              </Grid>
-
-              <Grid
-                item
-                mobile={12}
-                tablet={7}
-                laptop={8}
-                desktop={9}
-                rowSpacing={2}
-                columnSpacing={2}
-              >
-                <Dashboard
-                  ongoingData={ongoingOrders}
-                  ongoingLoader={ongoingLoader}
-                  pastInvoices={pastInvoices}
-                  pastInvoicesLoader={pastInvoicesLoader}
-                />
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
+              <FSideBar></FSideBar>
             </Grid>
-          </ThemeProvider>
+
+            <Grid
+              item
+              mobile={12}
+              tablet={7}
+              laptop={8}
+              desktop={9}
+              rowSpacing={2}
+              columnSpacing={2}
+            >
+              <Dashboard
+                ongoingData={ongoingOrders}
+                ongoingLoader={ongoingLoader}
+                pastInvoices={pastInvoices}
+                pastInvoicesLoader={pastInvoicesLoader}
+              />
+            </Grid>
+          </Grid>
         </Box>
       </Container>
 

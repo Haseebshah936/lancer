@@ -1,12 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Box, Paper, Popover, Typography, Divider } from "@mui/material";
+import {
+  Box,
+  Paper,
+  Popover,
+  Typography,
+  Divider,
+  IconButton,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import colors from "../../utils/colors";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useRealmContext } from "../../db/RealmContext";
 import { requestMethod } from "../../requestMethod";
 
-const NotificationList = ({ anchor, CloseList, notifications }) => {
+const NotificationList = ({
+  anchor,
+  CloseList,
+  notifications,
+  setNIndicator,
+}) => {
+  const { user } = useRealmContext();
   const [ListData, setListData] = useState([]);
   const [count, setCount] = useState(0);
 
@@ -15,9 +28,14 @@ const NotificationList = ({ anchor, CloseList, notifications }) => {
     return response.data;
   };
 
+  const getNotifications = async (id) => {
+    const response = await requestMethod.get("notification/user/" + id);
+    return response.data;
+  };
+
   const handleRead = (notificationID) => {
     MarkasRead(notificationID).then((resp) => {
-      console.log(resp);
+      setListData(ListData.filter((notify) => notify._id !== notificationID));
     });
   };
 
@@ -47,7 +65,9 @@ const NotificationList = ({ anchor, CloseList, notifications }) => {
   const open = Boolean(anchor);
 
   useEffect(() => {
-    console.log("ListData", ListData);
+    if (ListData.length === 0) {
+      setNIndicator(false);
+    }
   }, [ListData]);
   return (
     <>
@@ -122,14 +142,19 @@ const NotificationList = ({ anchor, CloseList, notifications }) => {
                         >
                           {notify.title}
                         </div>
-                        <ClearIcon
-                          onClick={handleRead(notify._id)}
-                          sx={{
-                            fontSize: "1.5rem",
-                            cursor: "pointer",
-                            ":hover": { color: "#000000b1 !important" },
-                          }}
-                        />
+
+                        <IconButton
+                          disableRipple
+                          onClick={() => handleRead(notify._id)}
+                        >
+                          <ClearIcon
+                            sx={{
+                              fontSize: "1.5rem",
+                              cursor: "pointer",
+                              ":hover": { color: "#000000b1 !important" },
+                            }}
+                          />
+                        </IconButton>
                       </div>
                       <div style={{ cursor: "context-menu" }}>
                         {notify.description}
