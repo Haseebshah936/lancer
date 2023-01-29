@@ -40,7 +40,7 @@ const LegendText = styled(Typography)({
   paddingLeft: "5px",
 });
 
-const RadialChartWidget = () => {
+const RadialChartWidget = ({ RCWData }) => {
   return (
     <>
       {" "}
@@ -56,7 +56,7 @@ const RadialChartWidget = () => {
           maxWidth: "100%",
         }}
       >
-        <CardHeading>Static Analytics</CardHeading>
+        <CardHeading>Analytics</CardHeading>
         <RadialBarChart
           width={500}
           height={300}
@@ -78,7 +78,7 @@ const RadialChartWidget = () => {
           />
         </RadialBarChart>
         <LegendWrapper>
-          {data.map((c) => (
+          {RCWData?.map((c) => (
             <LegendNameWrapper>
               <div
                 style={{

@@ -29,7 +29,7 @@ export default function EmployerReviewTimeLine({ p, setP }) {
     titleText: "Give a review to ",
     time: "",
     textFromEmployer: "",
-    previousRating: p?.hired?.userId?.stars,
+    previousRating: p?.hired?.userId?.seller?.rating,
     overAllRating: 0,
     comment: "",
   });

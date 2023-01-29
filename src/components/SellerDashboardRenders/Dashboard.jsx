@@ -19,7 +19,43 @@ const Dashboard = ({ ongoingData, loader }) => {
   const { activeProfile } = useCustomContext();
   const [views, setViews] = useState([]);
   const location = useLocation();
-
+  const [completedOrdersCount, setCompletedOrdersCount] = useState(0);
+  const [activeOrdersCount, setActiveOrdrCount] = useState(0);
+  const [cancelledOrdersCount, setCancelledOrdersCount] = useState(0);
+  useEffect(() => {
+    const path = location.pathname.split("/");
+    if (path[1] === "f") {
+      requestMethod.get(`project/seller/onGoing/${user?._id}`).then((res) => {
+        console.log(res.data.length);
+        setActiveOrdrCount(res.data.length);
+      });
+      requestMethod.get("project/seller/completed/" + user?._id).then((res) => {
+        console.log(res.data.length);
+        setCompletedOrdersCount(res.data.length);
+      });
+      requestMethod.get("project/seller/cancelled/" + user?._id).then((res) => {
+        console.log(res.data.length);
+        setCancelledOrdersCount(res.data.length);
+      });
+    } else {
+      requestMethod.get(`project/creator/onGoing/${user?._id}`).then((res) => {
+        console.log(res.data.length);
+        setActiveOrdrCount(res.data.length);
+      });
+      requestMethod
+        .get(`project/creator/completed/${user?._id}`)
+        .then((res) => {
+          console.log(res.data.length);
+          setCompletedOrdersCount(res.data.length);
+        });
+      requestMethod
+        .get(`project/creator/cancelled/${user?._id}`)
+        .then((res) => {
+          console.log(res.data.length);
+          setCancelledOrdersCount(res.data.length);
+        });
+    }
+  }, []);
   const path = location.pathname.split("/");
 
   const getViews = async (id) => {
@@ -101,21 +137,9 @@ const Dashboard = ({ ongoingData, loader }) => {
       >
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
-            Heading="Completed Orders"
-            Value={
-              user?.seller.completedOrders !== 0
-                ? user?.seller.completedOrders
-                : "-"
-            }
-            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
-            tabValue={activeProfile === "seller" ? 3 : 2}
-          />
-        </Grid>
-        <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
-          <StatCardWidget
             Heading="Active Orders"
             Value={
-              user?.seller.activeOrders !== 0 ? user?.seller.activeOrders : "-"
+              activeOrdersCount === 0 ? "No Active Orders" : activeOrdersCount
             }
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 2 : 1}
@@ -123,8 +147,24 @@ const Dashboard = ({ ongoingData, loader }) => {
         </Grid>
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
-            Heading="Reviews"
-            Value={user?.seller.reviews !== 0 ? user?.seller.reviews : "-"}
+            Heading="Completed Orders"
+            Value={
+              completedOrdersCount === 0
+                ? "No Completed Orders"
+                : completedOrdersCount
+            }
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 3 : 2}
+          />
+        </Grid>
+        <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
+          <StatCardWidget
+            Heading="Cancelled Orders"
+            Value={
+              cancelledOrdersCount === 0
+                ? "No Cancelled Orders"
+                : cancelledOrdersCount
+            }
             link={activeProfile === "seller" ? "/f/reviews" : "/e/reviews"}
           />
         </Grid>
@@ -147,7 +187,38 @@ const Dashboard = ({ ongoingData, loader }) => {
             tablet={12}
             mobile={12}
           >
-            <RadialChartWidget />
+            <RadialChartWidget
+              RCWData={[
+                {
+                  name: "ongoing Orders",
+                  value: activeOrdersCount === 0 ? 0 : activeOrdersCount,
+                  fill: "#8D60C6",
+                },
+                {
+                  name: "Completed Orders",
+                  value: completedOrdersCount === 0 ? 0 : completedOrdersCount,
+                  fill: "#F980B0",
+                },
+                {
+                  name: "Cancelled Orders",
+                  value: cancelledOrdersCount === 0 ? 0 : cancelledOrdersCount,
+                  fill: "#F9D356",
+                },
+                {
+                  name: "Total Orders",
+                  value:
+                    activeOrdersCount +
+                      completedOrdersCount +
+                      cancelledOrdersCount ===
+                    0
+                      ? 0
+                      : activeOrdersCount +
+                        completedOrdersCount +
+                        cancelledOrdersCount,
+                  fill: "#43C8E0",
+                },
+              ]}
+            />
           </Grid>
         </Grid>
 
