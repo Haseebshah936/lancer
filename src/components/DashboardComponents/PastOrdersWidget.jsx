@@ -64,7 +64,7 @@ const PastOrdersWidget = ({ pastInvoices, loader }) => {
               </OrderTitle>
 
               <DateCompleted>
-                {new Date(order.DateCompleted).toDateString()}
+                {new Date(order.createdAt).toDateString()}
               </DateCompleted>
             </Grid>
             <Grid
@@ -93,7 +93,7 @@ const PastOrdersWidget = ({ pastInvoices, loader }) => {
               </ProfileName>
             </Grid>
             <Grid item mobile={2} tablet={2} laptop={1}>
-              <AmmountEarned>{order.amount}</AmmountEarned>
+              <AmmountEarned>${order.amount}</AmmountEarned>
             </Grid>
           </Grid>
         ))}
