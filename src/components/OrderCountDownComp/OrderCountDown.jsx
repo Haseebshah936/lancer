@@ -10,6 +10,7 @@ import { requestMethod } from "../../requestMethod";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 import { toast } from "react-toastify";
 import { handleError } from "./../../utils/helperFunctions";
+import { useNavigate } from "react-router-dom";
 
 export default function OrderCountDown({ p, setP }) {
   const { activeProfile } = useCustomContext();
@@ -19,6 +20,7 @@ export default function OrderCountDown({ p, setP }) {
     minutes: 0,
     seconds: 0,
   });
+  const navigate = useNavigate();
   const [deliverOrderPopValue, setDeliverOrderPopValue] = useState(false);
   const [cancelOrderPopValue, setCancelOrderPopValue] = useState(false);
   const [deadlineExtendedPopValue, setDeadlineExtendedPopValue] =
@@ -196,6 +198,9 @@ export default function OrderCountDown({ p, setP }) {
               },
               minWidth: "135px",
               maxWidth: "135px",
+            }}
+            onClick={() => {
+              navigate("/chat");
             }}
           >
             Message

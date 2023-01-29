@@ -18,7 +18,8 @@ export default function ResponsiveDrawer({
   toggleLogin,
 }) {
   const { user, currentUser, logOut } = useRealmContext();
-  const { activeProfile, setActiveProfile } = useCustomContext();
+  const { activeProfile, setActiveProfile, setAptitudeOpen, setCustomerOpen } =
+    useCustomContext();
   const navigate = useNavigate();
 
   const location = useLocation();
@@ -101,24 +102,23 @@ export default function ResponsiveDrawer({
                     {user?.name}
                   </Typography>
                 </ProfileHeader>
-                {activeProfile === "seller" ? (
-                  <Chip
-                    sx={{
-                      color: colors.textGreen,
-                      borderColor: colors.textGreen,
-                      mt: 1,
-                      borderWidth: "2px",
 
-                      "& .MuiChip-label": {
-                        paddingInline: "10px",
-                        fontSize: "1.3rem",
-                        fontWeight: "bold",
-                      },
-                    }}
-                    label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
-                    variant="outlined"
-                  />
-                ) : null}
+                <Chip
+                  sx={{
+                    color: colors.textGreen,
+                    borderColor: colors.textGreen,
+                    mt: 1,
+                    borderWidth: "2px",
+
+                    "& .MuiChip-label": {
+                      paddingInline: "10px",
+                      fontSize: "1.3rem",
+                      fontWeight: "bold",
+                    },
+                  }}
+                  label={`$${user?.earnings === 0 ? 0 : user?.earnings}`}
+                  variant="outlined"
+                />
 
                 <Link
                   style={{ marginTop: "15px" }}
@@ -161,6 +161,20 @@ export default function ResponsiveDrawer({
                 </Link>
                 {activeProfile === "seller" ? (
                   <Box display={"flex"} flexDirection={"column"}>
+                    <Link
+                      onClick={() => {
+                        setAptitudeOpen(true);
+                      }}
+                    >
+                      Aptitude&nbsp;Test
+                    </Link>
+                    <Link
+                      onClick={() => {
+                        setCustomerOpen(true);
+                      }}
+                    >
+                      Contact&nbsp;Support
+                    </Link>
                     <NavLink to={`/profile/${user?._id}`}>Profile</NavLink>
                     <NavLink to={`/f/gigs/${user?._id}`}>Gigs</NavLink>
                     <NavLink to={`/f/settings/${user?._id}`}>Settings</NavLink>

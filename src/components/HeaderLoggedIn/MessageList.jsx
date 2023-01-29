@@ -4,38 +4,30 @@ import { ChatList } from "react-chat-elements";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
+import { useCustomContext } from "../../Hooks/useCustomContext";
 import { requestMethod } from "../../requestMethod";
 import colors from "../../utils/colors";
 
-// const chats = [
-//   {
-//     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-//     alt: "kursat_avatar",
-//     title: "Kursat",
-//     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-//     date: new Date(),
-//     unread: 3,
-//   },
-//   {
-//     avatar:
-//       "https://res.cloudinary.com/dj46ttbl8/image/upload/v1655322066/lancer/WhatsApp_Image_2021-05-11_at_10.42.43_PM-removebg-preview_1_pptrzr.jpg",
-//     alt: "Muhammad_Haseeb",
-//     title: "Muhammad Haseeb",
-//     subtitle: "Umer and Talha start working or else I'll tell miss.",
-//     date: new Date(),
-//     unread: 3,
-//   },
-//   {
-//     avatar: "https://avatars.githubusercontent.com/u/80540635?v=4",
-//     alt: "kursat_avatar",
-//     title: "Kursat",
-//     subtitle: "Why don't we go to the No Way Home movie this weekend ?",
-//     date: new Date(),
-//     unread: 3,
-//   },
-// ];
 const MessageList = ({ anchor, CloseList, chats }) => {
   const open = Boolean(anchor);
+  const { user } = useRealmContext();
+
+  const navigate = useNavigate();
+
+  const MarkasRead = async (id) => {
+    const response = await requestMethod.put("notification/read/" + id);
+    return response.data;
+  };
+
+  const handleRead = (notificationID) => {
+    MarkasRead(notificationID).then((resp) => {
+      console.log(resp);
+    });
+  };
+
+  useEffect(() => {
+    console.log("Chats", chats);
+  }, [chats]);
 
   return (
     <>
@@ -70,7 +62,22 @@ const MessageList = ({ anchor, CloseList, chats }) => {
             }}
           >
             {chats.length !== 0 ? (
-              <ChatList className="chat-list" dataSource={chats} />
+              <ChatList
+                className="chat-list"
+                dataSource={chats}
+                onClick={(chat) => {
+                  handleRead(chat.id);
+                  console.log("chat._id", chat.id);
+
+                  requestMethod
+                    .get(`chatroom/getChatroom/${chat.chatroom}/${user._id}`)
+                    .then((res) => {
+                      navigate("/chat", {
+                        state: { chatroom: res.data },
+                      });
+                    });
+                }}
+              />
             ) : (
               <div
                 style={{
@@ -88,7 +95,7 @@ const MessageList = ({ anchor, CloseList, chats }) => {
                     color: colors.textGreen,
                   }}
                 >
-                  You have no Messages Yet!
+                  You have read all your messages
                 </div>
               </div>
             )}

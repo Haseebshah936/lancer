@@ -33,11 +33,13 @@ export default function FReviews() {
   };
 
   useEffect(() => {
-    getBuyerReviews(user._id).then((res) => {
-      setReviews(res);
-      setLoader(false);
-    });
-  }, []);
+    if (user) {
+      getBuyerReviews(user._id).then((res) => {
+        setReviews(res);
+        setLoader(false);
+      });
+    }
+  }, [user]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -81,17 +83,17 @@ export default function FReviews() {
                         <Box key={index}>
                           <Grid container>
                             <Grid item xs={12}>
-                              <TitleP>{review.projectId.title}</TitleP>
+                              <TitleP>{review?.projectId?.title}</TitleP>
                             </Grid>
                             <Grid item xs={12}>
-                              <p>{review.comment}</p>
+                              <p>{review?.comment}</p>
                             </Grid>
                             <Grid item xs={12}>
                               <Grid container>
                                 <Grid item xs={3} sm={1}>
                                   <Avatar
                                     alt="Remy Sharp"
-                                    src={review.buyerId.profilePic}
+                                    src={review?.buyerId?.profilePic}
                                     sx={{ width: 45, height: 45 }}
                                   />
                                 </Grid>
@@ -104,9 +106,9 @@ export default function FReviews() {
                                   justifyContent={"flex-end"}
                                   flexDirection={"column"}
                                 >
-                                  <UserNameP>{review.buyerId.name}</UserNameP>
+                                  <UserNameP>{review?.buyerId?.name}</UserNameP>
                                   <p style={{ marginBottom: "0px" }}>
-                                    {new Date(review.createdAt).toDateString()}
+                                    {new Date(review?.createdAt).toDateString()}
                                   </p>
                                 </Grid>
                                 <Grid
@@ -117,10 +119,10 @@ export default function FReviews() {
                                 >
                                   <Rating
                                     name="read-only"
-                                    value={review.rating}
+                                    value={review?.rating}
                                     readOnly
                                   />
-                                  ({review.rating})
+                                  ({review?.rating})
                                 </Grid>
                               </Grid>
                             </Grid>

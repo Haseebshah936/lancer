@@ -63,7 +63,7 @@ function Head({
   toggleMessage,
   toggleNotification,
   toggleUserOptions,
-  notifications,
+  nIndicator,
   chats,
 }) {
   // const currentPathDashboard = useCurrentPath([{ path: "/f/dashboard" }]);
@@ -331,7 +331,7 @@ function Head({
               aria-label="show 4 new mails"
               color="inherit"
             >
-              {notifications.length !== 0 ? (
+              {nIndicator ? (
                 <Badge badgeContent={4} variant="dot" color="error">
                   <NotificationsOutlinedIcon
                     onClick={toggleNotification}

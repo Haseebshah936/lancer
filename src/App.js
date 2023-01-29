@@ -83,6 +83,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import PaymentStatus from "./pages/PaymentStatus";
 import { regSw, subscribe } from "./registerSW";
+import AllNotifications from "./pages/AllNotifications";
 
 // import realmData from "./realm.json";
 const stripePromise = loadStripe(
@@ -212,6 +213,7 @@ const AppNavigation = ({ currentUser, dispatch, state, user }) => {
       <Route path="/payments" element={<PurchaseScreen />} />
       <Route path="/payment-status" element={<PaymentStatus />} />
       <Route path="/customersupport" element={<CustomerSupport />} />
+      <Route path="/Notifications" element={<AllNotifications />} />
       <Route path="/portfolio/:id" element={<SellerPortfolio />} />
       <Route path="/Search" element={<SearchResults />} />
       <Route element={<PrivateRoutes />}>
