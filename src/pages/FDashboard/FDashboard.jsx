@@ -14,10 +14,19 @@ import { requestMethod } from "../../requestMethod";
 export default function FDashboard() {
   const { user } = useRealmContext();
   const [ongoingOrders, setOngoingOrders] = useState([]);
-  const [loader, setLoader] = useState(true);
+  const [ongoingLoader, setOngoingLoader] = useState(true);
+  const [pastInvoices, setPastInvoices] = useState([]);
+  const [pastInvoicesLoader, setPastInvoiceLoader] = useState(true);
 
   const getOngoingOrders = async (id) => {
     const response = await requestMethod.get("project/seller/onGoing/" + id);
+    return response.data;
+  };
+
+  const getPastInvoices = async (id) => {
+    const response = await requestMethod.get(
+      "invoice/getInvoiceByUserId/seller/" + id
+    );
     return response.data;
   };
 
@@ -25,7 +34,11 @@ export default function FDashboard() {
     if (user) {
       getOngoingOrders(user._id).then((data) => {
         setOngoingOrders(data);
-        setLoader(false);
+        setOngoingLoader(false);
+      });
+      getPastInvoices(user._id).then((data) => {
+        setPastInvoices(data);
+        setPastInvoiceLoader(false);
       });
     }
   }, [user]);
@@ -71,7 +84,12 @@ export default function FDashboard() {
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Dashboard ongoingData={ongoingOrders} loader={loader} />
+                <Dashboard
+                  ongoingData={ongoingOrders}
+                  ongoingLoader={ongoingLoader}
+                  pastInvoices={pastInvoices}
+                  pastInvoicesLoader={pastInvoicesLoader}
+                />
               </Grid>
             </Grid>
           </ThemeProvider>

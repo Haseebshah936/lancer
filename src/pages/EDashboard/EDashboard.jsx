@@ -16,9 +16,19 @@ export default function EDashboard() {
   const [value, setValue] = useState(0);
   const [ongoingOrders, setOngoingOrders] = useState([]);
   const [loader, setLoader] = useState(true);
+  const [ongoingLoader, setOngoingLoader] = useState(true);
+  const [pastInvoices, setPastInvoices] = useState([]);
+  const [pastInvoicesLoader, setPastInvoiceLoader] = useState(true);
 
   const getOngoingOrders = async (id) => {
     const response = await requestMethod.get("project/creator/onGoing/" + id);
+    return response.data;
+  };
+
+  const getPastInvoices = async (id) => {
+    const response = await requestMethod.get(
+      "invoice/getInvoiceByUserId/buyer/" + id
+    );
     return response.data;
   };
 
@@ -26,7 +36,11 @@ export default function EDashboard() {
     if (user) {
       getOngoingOrders(user._id).then((data) => {
         setOngoingOrders(data);
-        setLoader(false);
+        setOngoingLoader(false);
+      });
+      getPastInvoices(user._id).then((data) => {
+        setPastInvoices(data);
+        setPastInvoiceLoader(false);
       });
     }
   }, [user]);
@@ -71,7 +85,12 @@ export default function EDashboard() {
                 rowSpacing={2}
                 columnSpacing={2}
               >
-                <Dashboard ongoingData={ongoingOrders} loader={loader} />
+                <Dashboard
+                  ongoingData={ongoingOrders}
+                  ongoingLoader={ongoingLoader}
+                  pastInvoices={pastInvoices}
+                  pastInvoicesLoader={pastInvoicesLoader}
+                />
               </Grid>
             </Grid>
           </ThemeProvider>
