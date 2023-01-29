@@ -14,7 +14,12 @@ import { UserState } from "realm-web";
 import ContactCSDialouge from "./ContactCSDialouge";
 import colors from "../../utils/colors";
 import { useCustomContext } from "../../Hooks/useCustomContext";
-const Dashboard = ({ ongoingData, loader }) => {
+const Dashboard = ({
+  ongoingData,
+  ongoingLoader,
+  pastInvoices,
+  pastInvoicesLoader,
+}) => {
   const { user } = useRealmContext();
   const { activeProfile } = useCustomContext();
   const [views, setViews] = useState([]);
@@ -138,9 +143,7 @@ const Dashboard = ({ ongoingData, loader }) => {
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Active Orders"
-            Value={
-              activeOrdersCount === 0 ? "No Active Orders" : activeOrdersCount
-            }
+            Value={activeOrdersCount === 0 ? "-" : activeOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 2 : 1}
           />
@@ -148,11 +151,7 @@ const Dashboard = ({ ongoingData, loader }) => {
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Completed Orders"
-            Value={
-              completedOrdersCount === 0
-                ? "No Completed Orders"
-                : completedOrdersCount
-            }
+            Value={completedOrdersCount === 0 ? "-" : completedOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 3 : 2}
           />
@@ -160,11 +159,7 @@ const Dashboard = ({ ongoingData, loader }) => {
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Cancelled Orders"
-            Value={
-              cancelledOrdersCount === 0
-                ? "No Cancelled Orders"
-                : cancelledOrdersCount
-            }
+            Value={cancelledOrdersCount === 0 ? "-" : cancelledOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 4 : 3}
           />
@@ -231,10 +226,20 @@ const Dashboard = ({ ongoingData, loader }) => {
         </Grid>
 
         <Grid item rowSpacing={2} mobile={12}>
-          <OngoingOrdersWidget ongoingOrders={ongoingData} loader={loader} />
+          <OngoingOrdersWidget
+            ongoingOrders={ongoingData}
+            loader={ongoingLoader}
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 2 : 1}
+          />
         </Grid>
         <Grid item rowSpacing={2} mobile={12}>
-          <PastOrdersWidget />
+          <PastOrdersWidget
+            pastInvoices={pastInvoices}
+            loader={pastInvoicesLoader}
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 3 : 2}
+          />
         </Grid>
       </Grid>
     </>
