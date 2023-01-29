@@ -191,17 +191,24 @@ const Dashboard = ({ ongoingData, loader }) => {
               RCWData={[
                 {
                   name: "ongoing Orders",
-                  value: activeOrdersCount === 0 ? 0 : activeOrdersCount,
+                  value:
+                    activeOrdersCount === undefined ? 0 : activeOrdersCount,
                   fill: "#8D60C6",
                 },
                 {
                   name: "Completed Orders",
-                  value: completedOrdersCount === 0 ? 0 : completedOrdersCount,
+                  value:
+                    completedOrdersCount === undefined
+                      ? 0
+                      : completedOrdersCount,
                   fill: "#F980B0",
                 },
                 {
                   name: "Cancelled Orders",
-                  value: cancelledOrdersCount === 0 ? 0 : cancelledOrdersCount,
+                  value:
+                    cancelledOrdersCount === undefined
+                      ? 0
+                      : cancelledOrdersCount,
                   fill: "#F9D356",
                 },
                 {
@@ -210,7 +217,7 @@ const Dashboard = ({ ongoingData, loader }) => {
                     activeOrdersCount +
                       completedOrdersCount +
                       cancelledOrdersCount ===
-                    0
+                    undefined
                       ? 0
                       : activeOrdersCount +
                         completedOrdersCount +

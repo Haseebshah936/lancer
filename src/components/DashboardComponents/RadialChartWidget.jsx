@@ -65,7 +65,7 @@ const RadialChartWidget = ({ RCWData }) => {
           innerRadius={70}
           outerRadius={120}
           barSize={8}
-          data={data}
+          data={RCWData}
           startAngle={180}
           endAngle={450}
         >
