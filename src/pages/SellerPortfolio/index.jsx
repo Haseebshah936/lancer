@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { miniPc, miniTablet, mobile, tablet } from "../../responsive";
 import HeaderLoggedIn from "../../components/HeaderLoggedIn";
+import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import PricingPlan from "../../components/PricingPlan";
 import Gallery from "../../components/Gallery";
@@ -106,7 +107,7 @@ function SellerPortfolio(props) {
   const [premiumPlan, setPremiumPlan] = useState({});
   const [categoryFeatures, setCategoryFeatures] = useState([]);
   const [subCategoryFeatures, setSubCategoryFeatures] = useState([]);
-  const { activeProfile } = useCustomContext();
+  const { setCartDrawer } = useCustomContext();
   const [productMedia, setProductMedia] = useState([]);
   const descriptionRef = useRef();
   const [save, setSave] = useState(false);
@@ -272,13 +273,12 @@ function SellerPortfolio(props) {
   }, [productData, user]);
 
   useEffect(() => {
-    console.log("User: ", user);
-    console.log("product Data: ", productData);
-  }, [productData, user]);
+    setCartDrawer(false);
+  }, []);
 
   return (
     <>
-      <HeaderLoggedIn />
+      {user ? <HeaderLoggedIn /> : <Header />}
       <ThemeProvider
         theme={createTheme({
           breakpoints: {

@@ -81,6 +81,7 @@ import mongoose from "mongoose";
 import Banned from "./pages/Banned";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import PaymentStatus from "./pages/PaymentStatus";
 
 // import realmData from "./realm.json";
 const stripePromise = loadStripe(
@@ -208,6 +209,7 @@ const AppNavigation = ({ currentUser, dispatch, state, user }) => {
       <Route path="/AddCategory" element={<AddCategory />} />
       <Route path="/AddSubCategory" element={<AddSubCategory />} />
       <Route path="/payments" element={<PurchaseScreen />} />
+      <Route path="/payment-status" element={<PaymentStatus />} />
       <Route path="/customersupport" element={<CustomerSupport />} />
       <Route path="/portfolio/:id" element={<SellerPortfolio />} />
       <Route path="/Search" element={<SearchResults />} />
@@ -283,14 +285,13 @@ function App(props) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [aptitudeOpen, setAptitudeOpen] = useState(false);
   const [customerOpen, setCustomerOpen] = useState(false);
+<<<<<<< HEAD
   const [searchPagination, setSearchPagination] = useState(1);
   const [pageCount, setpageCount] = useState(1);
+=======
+  const [order, setOrder] = useState({});
+>>>>>>> 5d35982388ea67908ad2bbaad252190e6e1c801e
 
-  const options = {
-    // passing the client secret obtained from the server
-    clientSecret:
-      "sk_test_51JgDf0HHulWCxCO2kNiKxyPfuGnO56w1zqEIlVUYFyPBExEk2xRxuIwzezz73kfH1gFYaqQKV2QZdVf3zGVu8LPy00LxSgIpcR",
-  };
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
   }, [currentUser]);
@@ -334,6 +335,8 @@ function App(props) {
         setGigToBeEditedData,
         state,
         dispatch,
+        order,
+        setOrder,
       }}
     >
       <Router>

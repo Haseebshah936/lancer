@@ -11,7 +11,7 @@ import {
   Paper,
   Typography,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import { teamImg } from "../../assets";
 import CustomIconButton from "../../components/CustomIconButton";
@@ -22,7 +22,16 @@ import { toast } from "react-toastify";
 import { handleError } from "../../utils/helperFunctions";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import { requestMethod } from "../../requestMethod";
+import Checkout from "./Checkout";
+import CustomModal from "../../components/CustomModal";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import { set } from "date-fns/esm";
+import { useCustomContext } from "../../Hooks/useCustomContext";
+const stripePromise = loadStripe(
+  "pk_test_51JgDf0HHulWCxCO2rvJaz2Jxm1yUfy52n9weCoqxnXDH4jVVrjyu4UewmnhBGJSYamZhTvwx8JRkaKPq4w4ZwRdn00gD4wZNAX"
+);
 export default function OrderSummary({
   style = {},
   order,
@@ -32,6 +41,32 @@ export default function OrderSummary({
 }) {
   const { user } = useRealmContext();
   const navigate = useNavigate();
+  const [orderDetails, setOrderDetails] = React.useState({});
+  const [togglePayment, setTogglePayment] = React.useState(false);
+  const [clientSecret, setClientSecret] = React.useState("");
+  const { setOrder } = useCustomContext();
+  const [project, setProject] = React.useState({});
+  console.log("Order", order);
+
+  useEffect(() => {
+    const { gigID, planName, freelancerId, extraFeatures, proposalId } = order;
+    console.log({
+      productId: gigID,
+      extras: extraFeatures,
+      packageSelected: planName,
+      freelancerId,
+      employerId: user._id,
+      proposalId,
+    });
+    setOrderDetails({
+      productId: gigID,
+      extras: extraFeatures,
+      packageSelected: planName,
+      freelancerId,
+      employerId: user._id,
+      proposalId,
+    });
+  }, []);
 
   const CardSchema = {
     name: Joi.string().required().label("Name"),
@@ -42,6 +77,12 @@ export default function OrderSummary({
     // issuer: Joi.string(),
     focused: Joi.string(),
   };
+
+  useEffect(() => {
+    setTogglePayment(false);
+    setClientSecret("");
+    setOrder({});
+  }, []);
 
   const Validate = () => {
     // const tempCard = { ...Card, expiry: `00-${Card.expiry.replace("/", "-")}` };
@@ -63,6 +104,7 @@ export default function OrderSummary({
         employerId: user._id,
         amount: order.total,
         paymentMethod: method,
+        packageSelected: order.planName,
         productId: order.gigID,
         days: order.delivery,
         revisionsAllowed: "3",
@@ -94,6 +136,38 @@ export default function OrderSummary({
     }
     setErrors(error);
     return error;
+  };
+
+  const pay = async () => {
+    // Validate();
+    // creditCard
+    try {
+      let res;
+      if (method === "creditCard") {
+        res = await requestMethod.post("invoice/prjectIntent", orderDetails);
+        const { client_secret: clientSecret, id } = res.data;
+        if (clientSecret) {
+          setTogglePayment(true);
+          setClientSecret(clientSecret);
+        }
+        setProject({
+          title: order.title,
+          freelancerId: order.freelancerId,
+          proposalId: order?.proposalId,
+          employerId: user._id,
+          amount: order.total,
+          paymentMethod: method,
+          packageSelected: order.planName,
+          productId: order.gigID,
+          days: order.delivery,
+          revisionsAllowed: "3",
+          extras: order.extraFeatures,
+        });
+      }
+    } catch (error) {
+      handleError(error);
+      console.log(error);
+    }
   };
 
   return (
@@ -147,33 +221,35 @@ export default function OrderSummary({
         </Grid>
         <Divider sx={{ my: 2 }} />
 
-        <Grid item container direction="row" justifyContent="space-between">
-          <Grid item mobile={8}>
-            {" "}
-            <Typography
-              sx={{
-                fontSize: "1.7rem",
-                fontWeight: "bold",
-                color: "#62646a",
-              }}
+        {order?.planName && (
+          <Grid item container direction="row" justifyContent="space-between">
+            <Grid item mobile={8}>
+              {" "}
+              <Typography
+                sx={{
+                  fontSize: "1.7rem",
+                  fontWeight: "bold",
+                  color: "#62646a",
+                }}
+              >
+                {order?.gigQuantity > 1
+                  ? order?.planName + " (X" + order?.gigQuantity + ")"
+                  : order?.planName}
+              </Typography>
+            </Grid>
+            <Grid
+              item
+              container
+              mobile={4}
+              direction="row"
+              justifyContent="flex-end"
             >
-              {order?.gigQuantity > 1
-                ? order?.planName + " (X" + order?.gigQuantity + ")"
-                : order?.planName}
-            </Typography>
+              <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
+                ${order?.planCost * order?.gigQuantity}
+              </Typography>
+            </Grid>
           </Grid>
-          <Grid
-            item
-            container
-            mobile={4}
-            direction="row"
-            justifyContent="flex-end"
-          >
-            <Typography sx={{ fontSize: "1.7rem", color: "#62646a" }}>
-              ${order?.planCost * order?.gigQuantity}
-            </Typography>
-          </Grid>
-        </Grid>
+        )}
         <Grid item container mobile={12} sx={{ pt: 1 }}>
           <CustomList sx={{ py: 0 }}>
             {order?.features?.map((feature) => {
@@ -322,9 +398,7 @@ export default function OrderSummary({
                 fontSize: "1.5rem",
               }}
               text={`Pay Now`}
-              onClick={() => {
-                Validate();
-              }}
+              onClick={pay}
             />
             <Grid
               item
@@ -350,6 +424,20 @@ export default function OrderSummary({
           </Grid>
         </Grid>
       </Paper>
+
+      <CustomModal isVisible={togglePayment}>
+        <Elements
+          stripe={stripePromise}
+          options={{
+            clientSecret,
+          }}
+        >
+          <Checkout
+            project={project}
+            togglePaymentModal={() => setTogglePayment(false)}
+          />
+        </Elements>
+      </CustomModal>
     </>
   );
 }

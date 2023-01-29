@@ -120,99 +120,7 @@ export default function PurchaseScreen() {
                   <Mastercard style={{ marginLeft: "5px", width: "2.5rem" }} />
                 </RadioContainer>
 
-                {select === "creditCard" && (
-                  <Grid container mobile={12} sx={{ my: 2 }}>
-                    <Grid item container mobile={12}>
-                      <Grid container justifyContent="center" mobile={12}>
-                        <Grid item mobile={12}>
-                          <Cards
-                            cvc={Card.cvc}
-                            expiry={Card.expiry}
-                            focused={Card.focused}
-                            name={Card.name}
-                            number={Card.number}
-                            callback={(e, j) => handleCallback(e, j)}
-                          />
-                        </Grid>
-                      </Grid>
-                      <Grid
-                        item
-                        container
-                        mobile={12}
-                        rowSpacing={1}
-                        sx={{ pt: 2 }}
-                      >
-                        <Grid item mobile={12} laptop={5.75}>
-                          <TextFieldComp
-                            label="Enter Your Full Name"
-                            name="name"
-                            value={Card.name}
-                            pattern="[a-z A-Z-]+"
-                            error={errors.name}
-                            errmsg={errors.name}
-                            onChange={handleInputChange}
-                            onFocus={handleInputFocus}
-                          />
-                        </Grid>
-                        <Grid item mobile={12} laptop={0.5}></Grid>
-
-                        <Grid item mobile={12} laptop={5.75}>
-                          <TextFieldComp
-                            label="Card Number"
-                            name="number"
-                            value={Card.number}
-                            type="tel"
-                            pattern="[\d| ]{16,22}"
-                            error={errors.number}
-                            errmsg={errors.number}
-                            onChange={handleInputChange}
-                            onFocus={handleInputFocus}
-                          />
-                        </Grid>
-                      </Grid>
-
-                      <Grid
-                        item
-                        container
-                        rowSpacing={1}
-                        mobile={12}
-                        sx={{ pt: 2 }}
-                      >
-                        <Grid item mobile={12} laptop={5.75}>
-                          <TextFieldComp
-                            label="Expiration Date"
-                            type="tel"
-                            name="expiry"
-                            value={Card.expiry}
-                            pattern="\d\d/\d\d"
-                            error={errors.expiry}
-                            errmsg={errors.expiry}
-                            onChange={handleInputChange}
-                            onFocus={handleInputFocus}
-                          />
-                        </Grid>
-                        <Grid item mobile={12} laptop={0.5}></Grid>
-
-                        <Grid item mobile={12} laptop={5.75}>
-                          <TextFieldComp
-                            label="Security Code"
-                            type="tel"
-                            name="cvc"
-                            value={Card.cvc}
-                            pattern="\d{3}"
-                            error={errors.cvc}
-                            errmsg={errors.cvc}
-                            onChange={handleInputChange}
-                            onFocus={handleInputFocus}
-                          />
-                        </Grid>
-                      </Grid>
-                      <input type="hidden" name="issuer" value={Card.issuer} />
-                    </Grid>
-                  </Grid>
-                )}
-
-                <RadioContainer>
+                {/* <RadioContainer>
                   <Radio
                     value="JazzCash"
                     sx={{
@@ -257,7 +165,7 @@ export default function PurchaseScreen() {
                     image={EasyPaisa}
                     alt="Gig Image"
                   />
-                </RadioContainer>
+                </RadioContainer> */}
 
                 <RadioContainer>
                   <Radio
@@ -321,3 +229,95 @@ const RadioContainer = styled.div`
   align-items: center;
   margin: 5px 0px;
 `;
+
+// {select === "creditCard" && (
+//   <Grid container mobile={12} sx={{ my: 2 }}>
+//     <Grid item container mobile={12}>
+//       <Grid container justifyContent="center" mobile={12}>
+//         <Grid item mobile={12}>
+//           <Cards
+//             cvc={Card.cvc}
+//             expiry={Card.expiry}
+//             focused={Card.focused}
+//             name={Card.name}
+//             number={Card.number}
+//             callback={(e, j) => handleCallback(e, j)}
+//           />
+//         </Grid>
+//       </Grid>
+//       <Grid
+//         item
+//         container
+//         mobile={12}
+//         rowSpacing={1}
+//         sx={{ pt: 2 }}
+//       >
+//         <Grid item mobile={12} laptop={5.75}>
+//           <TextFieldComp
+//             label="Enter Your Full Name"
+//             name="name"
+//             value={Card.name}
+//             pattern="[a-z A-Z-]+"
+//             error={errors.name}
+//             errmsg={errors.name}
+//             onChange={handleInputChange}
+//             onFocus={handleInputFocus}
+//           />
+//         </Grid>
+//         <Grid item mobile={12} laptop={0.5}></Grid>
+
+//         <Grid item mobile={12} laptop={5.75}>
+//           <TextFieldComp
+//             label="Card Number"
+//             name="number"
+//             value={Card.number}
+//             type="tel"
+//             pattern="[\d| ]{16,22}"
+//             error={errors.number}
+//             errmsg={errors.number}
+//             onChange={handleInputChange}
+//             onFocus={handleInputFocus}
+//           />
+//         </Grid>
+//       </Grid>
+
+//       {/* <Grid
+//         item
+//         container
+//         rowSpacing={1}
+//         mobile={12}
+//         sx={{ pt: 2 }}
+//       >
+//         <Grid item mobile={12} laptop={5.75}>
+//           <TextFieldComp
+//             label="Expiration Date"
+//             type="tel"
+//             name="expiry"
+//             value={Card.expiry}
+//             pattern="\d\d/\d\d"
+//             error={errors.expiry}
+//             errmsg={errors.expiry}
+//             onChange={handleInputChange}
+//             onFocus={handleInputFocus}
+//           />
+//         </Grid>
+//         <Grid item mobile={12} laptop={0.5}></Grid>
+
+//         <Grid item mobile={12} laptop={5.75}>
+//           <TextFieldComp
+//             label="Security Code"
+//             type="tel"
+//             name="cvc"
+//             value={Card.cvc}
+//             pattern="\d{3}"
+//             error={errors.cvc}
+//             errmsg={errors.cvc}
+//             onChange={handleInputChange}
+//             onFocus={handleInputFocus}
+//           />
+//         </Grid>
+//       </Grid> */}
+//       <input type="hidden" name="issuer" value={Card.issuer} />
+//     </Grid>
+//   </Grid>
+// )}

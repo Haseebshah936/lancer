@@ -10,8 +10,10 @@ function CustomFilledButton({
   type = "",
   onClick = () => {},
   loading = false,
+  disabled = false,
   ...props
 }) {
+  console.log("disabled", disabled);
   return (
     <Button
       variant="contained"
@@ -26,9 +28,11 @@ function CustomFilledButton({
         background: ` linear-gradient(130deg, ${color1}, ${color2}) border-box`,
         marginTop: "4rem",
         textTransform: "capitalize",
+        opacity: disabled ? 0.5 : 1,
       }}
       onClick={onClick}
       type={type}
+      disabled={disabled}
       {...props}
     >
       {loading ? (
