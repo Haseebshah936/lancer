@@ -143,7 +143,7 @@ const Dashboard = ({
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Active Orders"
-            Value={activeOrdersCount === 0 ? "-" : activeOrdersCount}
+            Value={activeOrdersCount === 0 ? "0" : activeOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 2 : 1}
           />
@@ -151,7 +151,7 @@ const Dashboard = ({
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Completed Orders"
-            Value={completedOrdersCount === 0 ? "-" : completedOrdersCount}
+            Value={completedOrdersCount === 0 ? "0" : completedOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 3 : 2}
           />
@@ -159,7 +159,7 @@ const Dashboard = ({
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Cancelled Orders"
-            Value={cancelledOrdersCount === 0 ? "-" : cancelledOrdersCount}
+            Value={cancelledOrdersCount === 0 ? "0" : cancelledOrdersCount}
             link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
             tabValue={activeProfile === "seller" ? 4 : 3}
           />

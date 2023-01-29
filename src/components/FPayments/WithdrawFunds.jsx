@@ -3,11 +3,15 @@ import { Box, Button, Grid, Tab, Tabs, TextField } from "@mui/material";
 import Styled from "styled-components";
 import colors from "./../../utils/colors";
 import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
+import { toast } from "react-toastify";
+import { handleError } from "./../../utils/helperFunctions";
 
 export default function WithdrawFunds() {
   const { user } = useRealmContext();
   const [nameOnCard, setNameOnCard] = useState("");
   const [cardNumber, setCardNumber] = useState("");
+  const [amount, setAmount] = useState("");
   return (
     <div style={{ width: "100%" }}>
       <Grid conatiner>
@@ -41,6 +45,16 @@ export default function WithdrawFunds() {
                   onChange={(e) => setCardNumber(e.target.value)}
                 />
               </Grid>
+              <Grid item xs={12} mt={2}>
+                <GreenBorderTextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Amount"
+                  variant="outlined"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                />
+              </Grid>
               <Grid
                 item
                 xs={12}
@@ -58,7 +72,23 @@ export default function WithdrawFunds() {
                     backgroundColor: colors.becomePartnerGreen,
                   }}
                   onClick={() => {
-                    console.log("Withdraw", nameOnCard, cardNumber);
+                    console.log("withdrawal", nameOnCard, cardNumber);
+                    // userId, amount, IBAN, accountHolderName
+                    requestMethod
+                      .post("withdrawal", {
+                        userId: user?._id,
+                        amount: amount,
+                        IBAN: cardNumber,
+                        accountHolderName: nameOnCard,
+                      })
+                      .then((res) => {
+                        console.log("res", res);
+                        toast.success("Withdraw successfully");
+                      })
+                      .catch((err) => {
+                        console.log("err", err);
+                        handleError(err);
+                      });
                   }}
                 >
                   Withdraw
