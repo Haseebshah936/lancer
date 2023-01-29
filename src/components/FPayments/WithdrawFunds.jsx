@@ -22,7 +22,7 @@ export default function WithdrawFunds() {
           my={2}
         >
           <Box padding={2}>
-            <TitleP className="text-left">Card Details</TitleP>
+            <TitleP className="text-left">Account Details</TitleP>
             <Grid container>
               <Grid item xs={12} sx={{ mb: 1.6 }}>
                 <GreenBorderTextField

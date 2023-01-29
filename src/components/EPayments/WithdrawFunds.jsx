@@ -1,9 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Button, Grid, Tab, Tabs, TextField } from "@mui/material";
 import Styled from "styled-components";
 import colors from "./../../utils/colors";
+import { useRealmContext } from "../../db/RealmContext";
+import { requestMethod } from "../../requestMethod";
+import { toast } from "react-toastify";
+import { handleError } from "./../../utils/helperFunctions";
 
 export default function WithdrawFunds() {
+  const { user } = useRealmContext();
+  const [nameOnCard, setNameOnCard] = useState("");
+  const [cardNumber, setCardNumber] = useState("");
+  const [amount, setAmount] = useState("");
   return (
     <div style={{ width: "100%" }}>
       <Grid conatiner>
@@ -14,93 +22,45 @@ export default function WithdrawFunds() {
           my={2}
         >
           <Box padding={2}>
-            <TitleP className="text-left">Add Wallet</TitleP>
+            <TitleP className="text-left">Account Details</TitleP>
             <Grid container>
+              <Grid item xs={12} sx={{ mb: 1.6 }}>
+                <GreenBorderTextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Name"
+                  variant="outlined"
+                  value={nameOnCard}
+                  onChange={(e) => setNameOnCard(e.target.value)}
+                />
+              </Grid>
+
               <Grid item xs={12}>
                 <GreenBorderTextField
                   fullWidth
                   id="outlined-basic"
-                  label="Add Amount"
+                  label="Card IBAN"
                   variant="outlined"
+                  value={cardNumber}
+                  onChange={(e) => setCardNumber(e.target.value)}
                 />
               </Grid>
-              {/* <Grid item xs={12} my={1}>
-                <Grid conatiner display={"flex"} flexDirection={"row"}>
-                  <Grid item xs={1.9} mx={1} sm={0.7}>
-                    <PayentAmountDiv>50$</PayentAmountDiv>
-                  </Grid>
-                  <Grid item xs={2} sm={0.7}>
-                    <PayentAmountDiv>100$</PayentAmountDiv>
-                  </Grid>
-                  <Grid item xs={2} mx={1} sm={0.7}>
-                    <PayentAmountDiv>150$</PayentAmountDiv>
-                  </Grid>
-                </Grid>
-              </Grid> */}
-              <Grid item xs={12}>
+              <Grid item xs={12} mt={2}>
                 <GreenBorderTextField
                   fullWidth
                   id="outlined-basic"
-                  label="Card Number"
+                  label="Amount"
                   variant="outlined"
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
                 />
-              </Grid>
-              <Grid item xs={12} my={1.6}>
-                <Grid
-                  conatiner
-                  display={"flex"}
-                  flexDirection={{ xs: "column", md: "row" }}
-                  justifyContent={"space-between"}
-                >
-                  <Grid item xs={12} sm={5.8}>
-                    <GreenBorderTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="First Name"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={5.8} my={{ xs: 1.2, sm: 0 }}>
-                    <GreenBorderTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Last Name"
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
-              </Grid>
-              <Grid item xs={12}>
-                <Grid
-                  conatiner
-                  display={"flex"}
-                  flexDirection={{ xs: "column", md: "row" }}
-                  justifyContent={"space-between"}
-                >
-                  <Grid item xs={12} sm={3}>
-                    <GreenBorderTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="Expiry Date"
-                      variant="outlined"
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={8} my={{ xs: 1.2, sm: 0 }}>
-                    <GreenBorderTextField
-                      fullWidth
-                      id="outlined-basic"
-                      label="CVV (Security Code)"
-                      variant="outlined"
-                    />
-                  </Grid>
-                </Grid>
               </Grid>
               <Grid
                 item
                 xs={12}
                 my={1.2}
                 display={"flex"}
-                justifyContent={{ xs: "center", sm: "flex-start" }}
+                justifyContent={"center"}
               >
                 <Button
                   variant="contained"
@@ -111,8 +71,27 @@ export default function WithdrawFunds() {
                     height: "40px",
                     backgroundColor: colors.becomePartnerGreen,
                   }}
+                  onClick={() => {
+                    console.log("withdrawal", nameOnCard, cardNumber);
+                    // userId, amount, IBAN, accountHolderName
+                    requestMethod
+                      .post("withdrawal", {
+                        userId: user?._id,
+                        amount: amount,
+                        IBAN: cardNumber,
+                        accountHolderName: nameOnCard,
+                      })
+                      .then((res) => {
+                        console.log("res", res);
+                        toast.success("Withdraw successfully");
+                      })
+                      .catch((err) => {
+                        console.log("err", err);
+                        handleError(err);
+                      });
+                  }}
                 >
-                  Continue
+                  Withdraw
                 </Button>
               </Grid>
             </Grid>
@@ -121,7 +100,7 @@ export default function WithdrawFunds() {
         <Grid
           item
           xs={12}
-          sm={3.5}
+          sm={5}
           my={1.2}
           className="border rounded"
           padding={2}
@@ -152,17 +131,15 @@ export default function WithdrawFunds() {
                 <p style={{ color: "white", fontSize: "1.5rem" }}>
                   Avalible Amount
                 </p>
-                <p style={{ color: "white", fontSize: "1.5rem" }}>120$</p>
+                <p style={{ color: "white", fontSize: "1.5rem" }}>
+                  {user?.currentBalance} $
+                </p>
               </Box>
             </div>
             <div className="d-flex to-row justify-content-between pe-2 ps-2">
               <div className="pt-3">
                 <STitleP>Total Credit</STitleP>
-                <STitleP>120$</STitleP>
-              </div>
-              <div className="pt-3">
-                <STitleP>Total Credit</STitleP>
-                <STitleP>120$</STitleP>
+                <STitleP>{user?.currentBalance} $</STitleP>
               </div>
             </div>
           </div>

@@ -93,12 +93,7 @@ export default function FPayments() {
                         ></Tab>
                         <Tab
                           value="two"
-                          label="Invoices"
-                          style={{ color: colors.black, fontWeight: "bold" }}
-                        />
-                        <Tab
-                          value="three"
-                          label="Transactions History"
+                          label="Withdraw History"
                           style={{ color: colors.black, fontWeight: "bold" }}
                         />
                       </Tabs>
@@ -106,9 +101,6 @@ export default function FPayments() {
                     <Box display="flex" justifyContent={"center"}>
                       {value === "one" && <WithdrawFunds></WithdrawFunds>}
                       {value === "two" && <Invoices></Invoices>}
-                      {value === "three" && (
-                        <TransectionHistory></TransectionHistory>
-                      )}
                     </Box>
                   </Box>
                 </Grid>
