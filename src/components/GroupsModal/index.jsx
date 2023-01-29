@@ -82,7 +82,7 @@ function GroupsModal({ toggleClose, handleAddToGroup }) {
     <Wrap>
       <ClickAwayListener onClickAway={toggleClose}>
         <Form>
-          <FormControl component="fieldset">
+          <CustomFormControl component="fieldset">
             <FormGroup aria-label="position" column>
               <RadioGroup
                 aria-labelledby="chat-group"
@@ -105,8 +105,13 @@ function GroupsModal({ toggleClose, handleAddToGroup }) {
                   })}
               </RadioGroup>
             </FormGroup>
-          </FormControl>
+          </CustomFormControl>
           <CustomFilledButton
+            style={{
+              alignSelf: "center",
+              paddingInline: "4rem",
+              marginTop: "1rem",
+            }}
             title={"Add to Group"}
             onClick={() => handleAddToGroup(Selected)}
           />
@@ -130,8 +135,8 @@ const Wrap = styled.div`
 `;
 
 const Form = styled.div`
-  margin: 2rem;
-  padding: 4rem 3rem;
+  /* margin: 2rem; */
+  padding-block: 0rem 2rem;
   border-radius: 0.5rem;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.15);
@@ -141,118 +146,10 @@ const Form = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input`
-  width: 100%;
-  padding: 1.5rem 1rem;
-  margin-block: 1rem !important;
-  font-size: 1.4rem;
-  margin: 0.6rem 0;
-  border: 0.2rem solid rgba(0, 0, 0, 0.26);
-  text-transform: none;
-  outline: none;
-  border-radius: 2.5rem;
-  :focus {
-    border: 0.2rem solid ${colors.primaryGreen};
-  }
-  ::placeholder {
-    color: rgba(0, 0, 0, 0.7);
-  }
-`;
-
-const Heading = styled.h2`
-  font-size: 3rem;
-  color: #020202;
-  align-self: center;
-  margin-block: 1rem;
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
-`;
-
-const Btn = styled(Button)`
-  align-self: center;
-  padding: 1rem 2rem !important;
-  cursor: pointer;
-  margin-block: 1rem !important;
-  opacity: 0.6;
-  margin-top: 2.5rem;
-  border-radius: 50px !important;
-  width: 70%;
-  color: black !important;
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 50px;
-    border: 2px solid transparent;
-    background: linear-gradient(45deg, #050505, ${colors.borderGreen})
-      border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-  }
-  &:hover {
-    opacity: 1;
-    background-color: #fff !important;
-  }
-`;
-
-const BtnText = styled.div`
-  font-size: 1.5rem;
-  text-transform: capitalize;
-`;
-
-const SocialContainer = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-const SocialIcon = styled(Button)`
-  align-self: center;
-  padding: 1rem 2rem !important;
-  cursor: pointer;
-  margin-block: 1rem !important;
-  opacity: 0.8;
-  margin-top: 2.5rem;
-  border-radius: 50px !important;
-  color: black !important;
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 50px;
-    border: 2px solid transparent;
-    background: ${(props) => props.c};
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box,
-      linear-gradient(#fff 0 0);
-    -webkit-mask-composite: destination-out;
-    mask-composite: exclude;
-  }
-  &:hover {
-    opacity: 1.5;
-    background-color: #fff !important;
-  }
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 1rem 0.5rem;
-  align-items: center;
-  a {
-    color: black;
-    font-size: 1.2rem;
-    margin: 0.3rem 0;
-    text-decoration: underline;
-  }
-  a:visited {
-    color: black;
-  }
+const CustomFormControl = styled(FormControl)`
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-inline: 1rem !important;
+  padding-bottom: 1rem !important;
+  background-color: aliceblue;
 `;
