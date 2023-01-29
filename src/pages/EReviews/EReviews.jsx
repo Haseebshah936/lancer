@@ -38,11 +38,13 @@ export default function EReviews() {
   };
 
   useEffect(() => {
-    getSellerReviews(user._id).then((res) => {
-      setReviews(res);
-      setLoader(false);
-    });
-  }, []);
+    if (user) {
+      getSellerReviews(user._id).then((res) => {
+        setReviews(res);
+        setLoader(false);
+      });
+    }
+  }, [user]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
@@ -79,17 +81,17 @@ export default function EReviews() {
                         <Box key={index}>
                           <Grid container>
                             <Grid item xs={12}>
-                              <TitleP>{review.projectId.title}</TitleP>
+                              <TitleP>{review?.projectId?.title}</TitleP>
                             </Grid>
                             <Grid item xs={12}>
-                              <p>{review.comment}</p>
+                              <p>{review?.comment}</p>
                             </Grid>
                             <Grid item xs={12}>
                               <Grid container>
                                 <Grid item xs={3} sm={1}>
                                   <Avatar
                                     alt="Remy Sharp"
-                                    src={review.sellerId.profilePic}
+                                    src={review?.sellerId?.profilePic}
                                     sx={{ width: 45, height: 45 }}
                                   />
                                 </Grid>
@@ -102,7 +104,9 @@ export default function EReviews() {
                                   justifyContent={"flex-end"}
                                   flexDirection={"column"}
                                 >
-                                  <UserNameP>{review.sellerId.name}</UserNameP>
+                                  <UserNameP>
+                                    {review?.sellerId?.name}
+                                  </UserNameP>
                                   <p style={{ marginBottom: "0px" }}>
                                     {new Date(review.createdAt).toDateString()}
                                   </p>
@@ -115,10 +119,10 @@ export default function EReviews() {
                                 >
                                   <Rating
                                     name="read-only"
-                                    value={review.rating}
+                                    value={review?.rating}
                                     readOnly
                                   />
-                                  ({review.rating})
+                                  ({review?.rating})
                                 </Grid>
                               </Grid>
                             </Grid>

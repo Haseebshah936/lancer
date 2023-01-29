@@ -32,7 +32,9 @@ function Header({ setloader }) {
   };
 
   const getChats = async (id) => {
-    const response = await requestMethod.get("messages/user/" + id);
+    const response = await requestMethod.get(
+      "notification/messages/user/" + id
+    );
     return response.data;
   };
 
@@ -116,9 +118,8 @@ function Header({ setloader }) {
             title: chat.senderId.name,
             subtitle: chat.description,
             date: new Date(chat.createdAt),
-            onClick: () => {
-              navigate("/chat");
-            },
+            id: chat._id,
+            chatroom: chat.chatroomId,
           };
         });
 

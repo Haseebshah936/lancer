@@ -8,8 +8,18 @@ import { requestMethod } from "../../requestMethod";
 
 const NotificationList = ({ anchor, CloseList, notifications }) => {
   const [ListData, setListData] = useState([]);
-
   const [count, setCount] = useState(0);
+
+  const MarkasRead = async (id) => {
+    const response = await requestMethod.put("notification/read/" + id);
+    return response.data;
+  };
+
+  const handleRead = (notificationID) => {
+    MarkasRead(notificationID).then((resp) => {
+      console.log(resp);
+    });
+  };
 
   useEffect(() => {
     if (notifications.length > 4) {
@@ -90,6 +100,9 @@ const NotificationList = ({ anchor, CloseList, notifications }) => {
                         flexDirection: "column",
                         fontSize: "1.2rem",
                         paddingTop: "5px",
+                        backgroundColor: notify.isRead
+                          ? colors.lightGrey
+                          : "white",
                       }}
                     >
                       <div
@@ -110,7 +123,7 @@ const NotificationList = ({ anchor, CloseList, notifications }) => {
                           {notify.title}
                         </div>
                         <ClearIcon
-                          onClick={handleDelete(notify)}
+                          onClick={handleRead(notify._id)}
                           sx={{
                             fontSize: "1.5rem",
                             cursor: "pointer",

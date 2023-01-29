@@ -283,7 +283,7 @@ function Chat(props) {
   }, [user?._id]);
 
   useEffect(() => {
-    setActive(null);
+    setActive(location.state?.chatroom ? location.state?.chatroom : null);
     setChatRooms([]);
     setChatRoomsData([]);
     if (location.state) {
