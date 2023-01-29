@@ -197,7 +197,7 @@ const NotificationList = ({
               }}
             >
               <Link
-                to="/chat/1"
+                to="/Notifications"
                 style={{
                   textDecoration: "none",
                   color: colors.textGreen,
