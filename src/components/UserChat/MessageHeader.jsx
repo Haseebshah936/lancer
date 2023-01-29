@@ -244,9 +244,9 @@ function MessageHeader({
             <IconButton onClick={handleVideoCall}>
               <Videocam fontSize="large" />
             </IconButton>
-            <IconButton onClick={handleAudioCall}>
+            {/* <IconButton onClick={handleAudioCall}>
               <Call fontSize="large" />
-            </IconButton>
+            </IconButton> */}
           </>
         ) : (
           <IconButton
