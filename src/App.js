@@ -285,12 +285,9 @@ function App(props) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [aptitudeOpen, setAptitudeOpen] = useState(false);
   const [customerOpen, setCustomerOpen] = useState(false);
-<<<<<<< HEAD
   const [searchPagination, setSearchPagination] = useState(1);
   const [pageCount, setpageCount] = useState(1);
-=======
   const [order, setOrder] = useState({});
->>>>>>> 5d35982388ea67908ad2bbaad252190e6e1c801e
 
   useEffect(() => {
     setActiveProfile(JSON.parse(localStorage.getItem("activeProfile")));
