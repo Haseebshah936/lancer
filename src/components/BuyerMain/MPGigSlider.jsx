@@ -24,8 +24,9 @@ const MPGigSlider = () => {
 
   useEffect(() => {
     const search = user?.recentSearches[user?.recentSearches.length - 1];
-    const isSearch = user?.recentSearches?.filter((s) => s);
-    if (isSearch.length === 0) {
+
+    // const isSearch =
+    if (!search || user?.recentSearches?.filter((s) => s).length === 0) {
       setHide(true);
     } else {
       (async () => {
