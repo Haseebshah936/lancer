@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -8,6 +8,7 @@ import {
   Tab,
   Tabs,
   ThemeProvider,
+  Typography,
 } from "@mui/material";
 import Styled from "styled-components";
 import Header from "../../components/HeaderLoggedIn";
@@ -15,54 +16,58 @@ import colors from "../../utils/colors";
 import ESideBar from "../../pages/ESideBar/ESideBar";
 import Footer from "./../../components/Footer/index";
 import { sReviews } from "../../utils/dummyData";
+import { useCustomContext } from "../../Hooks/useCustomContext";
+import { useRealmContext } from "../../db/RealmContext";
+import { StarBorderOutlined } from "@mui/icons-material";
+import { requestMethod } from "../../requestMethod";
 
 export default function EReviews() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
+  const { activeProfile } = useCustomContext();
+  const [loader, setLoader] = useState(true);
+  const { user } = useRealmContext();
+  const [reviews, setReviews] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const getSellerReviews = async (id) => {
+    const response = await requestMethod.get("review/sellerReviews/" + id);
+    return response.data;
+  };
+
+  useEffect(() => {
+    getSellerReviews(user._id).then((res) => {
+      setReviews(res);
+      setLoader(false);
+    });
+  }, []);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>
 
       <Container>
         <Box sx={{ flexGrow: 1, pt: 1, pb: 1 }}>
-          <ThemeProvider
-            theme={createTheme({
-              breakpoints: {
-                values: {
-                  laptop: 1024,
-                  tablet: 640,
-                  mobile: 0,
-                  desktop: 1280,
-                  xs: 0,
-                  sm: 600,
-                  md: 900,
-                  lg: 1200,
-                  xl: 1536,
-                },
-              },
-            })}
-          >
-            <Grid container spacing={2}>
-              <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
-                <ESideBar></ESideBar>
-              </Grid>
+          <Grid container spacing={2}>
+            <Grid item mobile={12} laptop={4} tablet={5} desktop={3}>
+              <ESideBar></ESideBar>
+            </Grid>
 
-              <Grid
-                item
-                mobile={12}
-                tablet={7}
-                laptop={8}
-                desktop={9}
-                rowSpacing={2}
-                columnSpacing={2}
-              >
-                <Grid item xs={12} my={{ xs: 1, md: 0 }}>
-                  <HeadP>Reviews</HeadP>
-                  <Grid container>
-                    {sReviews.map((item, index) => (
+            <Grid
+              item
+              mobile={12}
+              tablet={7}
+              laptop={8}
+              desktop={9}
+              rowSpacing={2}
+              columnSpacing={2}
+            >
+              <Grid item xs={12} my={{ xs: 1, md: 0 }}>
+                <HeadP>Reviews</HeadP>
+                <Grid container>
+                  {reviews.length > 0 ? (
+                    reviews.map((review, index) => (
                       <Grid
                         item
                         xs={12}
@@ -74,17 +79,17 @@ export default function EReviews() {
                         <Box key={index}>
                           <Grid container>
                             <Grid item xs={12}>
-                              <TitleP>{item.reviewTitle}</TitleP>
+                              <TitleP>{review.projectId.title}</TitleP>
                             </Grid>
                             <Grid item xs={12}>
-                              <p>{item.reiewDescription}</p>
+                              <p>{review.comment}</p>
                             </Grid>
                             <Grid item xs={12}>
                               <Grid container>
                                 <Grid item xs={3} sm={1}>
                                   <Avatar
                                     alt="Remy Sharp"
-                                    src={item.userImg}
+                                    src={review.sellerId.profilePic}
                                     sx={{ width: 45, height: 45 }}
                                   />
                                 </Grid>
@@ -97,9 +102,9 @@ export default function EReviews() {
                                   justifyContent={"flex-end"}
                                   flexDirection={"column"}
                                 >
-                                  <UserNameP>{item.userName}</UserNameP>
+                                  <UserNameP>{review.sellerId.name}</UserNameP>
                                   <p style={{ marginBottom: "0px" }}>
-                                    {item.reviewDate}
+                                    {new Date(review.createdAt).toDateString()}
                                   </p>
                                 </Grid>
                                 <Grid
@@ -110,22 +115,34 @@ export default function EReviews() {
                                 >
                                   <Rating
                                     name="read-only"
-                                    value={item.stars}
+                                    value={review.rating}
                                     readOnly
                                   />
-                                  ({item.stars})
+                                  ({review.rating})
                                 </Grid>
                               </Grid>
                             </Grid>
                           </Grid>
                         </Box>
                       </Grid>
-                    ))}
-                  </Grid>
+                    ))
+                  ) : (
+                    <Grid
+                      item
+                      container
+                      justifyContent="center"
+                      alignItems="center"
+                      direction="column"
+                      my={2}
+                    >
+                      <Typography variant="h2">No Reviews Yet</Typography>
+                      <StarBorderOutlined sx={{ fontSize: "10rem" }} />
+                    </Grid>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
-          </ThemeProvider>
+          </Grid>
         </Box>
       </Container>
 

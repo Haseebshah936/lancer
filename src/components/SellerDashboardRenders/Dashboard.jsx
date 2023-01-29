@@ -17,9 +17,9 @@ import { useCustomContext } from "../../Hooks/useCustomContext";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
   const { activeProfile } = useCustomContext();
-
   const [views, setViews] = useState([]);
   const location = useLocation();
+
   const path = location.pathname.split("/");
 
   const getViews = async (id) => {
