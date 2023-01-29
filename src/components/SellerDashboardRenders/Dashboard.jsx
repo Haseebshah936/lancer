@@ -16,6 +16,7 @@ import colors from "../../utils/colors";
 import { useCustomContext } from "../../Hooks/useCustomContext";
 const Dashboard = ({ ongoingData, loader }) => {
   const { user } = useRealmContext();
+  const { activeProfile } = useCustomContext();
 
   const [views, setViews] = useState([]);
   const location = useLocation();
@@ -102,26 +103,29 @@ const Dashboard = ({ ongoingData, loader }) => {
           <StatCardWidget
             Heading="Completed Orders"
             Value={
-              user?.seller.completedOrders !== null
+              user?.seller.completedOrders !== 0
                 ? user?.seller.completedOrders
                 : "-"
             }
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 3 : 2}
           />
         </Grid>
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Active Orders"
             Value={
-              user?.seller.activeOrders !== null
-                ? user?.seller.activeOrders
-                : "-"
+              user?.seller.activeOrders !== 0 ? user?.seller.activeOrders : "-"
             }
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 2 : 1}
           />
         </Grid>
         <Grid item rowSpacing={2} laptop={5} desktop={4} tablet={5} mobile={12}>
           <StatCardWidget
             Heading="Reviews"
-            Value={user?.seller.reviews !== null ? user?.seller.reviews : "-"}
+            Value={user?.seller.reviews !== 0 ? user?.seller.reviews : "-"}
+            link={activeProfile === "seller" ? "/f/reviews" : "/e/reviews"}
           />
         </Grid>
         <Grid item container columnSpacing={2} rowSpacing={2}>

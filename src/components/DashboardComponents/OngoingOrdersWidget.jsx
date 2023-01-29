@@ -51,7 +51,7 @@ const OngoingOrdersWidget = ({
               alignSelf: "center",
             }}
           />
-        ) : ongoingOrders ? (
+        ) : ongoingOrders.length > 0 ? (
           ongoingOrders.map((order) => (
             <OrderWrapper>
               <OrderName>{order.title}</OrderName>

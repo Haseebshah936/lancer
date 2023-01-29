@@ -17,9 +17,14 @@ import { useCustomContext } from "../Hooks/useCustomContext";
 import { useRealmContext } from "../db/RealmContext";
 
 const SearchResults = () => {
-  const [pagination, setPagination] = useState(1);
-  const [count, setCount] = useState(1);
-  const { searchData } = useCustomContext();
+  // const [count, setCount] = useState(1);
+  const {
+    searchPagination,
+    setSearchPagination,
+    searchData,
+    pageCount,
+    setpageCount,
+  } = useCustomContext();
   const { user } = useRealmContext();
 
   // useEffect(() => {
@@ -29,10 +34,6 @@ const SearchResults = () => {
   //     setCount(Math.ceil(searchData.length / 12));
   //   });
   // }, []);
-
-  useEffect(() => {
-    setCount(Math.ceil(searchData.length / 12));
-  }, [pagination]);
 
   return (
     <Wrapper>
@@ -65,8 +66,8 @@ const SearchResults = () => {
               >
                 <SearchGrid
                   data={searchData.slice(
-                    (pagination - 1) * 12,
-                    pagination * 12
+                    (searchPagination - 1) * 12,
+                    searchPagination * 12
                   )}
                 ></SearchGrid>
                 <Box
@@ -77,9 +78,9 @@ const SearchResults = () => {
                   width="100%"
                 >
                   <Pagination
-                    count={count}
-                    page={pagination}
-                    onChange={(e, page) => setPagination(page)}
+                    count={pageCount}
+                    page={searchPagination}
+                    onChange={(e, page) => setSearchPagination(page)}
                   />
                 </Box>
               </Grid>

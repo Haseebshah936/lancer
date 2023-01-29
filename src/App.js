@@ -283,6 +283,8 @@ function App(props) {
   const [userFavorites, setUserFavorites] = useState([]);
   const [aptitudeOpen, setAptitudeOpen] = useState(false);
   const [customerOpen, setCustomerOpen] = useState(false);
+  const [searchPagination, setSearchPagination] = useState(1);
+  const [pageCount, setpageCount] = useState(1);
 
   const options = {
     // passing the client secret obtained from the server
@@ -296,6 +298,10 @@ function App(props) {
   return (
     <CustomContextProvider
       value={{
+        pageCount,
+        setpageCount,
+        searchPagination,
+        setSearchPagination,
         customerOpen,
         setCustomerOpen,
         aptitudeOpen,

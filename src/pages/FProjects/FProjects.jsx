@@ -24,6 +24,7 @@ import Footer from "../../components/Footer/index";
 import { requestMethod } from "../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import LoadingComp from "../../components/LoadingComp/LoadingComp";
+import { useLocation } from "react-router";
 
 export default function FProjects() {
   const [value, setValue] = React.useState(0);
@@ -34,6 +35,8 @@ export default function FProjects() {
   const [ongoingProjects, setOngoingProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [cancelledProjects, setCancelledProjects] = useState([]);
+  const location = useLocation();
+
   const allAvalibleProjectsFun = async () => {
     setLoadingValue(true);
     await requestMethod.get(`project/pending/${user?._id}`).then((res) => {
@@ -146,6 +149,13 @@ export default function FProjects() {
     // allOngoingProjectsFun();
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (location.state) {
+      setValue(location.state.value);
+    }
+  }, [location]);
+
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>

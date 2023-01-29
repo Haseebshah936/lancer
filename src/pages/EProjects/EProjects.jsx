@@ -22,6 +22,7 @@ import Footer from "./../../components/Footer/index";
 import { requestMethod } from "./../../requestMethod";
 import { useRealmContext } from "../../db/RealmContext";
 import LoadingComp from "../../components/LoadingComp/LoadingComp";
+import { useLocation } from "react-router";
 
 export default function EProjects() {
   const { user } = useRealmContext();
@@ -33,6 +34,8 @@ export default function EProjects() {
   const [ongoingProjects, setOngoingProjects] = useState([]);
   const [completedProjects, setCompletedProjects] = useState([]);
   const [cancelledProjects, setCancelledProjects] = useState([]);
+
+  const location = useLocation();
   const completedProjectsFun = async () => {
     setLoadingValue(true);
     await requestMethod
@@ -99,6 +102,12 @@ export default function EProjects() {
     }
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (location.state) {
+      setValue(location.state.value);
+    }
+  }, [location]);
   return (
     <div style={{ width: "100vw" }}>
       <Header></Header>

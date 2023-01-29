@@ -75,11 +75,16 @@ function Head({
     activeProfile,
     setActiveProfile,
     setSearchData,
+    searchData,
     terms,
     setTerms,
     setSearchDataLoader,
     setAptitudeOpen,
     setCustomerOpen,
+    searchPagination,
+    setSearchPagination,
+    pageCount,
+    setpageCount,
   } = useCustomContext();
 
   const handleSubmit = (search) => {
@@ -168,6 +173,10 @@ function Head({
       navigate("/");
     }
   }, [activeProfile, user, currentUser]);
+
+  useEffect(() => {
+    setpageCount(Math.ceil(searchData.length / 12));
+  }, [searchPagination]);
 
   // useEffect(() => {
   //   console.log("User from Realm", user);

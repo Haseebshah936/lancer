@@ -21,7 +21,7 @@ const data = [
     fill: "#F9D356",
   },
   {
-    name: "Bookmarked Projects",
+    name: "Completed Projects",
     value: 30,
     fill: "#43C8E0",
   },

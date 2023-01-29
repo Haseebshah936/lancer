@@ -145,7 +145,7 @@ const FSidebar = () => {
                       }}
                     />
                   </ListItemIcon>
-                  <CustomListText primary="Gigs" disableTypography={true} />
+                  <CustomListText primary="Products" disableTypography={true} />
                 </CustomListItem>
               </NavLink>
               <Link to="/f/projects">
