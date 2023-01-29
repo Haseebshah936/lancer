@@ -229,12 +229,16 @@ const Dashboard = ({
           <OngoingOrdersWidget
             ongoingOrders={ongoingData}
             loader={ongoingLoader}
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 2 : 1}
           />
         </Grid>
         <Grid item rowSpacing={2} mobile={12}>
           <PastOrdersWidget
             pastInvoices={pastInvoices}
             loader={pastInvoicesLoader}
+            link={activeProfile === "seller" ? "/f/projects" : "/e/projects"}
+            tabValue={activeProfile === "seller" ? 3 : 2}
           />
         </Grid>
       </Grid>

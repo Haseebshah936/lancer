@@ -7,6 +7,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import * as styled2 from "styled-components";
 import colors from "../../utils/colors";
 import CustomFilledButton from "../CustomFilledButton";
@@ -15,7 +16,11 @@ const OngoingOrdersWidget = ({
   title = "Ongoing Orders",
   ongoingOrders,
   loader,
+  tabValue,
+  link,
 }) => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     console.log("Ongoing Orders", ongoingOrders);
   }, [ongoingOrders]);
@@ -38,6 +43,15 @@ const OngoingOrdersWidget = ({
           <CustomFilledButton
             title={"View All"}
             style={{ margin: "5px 0px 0px 0px" }}
+            onClick={() => {
+              if (link) {
+                navigate(link, {
+                  state: {
+                    value: tabValue,
+                  },
+                });
+              }
+            }}
           ></CustomFilledButton>
         </HeaderrWrapper>
         <Divider sx={{ mx: -2, mb: 2 }} />

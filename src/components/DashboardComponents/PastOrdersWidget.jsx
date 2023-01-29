@@ -5,8 +5,10 @@ import {
   Grid,
   Divider,
   Avatar,
+  CircularProgress,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as styled2 from "styled-components";
 import { useRealmContext } from "../../db/RealmContext";
 import { useCustomContext } from "../../Hooks/useCustomContext";
@@ -15,8 +17,9 @@ import { tablet } from "../../responsive";
 import colors from "../../utils/colors";
 import CustomFilledButton from "../CustomFilledButton";
 
-const PastOrdersWidget = ({ pastInvoices, loader }) => {
+const PastOrdersWidget = ({ pastInvoices, loader, link, tabValue }) => {
   const { activeProfile } = useCustomContext();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -36,67 +39,91 @@ const PastOrdersWidget = ({ pastInvoices, loader }) => {
           <CustomFilledButton
             title={"View All"}
             style={{ margin: "5px 0px 0px 0px" }}
+            onClick={() => {
+              if (link) {
+                navigate(link, {
+                  state: {
+                    value: tabValue,
+                  },
+                });
+              }
+            }}
           ></CustomFilledButton>
         </HeaderrWrapper>
         <Divider sx={{ mx: -2, mb: 2 }} />
 
-        {pastInvoices.map((order, index) => (
-          <Grid
-            container
-            spacing={2}
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            sx={{ pt: 2 }}
-          >
+        {loader ? (
+          <CircularProgress
+            sx={{
+              "&.MuiCircularProgress-root": {
+                color: colors.textGreen,
+              },
+              alignSelf: "center",
+            }}
+          />
+        ) : pastInvoices.length > 0 ? (
+          pastInvoices.map((order, index) => (
             <Grid
-              item
               container
-              mobile={12}
-              tablet={5}
-              laptop={7}
-              direction="column"
-            >
-              <OrderTitle variant="h6">
-                {order.projectId.title.length > 60
-                  ? order.projectId.title.slice(0, 60)
-                  : order.projectId.title}
-              </OrderTitle>
-
-              <DateCompleted>
-                {new Date(order.createdAt).toDateString()}
-              </DateCompleted>
-            </Grid>
-            <Grid
-              item
-              container
-              mobile={10}
-              tablet={5}
-              laptop={4}
+              spacing={2}
               direction="row"
+              justifyContent="flex-start"
               alignItems="center"
+              sx={{ pt: 2 }}
             >
-              <Avatar
-                sx={{ width: 50, height: 50 }}
-                aria-label="ProfilePic"
-                src={
-                  activeProfile === "seller"
-                    ? order.employerId.profilePic
-                    : order.freelancerId.profilePic
-                }
-              ></Avatar>
+              <Grid
+                item
+                container
+                mobile={12}
+                tablet={5}
+                laptop={7}
+                direction="column"
+              >
+                <OrderTitle variant="h6">
+                  {order.projectId.title.length > 60
+                    ? order.projectId.title.slice(0, 60)
+                    : order.projectId.title}
+                </OrderTitle>
 
-              <ProfileName>
-                {activeProfile === "seller"
-                  ? order.employerId.name
-                  : order.freelancerId.name}
-              </ProfileName>
+                <DateCompleted>
+                  {new Date(order.createdAt).toDateString()}
+                </DateCompleted>
+              </Grid>
+              <Grid
+                item
+                container
+                mobile={10}
+                tablet={5}
+                laptop={4}
+                direction="row"
+                alignItems="center"
+              >
+                <Avatar
+                  sx={{ width: 50, height: 50 }}
+                  aria-label="ProfilePic"
+                  src={
+                    activeProfile === "seller"
+                      ? order.employerId.profilePic
+                      : order.freelancerId.profilePic
+                  }
+                ></Avatar>
+
+                <ProfileName>
+                  {activeProfile === "seller"
+                    ? order.employerId.name
+                    : order.freelancerId.name}
+                </ProfileName>
+              </Grid>
+              <Grid item mobile={2} tablet={2} laptop={1}>
+                <AmmountEarned>${order.amount}</AmmountEarned>
+              </Grid>
             </Grid>
-            <Grid item mobile={2} tablet={2} laptop={1}>
-              <AmmountEarned>${order.amount}</AmmountEarned>
-            </Grid>
-          </Grid>
-        ))}
+          ))
+        ) : (
+          <CardHeading sx={{ color: "black", fontWeight: "bold" }}>
+            You have no past orders
+          </CardHeading>
+        )}
       </Paper>
     </>
   );
