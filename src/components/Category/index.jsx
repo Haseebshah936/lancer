@@ -38,16 +38,16 @@ export default Category;
 const NewCard = styled(Card)`
   border-radius: 10% !important;
   overflow: hidden;
-  width: 21rem;
+  width: 23rem;
   min-width: 21rem;
-  height: 25rem;
+  height: 29rem;
   margin-top: 4rem;
   border: none;
   background-color: #fdfdfd;
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
-  margin-right: 1rem;
+  margin-right: 2rem;
 `;
 const Image = styled.img`
   width: 100%;
