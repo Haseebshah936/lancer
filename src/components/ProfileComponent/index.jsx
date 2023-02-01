@@ -21,19 +21,19 @@ function ProfileComponent({
         <Image src={url} />
         <DetailsContainer>
           <NameText>{name}</NameText>
-          {earning && (
+          {/* {earning && (
             <EarnedContainer>
               <p>{currency}</p> <Amount>{earning}</Amount>
             </EarnedContainer>
-          )}
+          )} */}
         </DetailsContainer>
       </Wrapper>
-      {orders && (
+      {/* {orders && (
         <Badge style={orderBoxStyle}>
           <Text>{ordersBoxTitle}</Text>
           <Text>{orders}</Text>
         </Badge>
-      )}
+      )} */}
       {component}
     </Container>
   );
@@ -59,7 +59,7 @@ const Container = styled.div`
 const Wrapper = styled.div`
   align-items: center;
   display: flex;
-  width: 50%;
+  /* width: 50%; */
 `;
 
 const CountText = styled.h3`
@@ -74,6 +74,7 @@ const Image = styled.img`
   min-width: 4rem;
   width: 4rem;
   border-radius: 2.5rem;
+  object-fit: cover;
 `;
 
 const DetailsContainer = styled.div`

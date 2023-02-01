@@ -1,21 +1,44 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Newsletter from "../components/NewsLetterComponent";
 import ProfileComponent from "../components/ProfileComponent";
+import { requestMethod } from "../requestMethod";
 
 function Ranking(props) {
-  const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+  const [users, setUsers] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    requestMethod
+      .get("user/rankedUsers")
+      .then((res) => {
+        console.log(res.data);
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Wrapper>
       <Header />
       <Container>
         <Heading>Top Sellers This Month</Heading>
         <ProfileContainer>
-          {a.map((c, i) => (
+          {users.map((c, i) => (
             // <div className="col-xxl-3 col-lg-4 col-md-6 col-xs-1">
-            <ProfileComponent key={i} count={c} />
+            <ProfileComponent
+              key={i}
+              count={i + 1}
+              url={c?.profilePic}
+              name={c?.name}
+              currency="$"
+              onClick={() => navigate(`/profile/${c?._id}`)}
+            />
             // </div>
           ))}
         </ProfileContainer>

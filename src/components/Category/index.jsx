@@ -2,17 +2,15 @@ import { Button } from "@mui/material";
 import React from "react";
 import { Card } from "react-bootstrap";
 import styled from "styled-components";
-import teamImg from "../../assets/1.svg"
+import teamImg from "../../assets/1.svg";
 
-function Category(props) {
+function Category({ name, url }) {
   return (
     <NewCard>
-      <Image variant="top" src={teamImg} />
+      <Image variant="top" src={url} />
       <Body>
-        <div>
-          <Title>Mobile Development</Title>
-        </div>
-        <Wrapper>
+        <Title>{name}</Title>
+        {/* <Wrapper>
           <Button
             variant="contained"
             sx={{
@@ -29,7 +27,7 @@ function Category(props) {
             Check Out
           </Button>
           <Text>251 Services</Text>
-        </Wrapper>
+        </Wrapper> */}
       </Body>
     </NewCard>
   );
@@ -40,7 +38,7 @@ export default Category;
 const NewCard = styled(Card)`
   border-radius: 10% !important;
   overflow: hidden;
-  width: 21rem;
+  width: 23rem;
   min-width: 21rem;
   height: 29rem;
   margin-top: 4rem;
@@ -49,24 +47,27 @@ const NewCard = styled(Card)`
   box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -webkit-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
   -moz-box-shadow: 3px 2px 16px 5px rgba(240, 240, 240, 0.75);
-  margin-right: 1rem;
+  margin-right: 2rem;
 `;
 const Image = styled.img`
   width: 100%;
-  height: 50%;
+  height: 70%;
   object-fit: contain;
   overflow: hidden;
 `;
 const Body = styled.div`
   width: 100%;
-  height: 50%;
-  padding: 3rem 2rem;
+  height: 20%;
+  /* padding: 3rem 2rem; */
+  margin-top: 2rem;
   justify-content: space-between;
   display: flex;
   flex-direction: column;
 `;
 const Title = styled.h3`
   font-size: 1.5rem;
+  align-self: center;
+  font-weight: bold;
 `;
 
 const Wrapper = styled.div`
