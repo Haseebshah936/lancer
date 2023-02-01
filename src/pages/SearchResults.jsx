@@ -65,6 +65,11 @@ const SearchResults = () => {
                 columnSpacing={2}
               >
                 <SearchGrid
+                  // data={searchData.slice(
+                  //   (searchPagination - 1) * 12,
+                  //   searchPagination * 12
+                  // )}
+
                   data={searchData.slice(
                     (searchPagination - 1) * 12,
                     searchPagination * 12

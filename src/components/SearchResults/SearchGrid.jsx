@@ -10,8 +10,10 @@ import { useEffect } from "react";
 import { Backdrop, CircularProgress, Typography } from "@mui/material";
 import colors from "../../utils/colors";
 
-const SearchGrid = () => {
-  const { searchData, searchDataLoader } = useCustomContext();
+const SearchGrid = ({ data }) => {
+  const { searchDataLoader } = useCustomContext();
+
+  // useEffect(() => {{)}
 
   return (
     <>
@@ -38,7 +40,7 @@ const SearchGrid = () => {
             />
           </Grid>
         ) : (
-          searchData.map((c) => (
+          data.map((c) => (
             <Grid
               item
               xs={3}
