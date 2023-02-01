@@ -177,12 +177,15 @@ function Head({
   }, [activeProfile, user, currentUser]);
 
   useEffect(() => {
-    setpageCount(Math.ceil(searchData.length / 12));
-  }, [searchPagination]);
+    if (searchData.length > 0) {
+      setpageCount(Math.ceil(searchData.length / 12));
+    }
+  }, [searchData]);
 
-  // useEffect(() => {
-  //   console.log("User from Realm", user);
-  // }, [user]);
+  useEffect(() => {
+    console.log("SearchPagination", searchPagination);
+    console.log("pageCount", pageCount);
+  }, [searchPagination, pageCount]);
 
   return (
     <>

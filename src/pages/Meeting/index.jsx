@@ -157,7 +157,7 @@ function Meeting(props) {
 
       <Camera src="" ref={cameraRef} autoPlay muted />
       <ButtonContainer>
-        {!state.isInitiator && (
+        {!state.isInitiator && state.connectionState !== "connected" && (
           <Button onClick={handleJoinConnection}>
             <Call
               sx={{
