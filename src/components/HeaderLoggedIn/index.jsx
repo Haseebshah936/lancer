@@ -81,6 +81,7 @@ function Header({ setloader }) {
 
   useEffect(() => {
     let interval;
+    let interval2;
     if (user?.state === "banned") {
       navigate("/banned");
       logOut();
@@ -109,31 +110,37 @@ function Header({ setloader }) {
         })();
       }, 30000);
 
-      getNotifications(user._id).then((res) => {
-        setNotifications(res);
-        if (notifications.length > 0) {
-          setNIndicator(true);
-        }
-      });
+      interval2 = setInterval(() => {
+        getNotifications(user._id).then((res) => {
+          setNotifications(res);
+          console.log("notifications", res);
 
-      getChats(user._id).then((res) => {
-        const newChats = res.splice(0, 4).map((chat) => {
-          return {
-            avatar: chat.senderId.profilePic,
-            alt: chat.senderId.name,
-            title: chat.senderId.name,
-            subtitle: chat.description,
-            date: new Date(chat.createdAt),
-            id: chat._id,
-            chatroom: chat.chatroomId,
-          };
+          if (notifications.length > 0) {
+            setNIndicator(true);
+            console.log("Nindicator", nIndicator);
+          }
         });
 
-        setChats(newChats);
-      });
+        getChats(user._id).then((res) => {
+          const newChats = res.splice(0, 4).map((chat) => {
+            return {
+              avatar: chat.senderId.profilePic,
+              alt: chat.senderId.name,
+              title: chat.senderId.name,
+              subtitle: chat.description,
+              date: new Date(chat.createdAt),
+              id: chat._id,
+              chatroom: chat.chatroomId,
+            };
+          });
+
+          setChats(newChats);
+        });
+      }, 5000);
     }
     return () => {
       clearInterval(interval);
+      clearInterval(interval2);
     };
   }, [user]);
 

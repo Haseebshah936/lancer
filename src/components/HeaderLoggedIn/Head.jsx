@@ -309,9 +309,8 @@ function Head({
               aria-label="show 4 new mails"
               color="inherit"
             >
-              {chats.length !== 0 ? (
+              {chats.length > 0 ? (
                 <Badge badgeContent={4} variant="dot" color="error">
-                  {" "}
                   <MailOutlineIcon
                     onClick={toggleMessage}
                     sx={{ color: colors.textGreen }}
