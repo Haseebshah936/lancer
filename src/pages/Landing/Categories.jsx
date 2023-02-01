@@ -7,7 +7,28 @@ import { useRef } from "react";
 import colors from "../../utils/colors";
 
 function Categories(props) {
-  const a = [1, 2, 3, 4, 5, 6];
+  const a = [
+    {
+      name: "App Development",
+      url: "https://img.freepik.com/free-vector/app-development-concept-with-programming-languages_23-2148688949.jpg?w=1380&t=st=1675272702~exp=1675273302~hmac=5571bcff6c5ca5e1fd81a6e0f3d9556af5e2e5a37432f9617bf8f479c3dad858",
+    },
+    {
+      name: "Web Development",
+      url: "https://img.freepik.com/free-vector/programming-concept-illustration_114360-1351.jpg?w=1380&t=st=1675271789~exp=1675272389~hmac=394b214a4fd6d0cf218a64b002536e1b78f616ef4d92d92f1716b0a4a14c5058",
+    },
+    {
+      name: "Search Engine Optimization",
+      url: "https://img.freepik.com/free-vector/seo-concept-illustration_114360-5576.jpg?w=1380&t=st=1675272555~exp=1675273155~hmac=268d45731858a629e4d8630550f3ecb826eb1e21accbbd9b227a3097b649eab3",
+    },
+    {
+      name: "Social Media Marketing",
+      url: "https://img.freepik.com/free-vector/mobile-marketing-concept-illustration_114360-1478.jpg?w=1380&t=st=1675272349~exp=1675272949~hmac=b22d47c03fe037f7727733a64028e0b570f3ec7b1e0e64ec01a4711f67c1a8ff",
+    },
+    {
+      name: "Video & Animation",
+      url: "https://img.freepik.com/free-vector/influencer-recording-new-video_23-2148527130.jpg?w=2000&t=st=1675273177~exp=1675273777~hmac=09d7852adf7b62f67516350dc0d11b8c2fa0654e68bf8bba0f2e138b9a453317",
+    },
+  ];
   const ref = useRef();
   const scroll = (scrollOffset) => {
     ref.current.scrollLeft += scrollOffset;
@@ -28,7 +49,7 @@ function Categories(props) {
         <CategoryContainer ref={ref}>
           {a.map((c, i) => (
             <div key={i} ref={categoryRef}>
-              <Category count={c} />
+              <Category name={c.name} url={c.url} />
             </div>
           ))}
         </CategoryContainer>
@@ -75,7 +96,7 @@ function Categories(props) {
         </ButtonContainer>
       </CategoryListContainer>
 
-      <Button
+      {/* <Button
         variant="contained"
         sx={{
           borderRadius: "2rem",
@@ -90,7 +111,7 @@ function Categories(props) {
         }}
       >
         View All
-      </Button>
+      </Button> */}
     </Container>
   );
 }

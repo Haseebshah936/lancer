@@ -13,7 +13,7 @@ function Landing(props) {
       <Title />
       <Categories />
       <TopSellers />
-      <FeaturedSeller />
+      {/* <FeaturedSeller /> */}
       <Newsletter />
       <Footer />
     </>

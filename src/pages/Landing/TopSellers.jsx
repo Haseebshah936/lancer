@@ -2,10 +2,25 @@ import { Button } from "@mui/material";
 import styled from "styled-components";
 import ProfileComponent from "../../components/ProfileComponent";
 import { Link, NavLink, useNavigate } from "react-router-dom";
+import { requestMethod } from "../../requestMethod";
+import { useEffect, useState } from "react";
 
 function TopSellers(props) {
-  const a = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [users, setUsers] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    requestMethod
+      .get("user/rankedUsers?limit=12")
+      .then((res) => {
+        console.log(res.data);
+        setUsers(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Container>
       <HeadingContainer>
@@ -18,9 +33,16 @@ function TopSellers(props) {
       </HeadingContainer>
 
       <ProfileContainer>
-        {a.map((c,i) => (
+        {users.map((user, i) => (
           // <div className="col-xxl-3 col-lg-4 col-md-6 col-xs-1">
-          <ProfileComponent key={i} count={c} />
+          <ProfileComponent
+            key={i}
+            count={i + 1}
+            url={user?.profilePic}
+            name={user?.name}
+            currency="$"
+            orders={user?.seller?.completedOrders}
+          />
           // </div>
         ))}
       </ProfileContainer>
