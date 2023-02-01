@@ -213,128 +213,126 @@ export default function ProjectDeiverdedTimeLine({
           </RequirementDescriptionBox>
         </RequirementBox>
         {/* "delivered", */}
-        {p?.state === "delivered" && (
-          <Grid container>
-            <Grid item xs={12} display={"flex"} justifyContent={"flex-end"}>
-              {user?._id === p?.creatorId?._id &&
-              projectDVar.state === "pending" ? (
-                <div style={{ marginTop: "5px" }}>
-                  <Button
-                    variant="contained"
-                    sx={{
+
+        <Grid container>
+          <Grid item xs={12} display={"flex"} justifyContent={"flex-end"}>
+            {user?._id === p?.creatorId?._id &&
+            projectDVar.state === "pending" ? (
+              <div style={{ marginTop: "5px" }}>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: colors.becomePartnerGreen,
+                    color: "white",
+                    "&:hover": {
                       backgroundColor: colors.becomePartnerGreen,
                       color: "white",
-                      "&:hover": {
-                        backgroundColor: colors.becomePartnerGreen,
-                        color: "white",
-                      },
-                      marginRight: "10px",
-                    }}
-                    onClick={() => {
-                      setDState(true);
-                    }}
-                  >
-                    Ask for revision
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{
+                    },
+                    marginRight: "10px",
+                  }}
+                  onClick={() => {
+                    setDState(true);
+                  }}
+                >
+                  Ask for revision
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: colors.becomePartnerGreen,
+                    color: "white",
+                    "&:hover": {
                       backgroundColor: colors.becomePartnerGreen,
                       color: "white",
-                      "&:hover": {
-                        backgroundColor: colors.becomePartnerGreen,
-                        color: "white",
-                      },
-                    }}
-                    onClick={() => {
-                      requestMethod
-                        .put("project/complete/" + p._id, { deliveryId })
-                        .then((res) => {
-                          setProjectDVar({
-                            ...projectDVar,
-                            state: "completed",
-                          });
-                          toast.success("Project completed successfully");
-                        })
-                        .catch((err) => {
-                          console.log("err", err);
-                          handleError(err);
+                    },
+                  }}
+                  onClick={() => {
+                    requestMethod
+                      .put("project/complete/" + p._id, { deliveryId })
+                      .then((res) => {
+                        setProjectDVar({
+                          ...projectDVar,
+                          state: "completed",
                         });
-                    }}
-                  >
-                    Accept
-                  </Button>
-                </div>
-              ) : (
-                <div style={{ marginTop: "5px" }}>
-                  {projectDVar.state === "pending" ? (
-                    <Button
-                      variant="contained"
-                      sx={{
+                        toast.success("Project completed successfully");
+                      })
+                      .catch((err) => {
+                        console.log("err", err);
+                        handleError(err);
+                      });
+                  }}
+                >
+                  Accept
+                </Button>
+              </div>
+            ) : (
+              <div style={{ marginTop: "5px" }}>
+                {projectDVar.state === "pending" ? (
+                  <Button
+                    variant="contained"
+                    sx={{
+                      backgroundColor: colors.becomePartnerGreen,
+                      color: "white",
+                      "&:hover": {
                         backgroundColor: colors.becomePartnerGreen,
                         color: "white",
-                        "&:hover": {
+                      },
+                    }}
+                    onClick={() => {}}
+                  >
+                    Project Submitted
+                  </Button>
+                ) : (
+                  <div>
+                    {projectDVar.state === "rejected" ? (
+                      <Button
+                        variant="contained"
+                        sx={{
                           backgroundColor: colors.becomePartnerGreen,
                           color: "white",
-                        },
-                      }}
-                      onClick={() => {}}
-                    >
-                      Project Submitted
-                    </Button>
-                  ) : (
-                    <div>
-                      {projectDVar.state === "rejected" ? (
-                        <Button
-                          variant="contained"
-                          sx={{
+                          "&:hover": {
                             backgroundColor: colors.becomePartnerGreen,
                             color: "white",
-                            "&:hover": {
-                              backgroundColor: colors.becomePartnerGreen,
-                              color: "white",
-                            },
-                          }}
-                          onClick={() => {
-                            let text = "";
-                            if (user._id === p.creatorId._id) {
-                              text =
-                                "Revision Request is already sent to the freelancer";
-                            } else {
-                              text = "Revision is requested by the client";
-                            }
-                            toast.success(text);
-                          }}
-                        >
-                          Revision Requested
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="contained"
-                          sx={{
+                          },
+                        }}
+                        onClick={() => {
+                          let text = "";
+                          if (user._id === p.creatorId._id) {
+                            text =
+                              "Revision Request is already sent to the freelancer";
+                          } else {
+                            text = "Revision is requested by the client";
+                          }
+                          toast.success(text);
+                        }}
+                      >
+                        Revision Requested
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        sx={{
+                          backgroundColor: colors.becomePartnerGreen,
+                          color: "white",
+                          "&:hover": {
                             backgroundColor: colors.becomePartnerGreen,
                             color: "white",
-                            "&:hover": {
-                              backgroundColor: colors.becomePartnerGreen,
-                              color: "white",
-                            },
-                          }}
-                          onClick={() => {
-                            toast.success(
-                              "Project is accepted coongratulations"
-                            );
-                          }}
-                        >
-                          Project Accepted
-                        </Button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
-            </Grid>
+                          },
+                        }}
+                        onClick={() => {
+                          toast.success("Project is accepted coongratulations");
+                        }}
+                      >
+                        Project Accepted
+                      </Button>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </Grid>
-        )}
+        </Grid>
+
         <Grid
           container
           display={"flex"}
