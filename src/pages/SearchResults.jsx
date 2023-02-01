@@ -75,19 +75,21 @@ const SearchResults = () => {
                     searchPagination * 12
                   )}
                 ></SearchGrid>
-                <Box
-                  mt={"4rem"}
-                  display="flex"
-                  justifyContent="center"
-                  alignContent={"center"}
-                  width="100%"
-                >
-                  <Pagination
-                    count={pageCount}
-                    page={searchPagination}
-                    onChange={(e, page) => setSearchPagination(page)}
-                  />
-                </Box>
+                {searchData.length > 12 && (
+                  <Box
+                    mt={"4rem"}
+                    display="flex"
+                    justifyContent="center"
+                    alignContent={"center"}
+                    width="100%"
+                  >
+                    <Pagination
+                      count={pageCount}
+                      page={searchPagination}
+                      onChange={(e, page) => setSearchPagination(page)}
+                    />
+                  </Box>
+                )}
               </Grid>
             </Grid>
           </ThemeProvider>
