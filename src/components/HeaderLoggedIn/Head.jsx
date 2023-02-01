@@ -146,7 +146,8 @@ function Head({
       currentPath == "/gig/gig" ||
       currentPath == "/createGig" ||
       currentPath == "/chat" ||
-      currentPath == "/editGig"
+      currentPath == "/editGig" ||
+      currentPath == "/customersupport"
     ) {
       return true;
     } else {
@@ -159,7 +160,8 @@ function Head({
       currentPath.includes("/profile/") ||
       currentPath.includes("/portfolio/") ||
       currentPath == "/chat" ||
-      currentPath == "/orderStatus"
+      currentPath == "/orderStatus" ||
+      currentPath == "/customersupport"
     );
   };
 

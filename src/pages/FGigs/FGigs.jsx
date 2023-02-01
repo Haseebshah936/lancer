@@ -184,7 +184,7 @@ export default function FGigs() {
                             onClick={() => {
                               console.log("i am clicked");
                               navigator.clipboard.writeText(
-                                "http://localhost:3000/profile/" + user?._id
+                                "http://localhost:3000/portfolio/" + gig?._id
                               );
                               const notify = () =>
                                 toast("URL is Copied to Clipoard");
